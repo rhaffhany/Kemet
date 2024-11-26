@@ -1,0 +1,359 @@
+$primary-font: 'Inter', sans-serif;
+$secondary-font: 'Roboto', sans-serif;
+$input-border-color: #FAC817;
+$gap-spacing: 20px;
+$padding-large: 4rem;
+$padding-small: 10px;
+$label-bottom-padding: 5px;
+$font-size: 16px;
+$line-height: 18px;
+
+body {
+  font-family: $primary-font;
+  position: relative;
+  
+}
+
+.color {
+  height: 526px;
+  width: 532px;
+  background: radial-gradient(circle, #FAC817, transparent);
+  position: absolute;
+  z-index: 0;
+  filter: blur(70px);
+  opacity: 0.5;
+  top: 45px;
+  left: 46px;
+  border-radius: 50%;
+  pointer-events: none;
+  -webkit-filter: blur(70px);
+}
+
+
+
+
+/* Ensure all form elements are above the blurry background */
+input, 
+label, 
+h2, 
+h6, 
+button, 
+.login-logo, 
+.form-item, 
+.join-us-link, 
+.small-hr, 
+.arrow-left, 
+.alert {
+  position: relative; /* Keep their positioning intact */
+  z-index: 1; /* Place above the blurry background */
+}
+input {
+  border: 1px solid #FAC817;
+  border-radius: 15px;
+  background-color: #fff;
+  padding: 10px; /* Use padding-small value */
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 18px;
+  position: relative; /* Add relative positioning for better stacking */
+}
+
+.form-item {
+  position: relative; /* Ensure the icon is positioned relative to this container */
+}
+
+.password-icon {
+  position: absolute;
+  top: -30px;  /* Adjust this value to position the icon above the input */
+  left: 10px;  /* Position the icon on the left side */
+  cursor: pointer;
+  z-index: 99;  /* Ensure the icon is above the input */
+}
+
+
+  html, body {
+    width: 100%;
+    height: 100%;
+  }
+  
+  body {
+    font-family: $primary-font;
+    position: relative;
+  }
+  
+  
+  input, 
+  label, 
+  h2, 
+  h6, 
+  button, 
+  .login-logo, 
+  .form-item, 
+  .join-us-link, 
+  .small-hr, 
+  .arrow-left, 
+  .alert {
+    position: relative;
+    z-index: 1;
+  }
+  
+  input {
+    border: 1px solid $input-border-color;
+    border-radius: 15px;
+    background-color: #fff;
+    padding: $padding-small;
+  
+    &:focus {
+      outline: none;
+      border: $input-border-color;
+      box-shadow: 0 0 5px $input-border-color;
+    }
+  }
+  
+  .loginform {
+    padding: $padding-large;
+  
+    .login-logo {
+      width: 120px;
+      height: auto;
+      margin-left: -7rem;
+      left: 47px;
+      border-radius: 20px 0px 0px 0px;
+      margin-bottom: 45px;
+    }
+  }
+  
+  h2 {
+    margin-bottom: 14px;
+  }
+  
+  h6 {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 18px;
+    color: #718096;
+    margin: 11px 22px;
+  }
+  
+  label {
+    padding-bottom: $label-bottom-padding;
+    font-weight: 400;
+    font-size: $font-size;
+    line-height: $line-height;
+    margin-top: 20px;
+  }
+  
+  .line-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .small-hr {
+    width: 90px;
+    border-top: 2px solid #111;
+    margin-bottom: 20px;
+  }
+  
+  .join-us-link {
+    font-size: $font-size;
+    font-weight: 400;
+    line-height: $line-height;
+    text-align: center;
+    display: grid;
+    place-items: center;
+    margin-bottom: -3rem;
+    cursor: pointer;
+    color: #000;
+  
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  
+  a {
+    color: #000;
+    text-decoration: none;
+  
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  
+  .btn {
+    display: grid;
+    cursor: default;
+    place-items: center;
+  }
+  
+  .login-btn {
+    width: 249px;
+    height: 42px;
+    background-color: #FFBD67;
+    color: #000000;
+    font-size: $font-size;
+    font-weight: 500;
+    line-height: $line-height;
+    text-align: center;
+    border: 2px solid $input-border-color;
+    border-radius: 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin-top: 24px;
+  
+    &:disabled {
+      background-color: #FFBD67;
+      cursor: not-allowed;
+    }
+  }
+  
+  .alert {
+    color: red;
+    height: 1px;
+    padding: 0;
+  }
+  
+  .arrow-left {
+    position: absolute;
+    top: 29px;
+    left: 16.25px;
+    opacity: 1;
+    cursor: pointer;
+  
+    &:hover {
+      opacity: 1;
+    }
+  
+  
+
+  &:focus {
+    outline: none;
+    border: $input-border-color;
+    box-shadow: 0 0 5px $input-border-color;
+  }
+  }
+
+.loginform {
+  padding: $padding-large;
+  
+
+  .login-logo {
+    width: 120px;
+    height: auto;
+    margin-left: -7rem;
+    left: 47px;
+    border-radius: 20px 0px 0px 0px;
+    margin-bottom: 45px;
+  }
+}
+
+h2 {
+  margin-bottom: 14px;
+}
+
+h6 {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  color: #718096;
+  margin: 11px 22px;
+}
+
+label {
+  padding-bottom: $label-bottom-padding;
+  font-weight: 400;
+  font-size: $font-size;
+  line-height: $line-height;
+  margin-top: 20px;
+}
+
+.line-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.small-hr {
+  width: 90px;
+  border-top: 2px solid #111;
+  margin-bottom: 20px;
+}
+
+.join-us-link {
+  font-size: $font-size;
+  font-weight: 400;
+  line-height: $line-height;
+  text-align: center;
+  display: grid;
+  place-items: center;
+  margin-bottom: -3rem;
+  cursor: pointer;
+  color: #000;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+a {
+  color: #000;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.btn {
+  display: grid;
+  place-items: center;
+}
+
+.login-btn {
+  width: 249px;
+  height: 42px;
+  background-color: #FFBD67;
+  color: #000000;
+  font-size: $font-size;
+  font-weight: 500;
+  line-height: $line-height;
+  text-align: center;
+  border: 2px solid $input-border-color;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin-top: 24px;
+
+  &:disabled {
+    background-color: #FFBD67;
+    cursor: not-allowed;
+  }
+}
+
+.alert {
+  color: red;
+  height: 1px;
+  padding: 0;
+  margin-bottom:2rem ;
+}
+
+.arrow-left {
+  position: absolute;
+  top: 29px;
+  left: 16.25px;
+  opacity: 1;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 1;
+  }
+}

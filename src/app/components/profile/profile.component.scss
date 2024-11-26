@@ -1,0 +1,153 @@
+// Variables
+$primary-color: var(--primary-color);
+$white: var(--white);
+$black: var(--black);
+$secondary-color: var(--secondary-color);
+$main-color: var(--main-color);
+
+// Section styling
+section {
+  background-color: $primary-color;
+}
+
+// Profile box section
+.box {
+  position: relative;
+  z-index: 999;
+  height: 270px;
+  transform: translateY(-50px);
+  background-color: $white;
+  /* box-shadow: 4px 4px 50px 2px #4F4F4F; */
+  box-shadow: 0 4px 6px 2px rgba(0, 0, 0, 0.1); 
+  border-radius: 20px;
+
+  .profile-pic {
+    height: 170px;
+    width: 182px;
+    img{
+      width: 170px; 
+      height: 182px; 
+      object-fit: cover;
+      border-radius: 50%;
+    }
+   
+  }
+  .img-fluid{
+    border: 1px solid $black;
+    box-shadow: inset 0px 4px 4px 2px #000000;
+  }
+
+  .profile-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .name {
+    line-height: 24.2px;
+  }
+
+  .btn {
+    border: 1px solid $black;
+    border-radius: 15px;
+    padding: 2px 9px;
+  }
+}
+
+// Information & Posts section
+.information-items {
+  /* height: 272px; */
+  background-color: $white;
+  /* box-shadow: 4px 4px 50px 2px #4F4F4F; */
+  box-shadow: 0 4px 6px 2px rgba(0, 0, 0, 0.1); 
+  border-radius: 10px;
+
+  img {
+    height: 18px;
+    width: 15px;
+  }
+
+  .signs {
+    button {
+      border: 2px solid $secondary-color;
+      border-radius: 20px;
+      padding: 2px;
+      background-color: $white;
+
+      &:hover {
+        background-color: $main-color;
+      }
+    }
+  }
+
+  .btn {
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+      transform: scale(1.05); /* Slight zoom on hover */
+    }
+  }
+}
+
+// Posts content section
+.posts {
+  /* height: 163px; */
+  height: fit-content;
+  background-color: $white;
+  /* box-shadow: 4px 4px 50px 2px #4F4F4F; */
+  box-shadow: 0 4px 6px 2px rgba(0, 0, 0, 0.1); 
+  border-radius: 10px;
+
+  .posts-content .pic {
+    width: 74px;
+    height: 69px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+}
+
+.userName {
+  font-weight: 600;
+}
+
+// Achievements section
+.Achievements .btn-unlock {
+  border: 1px solid $secondary-color;
+  border-radius: 10px;
+  padding: 18px 3px;
+  background-color: $white;
+
+  &:hover {
+    background-color: $main-color;
+  }
+}
+
+// edit-box
+.editBoxContainer{
+     position: fixed;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     top: 0px;
+     bottom: 0;
+     right: 0;
+     left: 0;
+     z-index: 9999;
+     background-color: rgba(58, 47, 20, 0.5);
+
+    .row{
+     background-color: var(--main-color);
+     border-radius: 20px;
+     padding: 20px; 
+     width: 80%; 
+     max-width: 800px; 
+     overflow: auto; 
+    }
+
+  .img-fluid{
+      width: 170px; 
+      height: 170px; 
+      object-fit: cover;
+  }
+}
+

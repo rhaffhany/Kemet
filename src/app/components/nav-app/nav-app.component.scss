@@ -1,0 +1,27 @@
+.navbar{
+    background-color: var(--primary-color) !important;
+}
+.search-input{
+    border: 1px solid var(--black);
+    border-radius: 20px;
+    padding: 10px;
+}
+.search-group{
+    position: relative;
+}
+.Search-icon{
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+.nav-link{
+    font-size: 18px;
+    font-weight: 600;
+}
+.nav-item .nav-link{
+    margin: 0 20px  ;
+    color: var(--black);
+}
+

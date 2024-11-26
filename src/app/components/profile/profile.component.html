@@ -1,0 +1,258 @@
+<section class="pb-5">
+    <img [src]="layoutPic" alt="layoutPic" class="w-100">
+    
+    <div class="container">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-md-11 p-0 box">
+
+                <div class="profile-box">
+                    <div class="row">
+                       
+                        <div class="col-md-3 p-0 w-auto">
+                            <div class="profile-pic rounded-circle m-5">
+                                <img [src]=" 'https://localhost:7051' + userData.imageURL || 'assets/default-profile.png' " alt="profileImg" class="img-fluid rounded-circle " (change)="handleUploadImg($event)">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 p-0  mt-5 " >
+                            <div class="profile-content d-block  w-50 mt-4">
+                                <h5 class="name fw-bold">{{userData.firstName}} {{userData.lastName}}</h5>
+                                <p class="lead">{{userName}}{{userData.firstName}} </p>
+                            </div>
+
+                            <div class="d-flex  w-50 mt-5 pt-5">
+                                <h5 class="fw-bold">0 Followers</h5>
+                                <h5 class="fw-bold px-3">0 Following</h5>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-2 w-auto offset-1 mt-4">
+                            <button class="btn btn-outline-dark fw-bold" (click)="toggleEditSection()">
+                                Edit profile
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container ">
+        <div class="row justify-content-center ">
+             <!-- Information Column -->
+            <div class="col-md-3 me-4 information h-25">
+
+                <!-- 1 -->
+                <div class="information-items py-5 px-4">
+                    <div class="location item d-flex">
+                        <img [src]="locationIcon" alt="locationIcon" class="me-2">
+                        <p>Cairo, Egypt</p>
+                    </div>
+                    <div class="calendar item d-flex">
+                        <img [src]="calendarIcon" alt="calendarIcon" class="me-2">
+                        <p>Joined Oct 2024</p>
+                    </div>
+                    <div class="website item d-flex">
+                        <img [src]="websiteIcon" alt="websiteIcon" class="me-2">
+                        <p>Website</p>
+                    </div>
+                    <div class="bio item d-flex">
+                        <img [src]="bioIcon" alt="bioIcon" class="me-2">
+                        <p class="mb-0">Bio</p>
+                    </div>
+                </div>
+
+                <!-- 2 -->
+                <div class="information-items mt-4 py-5 px-5">
+                    <div class="signs d-flex align-items-center justify-content-center ">
+                        <button class="me-2 w-100">Traveler</button>
+                        <button class="w-100">Adventurer</button>
+                    </div>
+                    <div class="signs mt-2 d-flex align-items-center justify-content-center ">
+                        <button class="me-2 w-100">Guided</button>
+                        <button class="w-100">Historical</button>
+                    </div>
+                    <div class="signs mt-2  d-flex align-items-center justify-content-center ">
+                        <button class="me-2 w-100">Solo</button>
+                        <button class="w-100">Flexible</button>
+                    </div>
+                    <div class="signs mt-2  d-flex align-items-center justify-content-center ">
+                        <button class="me-2 w-100">Culture</button>
+                        <button class="w-100">Fun</button>
+                    </div>
+                </div>   
+                
+                <!-- 3 -->
+                <div class="information-items Achievements mt-4 py-2 px-2">
+                    <h4 class="m-0" style="font-weight: 600;">Your Achievements</h4>
+                    <p class="lead">Start sharing to unlock</p>
+    
+                    <div class="d-flex justify-content-center mb-2">
+                        <button class="btn-unlock w-100">
+                            <div class="d-flex align-items-center justify-content-center" style="font-weight: 500; font-size: 14px;">
+                                <img [src]="lockIcon" alt="lockIcon" style="width: 24px; height: 24px; margin-right: 8px;">
+                                Write your first review to unlock
+                            </div>
+                        </button>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button class="btn-unlock w-100">
+                            <div class="d-flex align-items-center justify-content-center" style="font-weight: 500; font-size: 14px;">
+                                <img [src]="lockIcon" alt="lockIcon" style="width: 24px; height: 24px; margin-right: 8px;">
+                                Add your first photo to unlock
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="d-flex justify-content-center mt-4 mb-2">
+                        <button class="btn btn-outline-dark w-75 ">View all</button>
+                    </div>
+                    
+                </div>  
+
+                <!-- 4 -->
+                <div class="information-items mt-4 py-3 px-3">
+                    <p style="font-weight: 600;">Share your travel advice</p>
+                    <div class="d-flex">
+                        <img [src]="cameraIcon" class="me-2" alt="cameraIcon" style="width: 24px; height: 24px;">
+                        <p style="font-weight: 500;">Post photos</p>
+                    </div>
+                    <div class="d-flex">
+                        <img [src]="editIcon" class="me-2" alt="editIcon" style="width: 24px; height: 24px;">
+                        <p style="font-weight: 500;">Post a review</p>
+                    </div>
+                </div>  
+
+            </div>
+    
+            <!-- Posts Column -->
+            <div class="col-md-8">
+
+                <!-- First Post -->
+                <div class="posts d-flex pt-4 px-3 mb-1">
+                    <div class="col-md-1 posts-content">
+                        <div class="content rounded-circle">
+                            <img [src]="'https://localhost:7051' + userData.imageURL   || 'assets/default-profile.png'" alt="profileImg" (change)="handleUploadImg($event)" accept="image/*" class="file-input pic" >
+                        </div>
+                    </div>
+                    <div class="col-md-10 ms-3 pt-2">
+                        <div class="d-flex">
+                            <p class="userName pe-1 m-0" style="font-size: 18px; font-weight: 600;">{{userData.firstName}} {{userData.lastName}}</p>
+                            <p class="account lead m-0" style="font-size: 16px;">{{userName}}{{userData.firstName}}</p>
+                            <p class="date lead ps-1 m-0" style="font-size: 16px;">Nov 4</p>
+                        </div>
+                        <div class="comments">
+                            <p style="font-weight: 500;">Khan El Khalili is a highly recommended place y’all need to visit.</p>
+                        </div>
+                        <div class="icons d-flex">
+                            <a href=""><img [src]="chatIcon" alt="chatIcon"></a>
+                            <p class="me-4">130</p>
+                            <a href=""><img [src]="heartIcon" alt="heartIcon"></a>
+                            <p class="me-4">1k</p>
+                            <a href=""><img [src]="sendIcon" alt="sendIcon"></a>
+                        </div>
+                    </div>
+                    <div class="col-md-1 ps-3">
+                        <a href="" class="text-decoration-none text-black">
+                        <i class="bi bi-three-dots"></i>
+                        </a>
+                    </div>
+                </div>
+    
+                <!-- Second Post -->
+                <div class="posts d-flex pt-4 px-3">
+                    <div class="col-md-1 posts-content">
+                        <div class="content rounded-circle">
+                            <img [src]="'https://localhost:7051' + userData.imageURL   || 'assets/default-profile.png'" alt="profileImg" class="pic" (change)="handleUploadImg($event)">
+                        </div>
+                    </div>
+                    <div class="col-md-10 ms-3 pt-2">
+                        <div class="d-flex">
+                            <p class="userName pe-1 m-0" style="font-size: 18px; font-weight:600;">{{userData.firstName}} {{userData.lastName}}</p>
+                            <p class="account lead m-0" style="font-size: 16px;">{{userName}}{{userData.firstName}}</p>
+                            <p class="date lead ps-1 m-0" style="font-size: 16px;">Nov 5</p>
+                        </div>
+                        <div class="comments">
+                            <p style="font-weight: 500;">Art D’egypt was so fun today cant wait for next year.</p>
+                        </div>
+                        <div class="post-pic mb-3">
+                            <img [src]="postImg" alt="postImg">
+                        </div>
+                        <div class="icons d-flex">
+                            <a href=""><img [src]="chatIcon" alt="chatIcon"></a>
+                            <p class="me-4">200</p>
+                            <a href=""><img [src]="heartIcon" alt="heartIcon"></a>
+                            <p class="me-4">3k</p>
+                            <a href=""><img [src]="sendIcon" alt="sendIcon"></a>
+                        </div>
+                    </div>
+                    <div class="col-md-1 ps-3">
+                        <a href="" class="text-decoration-none text-black">
+                            <i class="bi bi-three-dots"></i>
+                        </a>                 
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <!-- edit-box -->
+    <div class="container-fluid">
+        <div class="editBoxContainer">
+            <div class="row ">
+                <div class="d-flex">
+                    <i role="button" class="fa-solid fa-xmark"></i>
+                    <h5>Edit Profile</h5>
+
+                </div>
+
+            <!-- <div class="col-md-4 p-0 w-auto">
+                <div class="profile-pic rounded-circle m-3">
+                    <img [src]="'https://localhost:7051'+ userData.imageURL || 'assets/default-profile.png'" alt="profileImg" class="img-fluid rounded-circle">
+                    <input type="file" (change)="handleUploadImg($event)" accept="image/*" class="file-input w-100 mt-2"/>
+                </div>
+            </div>
+        
+            <div class="col-md-8 p-0 mt-5 mx-auto">
+                <div class="profile-content w-50 mt-4">
+                <h5 class="name fw-bold">Edit Profile</h5>
+                </div>
+        
+                <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" class="form-control" [(ngModel)]="updatedData.firstName">
+                </div>
+        
+                <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" class="form-control" [(ngModel)]="updatedData.lastName">
+                </div>
+        
+                <div class="form-group">
+                <label for="dateOfBirth">Date of Birth</label>
+                <input type="date" id="dateOfBirth" class="form-control" [(ngModel)]="updatedData.dateOfBirth">
+                </div>
+        
+                <div class="form-group">
+                <label for="gender">Gender</label>
+                <select id="gender" class="form-control" [(ngModel)]="updatedData.gender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+                </div>
+        
+                <button class="btn btn-outline-dark fw-bold mt-2 float-end" (click)="updateCurrentData()">Update</button>
+            </div> -->
+            </div>
+        </div>        
+    </div>
+
+</section>
+

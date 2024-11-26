@@ -1,0 +1,70 @@
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+
+<form *ngIf="showLoginForm" (ngSubmit)="handleLogin()" [formGroup]="loginForm" class="loginform">
+  <div class="color"></div>    
+
+<img class="login-logo" src="../../../assets/logo/logo.png" alt="Logo">
+  <h2>Welcome Back </h2>
+
+    <div class="form-item">
+      <label for="email">Email Address</label>
+      <input class="form-control" formControlName="email" type="email" id="email" placeholder="Email" />
+      <div *ngIf="loginForm.get('email')?.errors && (loginForm.get('email')?.touched || loginForm.get('email')?.value.length > 0)" class="alert">
+        <p *ngIf="loginForm.get('email')?.getError('required')">Email is required</p>
+        <p *ngIf="loginForm.get('email')?.getError('email')">Invalid email format</p>
+      </div>
+    </div>
+  
+    <div class="form-item">
+      <label for="password">Password</label>
+      
+      <div class="password-icon" (click)="togglePasswordVisibility()">
+        <i class="iconly-Show-Broken"></i> <!-- Icon to show password -->
+      </div>
+      
+      <input 
+        class="form-control" 
+        formControlName="password" 
+        [type]="passwordVisible ? 'text' : 'password'" 
+        id="password" 
+      />
+    
+      <!-- Error Handling -->
+      <div *ngIf="loginForm.get('password')?.errors && 
+                  (loginForm.get('password')?.touched || loginForm.get('password')?.value.length > 0)" 
+           class="alert">
+        <p *ngIf="loginForm.get('password')?.getError('required')">Password is required</p>
+        <p *ngIf="loginForm.get('password')?.getError('minlength')">Password must be at least 6 characters</p>
+      </div>
+    </div>
+    
+    <a >Forgot password ?</a>
+    
+    
+    <div class="btn">
+    <button [disabled]="loginForm.invalid" class="login-btn" type="submit">
+      Sign in <span *ngIf="isLoading"><i class="fas fa-spin fa-spinner"></i></span>
+      </button>
+      </div>
+
+  
+    <p *ngIf="errorMsg" class="alert alert-danger">{{ errorMsg }}</p>
+  
+    <p *ngIf="successMsg" class="alert alert-success">{{ successMsg }}</p>
+  
+  <div class="line-container">
+    <hr class="small-hr">
+    <h6>New member?</h6>
+    <hr class="small-hr">
+  </div>
+  
+
+  <div class="join-us-link">
+    <a href="#" (click)="openRegisterModal($event)">Join us now</a>
+   </div>
+</form>
+<div *ngIf="showRegisterForm" class="modal-login">
+  <img src="../../../assets/icons/chevron-left.svg" alt="Arrow Left Icon" class="arrow-left" (click)="backToLogin()" />
+  <app-register></app-register>
+</div>

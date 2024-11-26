@@ -1,0 +1,172 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@800&display=swap');
+
+$font-family: 'Inter', sans-serif;
+$font-size: 18px;
+$font-weight: 600;
+$line-height: 21.78px;
+$color-default: #000;
+$color-hover: #FFBD67;
+
+.navbar {
+  width: 100%;
+  height: 100px;
+  top: 42px;
+  left: 0;
+  gap: 0px;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: transparent !important; /* Force transparency */
+  padding: 10px 20px;
+  box-sizing: border-box;
+  z-index: 10; /* Ensure the navbar is above other elements */
+}
+
+
+  .navbar-collapse {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  .navbar-nav {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    gap: 30px;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .navbar-nav .nav-item .nav-link {
+    font-family: 'inter';
+    font-size: $font-size;
+    font-weight: $font-weight;
+    color: $color-default;
+    line-height: $line-height;
+    margin-right: 40px;
+
+    &:hover {
+      opacity: 1;
+      color: #f4a261;
+    }
+
+    &.active-link {
+      color: #e76f51;
+    }
+  }
+
+  .logo {
+    margin-left: 0px;
+    padding-left: 0px;
+  }
+
+  .sign-in-button-container {
+    list-style-type: none;
+    display: inline-block;
+    position: relative;
+    margin-left: auto;
+    margin-right: 20px;
+  }
+
+  .sign-in-button {
+    width: 100px;
+    height: 42px;
+    background-color: #fff;
+    color: $color-default;
+    font-family: $font-family;
+    font-size: $font-size;
+    font-weight: 800px;
+    line-height: $line-height;
+    text-align: center;
+    border-radius: 20px;
+    border: 2px solid $color-default;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+    padding: 0;
+    margin-right: 0;
+
+    &:hover {
+      background-color: $color-hover;
+    }
+  }
+
+
+.modal.show {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.3s ease, visibility 0s 0s;
+  -webkit-transition: opacity 0.3s ease, visibility 0s 0s;
+  -moz-transition: opacity 0.3s ease, visibility 0s 0s;
+  -ms-transition: opacity 0.3s ease, visibility 0s 0s;
+  -o-transition: opacity 0.3s ease, visibility 0s 0s;
+}
+
+.modal.open {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease, visibility 0s ease 0s;
+}
+
+.close {
+  font-family: 'Inter', sans-serif;
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: -0.08px;
+  text-align: center;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  width: 17px;
+  height: 18px;
+  position: absolute;
+  top: 36px;
+  left: 577px;
+  opacity: 1;
+  cursor: pointer;
+  color: #000;
+  transition: opacity 0.3s ease, transform 0.2s ease;
+
+  &:hover {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0s ease 0.3s;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 624px;
+  height: auto;
+  overflow: hidden;
+  margin-top: 100px;
+  transition: margin-top 0.3s ease;
+}
