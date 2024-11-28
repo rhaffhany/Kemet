@@ -9,7 +9,7 @@ export class NavAppComponent {
 
   logo:string = "/assets/logo/logo.png";
   searchIcon:string = "/assets/icons/Search.png"
-  profilePic:string = "/assets/icons/profilePic.png"
+  profilePic:string = "/assets/icons/profile-pic.svg"
   // profileImg: string = 'assets/img/default-profile.png';
 
   

@@ -42,8 +42,26 @@ export class ProfileComponent {
 
   postImg:string = "/assets/img/Credits20Al20-The20Newspaper 1.png"
 
+  backgroundEdit:string = "/assets/img/sunset-update.png"
+
 
   //Api
+  handleUploadImg(event:any){
+    var file = event.target.files[0];
+    const formData:FormData = new FormData();
+    formData.append('profileImage',file);
+
+    this._ProfileService.UploadProfileImg(formData).subscribe({
+      next:(response)=>{
+        console.log(response);
+        this.profileImg = `https://localhost:7051/${response.filePath}`;
+      },
+      error:(err)=>{
+        console.error('Upload Error:', err);
+      }
+    });
+  }
+
   updatedData:any = {...this.userData};
 
   ngOnInit(): void {
@@ -63,35 +81,13 @@ export class ProfileComponent {
     });
   }
   
-  showEditSection: boolean = false; 
-  toggleEditSection(): void {
-    this.showEditSection = !this.showEditSection;
-  }
-
-  @ViewChild('editBoxContainer') editBoxContainer!: ElementRef;
-
-  @HostListener('document:click', ['$event'])
-  handleOutsideClick(event:MouseEvent): void {
-    const target = event.target as HTMLElement;
-
-    if (this.showEditSection &&
-      this.editBoxContainer &&
-      !this.editBoxContainer.nativeElement.contains(target))
-    {
-      this.showEditSection = false;
-    } else {
-      console.log('Clicked inside the edit section');
-    }
-  }
-
- 
   updateCurrentData(): void {
     this.updatedData.profileImage = this.profileImg;
     this._ProfileService.updateCurrentData(this.updatedData).subscribe({
       next:(response)=>{
         console.log(response);
         this.userData = {...this.updatedData};
-        this.showEditSection = false;
+        this.showEditSection = true;
         Swal.fire({
           title: 'Success!',
           text: 'Your profile has been updated successfully.',
@@ -111,25 +107,30 @@ export class ProfileComponent {
       },
     });
   }
-
   
-  
+ 
 
-  handleUploadImg(event:any){
-    var file = event.target.files[0];
-    const formData:FormData = new FormData();
-    formData.append('profileImage',file);
 
-    this._ProfileService.UploadProfileImg(formData).subscribe({
-      next:(response)=>{
-        console.log(response);
-        this.profileImg = `https://localhost:7051/${response.filePath}`;
-      },
-      error:(err)=>{
-        console.error('Upload Error:', err);
-      }
-    });
+
+  // editBoxContainer
+  months: string[] = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  days: number[] = Array.from({ length: 31 }, (_, i) => i + 1); 
+  years: number[] = Array.from({ length: 101 }, (_, i) => new Date().getFullYear() - i); 
+
+  selectedMonth: string = this.months[0];
+  selectedDay: number = this.days[0];
+  selectedYear: number = this.years[0];
+
+
+  showEditSection: boolean = true; 
+  toggleEditBox(): void {
+    this.showEditSection = !this.showEditSection; 
   }
+
 
 
 }
