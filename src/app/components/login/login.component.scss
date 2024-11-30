@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&display=swap');
 $primary-font: 'Inter', sans-serif;
 $secondary-font: 'Roboto', sans-serif;
 $input-border-color: #FAC817;
@@ -32,7 +33,6 @@ body {
 
 
 
-/* Ensure all form elements are above the blurry background */
 input, 
 label, 
 h2, 
@@ -44,30 +44,30 @@ button,
 .small-hr, 
 .arrow-left, 
 .alert {
-  position: relative; /* Keep their positioning intact */
-  z-index: 1; /* Place above the blurry background */
+  position: relative; 
+  z-index: 1; 
 }
 input {
   border: 1px solid #FAC817;
   border-radius: 15px;
   background-color: #fff;
-  padding: 10px; /* Use padding-small value */
+  padding: 10px;
   font-family: 'Inter', sans-serif;
   font-size: 16px;
   line-height: 18px;
-  position: relative; /* Add relative positioning for better stacking */
+  position: relative; 
 }
 
 .form-item {
-  position: relative; /* Ensure the icon is positioned relative to this container */
+  position: relative; 
 }
 
 .password-icon {
   position: absolute;
-  top: -30px;  /* Adjust this value to position the icon above the input */
-  left: 10px;  /* Position the icon on the left side */
+  top: -30px; 
+  left: 10px;  
   cursor: pointer;
-  z-index: 99;  /* Ensure the icon is above the input */
+  z-index: 99; 
 }
 
 

@@ -1,1 +1,100 @@
-<p>register works!</p>
+<form (ngSubmit)="handleRegister()" [formGroup]="registerForm" class="registerform">
+    <img class="login-logo" [src]="loginLogoSrc" [alt]="loginLogoAlt">
+    <h2>Join us now for <br>the best experience</h2>
+
+    <!-- First Name Field -->
+    <div class="form-row">
+        <div class="form-item">
+            <label for="firstName">First Name</label>
+            <input class="form-control" formControlName="firstName" type="text" id="firstName" />
+            <div *ngIf="registerForm.get('firstName')?.touched && registerForm.get('firstName')?.errors" class="alert">
+                <p *ngIf="registerForm.get('firstName')?.hasError('required')">First Name is required</p>
+                <p *ngIf="registerForm.get('firstName')?.hasError('minlength')">Minimum 3 characters</p>
+                <p *ngIf="registerForm.get('firstName')?.hasError('maxlength')">Maximum 20 characters</p>
+            </div>
+        </div>
+
+        <!-- Last Name Field -->
+        <div class="form-item">
+            <label for="lastName">Last Name</label>
+            <input class="form-control" formControlName="lastName" type="text" id="lastName" />
+            <div *ngIf="registerForm.get('lastName')?.touched && registerForm.get('lastName')?.errors" class="alert">
+                <p *ngIf="registerForm.get('lastName')?.hasError('required')">Last Name is required</p>
+                <p *ngIf="registerForm.get('lastName')?.hasError('minlength')">Minimum 3 characters</p>
+                <p *ngIf="registerForm.get('lastName')?.hasError('maxlength')">Maximum 20 characters</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gender Field -->
+    <div class="form-item">
+        <label for="gender">What’s your gender?</label>
+        <div id="gender">
+            <input type="radio" id="female" formControlName="gender" value="Female">
+            <label for="female">Female</label>
+
+            <input type="radio" id="male" formControlName="gender" value="Male">
+            <label for="male">Male</label>
+
+            <input type="radio" id="nonBinary" formControlName="gender" value="Non-Binary">
+            <label for="nonBinary">Non-Binary</label>
+
+            <input type="radio" id="ratherNotSay" formControlName="gender" value="Rather not say">
+            <label for="ratherNotSay">Rather not say</label>
+        </div>
+        <div *ngIf="registerForm.get('gender')?.touched && registerForm.get('gender')?.errors" class="alert">
+            <p *ngIf="registerForm.get('gender')?.hasError('required')">Gender is required</p>
+        </div>
+    </div>
+
+    <!-- Phone Number Field -->
+    <div class="form-item">
+        <label for="phoneNumber">Phone Number</label>
+        <div class="phone-input">
+            <span class="phonePrefix">+20</span>
+            <input class="form-control" formControlName="phoneNumber" type="tel" id="phoneNumber" />
+        </div>
+        <div *ngIf="registerForm.get('phoneNumber')?.touched && registerForm.get('phoneNumber')?.errors" class="alert">
+            <p *ngIf="registerForm.get('phoneNumber')?.hasError('required')">Phone Number is required</p>
+            <p *ngIf="registerForm.get('phoneNumber')?.hasError('pattern')">Invalid phone number</p>
+        </div>
+    </div>
+
+    <!-- Date of Birth Field -->
+    <div class="form-item">
+        <label for="dateOfBirth">What’s your date of birth?</label>
+        <input class="form-control" formControlName="dateOfBirth" type="date" id="dateOfBirth" placeholder="month/day/year" />
+        <div *ngIf="registerForm.get('dateOfBirth')?.touched && registerForm.get('dateOfBirth')?.errors" class="alert">
+            <p *ngIf="registerForm.get('dateOfBirth')?.hasError('required')">Date of Birth is required</p>
+        </div>
+    </div>
+
+    <!-- Nationality Field -->
+    <div class="form-item">
+        <label for="nationality">What is your nationality?</label>
+        <input class="form-control" formControlName="nationality" type="text" id="nationality" />
+        <div *ngIf="registerForm.get('nationality')?.touched && registerForm.get('nationality')?.errors" class="alert">
+            <p *ngIf="registerForm.get('nationality')?.hasError('required')">Nationality is required</p>
+        </div>
+    </div>
+
+    <!-- SSN Field -->
+    <div class="form-item">
+        <label for="ssn">What is your SSN?</label>
+        <input class="form-control" formControlName="ssn" type="text" id="ssn" />
+        <div *ngIf="registerForm.get('ssn')?.touched && registerForm.get('ssn')?.errors" class="alert">
+            <p *ngIf="registerForm.get('ssn')?.hasError('required')">SSN is required</p>
+            <p *ngIf="registerForm.get('ssn')?.hasError('pattern')">Invalid SSN</p>
+        </div>
+    </div>
+
+    <div class="line-container">
+        <hr class="small-hr">
+        <h6>One last step</h6>
+        <hr class="small-hr">
+      </div>
+      
+     <button type="submit" class="register-btn">Login Info</button> 
+
+    <p *ngIf="errorMsg" class="alert">{{ errorMsg }}</p>
+</form>

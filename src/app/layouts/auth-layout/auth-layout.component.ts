@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./auth-layout.component.scss']
 })
 export class AuthLayoutComponent {
-
+ decoreImagePath: string = 'assets/img/Decore.png'
+ decoreBlueImagePath: string = 'assets/img/Decore2.png'
 }

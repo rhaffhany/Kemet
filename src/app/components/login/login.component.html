@@ -1,10 +1,7 @@
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
-
 <form *ngIf="showLoginForm" (ngSubmit)="handleLogin()" [formGroup]="loginForm" class="loginform">
   <div class="color"></div>    
 
-<img class="login-logo" src="../../../assets/logo/logo.png" alt="Logo">
+  <img class="login-logo" [src]="loginLogoSrc" [alt]="loginLogoAlt">
   <h2>Welcome Back </h2>
 
     <div class="form-item">
@@ -20,7 +17,7 @@
       <label for="password">Password</label>
       
       <div class="password-icon" (click)="togglePasswordVisibility()">
-        <i class="iconly-Show-Broken"></i> <!-- Icon to show password -->
+        <i class="iconly-Show-Broken"></i> 
       </div>
       
       <input 
