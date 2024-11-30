@@ -17,10 +17,10 @@ $color-hover: #FFBD67;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: transparent !important; /* Force transparency */
+  background-color: transparent !important; 
   padding: 10px 20px;
   box-sizing: border-box;
-  z-index: 10; /* Ensure the navbar is above other elements */
+  z-index: 10; 
 }
 
 

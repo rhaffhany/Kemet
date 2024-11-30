@@ -9,7 +9,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-
+  loginLogoSrc: string = '/assets/logo/logo.png'; 
+  loginLogoAlt: string = 'Logo';  
   
   @Output() close = new EventEmitter<void>();
 

@@ -1,0 +1,146 @@
+.highly-recommended {
+    position: relative;
+    text-align: left;
+    margin-top: 238px;
+    margin-bottom: 238px;
+
+     
+    .title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #222;
+      }
+    
+      .subtitle {
+        font-size: 25px;
+        color: #1E1E1E;
+        margin-top: 17px;
+        margin-bottom: 87px;
+      }
+    
+      .carousel {
+        position: relative;
+        align-items: center;
+        height: auto;
+        left: 0;
+        display: flex;
+    
+        .cards-container {
+          display: flex;
+          overflow-x: hidden; 
+          gap: 15px;
+          flex-wrap: nowrap; 
+        }
+    
+        .cards {
+          display: flex;
+          transition: transform 0.5s ease;
+          flex-shrink: 0;
+          overflow: hidden; 
+          -webkit-transition: transform 0.5s ease;
+          -moz-transition: transform 0.5s ease;
+          -ms-transition: transform 0.5s ease;
+          -o-transition: transform 0.5s ease;
+        }
+    
+        .card {
+          background: transparent;
+          height: auto;
+          flex: 0 0 250px;  
+          text-align: left;
+          margin: 0 0.5rem;
+          border: none;
+          position: relative;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+    
+          .heart-icon {
+            position: absolute;
+            top: 23px;
+            right: 17px;
+            width: 24px;
+            height: 24px;
+            opacity: 0.8;
+            z-index: 10;
+          }
+    
+          .card-image {
+            width: 250px;
+            height: 234px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 10px;
+          }
+    
+          .card-title {
+            font-size: 25px;
+            font-weight: 600;
+            line-height: 30.26px;
+            text-align: left;
+            width: 205px;
+            margin-top: 17px;
+            color: #000000;
+            flex-grow: auto;
+          }
+    
+          .card-description {
+            width: 210px;
+            font-size: 22px;
+            font-weight: 300;
+            line-height: 26.63px;
+            text-align: left;
+            color: #000000;
+            margin-top: 1px;
+          }
+    
+          .rating {
+            width: 200px;
+            height: 50px;
+            padding-top: 12px;
+            display: flex;
+            justify-content: left;
+            margin-top: 1px;
+    
+            .star {
+              color: gold;
+            }
+          }
+        }
+    
+        .cards-container {
+          display: flex;
+          flex-wrap: nowrap;
+          justify-content: flex-start;
+          transition: transform 0.5s ease-in-out;
+        }
+    
+        .nav-button {
+          position: absolute;
+          top: 25%;
+          cursor: pointer;
+          width: 50px;
+          height: 50px;
+          z-index: 2;
+    
+          &.left {
+            left: -20px;
+          }
+    
+          &.right {
+            right: -20px;
+          }
+        }
+      }
+    
+      .rectangle {
+        width: 70px;
+        height: 100px;
+        top: -60px;
+        position: absolute;
+        border-radius: 30px 0px 10px 0px;
+        background-color: #59B1E6;
+        z-index: -1;
+      }
+    }
+    

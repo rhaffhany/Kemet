@@ -6,20 +6,19 @@ import { Component } from '@angular/core';
   styleUrls: ['./nav-auth.component.scss']
 })
 export class NavAuthComponent {
-
+  loginLogoSrc: string = '/assets/logo/logo.png'; 
+  loginLogoAlt: string = 'Logo';  
+  
   showModal = false; 
 
   // Open login modal
   openLoginModal(event: Event) {
-    event.preventDefault(); 
+    event.preventDefault();
     this.showModal = true; 
     console.log('Modal opened'); 
   }
 
-  // Close login modal
   closeModal() {
     this.showModal = false; 
-    console.log('Modal closed'); 
-  }
-  
+    console.log('Modal closed'); }
 }

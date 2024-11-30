@@ -2,11 +2,9 @@
 
 <nav class="navbar navbar-expand-sm navbar-light bg-light">
   <div class="container-fluid">
-    <!-- Logo Section -->
     <a class="navbar-brand" routerLink="/">
-      <img src="../../../assets/logo/logo.png" alt="Logo">
+      <img class="login-logo" [src]="loginLogoSrc" [alt]="loginLogoAlt">
     </a>
-    <!-- Navbar Links -->
     <div class="navbar-collapse" id="collapsibleNavId">
       <ul class="navbar-nav">
         <li class="nav-item">
@@ -26,7 +24,6 @@
         </li>
       </ul>
 
-      <!-- Navbar with Sign-In Button -->
       <div class="sign-in-button-container">
         <button (click)="openLoginModal($event)" class="sign-in-button">Sign In</button>
       </div>
@@ -34,3 +31,10 @@
   </div>
 </nav>
 
+<!-- Modal for Login -->
+<div class="modal login-modal" [ngClass]="{'show': showModal}">
+  <div class="modal-content">
+    <span class="close" (click)="closeModal()">&times;</span>
+    <app-login (close)="closeModal()"></app-login> 
+  </div>
+</div>

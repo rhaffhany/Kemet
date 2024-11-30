@@ -1,0 +1,208 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&display=swap');
+
+$primary-font: 'Inter', sans-serif;
+$secondary-font: 'Roboto', sans-serif;
+$input-border-color: #FAC817;
+$gap-spacing: 20px;
+$padding-large: 4rem;
+$padding-small: 10px;
+$label-bottom-padding: 5px;
+$font-size: 16px;
+$line-height: 18px;
+
+body {
+  font-family: $primary-font; 
+}
+
+
+input {
+  border: 1px solid $input-border-color;
+  border-radius: 15px;
+  margin-left: -10px;
+  width: auto;
+  &:focus {
+    outline: none;
+    border: $input-border-color;
+    box-shadow: 0 0 5px $input-border-color;
+  }
+}
+
+.registerform {
+  padding: $padding-large;
+  
+  .register-logo {
+    width: 120px;
+    height: auto;
+    margin-left: -4rem;
+    left: 47px;
+    border-radius: 20px 0px 0px 0px;
+    margin-bottom: 45px;
+  }
+}
+
+.form-row {
+  display: flex;
+  gap: $gap-spacing;
+  width: 100%;
+}
+h2{
+    padding: 0px;
+    margin: 0px;
+    margin-left: -3px;
+}
+
+.form-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-top: $padding-small;
+  margin-bottom: 22px;
+  margin-left: 10px;
+}
+
+#gender {
+  font-family: $primary-font;
+  display: flex;
+  gap: $gap-spacing;
+  align-items: baseline;
+  font-weight: 300;
+  margin-top: 10px;
+}
+
+input[type="radio"] {
+  margin-right: -7px;
+  margin-left: 0;
+  width: auto;
+}
+
+label {
+  font-family: $primary-font;
+  display: inline-block;
+  margin-left: -10px;
+  padding-left: 0;
+  padding-bottom: $label-bottom-padding;
+  font-weight: 500;
+  font-size: $font-size;
+  line-height: $line-height;
+}
+
+.phone-input {
+  display: flex;
+  align-items: center;
+  position: relative;
+  border: 1px solid $input-border-color;
+  border-radius: 15px;
+  margin-left: -10px;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  -ms-border-radius: 15px;
+  -o-border-radius: 15px;
+}
+
+.phonePrefix {
+  font-family: $secondary-font;
+  font-size: $font-size;
+  letter-spacing: -0.08px;
+  font-weight: 1;
+  margin-right: 5px;
+  padding-left: 20px;
+  padding-right: 5px;
+  height: 44px;
+  line-height: 44px;
+  border-radius: 15px 0 0 15px;
+  -webkit-border-radius: 15px 0 0 15px;
+  -moz-border-radius: 15px 0 0 15px;
+  -ms-border-radius: 15px 0 0 15px;
+  -o-border-radius: 15px 0 0 15px;
+}
+
+#phoneNumber {
+  height: 44px;
+  padding-left: 10px;
+  border-radius: 15px;
+  border: none;
+  font-size: $font-size;
+  margin-left: 2px;
+  width: 27rem;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  -ms-border-radius: 15px;
+  -o-border-radius: 15px;
+}
+
+.line-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  
+}
+
+.small-hr {
+  width: 7rem;
+  opacity: 1;
+  border: none;
+  border-top: 2px solid #111;
+  margin: 0;
+}
+
+h6 {
+  font-family: $primary-font;
+  font-size: 14px;
+  font-weight: 500;
+  color: #718096;
+  letter-spacing: 0.2px;
+  text-align: center;
+  margin: 0;
+  margin-left: 22px;
+  margin-right: 22px;
+}
+
+.register-btn {
+  width: 25rem;
+  height: 42px;
+  background-color: #FFBD67;
+  color: #000000;
+  font-family: $primary-font;
+  font-size: $font-size;
+  font-weight: 400;
+  line-height: $line-height;
+  text-align: center;
+  border: 2px solid $input-border-color;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin-right: 0;
+  margin-left: 2rem;
+  margin-top: 20px;
+  
+  &:disabled {
+    background-color: #FFBD67;
+    cursor: not-allowed;
+  }
+}
+
+.alert{
+    color: red;
+    height: 1px;
+    padding: 0px;
+}
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  
+}
+
+
+.alert {
+  color: red;
+}
