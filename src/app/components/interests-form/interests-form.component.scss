@@ -1,0 +1,25 @@
+section{
+    position: fixed;
+    background-color: var(--white);
+    border-radius: 30px;
+    height: auto;
+    z-index: 9999;
+}
+.container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.interests-options .action-button{
+    border-radius: 20px;
+}
+.move-buttons button{
+    border: 1px solid var(--secondary-color);
+    border-radius: 10px;
+    background-color: var(--white);
+    padding: 5px 0;
+
+    &:hover{
+        background-color: var(--main-color);
+    }
+}

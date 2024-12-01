@@ -12,7 +12,7 @@
                     [src]="profileImg || 'https://localhost:7051' + userData.imageURL" 
                     alt="Profile Image" 
                     class="profile-img rounded-circle" 
-                    (change)="handleUploadImg($event)">
+                    (change)="uploadProfileImg($event)">
                 </div>
               </div>
       
@@ -134,7 +134,7 @@
                 <div class="posts d-flex pt-4 px-3 mb-1">
                     <div class="col-md-1 posts-content">
                         <div class="content rounded-circle">
-                            <img [src]=" profileImg || 'https://localhost:7051' + userData.imageURL " alt="profileImg" (change)="handleUploadImg($event)" accept="image/*" class="file-input pic" >
+                            <img [src]=" profileImg || 'https://localhost:7051' + userData.imageURL " alt="profileImg" (change)="updateCurrentData()" accept="image/*" class="file-input pic" >
                         </div>
                     </div>
                     <div class="col-md-10 ms-3 pt-2">
@@ -165,10 +165,10 @@
                 <div class="posts d-flex pt-4 px-3">
                     <div class="col-md-1 posts-content">
                         <div class="content rounded-circle">
-                            <img [src]=" profileImg || 'https://localhost:7051' + userData.imageURL " alt="profileImg" class="pic" (change)="handleUploadImg($event)">
+                            <img [src]=" profileImg || 'https://localhost:7051' + userData.imageURL " alt="profileImg" class="pic" (change)="uploadProfileImg($event)">
                         </div>
                     </div>
-                    <div class="col-md-10 ms-3 pt-2">
+                    <div class="col-12 col-md-10 ms-md-3 pt-2">
                         <div class="d-flex">
                             <p class="userName pe-1 m-0" style="font-size: 18px; font-weight:600;">{{userData.firstName}} {{userData.lastName}}</p>
                             <p class="account lead m-0" style="font-size: 16px;">{{userName}}{{userData.firstName}}</p>
@@ -188,7 +188,7 @@
                             <a href=""><img [src]="sendIcon" alt="sendIcon"></a>
                         </div>
                     </div>
-                    <div class="col-md-1 ps-3">
+                    <div class="col-12 col-md-1 ps-md-3 text-end mt-3 ps-3 mt-md-0">
                         <a href="" class="text-decoration-none text-black">
                             <i class="bi bi-three-dots"></i>
                         </a>                 
@@ -210,7 +210,7 @@
                         <i class="fa-solid fa-xmark" role="button" style="width: 24px; font-size: 20px;" (click)="toggleEditBox()"></i>
                         <h5 class="mb-1 ms-4 fw-bold">Edit Profile</h5>
                     </div>
-                    <button class="action-button " [disabled]="" (change)="updateCurrentData()">Save</button>
+                    <button class="action-button " [disabled]="!updatedData" (click)="updateCurrentData()">Save</button>
                 </div> 
             </div>
         
@@ -227,23 +227,27 @@
 
             <div class="row update-profile-img p-2 ms-5 ">
                 <div class="blur-wrapper position-relative p-0 w-auto">
-                    <img [src]="profileImg" alt="profileImg" class="profileImg">
+                    <!-- <img [src]="profileImg" alt="profileImg" class="profileImg"> -->
+                    <img [src]="profileImg || 'https://localhost:7051' + userData.imageURL" alt="Profile Image" class="profileImg rounded-circle" (change)="uploadProfileImg($event)">
                     
                     <div class="blur-overlay position-absolute w-100 h-100"></div>
 
                     <div class="update-icons d-flex justify-content-evenly align-items-center">
-                        <i class="fa-solid fa-pen-to-square" role="button" ></i>
+                        <input type="file" #fileInput (change)="uploadProfileImg($event)" hidden>
+                        <i class="fa-solid fa-pen-to-square" role="button" (click)="fileInput.click()" ></i>
                     </div>
                 </div>
             </div>
 
+            <!-- Form Fields -->
             <div class="container update-data">
                 <div class="row ">
                     <div class="col col-sm-12">
                         <div class="form-group">
 
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control dropdown input-main" id="Name" placeholder="Name">
+                                <!-- mafroud ykon username hena -->
+                                <input type="text" class="form-control dropdown input-main pb-3" id="Name" placeholder="Name" style="padding: 34px 10px;" [(ngModel)]="updatedData.firstName">
                                 <label for="Name">Name</label>
                             </div>
                             <div class="form-floating mb-3">

@@ -4,12 +4,6 @@
       <div >
         <a class="navbar-brand" routerLink="home"><img [src]="logo" alt="logo" ></a>
       </div>
-      
-
-      <!-- <div class="form-floating search-group">
-        <input type="search" class="form-control search-input ms-3 me-2" id="form-floating" placeholder="Search">
-        <img [src]="searchIcon" alt="searchIcon" class="Search-icon ">
-      </div> -->
   
       <div class="search-container search-group ">
         <img [src]="searchIcon" alt="searchIcon" class="searchIcon">
@@ -17,7 +11,6 @@
       </div>
       
       
-
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -25,10 +18,10 @@
       <div class="collapse navbar-collapse d-flex align-items-center justify-content-around" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" routerLink="thingToDo" routerLinkActive="active-link" >Things to do</a>
+            <a class="nav-link" aria-current="page" routerLink="thingstodo" routerLinkActive="active-link">Things to do</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="adeventureMode" routerLinkActive="active-link" >Adventure mode</a>
+            <a class="nav-link" routerLink="adventureMode" routerLinkActive="active-link" >Adventure mode</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" routerLink="plan" routerLinkActive="active-link" >Plan</a>
@@ -43,7 +36,7 @@
       </div>
 
       <div>
-        <a routerLink="profile" routerLinkActive="active-link"><img [src]="profilePic || 'assets/default-profile.png' "alt="profile-pic"></a>
+        <a routerLink="profile" routerLinkActive="active-link"><img [src]="profilePic || 'https://localhost:7051' + userData.imageURL" class="profile-pic rounded-circle" alt="profile-pic" (change)="uploadProfileImg($event)" ></a>
       </div>
 
     </div>
