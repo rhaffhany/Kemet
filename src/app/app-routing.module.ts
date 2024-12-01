@@ -17,24 +17,23 @@ const routes: Routes = [
   
   {
     path: '', component: AuthLayoutComponent,children:[
-      { path: '', redirectTo: 'home', pathMatch: 'full' },
-      { path: 'login', component: LoginComponent },
-      { path: 'home', component: HomeComponent},
+      { path: '', redirectTo: '/home', pathMatch: 'full' },
+      { path: 'login', component: LoginComponent, title:'Login' },
+      { path: 'home', component: HomeComponent, title:'Home'},
     ]
   },
 
   {  path: '', component: AppLayoutComponent, 
     children: [
       { path:'profile', component: ProfileComponent, title:'Profile'},
-      { path:'footer', component: FooterComponent, title:'footer'},
-      { path: 'thingstodo', component: ThingsToDoComponent},
-      { path: 'adventureMode', component: AdventureModeComponent},
-      { path: 'plan', component: PlanComponent},
-      { path: 'wishlist', component: WishlistComponent},
-      { path: 'community', component: CommunityComponent},
-  
+      { path: 'thingstodo', component: ThingsToDoComponent, title:'Things To Do'},
+      { path: 'adventureMode', component: AdventureModeComponent, title:'Adventure Mode'},
+      { path: 'plan', component: PlanComponent, title:'Plan'},
+      { path: 'wishlist', component: WishlistComponent, title:'WhishList'},
+      { path: 'community', component: CommunityComponent, title:'Community'},
+      { path:'footer', component: FooterComponent},
     ]},
-   
+
     { path: '**' , component: NotfoundComponent , title:"Not Found 404!" }
 ];
 

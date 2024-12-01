@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { ProfileService } from 'src/app/services/profile.service';
 import Swal from 'sweetalert2';
 
@@ -9,18 +9,8 @@ import Swal from 'sweetalert2';
 })
 export class ProfileComponent {
 
-  constructor(private _ProfileService:ProfileService, private _ElementRef:ElementRef){}
+  constructor(private _ProfileService:ProfileService){}
 
-  userData:any = {
-    firstName: "",
-    lastName: "",
-    dateOfBirth: "",
-    ssn: "",
-    gender: "",
-    nationality: "",
-    imageURL:"",
-    interestCategoryIds: []
-  }
   
   // assets
   layoutPic:string = "/assets/img/sunset-5314319_640.png";
@@ -46,32 +36,37 @@ export class ProfileComponent {
 
 
   //Api
-  handleUploadImg(event:any){
-    var file = event.target.files[0];
-    const formData:FormData = new FormData();
-    formData.append('profileImage',file);
 
-    this._ProfileService.UploadProfileImg(formData).subscribe({
-      next:(response)=>{
-        console.log(response);
-        this.profileImg = `https://localhost:7051/${response.filePath}`;
-      },
-      error:(err)=>{
-        console.error('Upload Error:', err);
-      }
-    });
-  }
+
+  months: string[] = [...Array(12).keys()].map(i => new Date(0, i).toLocaleString('en', { month: 'long' }));
+  days: number[] = Array.from({ length: 31 }, (_, i) => i + 1); 
+  years: number[] = Array.from({ length: 101 }, (_, i) => new Date().getFullYear() - i); 
+
+  selectedMonth: string = '';
+  selectedDay: number = 0;
+  selectedYear: number = 0;
+    
+  userData:any = {};
 
   updatedData:any = {...this.userData};
+
 
   ngOnInit(): void {
     this._ProfileService.getCurrentUserData().subscribe({
       next:(data)=>{
-        // console.log(data);
         this.userData = data;
         this.updatedData = { ...this.userData };
-        if (!this.userData.profileImage) {
-          this.userData.profileImage = '../../../../src/assets/img/default-profile.png';
+        this.selectedMonth = new Date(this.userData.dateOfBirth).toLocaleString('en', { month: 'long' });
+        this.selectedDay = new Date(this.userData.dateOfBirth).getDate();
+        this.selectedYear = new Date(this.userData.dateOfBirth).getFullYear();
+
+        
+        console.log(data);
+
+        if (!this.userData.imageURL) {
+          this.profileImg;
+        }else{
+          this.profileImg = this.userData.filePath;
         }
       },
       error: (err) => {
@@ -80,13 +75,21 @@ export class ProfileComponent {
 
     });
   }
-  
+
   updateCurrentData(): void {
-    this.updatedData.profileImage = this.profileImg;
+    
+    if (!this.userData.imageURL) {
+      this.profileImg;
+    }else{
+      this.updatedData.imageURL = this.userData.filePath;
+    }
+
+    this.updatedData.dateOfBirth = `${this.selectedYear}-${this.months.indexOf(this.selectedMonth) + 1}-${this.selectedDay}`;
+
     this._ProfileService.updateCurrentData(this.updatedData).subscribe({
       next:(response)=>{
-        console.log(response);
         this.userData = {...this.updatedData};
+        console.log(this.updatedData);
         this.showEditSection = true;
         Swal.fire({
           title: 'Success!',
@@ -97,6 +100,7 @@ export class ProfileComponent {
         });
       },
       error:(err)=>{
+        this.showEditSection = true;
         Swal.fire({
           title: 'Error!',
           text: 'There was an issue updating your profile. Please try again later.',
@@ -104,27 +108,33 @@ export class ProfileComponent {
           confirmButtonText: 'OK',
           confirmButtonColor: '#d33',
         });
+        console.error('Error updating profile:', err);
       },
     });
   }
-  
- 
 
+  uploadProfileImg(event:any){
+    const file = event.target.files[0];
+    if (!file) {
+      console.error('No file selected!');
+      return;
+    }
+    const formData:FormData = new FormData();
+    formData.append('profileImage',file);
+
+    this._ProfileService.uploadProfileImg(formData).subscribe({
+      next:(response)=>{
+        console.log(response);
+        this.profileImg = `https://localhost:7051/${response.filePath}`;
+      },
+      error:(err)=>{
+        console.error('Upload Error:', err);
+      }
+    });
+  }
 
 
   // editBoxContainer
-  months: string[] = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
-
-  days: number[] = Array.from({ length: 31 }, (_, i) => i + 1); 
-  years: number[] = Array.from({ length: 101 }, (_, i) => new Date().getFullYear() - i); 
-
-  selectedMonth: string = this.months[0];
-  selectedDay: number = this.days[0];
-  selectedYear: number = this.years[0];
-
 
   showEditSection: boolean = true; 
   toggleEditBox(): void {

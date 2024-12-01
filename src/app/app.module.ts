@@ -27,6 +27,7 @@ import { AppLayoutComponent } from './layouts/app-layout/app-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChangePipe } from './pipe/change.pipe';
+import { InterestsFormComponent } from './components/interests-form/interests-form.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { ChangePipe } from './pipe/change.pipe';
     AppLayoutComponent,
     AuthLayoutComponent,
     ChangePipe,
+    InterestsFormComponent,
   ],
   imports: [
     BrowserModule,
