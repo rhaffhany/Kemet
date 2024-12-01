@@ -62,6 +62,6 @@
    </div>
 </form>
 <div *ngIf="showRegisterForm" class="modal-login">
-  <img src="../../../assets/icons/chevron-left.svg" alt="Arrow Left Icon" class="arrow-left" (click)="backToLogin()" />
+  <img [src]="arrowLeftIcon" alt="Arrow Left Icon" class="arrow-left" (click)="backToLogin()" />
   <app-register></app-register>
 </div>

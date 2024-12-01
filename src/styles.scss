@@ -26,10 +26,30 @@ html {
   text-decoration-skip-ink: none;
 }
 
+// Scrollbar design
+::-webkit-scrollbar {
+  width: 15px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--secondary-color);
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--white);
+}
+
+// Button styles
 .btn-main {
   border: 2px solid var(--secondary-color);
   background-color: var(--white);
   border-radius: 20px;
+  transition: background-color 0.3s ease-in-out;
 
   &:hover {
       background-color: var(--main-color);
@@ -40,6 +60,7 @@ html {
   border: 1px solid var(--secondary-color);
   background-color: var(--white);
   border-radius: 10px;
+  transition: background-color 0.3s ease-in-out;
 
   &:hover {
       background-color: var(--main-color);
@@ -49,4 +70,6 @@ html {
 .input-main {
   border: 1px solid var(--secondary-color);
   border-radius: 10px;
+  padding: 10px;
+  font-size: 16px;
 }
