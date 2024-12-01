@@ -1,87 +1,106 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
-import { AuthService } from './../../services/auth.service';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
 })
-export class RegisterComponent {
-  loginLogoSrc: string = '/assets/logo/logo.png';
-  loginLogoAlt: string = 'Logo'; 
-  
+export class RegisterComponent implements OnInit {
+  arrowLeftIcon: string = '/assets/icons/chevron-left.svg';
+  registerLogoSrc: string = '/assets/logo/logo.png';
+  registerLogoAlt: string = 'Logo';
+
+  registerForm!: FormGroup;
+  loginInfoForm!: FormGroup;
+  isLoginInfoModalOpen = false;
+  errorMsg: string | null = null;
   isLoading: boolean = false;
-  errorMsg: string = '';
 
-  isRegisterModalOpen: boolean = true; 
-  isLoginInfoModalOpen: boolean = false; 
+  constructor(
+    private fb: FormBuilder,
+    private _AuthService: AuthService,
+    private _Router: Router
+  ) {}
 
-  registerForm: FormGroup = new FormGroup({
-    firstName: new FormControl('', [
-      Validators.required,
-      Validators.minLength(3),
-      Validators.maxLength(20),
-    ]),
-    lastName: new FormControl('', [
-      Validators.required,
-      Validators.minLength(3),
-      Validators.maxLength(20),
-    ]),
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [
-      Validators.required,
-      Validators.minLength(6),
-    ]),
-    confirmPassword: new FormControl('', [
-      Validators.required,
-      Validators.minLength(6),
-    ]),
-    phoneNumber: new FormControl('', [
-      Validators.required,
-      Validators.pattern(/^01[0125][0-9]{8}$/),
-    ]),
-    dateOfBirth: new FormControl('', [Validators.required]),
-    nationality: new FormControl('', [
-      Validators.required,
-      Validators.minLength(3),
-      Validators.maxLength(30),
-    ]),
-    ssn: new FormControl('', [
-      Validators.required,
-      Validators.pattern(/^\d{9}$/),
-    ]),
-    gender: new FormControl('', [Validators.required]),
-  });
+  ngOnInit(): void {
+    this.registerForm = this.fb.group({
+      firstName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
+      lastName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
+      gender: ['', Validators.required],
+      phoneNumber: ['', [Validators.required, Validators.pattern(/^0\d{10}$/)]], 
+      dateOfBirth: ['', Validators.required],
+      nationality: ['', Validators.required],
+      ssn: ['', [Validators.required, Validators.pattern(/^[0-9]{9}$/)]], 
+    });
 
-  constructor(private _AuthService: AuthService, private _Router: Router) {}
+    this.loginInfoForm = this.fb.group({
+      userName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', Validators.required],
+    });
+
+    this.loginInfoForm.get('confirmPassword')?.valueChanges.subscribe((value) => {
+      const password = this.loginInfoForm.get('password')?.value;
+      if (password && value !== password) {
+        this.loginInfoForm.get('confirmPassword')?.setErrors({ mismatch: true });
+      }
+    });
+  }
+
+  toggleLoginInfoModal(): void {
+    if (this.registerForm.valid) {
+      this.isLoginInfoModalOpen = !this.isLoginInfoModalOpen;
+    } else {
+      this.errorMsg = 'Please fill all required fields in the registration form.';
+    }
+  }
+
+  backToRegister(): void {
+    this.isLoginInfoModalOpen = false;
+  }
 
   handleRegister(): void {
     this.isLoading = true;
-
-    if (this.registerForm.valid) {
-      const formValue = { ...this.registerForm.value };
-      formValue.dateOfBirth = this.formatDate(formValue.dateOfBirth);
-
-      this._AuthService.registerForm(formValue).subscribe({
+    
+    if (this.registerForm.valid && this.loginInfoForm.valid) {
+      const registerFormValue = { ...this.registerForm.value };
+      const loginInfoFormValue = { ...this.loginInfoForm.value };
+      
+      registerFormValue.dateOfBirth = this.formatDate(registerFormValue.dateOfBirth); 
+      
+      const formData = {
+        ...registerFormValue,
+        ...loginInfoFormValue,
+      };
+  
+      console.log('Sending combined data to server:', formData); 
+      
+      this._AuthService.registerForm(formData).subscribe({
         next: (response) => {
           if (response.message === 'success') {
-            this._Router.navigate(['/community']);
+            this._Router.navigate(['/profile']);
           }
           this.isLoading = false;
         },
         error: (err) => {
+          console.log(err);
           this.isLoading = false;
-          this.errorMsg = err.error.message;
+          this.errorMsg = err?.error?.message || 'An error occurred. Please try again later.';
         },
       });
     } else {
       this.isLoading = false;
-      this.errorMsg = 'Please fill out all required fields correctly.';
+      this.errorMsg = 'Please fill out all required fields correctly in both the registration and login forms.';
     }
   }
+  
+  
 
+  // Format date into YYYY-MM-DD format
   private formatDate(date: string | Date): string {
     const d = new Date(date);
     const year = d.getFullYear();
@@ -90,17 +109,13 @@ export class RegisterComponent {
     return `${year}-${month}-${day}`;
   }
 
-  // Modal management methods
-  openLoginModal(): void {
-    this.isRegisterModalOpen = false;
-    this.isLoginInfoModalOpen = true;
+  get f() {
+    return this.registerForm.controls;
   }
 
-  closeRegisterModal(): void {
-    this.isRegisterModalOpen = false;
-  }
+  passwordVisible: boolean = false;
 
-  closeLoginModal(): void {
-    this.isLoginInfoModalOpen = false;
+  togglePasswordVisibility() {
+    this.passwordVisible = !this.passwordVisible;
   }
 }

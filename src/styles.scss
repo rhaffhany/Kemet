@@ -1,57 +1,5 @@
 // Color Variables
 :root {
-<<<<<<< Updated upstream
-    --main-color: #FFE5C2;
-    --primary-color: #FFF2E0;
-    --secondary-color: #FFBD67;
-    --link-color: #6F6C90;
-    --color: #59B1E6;
-    --white: #FFFFFF;
-    --black: #000000;
-}
-  
-  // Global styles
-  *{
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  
-  html {
-    font-family: Inter;
-    text-underline-position: from-font;
-    text-decoration-skip-ink: none;
-  }
-  
-  .btn-main {
-    border: 2px solid var(--secondary-color);
-    background-color: var(--white);
-    border-radius: 20px;
-
-    &:hover {
-      background-color: var(--main-color);
-    }
-  }
-
-.action-button{
-    border: 1px solid var(--secondary-color);
-    background-color: var(--white);
-    border-radius: 10px;
-
-  &:hover {
-      background-color: var(--main-color);
-    }
-
-}
-  .input-main{
-    border: 1px solid var(--secondary-color);
-    border-radius: 10px;
-  }
-
-  // Scrollbar design
-  ::-webkit-scrollbar {
-    width: 5px;
-=======
   --main-color: #FFE5C2;
   --primary-color: #FFF2E0;
   --secondary-color: #FFBD67;
@@ -95,7 +43,6 @@ html {
 
   &:hover {
       background-color: var(--main-color);
->>>>>>> Stashed changes
   }
 }
 
