@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
+  arrowLeftIcon: string = '/assets/icons/chevron-left.svg';
   loginLogoSrc: string = '/assets/logo/logo.png'; 
   loginLogoAlt: string = 'Logo';  
   
