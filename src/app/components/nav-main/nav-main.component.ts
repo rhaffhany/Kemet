@@ -2,12 +2,11 @@ import { Component } from '@angular/core';
 import { ProfileService } from 'src/app/services/profile.service';
 
 @Component({
-  selector: 'app-nav-app',
-  templateUrl: './nav-app.component.html',
-  styleUrls: ['./nav-app.component.scss']
+  selector: 'app-nav-main',
+  templateUrl: './nav-main.component.html',
+  styleUrls: ['./nav-main.component.scss']
 })
-export class NavAppComponent {
-
+export class NavMainComponent {
   isCollapsed = true;
   
   constructor(private _ProfileService:ProfileService){}
@@ -77,6 +76,4 @@ export class NavAppComponent {
     });
   }
 
-
-  
 }
