@@ -1,0 +1,30 @@
+.search-bar-container {
+    text-align: center;
+    padding: 1rem 2rem;
+    color: #000000;
+  
+    .search-title {
+      font-family: 'Inter', sans-serif;  
+      font-size: 35px;                   
+      font-weight: 800;                 
+      line-height: 42.36px;             
+      color: #000000;                    
+      margin-top: 178px;                
+      margin-bottom: 13px;
+    }
+    .search-subtitle {
+      font-family: 'Inter', sans-serif; 
+      font-size: 16px;                 
+      font-weight: 500;               
+      line-height: 19.36px;           
+      color: #777;                    
+      margin-bottom: 17px;
+    }
+}
+.search-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}

@@ -28,6 +28,10 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChangePipe } from './pipe/change.pipe';
 import { InterestsFormComponent } from './components/interests-form/interests-form.component';
+import { NgbCollapseModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NavMainComponent } from './components/nav-main/nav-main.component';
+import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
+import { FaqComponent } from './components/faq/faq.component';
 
 @NgModule({
   declarations: [
@@ -55,13 +59,18 @@ import { InterestsFormComponent } from './components/interests-form/interests-fo
     AuthLayoutComponent,
     ChangePipe,
     InterestsFormComponent,
+    NavMainComponent,
+    MainLayoutComponent,
+    FaqComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgbModule,
+    NgbCollapseModule
   ],
   providers: [],
   bootstrap: [AppComponent]

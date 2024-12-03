@@ -201,8 +201,8 @@
     </div>
 
     <!-- edit-box -->
-    <div class="container-fluid editBoxContainer py-2 pt-4" [class.hidden]="showEditSection">
-        <div class="update-box p-1 mt-5 ">
+    <div class="container-fluid editBoxContainer py-2 pt-4 " [class.hidden]="showEditSection">
+        <div class="update-box p-1 mt-5  ">
             
             <div class="row w-100 pt-1">
                 <div class="d-flex justify-content-between p-0 ps-3">
@@ -210,7 +210,7 @@
                         <i class="fa-solid fa-xmark" role="button" style="width: 24px; font-size: 20px;" (click)="toggleEditBox()"></i>
                         <h5 class="mb-1 ms-4 fw-bold">Edit Profile</h5>
                     </div>
-                    <button class="action-button " [disabled]="!updatedData" (click)="updateCurrentData()">Save</button>
+                    <button class="action-button" aria-label="Close" [disabled]="!updatedData" (click)="updateCurrentData()">Save</button>
                 </div> 
             </div>
         
