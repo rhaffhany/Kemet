@@ -8,8 +8,6 @@ import { Component } from '@angular/core';
 })
 export class ThingsToDoComponent {
 
-  searchIcon:string = "/assets/icons/Search.png"
- 
- 
-
+  searchIcon:string = "/assets/icons/Search.png";
+  
 }
