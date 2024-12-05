@@ -4,12 +4,17 @@ section{
     border-radius: 30px;
     height: auto;
     z-index: 9999;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    
 }
-.container{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+// .container{
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+// }
 .interests-options .action-button{
     border-radius: 20px;
 }
