@@ -20,11 +20,14 @@ const routes: Routes = [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'login', component: LoginComponent },
       { path: 'home', component: HomeComponent},
+      
     ]
   },
+  
 
   {  path: '', component: AppLayoutComponent, 
     children: [
+
       { path:'profile', component: ProfileComponent, title:'Profile'},
       { path:'footer', component: FooterComponent, title:'footer'},
       { path: 'thingstodo', component: ThingsToDoComponent},

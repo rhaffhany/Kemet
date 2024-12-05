@@ -9,7 +9,6 @@ export class NavAuthComponent {
   loginLogoSrc: string = '/assets/logo/logo.png'; 
   loginLogoAlt: string = 'Logo';  
   
-  showModal = false; 
 
   // Open login modal
   openLoginModal(event: Event) {
@@ -18,7 +17,9 @@ export class NavAuthComponent {
     console.log('Modal opened'); 
   }
 
+  showModal = false; 
   closeModal() {
     this.showModal = false; 
     console.log('Modal closed'); }
+    
 }
