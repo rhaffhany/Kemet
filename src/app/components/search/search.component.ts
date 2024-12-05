@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent {
+  searchIcon:string = "/assets/icons/Search.png"
   query: string = '';  
   searchResults: any[] = [];  
   errorMessage: string = ''; 

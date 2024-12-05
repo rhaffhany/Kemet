@@ -1,4 +1,5 @@
 // Color Variables
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 :root {
   --main-color: #FFE5C2;
   --primary-color: #FFF2E0;
@@ -8,6 +9,47 @@
   --white: #FFFFFF;
   --black: #000000;
 }
+  
+  // Global styles
+  *{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  html {
+    font-family: "Inter", sans-serif;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+  }
+  
+  .btn-main {
+    border: 2px solid var(--secondary-color);
+    background-color: var(--white);
+    border-radius: 20px;
+
+    &:hover {
+      background-color: var(--main-color);
+    }
+  }
+
+.action-button{
+    border: 1px solid var(--secondary-color);
+    background-color: var(--white);
+    border-radius: 10px;
+
+  &:hover {
+      background-color: var(--main-color);
+    }
+
+}
+  .input-main{
+    border: 1px solid var(--secondary-color);
+    border-radius: 10px;
+  }
+
+  // Scrollbar design
+
 
 // Global styles
 * {
@@ -17,7 +59,7 @@
 }
 
 html, body {
-  overflow-x: hidden; /* Prevent horizontal scrolling */
+  overflow-x: hidden; 
 }
 
 html {
@@ -28,7 +70,7 @@ html {
 
 // Scrollbar design
 ::-webkit-scrollbar {
-  width: 15px;
+  width: 7px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -73,3 +115,6 @@ html {
   padding: 10px;
   font-size: 16px;
 }
+
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';
