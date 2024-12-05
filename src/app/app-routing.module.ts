@@ -14,8 +14,19 @@ import { NotfoundComponent } from './components/notfound/notfound.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { RegisterComponent } from './components/register/register.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
+import { PlaceAdditionalContentComponent } from './components/place-additional-content/place-additional-content.component';
 
 const routes: Routes = [
+
+  {
+    path: '', component: AuthLayoutComponent,children:[
+      { path: '', redirectTo: '/home', pathMatch: 'full' },
+      { path: 'home', component: HomeComponent},
+      
+      { path: 'login', component: LoginComponent, title:'Login' },
+      { path: 'register', component: RegisterComponent, title:'Register'},
+    ]
+  },
 
   {  path: '', component: MainLayoutComponent,  children:[
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -23,22 +34,10 @@ const routes: Routes = [
     { path: 'thingstodo', component: ThingsToDoComponent, title:'Things To Do'},
   ]},
   
-  {
-    path: '', component: AuthLayoutComponent,children:[
-      { path: '', redirectTo: 'home', pathMatch: 'full' },
-      { path: 'home', component: HomeComponent},
-      
 
-      { path: 'login', component: LoginComponent, title:'Login' },
-      { path: 'register', component: RegisterComponent, title:'Register'},
-    ]
-  },
-  
-
-  {  path: '', component: AppLayoutComponent, 
-    children: [
-
+  {  path: '', component: AppLayoutComponent, children: [
       { path:'profile', component: ProfileComponent, title:'Profile'},
+      { path:'places', component: PlaceAdditionalContentComponent, title:''},
       { path: 'adventureMode', component: AdventureModeComponent, title:'Adventure Mode'},
       { path: 'plan', component: PlanComponent, title:'Plan'},
       { path: 'wishlist', component: WishlistComponent, title:'WhishList'},

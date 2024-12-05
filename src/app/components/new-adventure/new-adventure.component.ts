@@ -1,28 +1,35 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { HomeService } from 'src/app/services/home.service';
 
 @Component({
   selector: 'app-new-adventure',
   templateUrl: './new-adventure.component.html',
   styleUrls: ['./new-adventure.component.scss']
 })
-export class NewAdventureComponent implements OnInit {
+export class NewAdventureComponent {
 
+  constructor(private _HomeService:HomeService){
+    this._HomeService.fetchActivities().subscribe(
+      data => {
+        this.activities = data;
+      },
+      error => {
+        console.error('Error fetching data:', error);
+      }
+    );
+  }
+
+ 
   leftArrowSrc: string = '../../../assets/icons/arrow-left-circle.svg';
   rightArrowSrc: string = '../../../assets/icons/arrow-right-circle.svg';
-
+  
   activities = [
     { name: '', duration: '', imageURLs: [''] },
   ];
 
   currentIndex = 0;
   totalSlides = 5;
-
-  constructor(private http: HttpClient) { }
-
-  ngOnInit(): void {
-    this.fetchActivities();
-  }
 
   prevSlide() {
     if (this.currentIndex > 0) {
@@ -54,19 +61,9 @@ export class NewAdventureComponent implements OnInit {
     cardsContainer.style.transform = `translateX(-${this.currentIndex * 250}px)`;
   }
 
-  fetchActivities() {
-    this.http.get<any[]>('https://localhost:7051/api/Activities') 
-      .subscribe(
-        data => {
-          this.activities = data;
-        },
-        error => {
-          console.error('Error fetching data:', error);
-        }
-      );
-  }
 
   onImageError(event: Event) {
     (event.target as HTMLImageElement).src = 'assets/default-image.jpg';
   }
+
 }
