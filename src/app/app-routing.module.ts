@@ -16,6 +16,12 @@ import { RegisterComponent } from './components/register/register.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 
 const routes: Routes = [
+
+  {  path: '', component: MainLayoutComponent,  children:[
+    { path: '', redirectTo: '/home', pathMatch: 'full' },
+    { path: 'home', component: HomeComponent, title:'Home'},
+    { path: 'thingstodo', component: ThingsToDoComponent, title:'Things To Do'},
+  ]},
   
   {
     path: '', component: AuthLayoutComponent,children:[
@@ -24,21 +30,15 @@ const routes: Routes = [
     ]
   },
 
-  {  path: '', component: MainLayoutComponent,  children:[
-    { path: 'thingstodo', component: ThingsToDoComponent, title:'Things To Do'},
-  ]},
-
   {  path: '', component: AppLayoutComponent, 
     children: [
-      { path: '', redirectTo: '/home', pathMatch: 'full' },
-      { path: 'home', component: HomeComponent, title:'Home'},
       { path:'profile', component: ProfileComponent, title:'Profile'},
-      { path: 'thingstodo', component: ThingsToDoComponent, title:'Things To Do'},
       { path: 'adventureMode', component: AdventureModeComponent, title:'Adventure Mode'},
       { path: 'plan', component: PlanComponent, title:'Plan'},
       { path: 'wishlist', component: WishlistComponent, title:'WhishList'},
       { path: 'community', component: CommunityComponent, title:'Community'},
     ]},
+
 
     { path: '**' , component: NotfoundComponent , title:"Not Found 404!" }
 ];
