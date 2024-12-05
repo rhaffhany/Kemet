@@ -36,7 +36,7 @@
       </div>
     </div>
     
-    <a >Forgot password ?</a>
+    <a (click)="openForgotPasswordForm()">Forgot password?</a>
     
     
     <div class="btn">
@@ -64,4 +64,70 @@
 <div *ngIf="showRegisterForm" class="modal-login">
   <img [src]="arrowLeftIcon" alt="Arrow Left Icon" class="arrow-left" (click)="backToLogin()" />
   <app-register></app-register>
+</div> 
+
+
+  <div *ngIf="showForgotPasswordForm">
+    <form [formGroup]="forgotPasswordForm" (ngSubmit)="handleForgotPassword()" class="forgot-password-form">
+       <div class="color"></div>    
+      <h2>Forgot Password?</h2>
+      <p>Don’t worry! It happens. Please enter the email associated with your account.</p>
+      
+      <div class="form-item">
+        <label for="forgot-email">Email Address</label>
+        <input 
+          class="form-control" 
+          formControlName="email" 
+          type="email" 
+          id="email" 
+          placeholder="Enter your email address" 
+        />
+        <div *ngIf="forgotPasswordForm.get('email')?.errors && 
+                    (forgotPasswordForm.get('email')?.touched || forgotPasswordForm.get('email')?.value.length > 0)" 
+             class="alert">
+          <p *ngIf="forgotPasswordForm.get('email')?.getError('required')">Email is required</p>
+          <p *ngIf="forgotPasswordForm.get('email')?.getError('email')">Invalid email format</p>
+        </div>
+      </div>
+      <button [disabled]="forgotPasswordForm.invalid" class="login-btn" type="submit">
+        Send Code <span *ngIf="isLoading"><i class="fas fa-spin fa-spinner"></i></span>
+      </button>
+      
+    <img [src]="arrowLeftIcon" alt="Arrow Left Icon" class="arrow-left arrow-forget" (click)="backToLogin()" />
+  
+    <p *ngIf="errorMsg" class="alert alert-danger">{{ errorMsg }}</p>
+    <p *ngIf="successMsg" class="alert alert-success">{{ successMsg }}</p>
+
+    </form>
+  </div>
+
+
+<!-- Verification Form -->
+<form *ngIf="showVerificationForm" (ngSubmit)="handleVerification()" class="verification-form" [formGroup]="verificationForm">
+  <h2>Please check your email</h2>
+  <p>We’ve sent a code to <span>{{ forgotPasswordEmail }}</span></p>
+  <div class="form-item">
+    <ng-otp-input [config]="otpConfig" (onInputChange)="onOtpChange($event)"></ng-otp-input>
+  </div>
+  <button [disabled]="verificationForm.invalid" class="login-btn verify-btn " type="submit">
+    Verify <span *ngIf="isLoading"><i class="fas fa-spin fa-spinner"></i></span>
+  </button>
+  <img [src]="arrowLeftIcon" alt="Arrow Left Icon" class="arrow-left arrow-forget" (click)="backToLogin()" />
+</form>
+
+<!-- Reset Password Form -->
+<div *ngIf="showResetPasswordForm">
+  <form [formGroup]="resetPasswordForm" (ngSubmit)="handleResetPassword()">
+    <h2>Reset Password</h2>
+    <div class="form-item">
+      <label for="new-password">New Password</label>
+      <input formControlName="newPassword" type="password" placeholder="New password (8+ characters)" />
+    </div>
+    <div class="form-item">
+      <label for="confirm-password">Confirm New Password</label>
+      <input formControlName="confirmPassword" type="password" placeholder="Repeat password" />
+    </div>
+    <button [disabled]="resetPasswordForm.invalid" type="submit">Reset Password</button>
+    <img [src]="arrowLeftIcon" alt="Arrow Left Icon" class="arrow-left arrow-forget" (click)="backToLogin()" />
+  </form>
 </div>

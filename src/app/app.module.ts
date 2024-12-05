@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
@@ -27,11 +26,14 @@ import { AppLayoutComponent } from './layouts/app-layout/app-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChangePipe } from './pipe/change.pipe';
+
+import { NgOtpInputModule } from 'ng-otp-input';
 import { InterestsFormComponent } from './components/interests-form/interests-form.component';
 import { NgbCollapseModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavMainComponent } from './components/nav-main/nav-main.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { FaqComponent } from './components/faq/faq.component';
+
 
 @NgModule({
   declarations: [
@@ -69,8 +71,10 @@ import { FaqComponent } from './components/faq/faq.component';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    NgOtpInputModule,
     NgbModule,
     NgbCollapseModule
+
   ],
   providers: [],
   bootstrap: [AppComponent]

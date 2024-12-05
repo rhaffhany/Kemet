@@ -25,13 +25,19 @@ const routes: Routes = [
   
   {
     path: '', component: AuthLayoutComponent,children:[
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
+      { path: 'home', component: HomeComponent},
+      
+
       { path: 'login', component: LoginComponent, title:'Login' },
       { path: 'register', component: RegisterComponent, title:'Register'},
     ]
   },
+  
 
   {  path: '', component: AppLayoutComponent, 
     children: [
+
       { path:'profile', component: ProfileComponent, title:'Profile'},
       { path: 'adventureMode', component: AdventureModeComponent, title:'Adventure Mode'},
       { path: 'plan', component: PlanComponent, title:'Plan'},
