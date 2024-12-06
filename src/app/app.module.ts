@@ -76,7 +76,6 @@ import { PlaceAdditionalContentComponent } from './components/place-additional-c
     NgOtpInputModule,
     NgbModule,
     NgbCollapseModule,
-    
   ],
   providers: [],
   bootstrap: [AppComponent]
