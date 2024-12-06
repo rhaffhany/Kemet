@@ -10,6 +10,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
+
   arrowLeftIcon: string = '/assets/icons/chevron-left.svg';
   loginLogoSrc: string = '/assets/logo/logo.png'; 
   loginLogoAlt: string = 'Logo';  

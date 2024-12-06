@@ -14,6 +14,7 @@ import { NotfoundComponent } from './components/notfound/notfound.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { RegisterComponent } from './components/register/register.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
+import { PlaceAdditionalContentComponent } from './components/place-additional-content/place-additional-content.component';
 
 const routes: Routes = [
   {
@@ -32,17 +33,6 @@ const routes: Routes = [
     { path: 'thingstodo', component: ThingsToDoComponent, title:'Things To Do'},
   ]},
   
-
-  {  path: '', component: AppLayoutComponent, 
-    children: [
-
-      { path:'profile', component: ProfileComponent, title:'Profile'},
-      { path: 'adventureMode', component: AdventureModeComponent, title:'Adventure Mode'},
-      { path: 'plan', component: PlanComponent, title:'Plan'},
-      { path: 'wishlist', component: WishlistComponent, title:'WhishList'},
-      { path: 'community', component: CommunityComponent, title:'Community'},
-    ]},
-
 
     { path: '**' , component: NotfoundComponent , title:"Not Found 404!" }
 

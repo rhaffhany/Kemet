@@ -32,6 +32,7 @@ import { NgbCollapseModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavMainComponent } from './components/nav-main/nav-main.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { FaqComponent } from './components/faq/faq.component';
+import { PlaceAdditionalContentComponent } from './components/place-additional-content/place-additional-content.component';
 
 
 
@@ -64,6 +65,7 @@ import { FaqComponent } from './components/faq/faq.component';
     NavMainComponent,
     MainLayoutComponent,
     FaqComponent,
+    PlaceAdditionalContentComponent,
   ],
   imports: [
     BrowserModule,

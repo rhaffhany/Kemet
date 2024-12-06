@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { HomeService } from 'src/app/services/home.service';
 
 @Component({
   selector: 'app-recommended',
@@ -7,49 +8,59 @@ import { Component } from '@angular/core';
   styleUrls: ['./recommended.component.scss']
 })
 export class RecommendedComponent {
-  leftArrowSrc: string = '../../../assets/icons/arrow-left-circle.svg';
-  rightArrowSrc: string = '../../../assets/icons/arrow-right-circle.svg';
-
   activities = [
     { name: '', description: '', imageURLs: [''] },
   ];
-
+  
+  leftArrowSrc: string = '../../../assets/icons/arrow-left-circle.svg';
+  rightArrowSrc: string = '../../../assets/icons/arrow-right-circle.svg';
+  
   currentIndex = 0;
-
-  constructor(private http: HttpClient) { }
-
-  ngOnInit(): void {
-    this.fetchActivities();  
+  totalSlides = 5;
+  
+  constructor(private _HomeService:HomeService){
+  
+    this._HomeService.fetchPlaces().subscribe(
+      data => {
+        this.activities = data;
+      },
+      error => {
+        console.error('Error fetching data:', error);
+      }
+    );
   }
-
+  
   prevSlide() {
     if (this.currentIndex > 0) {
       this.currentIndex--;
     } else {
       this.currentIndex = this.activities.length - 1;
     }
+    this.updateSlide();
   }
-
+  
   nextSlide() {
-    if (this.currentIndex < this.activities.length - 1) {
+    if (this.currentIndex < this.activities.length - 5) {
       this.currentIndex++;
     } else {
+      // Move to the first card when at the last slide
       this.currentIndex = 0;
     }
+    this.updateSlide();
   }
-
-  fetchActivities() {
-    this.http.get<any[]>('https://localhost:7051/api/Places') 
-      .subscribe(
-        data => {
-          this.activities = data;
-        },
-        error => {
-          console.error('Error fetching data:', error);
-        }
-      );
+  
+  updateSlide() {
+    const cardsContainer = document.querySelector('.cards-container') as HTMLElement;
+    if (this.currentIndex === this.activities.length - 1) {
+      cardsContainer.classList.add('swiped');
+    } else {
+      cardsContainer.classList.remove('swiped');
+    }
+    // Update the transform property to slide
+    cardsContainer.style.transform = `translateX(-${this.currentIndex * 250}px)`;
   }
-
+  
+  
   onImageError(event: Event) {
     (event.target as HTMLImageElement).src = 'assets/default-image.jpg';
   }
