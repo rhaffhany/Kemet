@@ -9,7 +9,7 @@
               <div class="col-md-3 text-center">
                 <div class="profile-pic rounded-circle">
                   <img 
-                    [src]="profileImg || 'https://localhost:7051' + userData.imageURL" 
+                    [src]="profileImg || 'https://localhost:7051' + userData.profileImageURL" 
                     alt="Profile Image" 
                     class="profile-img rounded-circle" 
                     (change)="uploadProfileImg($event)">
@@ -20,7 +20,7 @@
               <div class="col-md-6">
                 <div class="profile-info">
                   <h5 class="name fw-bold mb-1">{{ userData.firstName }} {{ userData.lastName }}</h5>
-                  <p class="lead username">{{ userName }}{{userData.firstName}}</p>
+                  <p class="lead username">{{ user }}{{updatedData.userName}}</p>
                   <div class="d-flex mt-md-5 info">
                     <h5 class="fw-bold me-3" >0 Followers</h5>
                     <h5 class="fw-bold">0 Following</h5>
@@ -48,7 +48,7 @@
                 <div class="information-items py-5 px-4">
                     <div class="location item d-flex">
                         <img [src]="locationIcon" alt="locationIcon" class="me-2">
-                        <p>Cairo, Egypt</p>
+                        <p>{{updatedData.city}},{{updatedData.country}}</p>
                     </div>
                     <div class="calendar item d-flex">
                         <img [src]="calendarIcon" alt="calendarIcon" class="me-2">
@@ -56,11 +56,11 @@
                     </div>
                     <div class="website item d-flex">
                         <img [src]="websiteIcon" alt="websiteIcon" class="me-2">
-                        <p>Website</p>
+                        <a class="text-decoration-none text-black mb-3" [href]="updatedData.websiteLink" target="_blank">{{updatedData.websiteLink}}</a>
                     </div>
                     <div class="bio item d-flex">
                         <img [src]="bioIcon" alt="bioIcon" class="me-2">
-                        <p class="mb-0">Bio</p>
+                        <p class="mb-0">{{updatedData.bio}}</p>
                     </div>
                 </div>
 
@@ -134,13 +134,13 @@
                 <div class="posts d-flex pt-4 px-3 mb-1">
                     <div class="col-md-1 posts-content">
                         <div class="content rounded-circle">
-                            <img [src]=" profileImg || 'https://localhost:7051' + userData.imageURL " alt="profileImg" (change)="updateCurrentData()" accept="image/*" class="file-input pic" >
+                            <img [src]=" profileImg || 'https://localhost:7051' + userData.profileImageURL " alt="profileImg" (change)="updateCurrentData()" accept="image/*" class="file-input pic" >
                         </div>
                     </div>
                     <div class="col-md-10 ms-3 pt-2">
                         <div class="d-flex">
                             <p class="userName pe-1 m-0" style="font-size: 18px; font-weight: 600;">{{userData.firstName}} {{userData.lastName}}</p>
-                            <p class="account lead m-0" style="font-size: 16px;">{{userName}}{{userData.firstName}}</p>
+                            <p class="account lead m-0" style="font-size: 16px;">{{user}}{{userData.firstName}}</p>
                             <p class="date lead ps-1 m-0" style="font-size: 16px;">Nov 4</p>
                         </div>
                         <div class="comments">
@@ -165,13 +165,13 @@
                 <div class="posts d-flex pt-4 px-3">
                     <div class="col-md-1 posts-content">
                         <div class="content rounded-circle">
-                            <img [src]=" profileImg || 'https://localhost:7051' + userData.imageURL " alt="profileImg" class="pic" (change)="uploadProfileImg($event)">
+                            <img [src]=" profileImg || 'https://localhost:7051' + userData.profileImageURL " alt="profileImg" class="pic" (change)="uploadProfileImg($event)">
                         </div>
                     </div>
                     <div class="col-12 col-md-10 ms-md-3 pt-2">
                         <div class="d-flex">
                             <p class="userName pe-1 m-0" style="font-size: 18px; font-weight:600;">{{userData.firstName}} {{userData.lastName}}</p>
-                            <p class="account lead m-0" style="font-size: 16px;">{{userName}}{{userData.firstName}}</p>
+                            <p class="account lead m-0" style="font-size: 16px;">{{user}}{{userData.firstName}}</p>
                             <p class="date lead ps-1 m-0" style="font-size: 16px;">Nov 5</p>
                         </div>
                         <div class="comments">
@@ -197,6 +197,7 @@
 
 
             </div>
+            
         </div>
     </div>
 
@@ -210,7 +211,7 @@
                         <i class="fa-solid fa-xmark" role="button" style="width: 24px; font-size: 20px;" (click)="toggleEditBox()"></i>
                         <h5 class="mb-1 ms-4 fw-bold">Edit Profile</h5>
                     </div>
-                    <button class="action-button" aria-label="Close" [disabled]="!updatedData" (click)="updateCurrentData()">Save</button>
+                    <button class="action-button" aria-label="Close" type="submit" [disabled]="!updatedData" (click)="updateCurrentData()">Save</button>
                 </div> 
             </div>
         
@@ -228,7 +229,7 @@
             <div class="row update-profile-img p-2 ms-5 ">
                 <div class="blur-wrapper position-relative p-0 w-auto">
                     <!-- <img [src]="profileImg" alt="profileImg" class="profileImg"> -->
-                    <img [src]="profileImg || 'https://localhost:7051' + userData.imageURL" alt="Profile Image" class="profileImg rounded-circle" (change)="uploadProfileImg($event)">
+                    <img [src]="profileImg || 'https://localhost:7051' + userData.profileImageURL" alt="Profile Image" class="profileImg rounded-circle" (change)="uploadProfileImg($event)">
                     
                     <div class="blur-overlay position-absolute w-100 h-100"></div>
 
@@ -246,20 +247,22 @@
                         <div class="form-group">
 
                             <div class="form-floating mb-3">
-                                <!-- mafroud ykon username hena -->
-                                <input type="text" class="form-control dropdown input-main pb-3" id="Name" placeholder="Name" style="padding: 34px 10px;" [(ngModel)]="updatedData.firstName">
-                                <label for="Name">Name</label>
+                                <input type="text" class="form-control dropdown input-main pb-3" id="Username" placeholder="Username" style="padding: 34px 10px;" [(ngModel)]="updatedData.userName"  [class.is-invalid]="usernameError">
+                                <label for="Username">Username</label>
+                                <div *ngIf="usernameError" class="invalid-feedback alert alert-danger">
+                                    The username is already in use. Please choose another one.
+                                </div>                              
                             </div>
                             <div class="form-floating mb-3">
-                                <textarea name="Bio" class="form-control input-main" id="Bio" placeholder="Bio" style="height: 82px;"></textarea>
+                                <textarea name="Bio" class="form-control input-main" id="Bio" placeholder="Bio" style="height: 82px;" [(ngModel)]="updatedData.bio"></textarea>
                                 <label for="Bio">Bio</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control input-main" id="Location" placeholder="Location">
+                                <input type="text" class="form-control input-main" id="Location" placeholder="Location" [(ngModel)]="updatedData.city">
                                 <label for="Location">Location</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="url" class="form-control input-main" id="Website" placeholder="Website">
+                                <input type="url" class="form-control input-main" id="Website" placeholder="Website" [(ngModel)]="updatedData.websiteLink">
                                 <label for="Website">Website</label>
                             </div>
 

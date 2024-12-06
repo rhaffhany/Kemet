@@ -20,21 +20,32 @@ const routes: Routes = [
   {
     path: '', component: AuthLayoutComponent,children:[
       { path: '', redirectTo: '/home', pathMatch: 'full' },
-      { path: 'home', component: HomeComponent},
-      
+      { path: 'home', component: HomeComponent, title:'Home'},
+
       { path: 'login', component: LoginComponent, title:'Login' },
       { path: 'register', component: RegisterComponent, title:'Register'},
     ]
   },
 
   {  path: '', component: MainLayoutComponent,  children:[
-    { path: '', redirectTo: '/home', pathMatch: 'full' },
-    { path: 'home', component: HomeComponent, title:'Home'},
+    // { path: '', redirectTo: '/home', pathMatch: 'full' },
+    // { path: 'home', component: HomeComponent, title:'Home'},
     { path: 'thingstodo', component: ThingsToDoComponent, title:'Things To Do'},
   ]},
   
 
-    { path: '**' , component: NotfoundComponent , title:"Not Found 404!" }
+
+  {  path: '', component: AppLayoutComponent, children: [
+      { path:'profile', component: ProfileComponent, title:'Profile'},
+      { path:'places', component: PlaceAdditionalContentComponent, title:'Places'},
+      { path: 'adventureMode', component: AdventureModeComponent, title:'Adventure Mode'},
+      { path: 'plan', component: PlanComponent, title:'Plan'},
+      { path: 'wishlist', component: WishlistComponent, title:'WhishList'},
+      { path: 'community', component: CommunityComponent, title:'Community'},
+  ]},
+
+
+  { path: '**' , component: NotfoundComponent , title:"Not Found 404!" }
 
 ];
 

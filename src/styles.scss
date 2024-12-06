@@ -33,6 +33,16 @@
     }
   }
 
+  .btn-info{
+    border: 1px solid var(--secondary-color);
+    background-color: var(--white);
+    border-radius: 20px;
+
+    &:hover {
+      background-color: var(--main-color);
+    }
+  }
+
 .action-button{
     border: 1px solid var(--secondary-color);
     background-color: var(--white);
@@ -43,12 +53,10 @@
     }
 
 }
-  .input-main{
+.input-main{
     border: 1px solid var(--secondary-color);
     border-radius: 10px;
-  }
-
-  // Scrollbar design
+}
 
 
 // Global styles
@@ -115,6 +123,12 @@ html {
   padding: 10px;
   font-size: 16px;
 }
+.rate {
+  color: #FAC817;
+}
+
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';
 
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';

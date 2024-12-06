@@ -26,6 +26,10 @@ export class AuthService {
   getToken(): string | null {
     return localStorage.getItem('token');
   }
+  //Get username
+  getUserName(): string | null{
+    return localStorage.getItem('userName');
+  }
 
   // Forgot Password
   forgotPassword(data: { email: string }): Observable<any> {
