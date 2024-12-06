@@ -1,3 +1,4 @@
+
 .search-bar {
   display: flex;
   align-items: center;
@@ -24,8 +25,8 @@
     padding: 0.8rem 0;
     border: none;
     outline: none;
+    z-index: 99;
     font-size: 1rem;
-    z-index: 1;
   }
 .search-results-container {
     margin-top: 20px;
@@ -45,23 +46,7 @@
     background-color: #f4f4f4;
   }
 }
-    
-  
-  .search-container {
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
-    text-align: center;
-  
-    .search-input {
-      width: 100%;
-      padding: 10px;
-      font-size: 16px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
+
   
     .results-container {
       background-color: #f9f9f9;
@@ -93,4 +78,3 @@
       font-style: italic;
       color: #999;
     }
-  }

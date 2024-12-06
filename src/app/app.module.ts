@@ -26,13 +26,13 @@ import { AppLayoutComponent } from './layouts/app-layout/app-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChangePipe } from './pipe/change.pipe';
-
 import { NgOtpInputModule } from 'ng-otp-input';
 import { InterestsFormComponent } from './components/interests-form/interests-form.component';
 import { NgbCollapseModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavMainComponent } from './components/nav-main/nav-main.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { FaqComponent } from './components/faq/faq.component';
+
 
 
 @NgModule({
@@ -73,8 +73,8 @@ import { FaqComponent } from './components/faq/faq.component';
     HttpClientModule,
     NgOtpInputModule,
     NgbModule,
-    NgbCollapseModule
-
+    NgbCollapseModule,
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

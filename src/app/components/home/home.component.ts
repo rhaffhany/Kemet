@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-
+ decoreImagePath: string = 'assets/img/Decore.png'
+ decoreBlueImagePath: string = 'assets/img/Decore2.png'
 }

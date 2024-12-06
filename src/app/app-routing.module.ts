@@ -16,23 +16,21 @@ import { RegisterComponent } from './components/register/register.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 
 const routes: Routes = [
+  {
+    path: '', component: AuthLayoutComponent,children:[
+      { path: '', redirectTo: '/home', pathMatch: 'full' },
+      { path: 'home', component: HomeComponent},
+      
+      { path: 'login', component: LoginComponent, title:'Login' },
+      { path: 'register', component: RegisterComponent, title:'Register'},
+    ]
+  },
 
   {  path: '', component: MainLayoutComponent,  children:[
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     { path: 'home', component: HomeComponent, title:'Home'},
     { path: 'thingstodo', component: ThingsToDoComponent, title:'Things To Do'},
   ]},
-  
-  {
-    path: '', component: AuthLayoutComponent,children:[
-      { path: '', redirectTo: 'home', pathMatch: 'full' },
-      { path: 'home', component: HomeComponent},
-      
-
-      { path: 'login', component: LoginComponent, title:'Login' },
-      { path: 'register', component: RegisterComponent, title:'Register'},
-    ]
-  },
   
 
   {  path: '', component: AppLayoutComponent, 
@@ -47,6 +45,7 @@ const routes: Routes = [
 
 
     { path: '**' , component: NotfoundComponent , title:"Not Found 404!" }
+
 ];
 
 @NgModule({
