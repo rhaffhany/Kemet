@@ -17,7 +17,6 @@ import { MainLayoutComponent } from './layouts/main-layout/main-layout.component
 import { PlaceAdditionalContentComponent } from './components/place-additional-content/place-additional-content.component';
 
 const routes: Routes = [
-
   {
     path: '', component: AuthLayoutComponent,children:[
       { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -35,17 +34,8 @@ const routes: Routes = [
   ]},
   
 
-  {  path: '', component: AppLayoutComponent, children: [
-      { path:'profile', component: ProfileComponent, title:'Profile'},
-      { path:'places', component: PlaceAdditionalContentComponent, title:''},
-      { path: 'adventureMode', component: AdventureModeComponent, title:'Adventure Mode'},
-      { path: 'plan', component: PlanComponent, title:'Plan'},
-      { path: 'wishlist', component: WishlistComponent, title:'WhishList'},
-      { path: 'community', component: CommunityComponent, title:'Community'},
-    ]},
-
-
     { path: '**' , component: NotfoundComponent , title:"Not Found 404!" }
+
 ];
 
 @NgModule({

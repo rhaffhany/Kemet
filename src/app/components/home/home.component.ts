@@ -7,5 +7,6 @@ import { HomeService } from 'src/app/services/home.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-
+ decoreImagePath: string = 'assets/img/Decore.png'
+ decoreBlueImagePath: string = 'assets/img/Decore2.png'
 }

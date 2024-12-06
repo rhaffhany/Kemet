@@ -1,33 +1,266 @@
-section{
-  background-color: var(--main-color);
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap');
+@import url('https://cdn.jsdelivr.net/npm/iconly@latest/dist/iconly.min.css');
+
+/* Variables */
+$blur: 70px;
+$font-family: 'Inter', sans-serif;
+$black: #000000;
+$gray: #777;
+$white: #FFFFFF;
+$yellow: #FAC817;
+$purple: #6068FF;
+$light-purple: #D5AEE4;
+$blue: #59B1E6;
+/* Section */
+section {
+  position: relative;
+  background-color: #FFE4C2;
+  z-index: 0; /* Background z-index */
+  overflow: hidden;
 }
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+/* Decorative Elements */
+.decore,
+.decoreblue {
+  position: absolute;
+  background: no-repeat center center;
+  background-size: contain;
+  pointer-events: none;
+  z-index: 1; 
+}
+
+.decore {
+  width: 766px;
+  height: 759px;
+  top: -80PX;
+  left: 770px;
+  z-index: 0;
+}
+
+.decoreblue {
+  width: 96px;
+  height: 252px;
+  top: 2570px;
+  left: 1260px;
+  z-index: 0;
+}
+
+.yellow-circle {
+  width: 478.94px;
+  height: 496.86px;
+  background: radial-gradient(circle, #FAC817, transparent);
+  position: absolute;
+  z-index: 0;
+  filter: blur(70px);
+  opacity: 0.5;
+  top: 410px;
+  left: -284px;
+  border-radius: 50%;
+  pointer-events: none;
+  -webkit-filter: blur(70px);
+}
+
+.purple-circle {
+  width: 478.94px;
+  height: 496.86px;
+  background: radial-gradient(circle, #6068FF, transparent);
+  position: absolute;
+  z-index: 0;
+  filter: blur(70px);
+  opacity: 0.5;
+  top: 1380px;
+  right: -284px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.blue-circle {
+  width: 354px;
+  height: 367px;
+  background: radial-gradient(circle, #59B1E6 , transparent);
+  position: absolute;
+  z-index: 0;
+  filter: blur(70px);
+  opacity: 0.8;
+  top: 2350px;
+  left: 100px;
+  border-radius: 50%;
+  pointer-events: none;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+}
+
+.second-purple-circle {
+  width: 478.94px;
+  height: 496.86px;
+  background: radial-gradient(circle, #D5AEE4, transparent);
+  position: absolute;
+  z-index: 0;
+  filter: blur(150px);
+  opacity: 1;
+  top: 3250px;
+  right: -105px;
+  border-radius: 50%;
+  pointer-events: none;
+  -webkit-filter: blur(150px);
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+}
+
+.second-blue-circle {
+  width: 354px;
+  height: 367px;
+  background: radial-gradient(circle, #59B1E6 , transparent);
+  position: absolute;
+  z-index: 0;
+  filter: blur(70px);
+  opacity: 0.8;
+  top: 3360px;
+  right: -212px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.third-purple-circle {
+  width: 478.94px;
+  height: 496.86px;
+  background: radial-gradient(circle, #D5AEE4 , transparent);
+  position: absolute;
+  z-index: 0;
+  filter: blur(70px);
+  opacity: 0.6;
+  top: 4240px;
+  right: -284px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Components */
+.search-bar-container,
+.search-container,
+.ancient-spotlight,
+.title,
+.subtitle {
+  position: relative;
+  z-index: 2; /* Ensure components are above the .decore */
+}
+
+
+/* Search Bar */
 .search-bar-container {
-    text-align: center;
-    padding: 1rem 2rem;
-    color: #000000;
-  
-    .search-title {
-      font-family: 'Inter', sans-serif;  
-      font-size: 35px;                   
-      font-weight: 800;                 
-      line-height: 42.36px;             
-      color: #000000;                    
-      margin-top: 178px;                
-      margin-bottom: 13px;
-    }
-    .search-subtitle {
-      font-family: 'Inter', sans-serif; 
-      font-size: 16px;                 
-      font-weight: 500;               
-      line-height: 19.36px;           
-      color: #777;                    
-      margin-bottom: 17px;
+  text-align: center;
+  padding: 1rem 2rem;
+  color: $black;
+  z-index: 99;
+  margin-TOP: 280PX;
+
+  .search-title {
+    font-family: $font-family;
+    font-size: 35px;
+    font-weight: 800;
+    line-height: 42.36px;
+    color: $black;
+    margin: 0 auto 13px;
+  }
+
+  .search-subtitle {
+    font-family: $font-family;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 19.36px;
+    color: $gray;
+    margin-bottom: 17px;
+  }
+}
+
+.search-container {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Titles and Subtitles */
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #222;
+}
+
+.subtitle {
+  font-size: 25px;
+  color: #1E1E1E;
+  margin: 17px 0 87px;
+}
+
+
+/* Ancient Spotlight */
+.ancient-spotlight {
+  position: relative;
+  text-align: left;
+  margin-top: 187px;
+
+  .rectangle {
+    width: 70px;
+    height: 76px;
+    position: absolute;
+    margin-top: -2rem ;
+    border-radius: 30px 0px 10px 0px;
+    background-color: #FFBD67;
+    z-index: 0;
+    -webkit-border-radius: 30px 0px 10px 0px;
+    -moz-border-radius: 30px 0px 10px 0px;
+    -ms-border-radius: 30px 0px 10px 0px;
+    -o-border-radius: 30px 0px 10px 0px;
+  }
+
+
+}
+.new-adventure {
+    position: relative;
+    text-align: left;
+    margin-top: 126px;
+    margin-bottom: 126px;
+    .rectangle {
+      width: 75px;
+      height: 82px;
+      position: absolute;
+      margin-top: -2.5rem ;
+      border-radius: 30px 0px 10px 0px;
+      background-color: #59B1E6;
+      z-index: 0;
+      -webkit-border-radius: 30px 0px 10px 0px;
+      -moz-border-radius: 30px 0px 10px 0px;
+      -ms-border-radius: 30px 0px 10px 0px;
+      -o-border-radius: 30px 0px 10px 0px;
     }
 }
-.search-container {
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
-    text-align: center;
+
+.highly-recommended {
+  position: relative;
+  text-align: left;
+  margin-top: 238px;
+  margin-bottom: 238px;
+  .rectangle {
+    width: 75px;
+    height: 82px;
+    position: absolute;
+    margin-top: -2.5rem ;
+    border-radius: 30px 0px 10px 0px;
+    background-color: #F0BB00;
+    z-index: 0;
+    -webkit-border-radius: 30px 0px 10px 0px;
+    -moz-border-radius: 30px 0px 10px 0px;
+    -ms-border-radius: 30px 0px 10px 0px;
+    -o-border-radius: 30px 0px 10px 0px;
+  }
 }

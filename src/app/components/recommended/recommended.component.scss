@@ -1,10 +1,4 @@
-.highly-recommended {
-    position: relative;
-    text-align: left;
-    margin-top: 238px;
-    margin-bottom: 238px;
-
-     
+   
     .title {
         font-size: 2rem;
         font-weight: 800;
@@ -24,6 +18,8 @@
         height: auto;
         left: 0;
         display: flex;
+        max-width: max-content;
+
     
         .cards-container {
           display: flex;
@@ -142,5 +138,5 @@
         background-color: #59B1E6;
         z-index: -1;
       }
-    }
+    
     
