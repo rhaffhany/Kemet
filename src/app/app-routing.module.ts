@@ -33,6 +33,14 @@ const routes: Routes = [
     { path: 'thingstodo', component: ThingsToDoComponent, title:'Things To Do'},
   ]},
   
+  {path: '', component: AppLayoutComponent, children: [
+    { path:'profile', component: ProfileComponent, title:'Profile'},
+    { path:'places', component: PlaceAdditionalContentComponent, title:'Places'},
+    { path: 'adventureMode', component: AdventureModeComponent, title:'Adventure Mode'},
+    { path: 'plan', component: PlanComponent, title:'Plan'},
+    { path: 'wishlist', component: WishlistComponent, title:'WhishList'},
+    { path: 'community', component: CommunityComponent, title:'Community'},
+]},
 
     { path: '**' , component: NotfoundComponent , title:"Not Found 404!" }
 

@@ -118,16 +118,21 @@
 <!-- Reset Password Form -->
 <div *ngIf="showResetPasswordForm">
   <form [formGroup]="resetPasswordForm" (ngSubmit)="handleResetPassword()">
-    <h2>Reset Password</h2>
+    <h2>Reset password</h2>
+    <p>Please type something you’ll remember</p>
     <div class="form-item">
       <label for="new-password">New Password</label>
-      <input formControlName="newPassword" type="password" placeholder="New password (8+ characters)" />
+      <input formControlName="newPassword" type="password" placeholder="must be 8 characters" />
     </div>
     <div class="form-item">
       <label for="confirm-password">Confirm New Password</label>
       <input formControlName="confirmPassword" type="password" placeholder="Repeat password" />
     </div>
-    <button [disabled]="resetPasswordForm.invalid" type="submit">Reset Password</button>
+    <button [disabled]="resetPasswordForm.invalid" type="submit">Repeat Password</button>
+
+      <h6>Already have an account? </h6>
+      <a href="#" (click)="backToLogin()">Log in</a>
+
     <img [src]="arrowLeftIcon" alt="Arrow Left Icon" class="arrow-left arrow-forget" (click)="backToLogin()" />
   </form>
 </div>
