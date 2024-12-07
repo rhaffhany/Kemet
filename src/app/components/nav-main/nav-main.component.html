@@ -37,17 +37,17 @@
       <div class="d-block">
         <p class="d-block">
           <a type="button" class="ms-2" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample">
-            <img [src]="profilePic || 'https://localhost:7051' + userData.imageURL"  class="profile-pic rounded-circle" alt="profile-pic" (change)="uploadProfileImg($event)" >
+            <img [src]="profilePic || 'https://localhost:7051' + userData.profileImageURL"  class="profile-pic rounded-circle" alt="profile-pic" (change)="uploadProfileImg($event)" >
           </a>
         </p>
         <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
           <div class="card d-block " style="width: 162px;">
             <div class="card-body">
-              <div role="button" routerLink="profile" class="mb-1">Profile</div>
-              <div role="button" routerLink="" class="mb-1">Write a review</div>
-              <div role="button" routerLink="" class="mb-1">Booking</div>
-              <div role="button" routerLink="" class="mb-1">Settings</div>
-              <div role="button" routerLink="" class="mb-1">Sign out</div>
+              <div role="button" routerLink="profile" class="mb-1" (click)="closeCollapse()">Profile</div>
+              <div role="button" routerLink="" class="mb-1" (click)="closeCollapse()">Write a review</div>
+              <div role="button" routerLink="" class="mb-1" (click)="closeCollapse()">Booking</div>
+              <div role="button" routerLink="" class="mb-1" (click)="closeCollapse()">Settings</div>
+              <div role="button" routerLink="" class="mb-1" (click)="closeCollapse()">Sign out</div>
             </div>
           </div>
         </div>   

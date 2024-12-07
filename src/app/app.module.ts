@@ -33,6 +33,8 @@ import { NavMainComponent } from './components/nav-main/nav-main.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { FaqComponent } from './components/faq/faq.component';
 import { PlaceAdditionalContentComponent } from './components/place-additional-content/place-additional-content.component';
+import { CarouselModule } from 'ngx-owl-carousel-o';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 
@@ -76,6 +78,9 @@ import { PlaceAdditionalContentComponent } from './components/place-additional-c
     NgOtpInputModule,
     NgbModule,
     NgbCollapseModule,
+    BrowserModule,
+    BrowserAnimationsModule,
+    CarouselModule
   ],
   providers: [],
   bootstrap: [AppComponent]
