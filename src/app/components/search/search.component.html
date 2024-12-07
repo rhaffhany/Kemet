@@ -3,12 +3,12 @@
       <input type="text" class="search-input w-auto" [(ngModel)]="query" (input)="onSearchInput()"  />
     </div>
   
-    <div *ngIf="errorMessage" class="error-message alert alert-danger text-center">
+    <div *ngIf="errorMessage" class="error-message text-center">
       {{ errorMessage }}
     </div>
   
     <div *ngIf="searchResults.length > 0" id="searchResults">
-      <div *ngFor="let result of searchResults" class="result-item alert alert-danger text-center">
+      <div *ngFor="let result of searchResults" class="result-item  text-center">
         {{ result.name }}
       </div>
     </div>

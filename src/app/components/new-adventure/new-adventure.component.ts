@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { HomeService } from 'src/app/services/home.service';
 
 @Component({
@@ -7,39 +6,36 @@ import { HomeService } from 'src/app/services/home.service';
   templateUrl: './new-adventure.component.html',
   styleUrls: ['./new-adventure.component.scss']
 })
-export class NewAdventureComponent {
+export class NewAdventureComponent  {
+  activities: any;  // The response from the API
+  leftArrowSrc: string = '../../../assets/icons/arrow-left-circle.svg';
+  rightArrowSrc: string = '../../../assets/icons/arrow-right-circle.svg';
+  currentIndex: number = 0;
+  totalSlides: number = 5;
 
-  constructor(private _HomeService:HomeService){
+  constructor(private _HomeService: HomeService) {
     this._HomeService.fetchActivities().subscribe(
       data => {
-        this.activities = data;
+        if (data && Array.isArray(data.$values)) {
+          this.activities = data.$values;
+        } else {
+          console.error('Expected $values array, but received:', data);
+        }
       },
       error => {
         console.error('Error fetching data:', error);
       }
     );
   }
-
- 
-  leftArrowSrc: string = '../../../assets/icons/arrow-left-circle.svg';
-  rightArrowSrc: string = '../../../assets/icons/arrow-right-circle.svg';
-  
-  activities = [
-    { name: '', duration: '', imageURLs: [''] },
-  ];
-
-  currentIndex = 0;
-  totalSlides = 5;
-
   prevSlide() {
     if (this.currentIndex > 0) {
       this.currentIndex--;
     } else {
-      this.currentIndex = this.activities.length - 1;
+      this.currentIndex = this.activities.length - 5;
     }
     this.updateSlide();
   }
-
+  
   nextSlide() {
     if (this.currentIndex < this.activities.length - 5) {
       this.currentIndex++;
@@ -49,7 +45,7 @@ export class NewAdventureComponent {
     }
     this.updateSlide();
   }
-
+  
   updateSlide() {
     const cardsContainer = document.querySelector('.cards-container') as HTMLElement;
     if (this.currentIndex === this.activities.length - 1) {
@@ -60,10 +56,12 @@ export class NewAdventureComponent {
     // Update the transform property to slide
     cardsContainer.style.transform = `translateX(-${this.currentIndex * 250}px)`;
   }
-
-
+  
+  
   onImageError(event: Event) {
     (event.target as HTMLImageElement).src = 'assets/default-image.jpg';
   }
-
 }
+
+
+

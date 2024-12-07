@@ -23,5 +23,7 @@ export class HomeService {
     return this._HttpClient.get('https://localhost:7051/api/Activities');
   }
 
-
+  fetchTravelAgencyPlan():Observable<any>  {
+    return this._HttpClient.get('https://localhost:7051/api/TravelAgencyPlan');
+  }
 }

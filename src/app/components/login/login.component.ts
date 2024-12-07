@@ -150,7 +150,8 @@ handleLogin(): void {
     this.errorMsg = 'Please fill out all fields correctly.';
   }
 }
-isDevMode = true
+
+isDevMode = false
   handleForgotPassword() {
     if (this.forgotPasswordForm.valid) {
       this.forgotPasswordEmail = this.forgotPasswordForm.value.email; // Store email for future reference

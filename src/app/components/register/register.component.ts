@@ -1,8 +1,8 @@
+import { ModalService } from './../../services/modal.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
-
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -17,12 +17,14 @@ export class RegisterComponent implements OnInit {
   loginInfoForm!: FormGroup;
   isLoginInfoModalOpen = false;
   errorMsg: string | null = null;
+  successMsg: string | null = null; 
   isLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private _AuthService: AuthService,
-    private _Router: Router
+    private _Router: Router,
+    private ModalService: ModalService
   ) {}
 
   ngOnInit(): void {
@@ -77,14 +79,20 @@ export class RegisterComponent implements OnInit {
         ...loginInfoFormValue,
       };
   
-      console.log('Sending combined data to server:', formData); 
-      
+      console.log('Sending combined data to server:', formData);
+
       this._AuthService.registerForm(formData).subscribe({
         next: (response) => {
-          if (response.message === 'success') {
-            this._Router.navigate(['/profile']);
+          if (response.token) {
+            localStorage.setItem('authToken', response.token);
+      
+            this.isLoading = false;
+      
+            setTimeout(() => {
+              this.ModalService.closeModal(); 
+             
+            }, 2000); 
           }
-          this.isLoading = false;
         },
         error: (err) => {
           console.log(err);
@@ -92,13 +100,10 @@ export class RegisterComponent implements OnInit {
           this.errorMsg = err?.error?.message || 'An error occurred. Please try again later.';
         },
       });
-    } else {
-      this.isLoading = false;
-      this.errorMsg = 'Please fill out all required fields correctly in both the registration and login forms.';
+    }}      
+    onSubmit() {
+      this.successMsg = "Registration successful!";
     }
-  }
-  
-  
 
   // Format date into YYYY-MM-DD format
   private formatDate(date: string | Date): string {
