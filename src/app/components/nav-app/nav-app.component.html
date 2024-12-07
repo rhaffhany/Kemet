@@ -38,7 +38,7 @@
       <div class="d-block">
         <p class="d-block">
           <a type="button" class="ms-2" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample">
-            <img [src]="profilePic || 'https://localhost:7051' + userData.imageURL"  class="profile-pic rounded-circle" alt="profile-pic" (change)="uploadProfileImg($event)" >
+            <img [src]="profilePic || 'https://localhost:7051' + userData.profileImageURL"  class="profile-pic rounded-circle" alt="profile-pic" (change)="uploadProfileImg($event)" >
           </a>
         </p>
         <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">

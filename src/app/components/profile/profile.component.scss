@@ -65,6 +65,12 @@ section{
 .edit-button{
   transform: translate(-30%,-260%);
 }
+.input-main {
+  border: 1px solid var(--secondary-color);
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 16px;
+}
 
 
 /* Responsive Design */

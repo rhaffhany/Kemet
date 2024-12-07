@@ -27,10 +27,10 @@ export class NavAppComponent {
         this.userData = data;
         this.updatedData = { ...this.userData };
 
-        if (!this.userData.imageURL) {
+        if (!this.userData.profileImageURL) {
           this.profilePic;
         }else{
-          this.profilePic = this.userData.filePath;
+          this.profilePic = this.userData.profileImageURL;
         }
       },
       error: (err) => {
@@ -47,7 +47,7 @@ export class NavAppComponent {
       return;
     }
     const formData:FormData = new FormData();
-    formData.append('profileImage',file);
+    formData.append('ProfileImage',file);
 
     this._ProfileService.uploadProfileImg(formData).subscribe({
       next:(response)=>{
@@ -60,22 +60,22 @@ export class NavAppComponent {
     });
   }
 
-  updateCurrentData(): void {
+  // updateCurrentData(): void {
     
-    if (!this.userData.imageURL) {
-      this.profilePic;
-    }else{
-      this.updatedData.imageURL = this.userData.filePath;
-    }
+  //   if (!this.userData.profileImageURL) {
+  //     this.profilePic;
+  //   }else{
+  //     this.updatedData.filePath = this.userData.profileImageURL;
+  //   }
 
-    this._ProfileService.updateCurrentData(this.updatedData).subscribe({
-      next:(response)=>{
-        this.userData = {...this.updatedData};
-      },
-      error:(err)=>{
-      },
-    });
-  }
+  //   this._ProfileService.updateCurrentData(this.updatedData).subscribe({
+  //     next:(response)=>{
+  //       this.userData = {...this.updatedData};
+  //     },
+  //     error:(err)=>{
+  //     },
+  //   });
+  // }
 
 
   

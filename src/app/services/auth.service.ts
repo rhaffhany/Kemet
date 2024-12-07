@@ -23,6 +23,10 @@ export class AuthService {
   getToken(): string | null {
     return localStorage.getItem('token');
   }
+  //Get username
+  getUserName(): string | null{
+    return localStorage.getItem('userName');
+  }
 
   forgotPassword(data: { email: string }): Observable<any> {
     return this._HttpClient.post(`${this.apiUrl}/Forgot-password`, data);
