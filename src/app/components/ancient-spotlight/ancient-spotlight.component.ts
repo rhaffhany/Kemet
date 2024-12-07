@@ -16,6 +16,7 @@ export class AncientSpotlightComponent {
   totalSlides: number = 5;
 
   constructor(private _HomeService: HomeService) {
+    
     this._HomeService.fetchPlaces().subscribe(
       data => {
         if (data && Array.isArray(data.$values)) {
@@ -28,7 +29,9 @@ export class AncientSpotlightComponent {
         console.error('Error fetching data:', error);
       }
     );
+    
   }
+
   prevSlide() {
     if (this.currentIndex > 0) {
       this.currentIndex--;

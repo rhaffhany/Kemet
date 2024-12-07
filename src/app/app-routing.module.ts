@@ -4,7 +4,6 @@ import { AppLayoutComponent } from './layouts/app-layout/app-layout.component';
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { ProfileComponent } from './components/profile/profile.component';
-import { FooterComponent } from './components/footer/footer.component';
 import { ThingsToDoComponent } from './components/things-to-do/things-to-do.component';
 import { AdventureModeComponent } from './components/adventure-mode/adventure-mode.component';
 import { PlanComponent } from './components/plan/plan.component';
@@ -28,30 +27,19 @@ const routes: Routes = [
   },
 
   {  path: '', component: MainLayoutComponent,  children:[
-    // { path: '', redirectTo: '/home', pathMatch: 'full' },
-    // { path: 'home', component: HomeComponent, title:'Home'},
+    { path: '', redirectTo: '/home', pathMatch: 'full' },
+    { path: 'home', component: HomeComponent, title:'Home'},
     { path: 'thingstodo', component: ThingsToDoComponent, title:'Things To Do'},
   ]},
   
   {path: '', component: AppLayoutComponent, children: [
     { path:'profile', component: ProfileComponent, title:'Profile'},
-    { path:'places', component: PlaceAdditionalContentComponent, title:'Places'},
+    { path:'places/:placeID', component: PlaceAdditionalContentComponent, title:'Places'},
     { path: 'adventureMode', component: AdventureModeComponent, title:'Adventure Mode'},
     { path: 'plan', component: PlanComponent, title:'Plan'},
     { path: 'wishlist', component: WishlistComponent, title:'WhishList'},
     { path: 'community', component: CommunityComponent, title:'Community'},
-]},
-
-
-  {  path: '', component: AppLayoutComponent, children: [
-      { path:'profile', component: ProfileComponent, title:'Profile'},
-      { path:'places', component: PlaceAdditionalContentComponent, title:'Places'},
-      { path: 'adventureMode', component: AdventureModeComponent, title:'Adventure Mode'},
-      { path: 'plan', component: PlanComponent, title:'Plan'},
-      { path: 'wishlist', component: WishlistComponent, title:'WhishList'},
-      { path: 'community', component: CommunityComponent, title:'Community'},
   ]},
-
 
   { path: '**' , component: NotfoundComponent , title:"Not Found 404!" }
 

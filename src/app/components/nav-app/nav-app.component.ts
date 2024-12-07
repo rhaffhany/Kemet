@@ -9,6 +9,10 @@ import { ProfileService } from 'src/app/services/profile.service';
 export class NavAppComponent {
 
   isCollapsed = true;
+  closeCollapse(){
+    this.isCollapsed = true;
+  }
+
   
   constructor(private _ProfileService:ProfileService){}
 
@@ -77,6 +81,6 @@ export class NavAppComponent {
   //   });
   // }
 
-
+ 
   
 }

@@ -15,6 +15,7 @@ export class RecommendedComponent {
   totalSlides: number = 5;
 
   constructor(private _HomeService: HomeService) {
+
     this._HomeService.fetchPlaces().subscribe(
       data => {
         if (data && Array.isArray(data.$values)) {
@@ -27,7 +28,9 @@ export class RecommendedComponent {
         console.error('Error fetching data:', error);
       }
     );
+    
   }
+
   prevSlide() {
     if (this.currentIndex > 0) {
       this.currentIndex--;
@@ -62,5 +65,6 @@ export class RecommendedComponent {
   onImageError(event: Event) {
     (event.target as HTMLImageElement).src = 'assets/default-image.jpg';
   }
+
 }
 
