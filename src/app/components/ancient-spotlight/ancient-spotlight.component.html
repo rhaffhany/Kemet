@@ -6,7 +6,7 @@
       </svg>
 
       <div *ngIf="place.imageURLs?.$values?.length > 0" role="button" [routerLink]="['/places',place.placeID]" >
-        <img [src]="place.imageURLs.$values[0]" [alt]="place.name" class="card-image"  (error)="onImageError($event)">
+        <img [src]="place.imageURLs.$values[0]" [alt]="place.name" class="card-image" >
       </div>
 
       <h3 class="card-title">{{ place.name }}</h3>

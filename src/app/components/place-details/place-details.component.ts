@@ -1,18 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DetailsService } from 'src/app/services/details.service';
 import { ProfileService } from 'src/app/services/profile.service';
 
-
 @Component({
-  selector: 'app-place-additional-content',
-  templateUrl: './place-additional-content.component.html',
-  styleUrls: ['./place-additional-content.component.scss']
+  selector: 'app-place-details',
+  templateUrl: './place-details.component.html',
+  styleUrls: ['./place-details.component.scss']
 })
-export class PlaceAdditionalContentComponent implements OnInit{
+export class PlaceDetailsComponent {
 
   blackDot:string = "/assets/icons/Ellipse 148.svg";
   ticket:string = "/assets/icons/Ticket.svg"
+  searchIcon:string = "/assets/icons/Search.png"
+
+  searchResults: any[] = [];  
+  errorMessage: string = ''; 
+
 
 
   // placeID:any;

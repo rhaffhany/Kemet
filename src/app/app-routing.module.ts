@@ -13,7 +13,7 @@ import { NotfoundComponent } from './components/notfound/notfound.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { RegisterComponent } from './components/register/register.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
-import { PlaceAdditionalContentComponent } from './components/place-additional-content/place-additional-content.component';
+import { PlaceDetailsComponent } from './components/place-details/place-details.component';
 
 const routes: Routes = [
   {
@@ -27,14 +27,14 @@ const routes: Routes = [
   },
 
   {  path: '', component: MainLayoutComponent,  children:[
-    { path: '', redirectTo: '/home', pathMatch: 'full' },
-    { path: 'home', component: HomeComponent, title:'Home'},
+    // { path: '', redirectTo: '/home', pathMatch: 'full' },
+    // { path: 'home', component: HomeComponent, title:'Home'},
     { path: 'thingstodo', component: ThingsToDoComponent, title:'Things To Do'},
   ]},
   
   {path: '', component: AppLayoutComponent, children: [
     { path:'profile', component: ProfileComponent, title:'Profile'},
-    { path:'places/:placeID', component: PlaceAdditionalContentComponent, title:'Places'},
+    { path:'places/:placeID', component: PlaceDetailsComponent, title:'Places'},
     { path: 'adventureMode', component: AdventureModeComponent, title:'Adventure Mode'},
     { path: 'plan', component: PlanComponent, title:'Plan'},
     { path: 'wishlist', component: WishlistComponent, title:'WhishList'},
@@ -46,7 +46,10 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  imports: [
+    RouterModule.forRoot(routes, { scrollPositionRestoration: "disabled" } )
+  ],
+  exports: [RouterModule],
+
 })
 export class AppRoutingModule { }

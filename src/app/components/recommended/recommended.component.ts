@@ -62,9 +62,9 @@ export class RecommendedComponent {
   }
   
   
-  onImageError(event: Event) {
-    (event.target as HTMLImageElement).src = 'assets/default-image.jpg';
-  }
+  // onImageError(event: Event) {
+  //   (event.target as HTMLImageElement).src = 'assets/default-image.jpg';
+  // }
 
 }
 

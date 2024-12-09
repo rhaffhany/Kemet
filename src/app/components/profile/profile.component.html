@@ -1,5 +1,5 @@
 <section class="pb-5">
-    <img [src]="layoutPic" alt="layoutPic" class="w-100">
+    <img [src]="layoutPic || 'https://localhost:7051' + userData.backgroundImageURL" alt="layoutPic" class="w-100" >
 
     <div class="container">
         <div class="row justify-content-center align-items-center">
@@ -155,7 +155,7 @@
                         </div>
                     </div>
                     <div class="col-md-1 ps-3">
-                        <a href="" class="text-decoration-none text-black">
+                        <a [href]="" class="text-decoration-none text-black" role="button">
                         <i class="bi bi-three-dots"></i>
                         </a>
                     </div>
@@ -188,8 +188,8 @@
                             <a href=""><img [src]="sendIcon" alt="sendIcon"></a>
                         </div>
                     </div>
-                    <div class="col-12 col-md-1 ps-md-3 text-end mt-3 ps-3 mt-md-0">
-                        <a href="" class="text-decoration-none text-black">
+                    <div class="col-12 col-md-1 ps-3">
+                        <a [href]="" class="text-decoration-none text-black" role="button">
                             <i class="bi bi-three-dots"></i>
                         </a>                 
                     </div>
@@ -211,17 +211,18 @@
                         <i class="fa-solid fa-xmark" role="button" style="width: 24px; font-size: 20px;" (click)="toggleEditBox()"></i>
                         <h5 class="mb-1 ms-4 fw-bold">Edit Profile</h5>
                     </div>
-                    <button class="action-button" aria-label="Close" type="submit" [disabled]="!updatedData" (click)="updateCurrentData()">Save</button>
+                    <button class="action-button" aria-label="Close" type="submit" (click)="updateCurrentData()">Save</button>
                 </div> 
             </div>
         
             <div class="row backgroundImgEdit p-2">
                 <div class="blur-wrapper position-relative p-0">
-                    <img [src]="backgroundEdit" alt="background" class="background-image w-100 ">
+                    <img [src]="backgroundEdit || 'https://localhost:7051' + userData.backgroundImageURL" alt="background" class="background-image w-100 "  >
                     <div class="blur-overlay position-absolute w-100 h-100"></div>
                     <div class="update-icons d-flex justify-content-evenly align-items-center">
-                        <i class="fa-solid fa-pen-to-square" role="button"></i>
-                        <i class="fa-solid fa-xmark " role="button"></i>
+                        <input type="file" #backgroundFileInput (change)="uploadBackgroundImg($event)" hidden>
+                        <i class="fa-solid fa-pen-to-square" role="button" (click)="backgroundFileInput.click()" ></i>
+                        <i class="fa-solid fa-xmark " role="button" (change)="removeBackground()"></i>
                     </div>
                 </div>
             </div>
@@ -229,7 +230,7 @@
             <div class="row update-profile-img p-2 ms-5 ">
                 <div class="blur-wrapper position-relative p-0 w-auto">
                     <!-- <img [src]="profileImg" alt="profileImg" class="profileImg"> -->
-                    <img [src]="profileImg || 'https://localhost:7051' + userData.profileImageURL" alt="Profile Image" class="profileImg rounded-circle" (change)="uploadProfileImg($event)">
+                    <img [src]="profileImg || 'https://localhost:7051' + userData.profileImageURL" alt="Profile Image" class="profileImg rounded-circle" >
                     
                     <div class="blur-overlay position-absolute w-100 h-100"></div>
 
@@ -246,13 +247,22 @@
                     <div class="col col-sm-12">
                         <div class="form-group">
 
-                            <div class="form-floating mb-3">
-                                <input type="text" class="form-control dropdown input-main pb-3" id="Username" placeholder="Username" style="padding: 34px 10px;" [(ngModel)]="updatedData.userName"  [class.is-invalid]="usernameError">
+                            <div class="form-floating mb-3 d-flex align-items-center position-relative">
+                                <input type="text" class="form-control dropdown input-main pb-3" id="Username" placeholder="Username" style="padding: 34px 10px;" [(ngModel)]="updatedData.userName"  [disabled]="!isUsernameEditable">
+                                <button
+                                    type="button"
+                                    class="btn btn-outline-secondary position-absolute"
+                                    style="right: 10px; top: 50%; transform: translateY(-50%);"
+                                    (click)="toggleUsernameEdit()"
+                                    >
+                                    <i [ngClass]="isUsernameEditable ? 'fa fa-lock' : 'fa fa-pen'" aria-hidden="true"></i>
+                                    </button>
                                 <label for="Username">Username</label>
                                 <div *ngIf="usernameError" class="invalid-feedback alert alert-danger">
                                     The username is already in use. Please choose another one.
                                 </div>                              
                             </div>
+
                             <div class="form-floating mb-3">
                                 <textarea name="Bio" class="form-control input-main" id="Bio" placeholder="Bio" style="height: 82px;" [(ngModel)]="updatedData.bio"></textarea>
                                 <label for="Bio">Bio</label>
@@ -269,7 +279,7 @@
                             <div class="form-input">
                                 <h5 for="birthdate" style="font-weight: 400;">Birth date</h5>
                                 <label for="month"></label>
-                                <select [(ngModel)]="selectedMonth" id="month" class="dropdown input-main me-2">
+                                <select [(ngModel)]="selectedMonth" id="month" class="dropdown input-main me-2" (change)="onMonthChange()">
                                     <option value="" disabled selected>Month</option>
                                     <option *ngFor="let month of months" [value]="month">{{ month }}</option>
                                 </select>
@@ -279,7 +289,7 @@
                                     <option *ngFor="let day of days" [value]="day">{{ day }}</option>
                                 </select>
                                 <label for="year"></label>
-                                <select [(ngModel)]="selectedYear" id="year" class="dropdown input-main">
+                                <select [(ngModel)]="selectedYear" id="year" class="dropdown input-main" (change)="onYearChange()">
                                     <option value="" disabled selected>Year</option>
                                     <option *ngFor="let year of years" [value]="year">{{ year }}</option>
                                 </select>
