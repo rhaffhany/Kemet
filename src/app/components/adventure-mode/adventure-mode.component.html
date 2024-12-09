@@ -1,1 +1,20 @@
-<p>adventure-mode works!</p>
+<section>
+  <div class="spinner-container">
+    <h1 class="title">Feeling meh? Tap, Spin, and Let the Adventure Begin!</h1>
+    <p class="subtitle">Adventure Mode curates thrills near you—don’t like it? Spin for more!</p>
+
+    <div class="spinner">
+      <img
+        [src]="logoImage"
+        [style.transform]="'rotate(' + spinAngle + 'deg)'" 
+        [style.transition]="isSpinning ? 'transform ' + animationDuration + 's cubic-bezier(0.25, 1, 0.5, 1)' : 'none'"
+        alt="Wheel Spinner"
+        class="spinner-image"
+      />
+    </div>
+
+    <!-- Display the fetched name -->
+    <h2 *ngIf="name">{{ name }}</h2>
+  </div>
+  <button class="spinBtn" (click)="onButtonClick()" [disabled]="disableButton">Spin</button>
+</section>

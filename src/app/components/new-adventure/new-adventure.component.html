@@ -6,7 +6,7 @@
       </svg>
 
       <div *ngIf="activity.imageURLs?.$values && activity.imageURLs.$values.length > 0">
-        <img [src]="activity.imageURLs.$values[0]" [alt]="activity.name" class="card-image" role="button" routerLink="/activities" (error)="onImageError($event)">
+        <img [src]="activity.imageURLs.$values[0]" [alt]="activity.name" class="card-image">
       </div>
       
 

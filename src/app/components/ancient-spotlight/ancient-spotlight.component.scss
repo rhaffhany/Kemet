@@ -12,7 +12,16 @@
         gap: 15px;
         flex-wrap: nowrap; 
       }
-  
+      
+      .category {
+        font-size: 25px;
+        color: #1E1E1E;
+        margin-top: 3px;
+        margin-bottom: 87px;
+        font-weight: 300;
+        size: 22px;
+      }
+      
       .cards {
         display: flex;
         transition: transform 0.5s ease;
@@ -68,16 +77,7 @@
           color: #000000;
           flex-grow: auto;
         }
-  
-        .card-description {
-          width: 210px;
-          font-size: 22px;
-          font-weight: 300;
-          line-height: 26.63px;
-          text-align: left;
-          color: #000000;
-          margin-top: 1px;
-        }
+
   
         .rating {
           width: 200px;
@@ -98,7 +98,11 @@
         flex-wrap: nowrap;
         justify-content: flex-start;
         transition: transform 0.5s ease-in-out;
-      }
+        -webkit-transition: transform 0.5s ease-in-out;
+        -moz-transition: transform 0.5s ease-in-out;
+        -ms-transition: transform 0.5s ease-in-out;
+        -o-transition: transform 0.5s ease-in-out;
+}
   
       .nav-button {
         position: absolute;
@@ -116,6 +120,15 @@
           right: -20px;
         }
       }
+      .red-heart {
+        fill: red; /* Makes the heart red */
+      }
+      
+      .filled-heart path {
+        fill: red; /* Ensures the heart is filled with red color */
+      }
+      
+      
     }
   
    

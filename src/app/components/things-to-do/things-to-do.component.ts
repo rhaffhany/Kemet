@@ -7,7 +7,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./things-to-do.component.scss']
 })
 export class ThingsToDoComponent {
-
   searchIcon:string = "/assets/icons/Search.png";
-  
+
 }

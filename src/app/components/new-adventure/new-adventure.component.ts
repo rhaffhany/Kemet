@@ -58,9 +58,7 @@ export class NewAdventureComponent  {
   }
   
   
-  onImageError(event: Event) {
-    (event.target as HTMLImageElement).src = 'assets/default-image.jpg';
-  }
+
 }
 
 
