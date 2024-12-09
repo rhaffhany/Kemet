@@ -1,0 +1,409 @@
+<section class="py-5">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-6 mt-5">
+                <h1 class="fw-bolder">{{placeDetails.name}}</h1>
+                <div class="rating d-flex">
+                <span *ngFor="let star of [].constructor(5); let i = index" class="rate">
+                <!-- <i class="fa-regular fa-star"></i> -->
+                <svg width="33" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"  [style.fill]="i < placeDetails.ratingsCount ? '#FAC817' : '#FFE5C2'"
+                stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+                </span>
+                <p style="font-size: 20px;" class="ms-1 mb-0">{{placeDetails.reviews.$values}} reviews</p>
+                <img [src]="blackDot" alt="dot" class="mx-2 mt-2">
+                <p style="font-size: 20px;" class="mb-0">Historic Walking Area</p>
+                </div>
+                <div class="mt-2 ">
+                    <a routerLink="/write-review" class="text-decoration-none text-black review-link">
+                        <span class="review" style="font-size: 20px; font-weight: 500;">Write a review</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row gap-4 mt-3">
+
+            <div class="col-md-4 p-4 about bg-white ">
+                <h5 class="fw-bold">About</h5>
+                <div class="about-content">
+                    <p style="line-height: 24.2px;" >{{placeDetails.description}}</p>
+                </div>
+                <div class="about-items">
+                    <div class="d-flex align-items-center">
+                        <i class="fa-regular fa-clock"></i>
+                        <p class="mb-0 ms-2">Duration {{placeDetails.duration}}</p>
+                    </div>
+                    <div class="d-flex align-items-center mb-5">
+                        <img [src]="ticket" alt="ticket" style="height: 20px; width: 20px;">
+                        <p class="mb-0 ms-1">Free entry</p>
+                    </div>
+                </div>
+
+                <h5 class="fw-bold pt-2">Tours and Experiences</h5>
+                <p style="line-height: 24.2px;">Explore different ways to experience
+                    this place.</p>
+                <button class="btn-info w-100 py-3 mt-5">See all options</button>
+
+            </div>
+
+            <div class="col-md-7 photos">
+              <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel">
+                <!-- Large Image Display -->
+                <div class="carousel-inner ">
+                  <div class="carousel-item active">
+                    <img [src]="placeDetails?.imageURLs?.$values?.[0]" class="d-block w-100 img-lg" alt="Large Image" style="border-radius: 20px;">
+                  </div>
+                </div>
+            
+                <!-- Thumbnail Carousel (Scrollable) -->
+                <div class="carousel-thumbnails d-flex mt-3" style="overflow-x: auto;">
+                  <div *ngFor="let imgUrl of placeDetails.imageURLs?.$values; let i = index" class="thumbnail-item" (click)="updateLargeImage(i)">
+                    <img [src]="imgUrl" class="img-fluid rounded mb-2" style="cursor: pointer; max-width: 80px; margin-right: 10px;" alt="Thumbnail">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+        </div>
+
+        <div class="row py-5">
+            <div class="col">
+                <p style="font-size: 20px; font-weight: 600;">Culture tips</p>
+                <div class="tips d-flex">
+                    <p class="me-2">Dress Respectfully</p>
+                    <p class="me-2">Respect Prayer Times</p>
+                    <p class="me-2">Embrace Haggling</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="container-fluid">
+        <h3 class="text-center pb-5" style="font-weight: 600;">See what travelers are saying</h3>
+        <div class="row gap-2 align-items-center justify-content-center">
+
+            <div class="col-md-3 reviews bg-light-subtle p-4" style="border-radius: 20px;">
+
+                <div class="profile-info d-flex justify-content-between">
+                    <div class="d-flex">
+                        <img [src]="profilePic || 'https://localhost:7051' + userData.profileImageURL"  class="profile-pic rounded-circle" alt="profile-pic" (change)="uploadProfileImg($event)" >
+                        <div class="ms-2 d-block">
+                            <p class="fw-bold m-0">{{updatedData.firstName}} {{updatedData.lastName}}</p>
+                            <p>{{updatedData.city}}, {{updatedData.country}}</p>
+                            <div class="rating">
+                                <span *ngFor="let star of [].constructor(3); let i = index" class="star rate">
+                                <svg width="45" height="40" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                </svg>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <i class="fa-solid fa-ellipsis" role="button"></i>
+                    </div>
+                </div>
+
+                <div class="review-content">
+                    <h5 class="mt-3" style="font-weight: 600;">Delicious Food</h5>
+                    <p style="line-height: 16.94px; font-size: 14px;">Delicious local food, friendly and knowledgeable guide,
+                        Mohammad Boogie, Driver Aemn, and even photographer
+                        Abdul! Had the best Falafel, loved learning about other
+                        Egyptian food! We got to pick 2 “side quest” - we choose
+                        the spices and oils, where we learned a lot about both! 
+                        Got some rare blue lotus to make some tea of! Looking 
+                        forward to trying that! Also had camel for the 1st time! 
+                        Quite the experience. Be sure to not plan anything promptly
+                        after your tour. 1.) It might be longer b/c of traffic,etc. and 
+                        2.) You will be full and might need to take a nap after! Lol
+                    </p>
+                </div>
+
+                <div class="review-info">
+                    <p class="m-0" style="font-size: 14px;">Visited <span class="fw-bold">October 2023</span></p>
+                    <p style="font-size: 14px;">Traveled <span class="fw-bold">with family</span></p>
+                </div>
+
+                <div class="additional-info">
+                    <p style="font-size: 13px;">Written October 5, 2023</p>
+                </div>
+
+            </div>
+
+            <div class="col-md-3 reviews bg-light-subtle p-4" style="border-radius: 20px;">
+
+                <div class="profile-info d-flex justify-content-between">
+                    <div class="d-flex">
+                        <img [src]="profilePic || 'https://localhost:7051' + userData.profileImageURL"  class="profile-pic rounded-circle" alt="profile-pic" (change)="uploadProfileImg($event)" >
+                        <div class="ms-2 d-block">
+                            <p class="fw-bold m-0">{{updatedData.firstName}} {{updatedData.lastName}}</p>
+                            <p>{{updatedData.city}}, {{updatedData.country}}</p>
+                            <div class="rating">
+                                <span *ngFor="let star of [].constructor(3); let i = index" class="star rate">
+                                <svg width="45" height="40" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                </svg>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <i class="fa-solid fa-ellipsis" role="button"></i>
+                    </div>
+                </div>
+
+                <div class="review-content">
+                    <h5 class="mt-3" style="font-weight: 600;">Delicious Food</h5>
+                    <p style="line-height: 16.94px; font-size: 14px;">Delicious local food, friendly and knowledgeable guide,
+                        Mohammad Boogie, Driver Aemn, and even photographer
+                        Abdul! Had the best Falafel, loved learning about other
+                        Egyptian food! We got to pick 2 “side quest” - we choose
+                        the spices and oils, where we learned a lot about both! 
+                        Got some rare blue lotus to make some tea of! Looking 
+                        forward to trying that! Also had camel for the 1st time! 
+                        Quite the experience. Be sure to not plan anything promptly
+                        after your tour. 1.) It might be longer b/c of traffic,etc. and 
+                        2.) You will be full and might need to take a nap after! Lol
+                    </p>
+                </div>
+
+                <div class="review-info">
+                    <p class="m-0" style="font-size: 14px;">Visited <span class="fw-bold">October 2023</span></p>
+                    <p style="font-size: 14px;">Traveled <span class="fw-bold">with family</span></p>
+                </div>
+
+                <div class="additional-info">
+                    <p style="font-size: 13px;">Written October 5, 2023</p>
+                </div>
+
+            </div>
+
+            <div class="col-md-3 reviews bg-light-subtle p-4" style="border-radius: 20px;">
+
+                <div class="profile-info d-flex justify-content-between">
+                    <div class="d-flex">
+                        <img [src]="profilePic || 'https://localhost:7051' + userData.profileImageURL"  class="profile-pic rounded-circle" alt="profile-pic" (change)="uploadProfileImg($event)" >
+                        <div class="ms-2 d-block">
+                            <p class="fw-bold m-0">{{updatedData.firstName}} {{updatedData.lastName}}</p>
+                            <p>{{updatedData.city}}, {{updatedData.country}}</p>
+                            <div class="rating">
+                                <span *ngFor="let star of [].constructor(3); let i = index" class="star rate">
+                                <svg width="45" height="40" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                </svg>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <i class="fa-solid fa-ellipsis" role="button"></i>
+                    </div>
+                </div>
+
+                <div class="review-content">
+                    <h5 class="mt-3" style="font-weight: 600;">Delicious Food</h5>
+                    <p style="line-height: 16.94px; font-size: 14px;">Delicious local food, friendly and knowledgeable guide,
+                        Mohammad Boogie, Driver Aemn, and even photographer
+                        Abdul! Had the best Falafel, loved learning about other
+                        Egyptian food! We got to pick 2 “side quest” - we choose
+                        the spices and oils, where we learned a lot about both! 
+                        Got some rare blue lotus to make some tea of! Looking 
+                        forward to trying that! Also had camel for the 1st time! 
+                        Quite the experience. Be sure to not plan anything promptly
+                        after your tour. 1.) It might be longer b/c of traffic,etc. and 
+                        2.) You will be full and might need to take a nap after! Lol
+                    </p>
+                </div>
+
+                <div class="review-info">
+                    <p class="m-0" style="font-size: 14px;">Visited <span class="fw-bold">October 2023</span></p>
+                    <p style="font-size: 14px;">Traveled <span class="fw-bold">with family</span></p>
+                </div>
+
+                <div class="additional-info">
+                    <p style="font-size: 13px;">Written October 5, 2023</p>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    
+
+    <!-- ll api bta3 reviews lma yegy -->
+    <!-- <div class="container-fluid">
+        <h3 class="text-center" style="font-weight: 600;">See what travelers are saying</h3>
+        <owl-carousel-o [options]="carouselOptions">
+          <ng-template carouselSlide *ngFor="let review of reviews">
+            <div class="col-md-3 bg-light-subtle p-4" style="border-radius: 20px;">
+
+              <div class="profile-info d-flex justify-content-between">
+
+                <div class="d-flex">
+                  <img 
+                    [src]="profilePic || 'https://localhost:7051' + review.userData.profileImageURL" 
+                    class="profile-pic rounded-circle" 
+                    alt="profile-pic">
+                  <div class="ms-2 d-block">
+                    <p class="fw-bold m-0">{{ review.updatedData.firstName }} {{ review.updatedData.lastName }}</p>
+                    <p>{{ review.updatedData.city }}, {{ review.updatedData.country }}</p>
+                    <div class="rating">
+                      <span *ngFor="let star of [].constructor(3); let i = index" class="star rate">
+                        <svg width="45" height="40" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <i class="fa-solid fa-ellipsis" role="button"></i>
+                </div>
+
+              </div>
+
+              <div class="review-content">
+                <h5 class="mt-3" style="font-weight: 600;">{{ review.title }}</h5>
+                <p style="line-height: 16.94px; font-size: 14px;">{{ review.content }}</p>
+              </div>
+
+              <div class="review-info">
+                <p class="m-0" style="font-size: 14px;">Visited <span class="fw-bold">{{ review.visitDate }}</span></p>
+                <p style="font-size: 14px;">Traveled <span class="fw-bold">{{ review.travelType }}</span></p>
+              </div>
+
+              <div class="additional-info">
+                <p style="font-size: 13px;">Written {{ review.writtenDate }}</p>
+              </div>
+
+            </div>
+          </ng-template>
+        </owl-carousel-o>
+    </div> -->
+      
+    <div class="container mt-5">
+        <h3 class="fw-bold mb-5">Reviews</h3>
+        <div class="row gap-3 align-content-center justify-content-center">
+
+            <div class="col-lg-3 col-md-5 col-sm-6">
+                <div class="reviews-avg-box bg-white p-3" style="border-radius: 20px;">
+                    <div class="d-flex align-items-center">
+                        <h3 class="fw-bolder me-2">4.5</h3>
+                        <span *ngFor="let star of [].constructor(5); let i = index" class="rate mb-2">
+                            <!-- <i class="fa-regular fa-star"></i> -->
+                            <svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"  [style.fill]="i < placeDetails.ratingsCount ? '#FAC817' : '#FFFFFF' "
+                            stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                            </svg>
+                        </span>
+                        <p class="mb-1 ms-2" style="font-size: 13px; color: rgba(51, 51, 51, 0.63);">2,256,896</p>
+                    </div>
+
+                    <div class="rating-rate d-block align-items-center p-2">
+                        <div class="rating-box d-flex align-items-center gap-2  ">
+                            <h4 class="m-0" style="font-size: 20px;">5</h4>
+                            <div class="progress mb-1" role="progressbar" aria-label="Basic example" style="height: 10px; width: 323px;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar" style="width: 75%; border-radius: 20px; background-color: rgba(255, 189, 103, 1);"></div>
+                            </div>
+                        </div>
+                        <div class="rating-box d-flex align-items-center gap-2">
+                            <h4 class="m-0" style="font-size: 20px;">4</h4>
+                            <div class="progress mb-1" role="progressbar" aria-label="Basic example" style="height: 10px; width: 323px;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar" style="width: 30%; border-radius: 20px; background-color: rgba(255, 189, 103, 1);"></div>
+                            </div>
+                        </div>
+                        <div class="rating-box d-flex align-items-center gap-2">
+                            <h4 class="m-0" style="font-size: 20px;">3</h4>
+                            <div class="progress mb-1" role="progressbar" aria-label="Basic example" style="height: 10px; width: 323px;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar" style="width: 20%; border-radius: 20px; background-color: rgba(255, 189, 103, 1);"></div>
+                            </div>
+                        </div>
+                        <div class="rating-box d-flex align-items-center gap-2">
+                            <h4 class="m-0" style="font-size: 20px;">2</h4>
+                            <div class="progress mb-1" role="progressbar" aria-label="Basic example" style="height: 10px; width: 323px;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar" style="width: 5%; border-radius: 20px; background-color: rgba(255, 189, 103, 1);"></div>
+                            </div>
+                        </div>
+                        <div class="rating-box d-flex align-items-center gap-2">
+                            <h4 class="m-0" style="font-size: 20px;">1</h4>
+                            <div class="progress mb-1" role="progressbar" aria-label="Basic example" style="height: 10px; width: 323px;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar" style="width: 25%; border-radius: 20px; background-color: rgba(255, 189, 103, 1);"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="col-md-8">
+
+                <div class="search-bar p-2">
+                    <img [src]="searchIcon" alt="searchIcon" class="search-icon">
+                    <input type="text" class="search-input w-100" placeholder="Search reviews" />
+                </div>
+
+                  <div *ngIf="errorMessage" class="error-message text-center">
+                    {{ errorMessage }}
+                  </div>
+                  <div *ngIf="searchResults.length > 0" id="searchResults">
+                    <div *ngFor="let result of searchResults" class="result-item  text-center">
+                      {{ result.name }}
+                    </div>
+
+                </div>
+
+                <div class="filter-reviews">
+                    <button class="mt-3 me-2">Filters</button>
+                    <button class="mt-3">Most Recent</button>
+                </div>
+
+                <div class="reviews mt-3 bg-light bg-light-subtle p-4" style="border-radius: 20px;">
+                    <div class="profile-info d-flex justify-content-between">
+                        <div class="d-flex">
+                            <img [src]="profilePic || 'https://localhost:7051' + userData.profileImageURL"  class="profile-pic rounded-circle" alt="profile-pic" (change)="uploadProfileImg($event)" >
+                            <div class="ms-2 d-block">
+                                <p class="fw-bold m-0">{{updatedData.firstName}} {{updatedData.lastName}}</p>
+                                <p class="m-0">{{updatedData.city}}, {{updatedData.country}}</p>
+                                <div class="rating">
+                                    <span *ngFor="let star of [].constructor(5); let i = index" class="rate mb-2">
+                                        <!-- <i class="fa-regular fa-star"></i> -->
+                                        <svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"  [style.fill]="i < placeDetails.ratingsCount ? '#FAC817' : '#FFFFFF' "
+                                        stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                        </svg>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <i class="fa-solid fa-ellipsis" role="button"></i>
+                        </div>
+                    </div>
+    
+                    <div class="review-content">
+                        <p class="mt-3 mb-1" style="font-weight: 600;">Must Visit in Cairo</p>
+                        <p style="font-size: 14px;">Nov 2024 <span class="fw-bolder">.</span> Family</p>
+
+                        <p style="line-height: 16.94px; font-size: 14px;">One of the most iconic places to visit in cairo. The building itself is phenomenal.
+                            There is so much to see as well as explore.
+                        </p>
+                    </div>
+    
+                    <div class="review-info">
+                        <p class="m-0" style="font-size: 11px; line-height: 13.31px;">Written November 24, 2024</p>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+      
+
+    </div>
+
+</section>

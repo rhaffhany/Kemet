@@ -55,7 +55,7 @@ export class ProfileService {
         formData.append(key, updatedData[key]);
       } 
     }
-    return this._HttpClient.put(`${this.BaseUrl}/api/Profile/UpdateUserData`, updatedData, {headers});
+    return this._HttpClient.put(`${this.BaseUrl}/api/Profile/UpdateUserData`, updatedData, {headers, responseType: 'text'});
   }
     
 
@@ -70,6 +70,16 @@ export class ProfileService {
     return this._HttpClient.post(`${this.BaseUrl}/api/Profile/upload-profile-image`, formData, {headers} );
   }
 
+  uploadBackgroundImg(_FormData:FormData):Observable<any>{
+    const token = this._AuthService.getToken();
+    if(!token){
+      throw new Error("not found")
+    }
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    });
+    return this._HttpClient.post(`${this.BaseUrl}/api/Profile/upload-background-image`, _FormData, {headers})
+  }
 
 
 
@@ -83,4 +93,5 @@ export class ProfileService {
   //     //  = decode;
   //   }
   // }
+
 

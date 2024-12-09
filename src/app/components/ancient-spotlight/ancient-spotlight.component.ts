@@ -32,6 +32,9 @@ export class AncientSpotlightComponent implements OnInit {
 
 
   ngOnInit(): void {
+
+  constructor(private _HomeService: HomeService) {
+    
     this._HomeService.fetchPlaces().subscribe(
       data => {
         if (data && Array.isArray(data.$values)) {
@@ -81,6 +84,7 @@ export class AncientSpotlightComponent implements OnInit {
         console.error('Error adding to wishlist:', error);
       }
     );
+    
   }
   
   removeFromWishlist(placeID: number, index: number): void {
@@ -96,6 +100,9 @@ export class AncientSpotlightComponent implements OnInit {
   }
 
   prevSlide(): void {
+
+
+  prevSlide() {
     if (this.currentIndex > 0) {
       this.currentIndex--;
     }
@@ -111,5 +118,22 @@ export class AncientSpotlightComponent implements OnInit {
     const endIndex = Math.min(this.currentIndex + this.totalSlides, this.places.length);
     return this.places.slice(this.currentIndex, endIndex);
   }
+
+  
+  updateSlide() {
+    const cardsContainer = document.querySelector('.cards-container') as HTMLElement;
+    if (this.currentIndex === this.places.length - 1) {
+      cardsContainer.classList.add('swiped');
+    } else {
+      cardsContainer.classList.remove('swiped');
+    }
+    // Update the transform property to slide
+    cardsContainer.style.transform = `translateX(-${this.currentIndex * 250}px)`;
+  }
+  
+  
+  // onImageError(event: Event) {
+  //   (event.target as HTMLImageElement).src = 'assets/default-image.jpg';
+  // }
   
 }

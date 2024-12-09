@@ -16,6 +16,8 @@ export class RecommendedComponent implements OnInit {
   constructor(private _HomeService: HomeService) {}
 
   ngOnInit(): void {
+  constructor(private _HomeService: HomeService) {
+
     this._HomeService.fetchPlaces().subscribe(
       data => {
         if (data && Array.isArray(data.$values)) {
@@ -46,6 +48,7 @@ export class RecommendedComponent implements OnInit {
         console.error('Error fetching places data:', error);
       }
     );
+    
   }
 
 
@@ -76,4 +79,11 @@ export class RecommendedComponent implements OnInit {
     }
     cardsContainer.style.transform = `translateX(-${this.currentIndex * 250}px)`;
   }
+
+  
+  
+  // onImageError(event: Event) {
+  //   (event.target as HTMLImageElement).src = 'assets/default-image.jpg';
+  // }
+
 }
