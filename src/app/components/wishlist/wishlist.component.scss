@@ -1,0 +1,116 @@
+/* Global Variables */
+$primary-color: #4caf50;
+$secondary-color: #FFE4C2;
+$card-bg: #fff;
+$card-border: #e0e0e0;
+$shadow-color: rgba(0, 0, 0, 0.1);
+$font-family: 'Inter', sans-serif;
+
+/* Section Layout */
+section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+  background-color: $secondary-color;
+  min-height: 100vh;
+  padding-left: 64px;
+
+}
+
+.title {
+  font-family: $font-family;
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: black;
+  text-align: left;
+}
+
+/* Card Styling */
+.card {
+  width: 1300px;
+  max-width: 600px;
+  background-color: $card-bg;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px $shadow-color;
+  overflow: hidden;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    /*Slighthovereffect*/box-shadow: 0 8px 20px $shadow-color;
+    -webkit-transform: translateY(-5px);
+    -moz-transform: translateY(-5px);
+    -ms-transform: translateY(-5px);
+    -o-transform: translateY(-5px);
+}
+}
+
+.card-body {
+  display: flex;
+  align-items: center;
+  padding: 24px;
+  gap: 20px;
+}
+
+.card-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.card-photo {
+  width: 330px; /* Image size */
+  height: 210px;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Image shadow for depth */
+}
+
+.card-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+
+.card-title {
+  font-family: $font-family;
+  font-size: 22px;
+  font-weight: 600;
+  color: $secondary-color;
+  margin-bottom: 8px;
+  line-height: 1.4;
+  margin-top: 200px;
+}
+
+.card-subtitle {
+  font-family: $font-family;
+  font-size: 16px;
+  color: #777;
+  margin-top: 4px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .card-body {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .card-photo {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 16px;
+  }
+
+  .card-title {
+    font-size: 20px;
+  }
+
+  .card-subtitle {
+    font-size: 14px;
+  }
+}

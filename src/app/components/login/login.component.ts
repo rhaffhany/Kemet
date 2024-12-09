@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms'
 import { AuthService } from './../../services/auth.service';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-
+import { jwtDecode } from 'jwt-decode';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -11,10 +11,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class LoginComponent {
 
+  // Assets
   arrowLeftIcon: string = '/assets/icons/chevron-left.svg';
-  loginLogoSrc: string = '/assets/logo/logo.png'; 
-  loginLogoAlt: string = 'Logo';  
-  
+  loginLogoSrc: string = '/assets/logo/logo.png';
+  loginLogoAlt: string = 'Logo';
+
 
   @Output() close = new EventEmitter<void>();
 
@@ -149,40 +150,28 @@ handleLogin(): void {
     this.isLoading = false;
     this.errorMsg = 'Please fill out all fields correctly.';
   }
-}
+}handleForgotPassword() {
+  if (this.forgotPasswordForm.valid) {
+    this.forgotPasswordEmail = this.forgotPasswordForm.value.email; // Store email for future reference
+    this.isLoading = true;
 
-isDevMode = false
-  handleForgotPassword() {
-    if (this.forgotPasswordForm.valid) {
-      this.forgotPasswordEmail = this.forgotPasswordForm.value.email; // Store email for future reference
-      this.isLoading = true;
-
-      if (this.isDevMode) {
-        // Simulate success in dev mode without calling the backend
+    // Call your backend service for production flow
+    this.authService.forgotPassword({ email: this.forgotPasswordEmail }).subscribe({
+      next: () => {
         this.successMsg = 'Verification code sent to your email!';
         this.isLoading = false;
-        // Skip the actual email sending and just toggle to verification form
         this.showForgotPasswordForm = false;
         this.showVerificationForm = true;
-      } else {
-        // Here, you can call your backend service for production flow
-        // this._AuthService.forgotPassword({ email: this.forgotPasswordEmail }).subscribe({
-        //   next: () => {
-        //     this.successMsg = 'Verification code sent to your email!';
-        //     this.isLoading = false;
-        //     this.showForgotPasswordForm = false;
-        //     this.showVerificationForm = true;
-        //   },
-        //   error: (err) => {
-        //     this.errorMsg = this.handleError(err);
-        //     this.isLoading = false;
-        //   },
-        // });
-      }
-    } else {
-      this.errorMsg = 'Please provide a valid email address.';
-    }
+      },
+      error: (err: any) => { // Explicitly typing 'err' as 'any'
+        this.errorMsg = this.handleError(err);
+        this.isLoading = false;
+      },
+    });
+  } else {
+    this.errorMsg = 'Please provide a valid email address.';
   }
+}
 // Resend Verification Code
 resendCode(): void {
   if (!this.isTimerActive) {
@@ -243,12 +232,9 @@ verifyOtp(userId: string, otp: string): void {
 
   this.authService.verifyOtp({ userId, otp }).subscribe({
     next: (response) => {
-      this.isLoading = false;
 
-      // Save resetToken as token in local storage
       localStorage.setItem('token', response.resetToken);
 
-      this.successMsg = 'OTP verified successfully!';
       this.showVerificationForm = false;
       this.showResetPasswordForm = true;
     },
@@ -258,6 +244,7 @@ verifyOtp(userId: string, otp: string): void {
     },
   });
 }
+
 
 
 
@@ -324,10 +311,13 @@ verifyOtp(userId: string, otp: string): void {
         error: (err) => {
           this.errorMsg = this.handleError(err);
           this.isLoading = false;
+
+
         },
       });
     } else {
       this.errorMsg = 'Please provide a valid new password.';
+
     }
   }
   
@@ -342,6 +332,11 @@ verifyOtp(userId: string, otp: string): void {
       return `Unexpected error: ${error.message}`;
     }
   }
+
+
+
+
+
 
 
 toggleFormVisibility(form: string): void {
@@ -390,4 +385,19 @@ togglePasswordVisibility(): void {
 onOtpChange(otp: string): void {
   this.verificationForm.get('verificationCode')?.setValue(otp); 
 }
+isTokenExpired(): boolean {
+  const token = this.authService.getToken();
+  if (!token) return true;
+
+  try {
+    const decoded: any = jwtDecode(token);
+    const currentTime = Math.floor(Date.now() / 1000);
+    return decoded.exp < currentTime;
+  } catch (error) {
+    console.error('Error decoding token:', error);
+    return true;
+  }
+}
+
+
 }
