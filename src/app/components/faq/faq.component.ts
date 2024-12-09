@@ -6,9 +6,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./faq.component.scss']
 })
 export class FaqComponent {
-  showMic: Boolean = false;
-  toggleMic(){
-    this.showMic = !this.showMic;
+  
+  showChat: boolean = false;
+
+  toggleChatBot() {
+      this.showChat = !this.showChat;
   }
 
 }

@@ -6,6 +6,7 @@ import { ProfileService } from 'src/app/services/profile.service';
   templateUrl: './nav-app.component.html',
   styleUrls: ['./nav-app.component.scss']
 })
+
 export class NavAppComponent {
 
   isCollapsed = true;
@@ -25,7 +26,10 @@ export class NavAppComponent {
   updatedData:any = {...this.userData};
 
 
+
+
   ngOnInit(): void {
+
     this._ProfileService.getCurrentUserData().subscribe({
       next:(data)=>{
         this.userData = data;
@@ -42,6 +46,7 @@ export class NavAppComponent {
       },
 
     });
+
   }
 
   uploadProfileImg(event:any){
@@ -64,23 +69,5 @@ export class NavAppComponent {
     });
   }
 
-  // updateCurrentData(): void {
-    
-  //   if (!this.userData.profileImageURL) {
-  //     this.profilePic;
-  //   }else{
-  //     this.updatedData.filePath = this.userData.profileImageURL;
-  //   }
-
-  //   this._ProfileService.updateCurrentData(this.updatedData).subscribe({
-  //     next:(response)=>{
-  //       this.userData = {...this.updatedData};
-  //     },
-  //     error:(err)=>{
-  //     },
-  //   });
-  // }
-
- 
   
 }

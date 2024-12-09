@@ -1,4 +1,17 @@
-<div class="FAQ">
-    <div><i class="fa-solid fa-microphone mb-1 mic" role="button" [class.hidden]="!showMic"></i></div>
-    <div><i class="fa-regular fa-comment-dots comment" role="button" (click)="toggleMic()"></i></div>
+<div class="FAQ" >
+    <div class="iframe-wrapper" [class.hidden]="!showChat">
+        <iframe
+            title="KEMET"
+            src="https://KEMET-1JvtOF.ai.copilot.live"
+            style="border-radius: 0px 30px; border-top-left-radius: 25px;"
+            loading="lazy"
+            allow="microphone;camera;speaker;clipboard-read;clipboard-write;geolocation;"
+            width="700px"  
+            height="600px"
+        >
+        </iframe>
+    </div>
+    <div class="icon-wrapper">
+        <i class="fa-regular fa-comment-dots comment" role="button" (click)="toggleChatBot()"></i>
+    </div>
 </div>
