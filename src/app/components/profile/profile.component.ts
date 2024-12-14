@@ -48,6 +48,12 @@ export class ProfileComponent {
 
   usernameError: boolean = false;
   isUsernameEditable: boolean = false;
+
+  isEdited = false;
+
+  onEdit() {
+    this.isEdited = true;
+  }
     
   userData:any = {
       "$id": "",
@@ -70,7 +76,6 @@ export class ProfileComponent {
       "websiteLink": "",
       "creationDate": ""
   };
-
   updatedData:any = {...this.userData};
 
 
@@ -106,6 +111,88 @@ export class ProfileComponent {
 
   }
 
+  updateCurrentData(): void {
+
+    // Ensure dateOfBirth is correctly formatted
+    if (this.selectedMonth && this.selectedDay && this.selectedYear) {
+      const monthIndex = this.months.indexOf(this.selectedMonth) + 1; 
+      const day = this.selectedDay;
+      const year = this.selectedYear;
+      this.updatedData.dateOfBirth = `${year}-${monthIndex.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+    }
+
+    // Ensure interestCategoryIds is an array
+    if (this.updatedData.interestCategoryIds?.$values) {
+      this.updatedData.interestCategoryIds = this.updatedData.interestCategoryIds.$values;
+    }
+
+    // Validate and sanitize fields (e.g., websiteLink must start with http/https)
+    if (this.updatedData.websiteLink) {
+      this.updatedData.websiteLink = `https://${this.updatedData.websiteLink}`;
+    }
+
+
+    if (this.isUsernameEditable && this.updatedData.userName !== this.userData.userName) {
+      // Ensure userName is correctly updated if it was changed
+      console.log('Updated username:', this.updatedData.userName); // Debugging
+    }
+    
+    // Validate username only if edited
+    if (!this.isUsernameEditable) {
+      delete this.updatedData.userName;
+    }
+
+    // Remove extra properties
+    delete this.updatedData.$id;
+
+    // Call the update API
+    this._ProfileService.updateCurrentData(this.updatedData).subscribe({
+      next: (response) => {
+
+        localStorage.setItem('userName', this.updatedData.userName);
+
+        this.userData = {...this.updatedData};
+        this.showEditSection = true;
+        this.isEdited = true;
+
+        Swal.fire({
+          title: 'Success!',
+          text: 'Your profile has been updated successfully.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+          confirmButtonColor: 'var(--secondary-color)',
+        });
+        
+
+      },
+      error: (err) => {
+        console.error('Error in updating profile:', err);
+        console.error('Error details:', err.error);
+
+        this.showEditSection = true;
+        this.isUsernameEditable = false;
+
+        if (err.status === 400) {
+          Swal.fire({
+            title: 'Error!',
+            text: 'The username is already taken. Please choose another.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#d33',
+          });
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: 'There was an issue updating your profile. Please try again later.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#d33',
+          });
+        }
+      },
+    });
+  }
+
   onMonthChange() {
     // Update the days based on the selected month
     const monthIndex = this.months.indexOf(this.selectedMonth);
@@ -115,7 +202,7 @@ export class ProfileComponent {
       this.selectedDay = daysInMonth; // Ensure the selected day is valid
     }
   }
-  
+
   onYearChange() {
     // Optionally, adjust the available days based on the selected year (e.g., leap year handling)
     if (this.selectedMonth === 'February') {
@@ -129,88 +216,6 @@ export class ProfileComponent {
   toggleUsernameEdit(): void {
     this.isUsernameEditable = !this.isUsernameEditable; 
   }
-
- updateCurrentData(): void {
-
-  // Ensure dateOfBirth is correctly formatted
-  if (this.selectedMonth && this.selectedDay && this.selectedYear) {
-    const monthIndex = this.months.indexOf(this.selectedMonth) + 1; 
-    const day = this.selectedDay;
-    const year = this.selectedYear;
-    this.updatedData.dateOfBirth = `${year}-${monthIndex.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-  }
-
-  // Ensure interestCategoryIds is an array
-  if (this.updatedData.interestCategoryIds?.$values) {
-    this.updatedData.interestCategoryIds = this.updatedData.interestCategoryIds.$values;
-  }
-
-  // Validate and sanitize fields (e.g., websiteLink must start with http/https)
-  if (this.updatedData.websiteLink) {
-    this.updatedData.websiteLink = `https://${this.updatedData.websiteLink}`;
-  }
-
-
-  if (this.isUsernameEditable && this.updatedData.userName !== this.userData.userName) {
-    // Ensure userName is correctly updated if it was changed
-    console.log('Updated username:', this.updatedData.userName); // Debugging
-  }
-  
-   // Validate username only if edited
-   if (!this.isUsernameEditable) {
-    delete this.updatedData.userName;
-  }
-
-  // Remove extra properties
-  delete this.updatedData.$id;
-
-  // Call the update API
-  this._ProfileService.updateCurrentData(this.updatedData).subscribe({
-    next: (response) => {
-
-      localStorage.setItem('userName', this.updatedData.userName);
-
-      this.userData = {...this.updatedData};
-      this.showEditSection = true;
-
-
-      Swal.fire({
-        title: 'Success!',
-        text: 'Your profile has been updated successfully.',
-        icon: 'success',
-        confirmButtonText: 'OK',
-        confirmButtonColor: 'var(--secondary-color)',
-      });
-      
-
-    },
-    error: (err) => {
-      console.error('Error in updating profile:', err);
-      console.error('Error details:', err.error);
-
-      this.showEditSection = true;
-      this.isUsernameEditable = false;
-
-      if (err.status === 400) {
-        Swal.fire({
-          title: 'Error!',
-          text: 'The username is already taken. Please choose another.',
-          icon: 'error',
-          confirmButtonText: 'OK',
-          confirmButtonColor: '#d33',
-        });
-      } else {
-        Swal.fire({
-          title: 'Error!',
-          text: 'There was an issue updating your profile. Please try again later.',
-          icon: 'error',
-          confirmButtonText: 'OK',
-          confirmButtonColor: '#d33',
-        });
-      }
-    },
-  });
-}
 
 
   uploadProfileImg(event:any):void{

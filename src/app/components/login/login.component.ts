@@ -59,7 +59,7 @@ export class LoginComponent {
   constructor(
     private cdr: ChangeDetectorRef,
     private authService: AuthService,
-    private router: Router,
+    private router:Router,
     private fb: FormBuilder
   ) {
     this.loginForm = this.createLoginForm();

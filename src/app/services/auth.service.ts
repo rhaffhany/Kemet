@@ -13,7 +13,7 @@ export class AuthService {
 
   // Retrieve JWT token
   getToken(): string | null {
-    return localStorage.getItem('authToken');
+    return localStorage.getItem('token');
   }
 
   // Check if token is expired
