@@ -15,7 +15,7 @@ export class ProfileService {
 
   private BaseUrl = 'https://localhost:7051';
   getAdventureData(): Observable<any> {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('token');
     if (!token) {
       return throwError('Authentication token is missing. Please log in again.');
     }

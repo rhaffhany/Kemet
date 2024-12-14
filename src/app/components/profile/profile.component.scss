@@ -72,6 +72,14 @@ section{
   font-size: 16px;
 }
 
+.action-button{
+    &:disabled{
+      backface-visibility: #6656056d;
+      color: #6865656b;
+      cursor: not-allowed;
+    }
+}
+
 
 /* Responsive Design */
 @media (max-width: 768px) {
