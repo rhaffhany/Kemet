@@ -7,6 +7,7 @@ import { HomeService } from 'src/app/services/home.service';
   styleUrls: ['./recommended.component.scss']
 })
 export class RecommendedComponent implements OnInit {
+
   places: any;
   leftArrowSrc: string = '../../../assets/icons/arrow-left-circle.svg';
   rightArrowSrc: string = '../../../assets/icons/arrow-right-circle.svg';
@@ -16,7 +17,6 @@ export class RecommendedComponent implements OnInit {
   constructor(private _HomeService: HomeService) {}
 
   ngOnInit(): void {
-  constructor(private _HomeService: HomeService) {
 
     this._HomeService.fetchPlaces().subscribe(
       data => {
@@ -85,5 +85,6 @@ export class RecommendedComponent implements OnInit {
   // onImageError(event: Event) {
   //   (event.target as HTMLImageElement).src = 'assets/default-image.jpg';
   // }
+
 
 }

@@ -3,21 +3,23 @@ import { HomeService } from 'src/app/services/home.service';
 import { WishlistService } from 'src/app/services/wishlist.service';
 import { AuthService } from 'src/app/services/auth.service'; // Import AuthService
 
-interface Place {
-  id: number;
-  name: string;
-  description: string;
-  imageURLs: { $values: string[] };  
-  categoryName: string;
-}
+// interface Place {
+//   placeID: number;
+//   name: string;
+//   description: string;
+//   imageURLs: { $values: string[] };  
+//   categoryName: string;
+// }
 
 @Component({
   selector: 'app-ancient-spotlight',
   templateUrl: './ancient-spotlight.component.html',
   styleUrls: ['./ancient-spotlight.component.scss'],
 })
+
 export class AncientSpotlightComponent implements OnInit {
-  places: Place[] = [];
+
+  places: any = [];
   currentIndex: number = 0;
   heartStates: boolean[] = [];
   totalSlides: number = 5;
@@ -32,16 +34,40 @@ export class AncientSpotlightComponent implements OnInit {
 
 
   ngOnInit(): void {
-
-  constructor(private _HomeService: HomeService) {
     
+    // this._HomeService.fetchPlaces().subscribe(
+    //   data => {
+    //     if (data && Array.isArray(data.$values)) {
+    //       this.places = data.$values;
+          
+    //       console.log('Fetched places:', this.places);
+          
+    //       this.places.forEach((place: any) => {
+    //         if (place.placeID) {
+    //           console.log('Fetching category for PlaceID:', place.placeID); 
+    //           this._HomeService.fetchPlaceCategory(place.placeID).subscribe(
+    //             categoryData => {
+    //               place.categoryName = categoryData.categoryName;
+    //             },
+    //             error => {
+    //               console.error('Error fetching category data for PlaceID:', place.placeID, error);
+    //             }
+    //           );
+    //         } else {
+    //           console.error('Place ID is undefined for:', place);
+    //         }
+    //       });
+    //     }
+    //   }
+    // );
+
     this._HomeService.fetchPlaces().subscribe(
       data => {
         if (data && Array.isArray(data.$values)) {
           this.places = data.$values;
-          
+
           console.log('Fetched places:', this.places);
-          
+
           this.places.forEach((place: any) => {
             if (place.placeID) {
               console.log('Fetching category for PlaceID:', place.placeID); 
@@ -57,9 +83,15 @@ export class AncientSpotlightComponent implements OnInit {
               console.error('Place ID is undefined for:', place);
             }
           });
+        } else {
+          console.error('Expected $values array, but received:', data);
         }
+      },
+      error => {
+        console.error('Error fetching places data:', error);
       }
     );
+
   }
 
 
@@ -99,8 +131,6 @@ export class AncientSpotlightComponent implements OnInit {
     );
   }
 
-  prevSlide(): void {
-
 
   prevSlide() {
     if (this.currentIndex > 0) {
@@ -114,7 +144,7 @@ export class AncientSpotlightComponent implements OnInit {
     }
   }
 
-  getDisplayedPlaces(): Place[] {
+  getDisplayedPlaces(): any[] {
     const endIndex = Math.min(this.currentIndex + this.totalSlides, this.places.length);
     return this.places.slice(this.currentIndex, endIndex);
   }
