@@ -122,11 +122,19 @@ section{
 
 // Information & Posts section
 .information-items {
-  /* height: 272px; */
   background-color: $white;
-  /* box-shadow: 4px 4px 50px 2px #4F4F4F; */
   box-shadow: 0 4px 6px 2px rgba(0, 0, 0, 0.1); 
   border-radius: 10px;
+
+  .item{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    overflow: hidden;
+    width: 100%; 
+    margin-bottom: 5%;
+  }
+
 
   img {
     height: 18px;
@@ -137,7 +145,7 @@ section{
     transition: all 0.3s ease-in-out;
 
     &:hover {
-      transform: scale(1.05); /* Slight zoom on hover */
+      transform: scale(1.05); 
     }
   }
 
@@ -203,6 +211,10 @@ section{
       height: 170px; 
       object-fit: cover;
   }
+}
+
+.form-floating>.form-select~label::after {
+  background-color: transparent
 }
 
 .action-button{

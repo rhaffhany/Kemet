@@ -11,6 +11,14 @@
   --white: #FFFFFF;
   --black: #000000;
 }
+
+.rate {
+  color: #FAC817;
+}
+
+.hidden{
+  display: none;
+}
   
   // Global styles
   *{
@@ -126,22 +134,28 @@ html {
   font-size: 16px;
 }
 
-.rate {
-  color: #FAC817;
+.selection-btn{
+  border: 1px solid var(--secondary-color);
+  background-color: var(--white);
+  border-radius: 20px;
+  padding: 8px 25px;
+  font-size: 16px;
+  transition: all 0.3s ease-in-out;
+
+  &:hover{
+    background-color: var(--secondary-color); 
+    color: var(--white); 
+    transform: scale(1.05); 
+  }
 }
 
-.hidden{
-  display: none;
+.submit-btn{
+  border: 1px solid var(--secondary-color);
+  background-color: var(--secondary-color);
+  border-radius: 20px;
+  padding: 8px 30px;
+  transition: transform 0.3s ease;
+  &:hover{
+    transform: scale(1.05);
+  }
 }
-
-/* Importing Bootstrap SCSS file. */
-// @import 'bootstrap/scss/bootstrap';
-
-/* Importing Bootstrap SCSS file. */
-// @import 'bootstrap/scss/bootstrap';
-
-/* Importing Bootstrap SCSS file. */
-// @import "./node_modules/bootstrap/scss/bootstrap";
-
-/* Importing Datepicker SCSS file. */
-// @import "node_modules/ngx-bootstrap/datepicker/bs-datepicker";

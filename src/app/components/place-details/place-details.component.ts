@@ -17,9 +17,10 @@ export class PlaceDetailsComponent {
   searchResults: any[] = [];  
   errorMessage: string = ''; 
 
+  userData:any = {};
+  updatedData:any = {...this.userData};
 
 
-  // placeID:any;
   placeID:any;
 
   placeDetails:any = {
@@ -90,8 +91,7 @@ export class PlaceDetailsComponent {
 
 
   //handle pp
-  userData:any = {};
-  updatedData:any = {...this.userData};
+  
 
   profilePic:string = "/assets/icons/profile-pic.svg"
   uploadProfileImg(event:any){
