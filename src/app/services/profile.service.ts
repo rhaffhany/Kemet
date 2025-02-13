@@ -44,7 +44,7 @@ export class ProfileService {
   }
 
   
-  updateCurrentData(updatedData:any):Observable<any>{
+  updateCurrentData(updatedData: any):Observable<any>{
     const token = this._AuthService.getToken();
     this._AuthService.getUserName();
 

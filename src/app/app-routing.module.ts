@@ -14,6 +14,8 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
 import { RegisterComponent } from './components/register/register.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { PlaceDetailsComponent } from './components/place-details/place-details.component';
+import { ReviewComponent } from './components/review/review.component';
+import { ReviewContentComponent } from './components/review-content/review-content.component';
 
 const routes: Routes = [
   {
@@ -39,6 +41,8 @@ const routes: Routes = [
     { path: 'plan', component: PlanComponent, title:'Plan'},
     { path: 'wishlist', component: WishlistComponent, title:'WhishList'},
     { path: 'community', component: CommunityComponent, title:'Community'},
+    { path: 'review', component: ReviewComponent, title:'Review'},
+    { path: 'write-review', component: ReviewContentComponent, title:'Review'},
   ]},
 
   { path: '**' , component: NotfoundComponent , title:"Not Found 404!" }

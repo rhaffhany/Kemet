@@ -1,0 +1,67 @@
+<section>
+    <div class="search-bar-container pt-5">
+        <h1 class="search-title">Leave a tip, make a trip unforgettable!</h1>
+        <p class="search-subtitle">
+            Your review could inspire someone’s next adventure
+        </p>
+        <app-search/>
+    </div>
+    <!--  -->
+    <div class="content ms-4">
+        <h5>Ready to finish your story?</h5>
+        <div class="content-items p-4 w-25 my-4 d-flex" role="button" routerLink="/write-review">
+            <!-- close btn -->
+            <button class="close-btn p-2"><i class="fa-solid fa-x"></i></button>
+            <img src=".." alt="place_pic" class="bg-danger" width="58" height="63">
+            <div class="ms-2">
+                <p class="fw-bold mb-0">place location</p>
+                <p class="text-muted mb-1">cairo, Egypt</p>
+                <span *ngFor="let star of [].constructor(5); let i = index" class="rate">
+                    <svg width="33" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"  [style.fill]="i < placeDetails.ratingsCount ? '#FFBD67' : '#FFFFFF'"
+                    stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                </span>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- past reviews of the user -->
+<section id="past-user-reviews" class="py-5">
+    <div class="user-reviews ms-4">
+        <h4 class="fw-bold mb-0">Your Reviews</h4>
+        <div class="container-fluid">
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="review-info d-flex">
+                        <img src=".." alt="place_pic" width="111" height="97">
+                        <div class="block">
+                            <h5 class="mb-1" style="font-size: 18px;">place name</h5>
+                            <p class="text-muted"  style="font-size: 16px;">cairo, Egypt</p>
+                        </div>
+                    </div>
+                    <div class="review-details">
+                        <span *ngFor="let star of [].constructor(5); let i = index" class="rate">
+                            <svg width="33" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"  [style.fill]="i < placeDetails.ratingsCount ? '#FFBD67' : '#FFE5C2'"
+                            stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                            </svg>
+                        </span>
+                        <h6 class="my-1" style="font-size: 16px;">Trip Title</h6>
+                        <p class="text-muted mb-2"  style="font-size: 14px;">Trip date</p>
+                        <p class="lead" style="font-size:16px;">Our family trip to the Pyramids of Giza was incredible! We were awestruck by the Great Pyramid 
+                            and enjoyed learning its history from our guide. Riding camels was a hit with the kids, 
+                            and we loved taking photos with the Sphinx. The delicious lunch with a view of the pyramids was
+                            the perfect way to end the day. It was a fantastic mix of fun and education, creating unforgettable
+                            memories for our family! Highly recommended!</p>
+
+                        <p class="text-muted mb-2"  style="font-size: 12px;">Written in <span>October 26, 2024</span></p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>

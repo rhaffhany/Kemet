@@ -1,8 +1,12 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CarouselModule } from 'ngx-owl-carousel-o';
 import { HttpClientModule } from '@angular/common/http';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+
 import { HomeComponent } from './components/home/home.component';
 import { ThingsToDoComponent } from './components/things-to-do/things-to-do.component';
 import { AdventureModeComponent } from './components/adventure-mode/adventure-mode.component';
@@ -32,11 +36,9 @@ import { NgbCollapseModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavMainComponent } from './components/nav-main/nav-main.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { FaqComponent } from './components/faq/faq.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CarouselModule } from 'ngx-owl-carousel-o';
 import { PlaceDetailsComponent } from './components/place-details/place-details.component';
-
-
+import { ReviewComponent } from './components/review/review.component';
+import { ReviewContentComponent } from './components/review-content/review-content.component';
 
 @NgModule({
   declarations: [
@@ -68,6 +70,8 @@ import { PlaceDetailsComponent } from './components/place-details/place-details.
     MainLayoutComponent,
     FaqComponent,
     PlaceDetailsComponent,
+    ReviewComponent,
+    ReviewContentComponent,
   ],
   imports: [
     BrowserModule,
