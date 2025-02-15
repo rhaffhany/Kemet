@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { ProfileService } from 'src/app/services/profile.service';
 import Swal from 'sweetalert2';
 
@@ -11,7 +11,7 @@ import Swal from 'sweetalert2';
 
 export class ProfileComponent {
 
-  constructor(private _ProfileService:ProfileService){}
+  constructor(private _ProfileService:ProfileService, private ngZone: NgZone){}
 
   // assets
   layoutPic:string = "/assets/img/sunset-5314319_640.png";
@@ -37,7 +37,6 @@ export class ProfileComponent {
 
 
   //Api
-
   months: string[] = [...Array(12).keys()].map(i => new Date(0, i).toLocaleString('en', { month: 'long' }));
   days: number[] = Array.from({ length: 31 }, (_, i) => i + 1); 
   years: number[] = Array.from({ length: 101 }, (_, i) => new Date().getFullYear() - i); 
@@ -51,9 +50,10 @@ export class ProfileComponent {
 
   isEdited = false;
 
-  onEdit() {
+
+  onEdit(): void {
     this.isEdited = true;
-  }
+  }  
     
   userData:any = {
       "$id": "",
@@ -76,11 +76,11 @@ export class ProfileComponent {
       "websiteLink": "",
       "creationDate": ""
   };
+
   updatedData:any = {...this.userData};
 
 
   ngOnInit(): void {
-
     this._ProfileService.getCurrentUserData().subscribe({
       next:(data)=>{
         this.userData = data;
@@ -100,14 +100,21 @@ export class ProfileComponent {
           this.profileImg = this.userData.profileImageURL;
         }
 
+        // if (!this.updatedData.userName) {
+        //   this.updatedData.userName = this.userData.userName;
+        // }
+
         console.log("userData>>",data);
 
       },
       error: (err) => {
         console.error('Error fetching user data:', err);
       },
-
     });
+
+    if (this.updatedData.country) {
+      this.onCountryChange();
+    }
 
   }
 
@@ -123,21 +130,14 @@ export class ProfileComponent {
 
     // Ensure interestCategoryIds is an array
     if (this.updatedData.interestCategoryIds?.$values) {
-      this.updatedData.interestCategoryIds = this.updatedData.interestCategoryIds.$values;
+      this.updatedData.interestCategoryIds = [...this.updatedData.interestCategoryIds.$values];
     }
 
     // Validate and sanitize fields (e.g., websiteLink must start with http/https)
-    if (this.updatedData.websiteLink) {
+    if (this.updatedData.websiteLink && !this.updatedData.websiteLink.startsWith('http')) {
       this.updatedData.websiteLink = `https://${this.updatedData.websiteLink}`;
     }
 
-
-    if (this.isUsernameEditable && this.updatedData.userName !== this.userData.userName) {
-      // Ensure userName is correctly updated if it was changed
-      console.log('Updated username:', this.updatedData.userName); // Debugging
-    }
-    
-    // Validate username only if edited
     if (!this.isUsernameEditable) {
       delete this.updatedData.userName;
     }
@@ -145,16 +145,22 @@ export class ProfileComponent {
     // Remove extra properties
     delete this.updatedData.$id;
 
-    // Call the update API
+    // API
     this._ProfileService.updateCurrentData(this.updatedData).subscribe({
       next: (response) => {
 
-        localStorage.setItem('userName', this.updatedData.userName);
+        if (this.updatedData.userName) {
+          localStorage.setItem('userName', this.updatedData.userName);
+        }
+
+        console.log("update data:", this.updatedData);
+        
 
         this.userData = {...this.updatedData};
+        this.updatedData = response;
         this.showEditSection = true;
-        this.isEdited = true;
-
+        this.isEdited = false;
+        
         Swal.fire({
           title: 'Success!',
           text: 'Your profile has been updated successfully.',
@@ -162,17 +168,21 @@ export class ProfileComponent {
           confirmButtonText: 'OK',
           confirmButtonColor: 'var(--secondary-color)',
         });
-        
 
+        this.ngZone.runOutsideAngular(() => {
+          setTimeout(() => {
+            location.reload();
+          }, 1500); 
+        });
+        
       },
       error: (err) => {
         console.error('Error in updating profile:', err);
-        console.error('Error details:', err.error);
 
         this.showEditSection = true;
         this.isUsernameEditable = false;
 
-        if (err.status === 400) {
+        if (err.status === 400 && err.error.includes('Username already exists')) {
           Swal.fire({
             title: 'Error!',
             text: 'The username is already taken. Please choose another.',
@@ -213,10 +223,25 @@ export class ProfileComponent {
     }
   }
 
-  toggleUsernameEdit(): void {
-    this.isUsernameEditable = !this.isUsernameEditable; 
-  }
+  countryCities: { [key: string]: string[] } = {
+    "Egypt": ["Cairo", "Alexandria", "Borsaid", "Giza", "Luxor", "Aswan", "Mansoura", "Tanta", "Ismailia"],
+    "USA": ["New York", "Los Angeles", "Chicago", "Houston", "Miami"],
+    "UK": ["London", "Manchester", "Birmingham", "Liverpool"],
+    "France": ["Paris", "Marseille", "Lyon", "Toulouse"]
+  };
 
+  get countryList(): string[] {
+    return Object.keys(this.countryCities);
+  }
+  
+
+  filteredCities: string[] = [];
+
+  onCountryChange() {
+    this.filteredCities = this.countryCities[this.updatedData.country] || [];
+    this.updatedData.city = "";
+    this.isEdited = true;
+  }
 
   uploadProfileImg(event:any):void{
     const file = event.target.files[0];
@@ -230,7 +255,14 @@ export class ProfileComponent {
     this._ProfileService.uploadProfileImg(formData).subscribe({
       next:(response)=>{
         this.profileImg = `https://localhost:7051/${response.filePath}`;
-        console.log(response);
+        this.isEdited = true;
+        Swal.fire({
+          title: 'Success!',
+          text: 'Your profile photo has been updated successfully.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+          confirmButtonColor: 'var(--secondary-color)',
+        });
       },
       error:(err)=>{
         console.error('Upload Error:', err);
@@ -259,14 +291,16 @@ export class ProfileComponent {
     });
   }
   
-
   removeBackground():void{
     // this.backgroundEdit = '/assets/img/sunset-update.png';
     // this.layoutPic= "/assets/img/sunset-5314319_640.png";
     this.updatedData.filePath = this.backgroundEdit || this.layoutPic;
 
   }
-  
+
+  toggleUsernameEdit(): void {
+    this.isUsernameEditable = !this.isUsernameEditable; 
+  }
 
   // editBoxContainer
   showEditSection: boolean = true; 

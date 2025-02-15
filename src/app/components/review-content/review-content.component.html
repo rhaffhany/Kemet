@@ -1,0 +1,71 @@
+<section>
+    <div class="container py-5">
+        <div class="row ">
+
+            <div class="col-md-3 bg-warning">
+                <div class="card rounded-2 p-4" style="width: 18rem;">
+                    <img src=".." class="card-img-top bg-black" alt="place_pic">
+                    <div class="card-body">
+                      <h5 class="card-text mb-0">place</h5>
+                      <p class="text-muted" style="font-size: 25px;">,</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8 offset-1">
+                <!-- Q1 -->
+                <p class="mb-0">How would you rate your experience ?</p>
+                <div class="stars rate">
+                    <span *ngFor="let star of stars; let i = index" class="rate"
+                    (click)="rate(i + 1)" 
+                    (mouseenter)="setHover(i + 1)" 
+                    (mouseleave)="clearHover()">
+                    <svg width="33" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"  
+                        [ngStyle]="{ fill: i < (hoverRating || rating) ? '#FAC817' : '#FFE5C2' }" 
+                        stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                    </span>
+                </div>
+                <!-- Q2 -->
+                <p class="mb-0">When did you go ?</p>
+                <div class="datepicker-container position-relative">
+                    <button class="selection-btn mt-1" (click)="d.toggle()">Select Date</button>
+                    <input type="text" ngbDatepicker #d="ngbDatepicker" (dateSelect)="onDateSelect($event)" class="visually-hidden" />
+                    <p *ngIf="selectedDate" class="selected-date ms-3 fw-bold mb-1">{{ selectedDate | date: 'longDate' }}</p>
+                </div>
+                <!-- Q3 -->
+                <p class="mb-1">who did you go ?</p>
+                <div class="chocies">
+                    <button class="selection-btn me-1">Business</button>
+                    <button class="selection-btn me-1">Couples</button>
+                    <button class="selection-btn me-1">Family</button>
+                    <button class="selection-btn me-1">solo</button>
+                </div>
+                <!-- review -->
+                <p class="mb-1">Write a review</p>
+                <textarea name="review" id="review" class="review w-50" rows="5"></textarea>
+                <!-- title of review -->
+                <p class="mb-1">Title your review</p>
+                <input type="text" class="p-2 w-50">
+                <!-- add photo -->
+                <p class="mb-1">Title your review</p>
+                <div class="custom-file-upload w-50 p-5">
+                    <input type="file" id="fileInput" class="d-none" multiple (change)="onFileSelected($event)">
+                    <label for="fileInput">
+                        <i class="fa-solid fa-plus"></i>
+                    </label>
+                </div>
+                <div class="preview-container">
+                    <img *ngFor="let img of selectedImages" [src]="img" class="preview-img" />
+                </div>
+                <!-- submit -->
+                <button class="submit-btn fw-bold w-50 mt-4" type="submit">Submit</button>
+                
+                
+            </div>
+
+        </div>
+    </div>
+    
+</section>
