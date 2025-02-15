@@ -1,32 +1,37 @@
-import { Component, EventEmitter, Output, ChangeDetectorRef } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { AuthService } from './../../services/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { jwtDecode } from 'jwt-decode';
+import { ModalService } from '../../services/modal.service';
+import { Subscription } from 'rxjs';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent {
-
+export class LoginComponent implements OnDestroy {
   // Assets
   arrowLeftIcon: string = '/assets/icons/chevron-left.svg';
   loginLogoSrc: string = '/assets/logo/logo.png';
   loginLogoAlt: string = 'Logo';
 
+  // Modal state
+  showModal = false;
+  private modalSubscription: Subscription;
 
-  @Output() close = new EventEmitter<void>();
-
-  // Form State Management
+  // Form visibility states
   showLoginForm = true;
   showRegisterForm = false;
   showForgotPasswordForm = false;
   showVerificationForm = false;
   showResetPasswordForm = false;
+  showPasswordChangedSuccess = false;
+  showLoginModal = false;
 
-  // Status Flags
+
+  // Status flags
   isLoading = false;
   isTimerActive = false;
 
@@ -35,369 +40,331 @@ export class LoginComponent {
   successMsg = '';
 
   // Timer
-  timer: number = 0;
+  timerCount = 30;
+  timerInterval: any;
 
   // Forms
   loginForm: FormGroup;
   forgotPasswordForm: FormGroup;
   verificationForm: FormGroup;
   resetPasswordForm: FormGroup;
+  registerForm: FormGroup;  // Register form added
 
-  // Forgot Password Email
-  forgotPasswordEmail = '';
-
-  // Password Visibility
+  // Password visibility
   passwordVisible = false;
+  forgotPasswordEmail = '';
+  currentUserId: string = '';
+
   // OTP Config
   otpConfig = {
-    length: 6, // Length of the OTP
-    isNumberInput: true, // Allow only numbers
-    autofocus: true, // Autofocus on the first OTP input
-    separator: ' ', // Separator between OTP digits (optional)
+    length: 6,
+    isNumberInput: true,
+    autofocus: true,
+    separator: ' ',
   };
 
   constructor(
-    private cdr: ChangeDetectorRef,
+    private modalService: ModalService,
     private authService: AuthService,
-    private router:Router,
-    private fb: FormBuilder
+    private router: Router,
+    private fb: FormBuilder,
+    private cdr: ChangeDetectorRef
   ) {
+    // Initialize forms
     this.loginForm = this.createLoginForm();
     this.forgotPasswordForm = this.createForgotPasswordForm();
     this.verificationForm = this.createVerificationForm();
     this.resetPasswordForm = this.createResetPasswordForm();
+    this.registerForm = this.createRegisterForm();  // Initialize register form
+
+    // Subscribe to modal state changes
+    this.modalSubscription = this.modalService.getLoginModalState().subscribe((state: boolean) => {
+      this.showModal = state;
+      if (!state) this.resetAllForms();
+    });
   }
-  
-  
-  // ========================
-  // Form Creation
-  // ========================
+
+  ngOnDestroy(): void {
+    this.modalSubscription.unsubscribe();
+  }
 
   private createLoginForm(): FormGroup {
-    return new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    return this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
   private createForgotPasswordForm(): FormGroup {
-    return new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.email]),
+    return this.fb.group({
+      email: ['', [Validators.required, Validators.email]], // Added email validation here
     });
   }
 
   private createVerificationForm(): FormGroup {
-    return new FormGroup({
-      verificationCode: new FormControl('', [
+    return this.fb.group({
+      verificationCode: ['', [
         Validators.required,
         Validators.minLength(6),
         Validators.maxLength(6),
-      ]),
-   
+      ]],
     });
   }
 
   private createResetPasswordForm(): FormGroup {
-    return new FormGroup({
-      newPassword: new FormControl('', [Validators.required, Validators.minLength(6)]),
-      confirmPassword: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    return this.fb.group({
+      newPassword: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', Validators.required]
+    }, { 
+      validator: this.passwordMatchValidator 
     });
   }
 
-  // ========================
-  // Handlers
-  // ========================
+  private createRegisterForm(): FormGroup {
+    return this.fb.group({
+      name: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', Validators.required],
+    }, {
+      validator: this.passwordMatchValidator
+    });
+  }
+  private passwordMatchValidator(form: FormGroup): { [key: string]: boolean } | null {
+    const newPassword = form.get('newPassword')?.value;
+    const confirmPassword = form.get('confirmPassword')?.value;
+  
+    return newPassword && confirmPassword && newPassword === confirmPassword
+      ? null
+      : { passwordMismatch: true };
+  }
+  
 
-  // Login Handler
+  // Modal control
+  closeModal(): void {
+    this.modalService.closeAllModals();
+    this.resetAllForms();
+  }
 
-handleLogin(): void {
+handleLogin() {
+  if (this.loginForm.invalid) return;
+
   this.isLoading = true;
-  if (this.loginForm.valid) {
-    this.authService.loginForm(this.loginForm.value).subscribe({
-      next: (response) => {
-        if (response?.token) {
-          console.log('Login Response:', response);  // Log response to verify userId
-
-          // Set token in localStorage
-          localStorage.setItem('token', response.token);
-          
-          // If userId is available, store it
-          if (response?.userId) {
-            localStorage.setItem('userId', response.userId);
-            console.log('userId stored in localStorage:', response.userId);
-          }
-        
-          // Set other user info in localStorage
-          localStorage.setItem('userName', response.userName);
-
-          console.log('Login successful, userId:', response.userId);  // Log userId after successful login
-
-          this.close.emit();
-          setTimeout(() => {
-            this.router.navigate([response.role === 'admin' ? '/admin' : '/profile']);
-          }, 500);
-        } else {
-          this.errorMsg = 'Unexpected response from server';
-        }
-        this.isLoading = false;
-      },
-      error: (err) => {
-        this.errorMsg = this.handleError(err);
-        this.isLoading = false;
-      },
-    });
-  } else {
-    this.isLoading = false;
-    this.errorMsg = 'Please fill out all fields correctly.';
-  }
-}handleForgotPassword() {
-  if (this.forgotPasswordForm.valid) {
-    this.forgotPasswordEmail = this.forgotPasswordForm.value.email; // Store email for future reference
-    this.isLoading = true;
-
-    // Call your backend service for production flow
-    this.authService.forgotPassword({ email: this.forgotPasswordEmail }).subscribe({
-      next: () => {
-        this.successMsg = 'Verification code sent to your email!';
-        this.isLoading = false;
-        this.showForgotPasswordForm = false;
-        this.showVerificationForm = true;
-      },
-      error: (err: any) => { // Explicitly typing 'err' as 'any'
-        this.errorMsg = this.handleError(err);
-        this.isLoading = false;
-      },
-    });
-  } else {
-    this.errorMsg = 'Please provide a valid email address.';
-  }
-}
-// Resend Verification Code
-resendCode(): void {
-  if (!this.isTimerActive) {
-    this.startTimer();
-    this.authService.resendVerificationCode({ email: this.forgotPasswordEmail }).subscribe({
-      next: () => {
-        this.successMsg = 'Verification code resent successfully!';
-      },
-      error: (err) => {
-        this.errorMsg = this.handleError(err);
-      },
-    });
-  }
-}
-
-timerCount = 30;
-
-// Start timer for resend code button
-startTimer(): void {
-  this.isTimerActive = true;
-  const interval = setInterval(() => {
-    if (this.timerCount === 0) {
-      clearInterval(interval);
-      this.isTimerActive = false;
-      this.timerCount = 30; // Reset timer to 30 seconds
-    } else {
-      this.timerCount--;
-    }
-  }, 1000); // Decrement every second
-}
-
-handleVerification(): void {
-  console.log('handleVerification() triggered');
-
-  if (this.verificationForm.valid) {
-    const otp = this.verificationForm.value.verificationCode; 
-    const userId = localStorage.getItem('userId'); 
-
-    console.log('Entered OTP:', otp);
-    console.log('userId from localStorage:', userId);
-
-    if (!userId) {
-      this.errorMsg = 'User ID is missing. Please try again.';
-      return;
-    }
-
-    if (otp.length === 6) {
-      this.verifyOtp(userId, otp); // Call verifyOtp method if valid
-    } else {
-      this.errorMsg = 'Please enter a valid 6-digit OTP.';
-    }
-  } else {
-    this.errorMsg = 'Please enter a valid verification code.';
-  }
-}
-verifyOtp(userId: string, otp: string): void {
-  this.isLoading = true;
-
-  this.authService.verifyOtp({ userId, otp }).subscribe({
-    next: (response) => {
-
-      localStorage.setItem('token', response.resetToken);
-
-      this.showVerificationForm = false;
-      this.showResetPasswordForm = true;
+  this.authService.loginForm(this.loginForm.value).subscribe({
+    next: () => {
+      // Redirect to home page with app navbar
+      this.router.navigate(['/home']);
     },
-    error: (err) => {
-      this.errorMsg = this.handleError(err);
+    error: (error) => {
+      this.errorMsg = error.message;
       this.isLoading = false;
-    },
+    }
   });
 }
+isOpen = false;
 
 
+  handleForgotPassword() {
+    this.authService.forgotPassword(this.forgotPasswordForm.value).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        const userId = response.data || response.apiResponse?.data;
 
-
-  getUserId(): string | null {
-    const userId = localStorage.getItem('userId');
-    console.log('getUserId() - Retrieved from localStorage:', userId);  
-    return userId;  
-  }
-  
-
-  
-  handleResetPassword(): void {
-    if (this.resetPasswordForm.valid) {
-      const newPassword = this.resetPasswordForm.value.newPassword; 
-      const email = localStorage.getItem('userEmail'); 
-      const token = localStorage.getItem('token'); 
-  
-      if (!email || !token) {
-        this.errorMsg = 'Email or reset token is missing. Please try again.';
-        return;
+        if (userId && typeof userId === 'string') {
+          this.currentUserId = userId;
+          this.showVerificationForm = true;
+          this.showForgotPasswordForm = false;
+          this.successMsg = 'Verification code sent successfully!';
+          this.forgotPasswordEmail = this.forgotPasswordForm.get('email')?.value;
+          this.startTimer(); 
+        } else {
+          console.error('Unexpected response structure:', response);
+          this.errorMsg = 'Failed to process server response';
+        }
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.errorMsg = this.handleError(err);
       }
-  
-      const payload = { email, token, newPassword }; 
-  
-      this.isLoading = true;
-  
-      this.authService.resetPassword(payload).subscribe({
+    });
+  }
+
+  resendCode(): void {
+    if (!this.isTimerActive) {
+      this.startTimer();
+      this.authService.resendVerificationCode({ email: this.forgotPasswordForm.value.email }).subscribe({
         next: () => {
-          this.isLoading = false;
-          this.successMsg = 'Password reset successfully! You can now log in with your new password.';
-          this.showResetPasswordForm = false;
+          this.successMsg = 'Verification code resent successfully!';
         },
         error: (err) => {
           this.errorMsg = this.handleError(err);
-          this.isLoading = false;
         },
       });
-    } else {
-      this.errorMsg = 'Please enter a valid password.';
     }
   }
-  
-  resetPassword(): void {
-    if (this.resetPasswordForm.valid) {
-      const email = localStorage.getItem('email'); // Retrieve email from local storage
-      const token = localStorage.getItem('token'); // Retrieve token from local storage
-      const newPassword = this.resetPasswordForm.value.newPassword;
-  
-      if (!email || !token) {
-        this.errorMsg = 'Missing email or token. Please restart the password reset process.';
-        return;
+
+  formatTimer(seconds: number): string {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${this.pad(minutes)}:${this.pad(remainingSeconds)}`;
+  }
+
+  private pad(num: number): string {
+    return num.toString().padStart(2, '0');
+  }
+
+  startTimer(): void {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+    }
+    
+    this.timerCount = 30;
+    this.isTimerActive = true;
+    
+    this.timerInterval = setInterval(() => {
+      this.timerCount--;
+      
+      if (this.timerCount <= 0) {
+        clearInterval(this.timerInterval);
+        this.isTimerActive = false;
       }
-  
-      const payload = { email, token, newPassword };
-  
-      this.isLoading = true;
-  
-      this.authService.resetPassword(payload).subscribe({
-        next: (response) => {
-          this.isLoading = false;
-          this.successMsg = 'Password reset successfully! You can now log in with your new password.';
-          this.showResetPasswordForm = false;
-        },
-        error: (err) => {
-          this.errorMsg = this.handleError(err);
-          this.isLoading = false;
+      this.cdr.detectChanges();
+    }, 1000);
+  }
 
-
-        },
-      });
-    } else {
-      this.errorMsg = 'Please provide a valid new password.';
-
-    }
+  handleVerification(): void {
+    this.isLoading = true;
+    this.errorMsg = '';
+    this.successMsg = '';
+  
+    const payload = {
+      userId: this.currentUserId,
+      otp: this.verificationForm.value.verificationCode
+    };
+  
+    this.authService.verifyOtp(payload).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        console.log('Verification response:', response); 
+  
+        if (response?.resetToken) {
+          // Store the reset token
+          localStorage.setItem('resetToken', response.resetToken);
+  
+          this.showVerificationForm = false;
+          this.showResetPasswordForm = true;
+  
+          // Ensure the modal displays the reset password form properly
+          this.cdr.detectChanges(); // Trigger change detection if necessary
+  
+          this.successMsg = 'OTP verified successfully. You can now reset your password.';
+        } else {
+          this.errorMsg = 'Verification failed. Please try again.';
+        }
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.errorMsg = this.handleVerificationError(err);
+        this.cdr.detectChanges();
+      }
+    });
   }
   
-  handleError(error: any): string {
+
+  private handleVerificationError(error: HttpErrorResponse): string {
     if (error.status === 401) {
-      return 'Unauthorized: Invalid token or session expired.';
-    } else if (error.status === 400) {
-      return 'Bad request: Check your input and try again.';
-    } else if (error.status >= 500) {
-      return 'Server error: Please try again later.';
-    } else {
-      return `Unexpected error: ${error.message}`;
+      return 'Invalid or expired verification code. Please request a new code.';
     }
+    return 'Verification failed. Please try again.';
+  }
+  handleResetPassword(): void {
+    if (this.resetPasswordForm.invalid || this.resetPasswordForm.errors?.['passwordMismatch']) return;
+    const resetData = {
+      email: this.forgotPasswordForm.value.email,
+      token: localStorage.getItem('resetToken') || '',
+      newPassword: this.resetPasswordForm.value.newPassword
+    };
+  
+    this.isLoading = true;
+    this.errorMsg = '';
+  
+    this.authService.resetPassword(resetData).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.showResetPasswordForm = false;
+        this.showPasswordChangedSuccess = true;
+        localStorage.removeItem('resetToken'); 
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.errorMsg = this.handleError(err);
+      }
+    });
+  }
+  
+  private resetAllForms(): void {
+    this.showLoginForm = true;
+    this.showRegisterForm = false;
+    this.showForgotPasswordForm = false;
+    this.showVerificationForm = false;
+    this.showResetPasswordForm = false;
+    this.errorMsg = '';
+    this.successMsg = '';
+    this.loginForm.reset();
+    this.forgotPasswordForm.reset();
+    this.verificationForm.reset();
+    this.resetPasswordForm.reset();
+    this.registerForm.reset();  
+     this.showPasswordChangedSuccess = false;
   }
 
-
-
-
-
-
-
-toggleFormVisibility(form: string): void {
-  this.resetFormState();
-  this.showLoginForm = form === 'login';
-  this.showRegisterForm = form === 'register';
-  this.showForgotPasswordForm = form === 'forgotPassword';
-  this.showVerificationForm = form === 'verification';
-  this.showResetPasswordForm = form === 'resetPassword';
-}
-
-resetFormState(): void {
-  this.showLoginForm = false;
-  this.showRegisterForm = false;
-  this.showForgotPasswordForm = false;
-  this.showVerificationForm = false;
-  this.showResetPasswordForm = false;
-}
-
-resetMessages(): void {
-  this.errorMsg = '';
-  this.successMsg = '';
-}
-
-backToLogin(): void {
-  this.toggleFormVisibility('login');
-}
-
-backToForgotPassword(): void {
-  this.toggleFormVisibility('forgotPassword');
-}
-
-openForgotPasswordForm(): void {
-  this.toggleFormVisibility('forgotPassword');
-}
-
-openRegisterModal(event: Event): void {
-  event.preventDefault(); 
-  this.toggleFormVisibility('register');
-}
-
-
-togglePasswordVisibility(): void {
-  this.passwordVisible = !this.passwordVisible;
-}
-onOtpChange(otp: string): void {
-  this.verificationForm.get('verificationCode')?.setValue(otp); 
-}
-isTokenExpired(): boolean {
-  const token = this.authService.getToken();
-  if (!token) return true;
-
-  try {
-    const decoded: any = jwtDecode(token);
-    const currentTime = Math.floor(Date.now() / 1000);
-    return decoded.exp < currentTime;
-  } catch (error) {
-    console.error('Error decoding token:', error);
-    return true;
+  private handleError(error: HttpErrorResponse): string {
+    if (error.status === 401) return 'Invalid credentials';
+    if (error.status === 400) return 'Bad request';
+    if (error.status >= 500) return 'Server error';
+    return error.message || 'An unexpected error occurred';
   }
-}
 
+  // UI handlers
+  togglePasswordVisibility(): void {
+    this.passwordVisible = !this.passwordVisible;
+  }
+
+  openForgotPasswordForm(): void {
+    this.showLoginForm = false;
+    this.showForgotPasswordForm = true;
+  }
+
+  openRegisterForm(): void {
+    this.showLoginForm = false;
+    this.showRegisterForm = true;
+  }
+
+  backToLogin(): void {
+    this.resetAllForms();
+  }
+
+  backToVerification(): void {
+    this.showResetPasswordForm = false;
+    this.showVerificationForm = true;
+  }
+
+  onOtpChange(otp: string): void {
+    this.verificationForm.get('verificationCode')?.setValue(otp);
+  }
+
+  closeOnOutsideClick(event: Event): void {
+    this.closeModal();
+  }
+  openRegister() {
+    console.log('[LoginComponent] Calling openRegister()');
+    this.modalService.openRegister();
+  }
+  ngOnInit() {
+    // Subscribe to login modal state
+    this.modalService.getLoginModalState().subscribe(state => {
+      this.showLoginModal = state;
+    });
+  }
 
 }

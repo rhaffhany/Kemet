@@ -1,25 +1,36 @@
+import { AuthService } from 'src/app/services/auth.service';
+import { ModalService } from './../../services/modal.service';
 import { Component } from '@angular/core';
-
+import { HostListener } from '@angular/core';
 @Component({
   selector: 'app-nav-auth',
   templateUrl: './nav-auth.component.html',
   styleUrls: ['./nav-auth.component.scss']
 })
 export class NavAuthComponent {
-  loginLogoSrc: string = '/assets/logo/logo.png'; 
-  loginLogoAlt: string = 'Logo';  
-  
+  loginLogoSrc: string = '/assets/logo/logo.png';
+  loginLogoAlt: string = 'Logo';
+  constructor(
+    public ModalService: ModalService,
+    public AuthService: AuthService
+  ){}
 
-  // Open login modal
+
   openLoginModal(event: Event) {
     event.preventDefault();
-    this.showModal = true; 
-    console.log('Modal opened'); 
+    console.log('Sign In button clicked'); // Debugging log
+    this.ModalService.openLogin();
   }
+  isLoggedIn$ = this.AuthService.isLoggedIn$;
 
-  showModal = false; 
-  closeModal() {
-    this.showModal = false; 
-    console.log('Modal closed'); }
-    
+  logout() {
+    this.AuthService.logout();
+  }
+  isScrolled = false;
+
+    @HostListener('window:scroll', [])
+    onWindowScroll() {
+      this.isScrolled = window.scrollY > 50; 
+    }
+  
 }

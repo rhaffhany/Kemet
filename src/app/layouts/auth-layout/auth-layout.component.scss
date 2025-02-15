@@ -11,4 +11,15 @@
 
 .nav-color{
 background-color: #FFE4C2;
+padding-bottom: 20px;
+}
+
+:host {
+  background-color: #FFE4C2;
+  display: block;
+  margin-bottom: 6rem; // Adds space below navbar
+}
+
+.content-wrapper {
+  padding-top: 6rem; 
 }

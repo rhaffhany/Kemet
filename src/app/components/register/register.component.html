@@ -1,3 +1,8 @@
+<div class="modal register-modal" 
+     [class.show]="showRegisterModal" 
+     (click)="closeOnOutsideClick($event)">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+
 <div *ngIf="!isLoginInfoModalOpen">
     <form [formGroup]="registerForm" class="registerform">
       <img class="register-logo" [src]="registerLogoSrc" [alt]="registerLogoAlt" />

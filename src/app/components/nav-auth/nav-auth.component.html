@@ -1,6 +1,5 @@
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
 
-<nav class="navbar navbar-expand-sm navbar-light bg-light">
+<nav class="navbar navbar-expand-sm navbar-light bg-light" [class.scrolled]="isScrolled">
   <div class="container-fluid">
     <a class="navbar-brand" routerLink="/">
       <img class="login-logo" [src]="loginLogoSrc" [alt]="loginLogoAlt">
@@ -27,15 +26,10 @@
       <div class="sign-in-button-container">
         <button (click)="openLoginModal($event)" class="sign-in-button">Sign In</button>
       </div>
+      
+      <app-login></app-login>
     </div>
   </div>
 </nav>
 
-<!-- Modal for Login -->
-<div class="modal login-modal" [ngClass]="{'show': showModal}">
-  <div class="modal-content">
-    <span class="close" (click)="closeModal()">&times;</span>
-    <app-login (close)="closeModal()"></app-login> 
-  </div>
-</div>
 

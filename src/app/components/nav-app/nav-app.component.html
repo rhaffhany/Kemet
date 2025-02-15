@@ -1,5 +1,5 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary py-5 ">
-    <div class="container">
+<nav class="navbar navbar-expand-lg" [ngClass]="{ 'transparent': isHomePage && !isScrolled, 'scrolled': !isHomePage || isScrolled }">
+  <div class="container">
 
       <div >
         <a class="navbar-brand" routerLink="home"><img [src]="logo" alt="logo" ></a>
@@ -48,7 +48,7 @@
               <div role="button" routerLink="" class="mb-1" (click)="closeCollapse()">Write a review</div>
               <div role="button" routerLink="" class="mb-1" (click)="closeCollapse()">Booking</div>
               <div role="button" routerLink="" class="mb-1" (click)="closeCollapse()">Settings</div>
-              <div role="button" routerLink="" class="mb-1" (click)="closeCollapse()">Sign out</div>
+              <div role="button" routerLink="" class="mb-1" (click)="logout()">Sign out</div>
             </div>
           </div>
         </div>   
