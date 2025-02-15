@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&display=swap');
+
+// Variables
 $primary-font: 'Inter', sans-serif;
 $secondary-font: 'Roboto', sans-serif;
 $input-border-color: #FAC817;
@@ -9,12 +11,18 @@ $label-bottom-padding: 5px;
 $font-size: 16px;
 $line-height: 18px;
 
+// Global styles
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
 body {
   font-family: $primary-font;
   position: relative;
-  
 }
 
+// Blurred background effect
 .color {
   height: 526px;
   width: 532px;
@@ -27,232 +35,74 @@ body {
   left: 46px;
   border-radius: 50%;
   pointer-events: none;
-  -webkit-filter: blur(70px);
 }
 
-input, 
-label, 
-h2, 
-h6, 
-button, 
-.login-logo, 
-.form-item, 
-.join-us-link, 
-.small-hr, 
-.arrow-left, 
-.alert {
-  position: relative; 
-  z-index: 1; 
+// General element styles
+input, label, h2, h6, button, .login-logo, .form-item, .join-us-link, .small-hr, .arrow-left, .alert {
+  position: relative;
+  z-index: 1;
 }
+
 input {
-  border: 1px solid #FAC817;
+  border: 1px solid $input-border-color;
   border-radius: 15px;
   background-color: #fff;
-  padding: 10px;
-  font-family: 'Inter', sans-serif;
-  font-size: 16px;
-  line-height: 18px;
-  position: relative;
-  -webkit-border-radius: 15px;
-  -moz-border-radius: 15px;
-  -ms-border-radius: 15px;
-  -o-border-radius: 15px;
+  padding: $padding-small;
+  font-family: $primary-font;
+  font-size: $font-size;
+  line-height: $line-height;
+
+  &:focus {
+    outline: none;
+    border-color: $input-border-color;
+    box-shadow: 0 0 5px $input-border-color;
+  }
 }
 
+// Form styles
 .form-item {
-  position: relative; 
+  position: relative;
+  margin-bottom: 1rem;
+  width: 100%;
 }
 
 .password-icon {
   position: absolute;
-  top: -30px; 
-  left: 10px;  
+  top: -30px;
+  left: 10px;
   cursor: pointer;
-  z-index: 99; 
+  z-index: 99;
 }
 
-
-  html, body {
-    width: 100%;
-    height: 100%;
-  }
-  
-  body {
-    font-family: $primary-font;
-    position: relative;
-  }
-  
-  
-  input, 
-  label, 
-  h2, 
-  h6, 
-  button, 
-  .login-logo, 
-  .form-item, 
-  .join-us-link, 
-  .small-hr, 
-  .arrow-left, 
-  .alert {
-    position: relative;
-    z-index: 1;
-  }
-  
-  input {
-    border: 1px solid $input-border-color;
-    border-radius: 15px;
-    background-color: #fff;
-    padding: $padding-small;
-  
-    &:focus {
-      outline: none;
-      border: $input-border-color;
-      box-shadow: 0 0 5px $input-border-color;
-    }
-  }
-  
-  .loginform {
-    padding: $padding-large;
-  
-    .login-logo {
-      width: 120px;
-      height: auto;
-      margin-left: -7rem;
-      left: 47px;
-      border-radius: 20px 0px 0px 0px;
-      margin-bottom: 45px;
-    }
-  }
-  
-  h2 {
-    margin-bottom: 14px;
-  }
-  
-  h6 {
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 18px;
-    color: #718096;
-    margin: 11px 22px;
-  }
-  
-  label {
-    padding-bottom: $label-bottom-padding;
-    font-weight: 400;
-    font-size: $font-size;
-    line-height: $line-height;
-    margin-top: 20px;
-  }
-  
-  .line-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-  }
-  
-  .small-hr {
-    width: 90px;
-    border-top: 2px solid #111;
-    margin-bottom: 20px;
-  }
-  
-  .join-us-link {
-    font-size: $font-size;
-    font-weight: 400;
-    line-height: $line-height;
-    text-align: center;
-    display: grid;
-    place-items: center;
-    margin-bottom: -3rem;
-    cursor: pointer;
-    color: #000;
-  
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-  
-  a {
-    color: #000;
-    text-decoration: none;
-  
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-  
-  .btn {
-    display: grid;
-    cursor: default;
-    place-items: center;
-  }
-  
-  .login-btn {
-    width: 249px;
-    height: 42px;
-    background-color: #FFBD67;
-    color: #000000;
-    font-size: $font-size;
-    font-weight: 500;
-    line-height: $line-height;
-    text-align: center;
-    border: 2px solid $input-border-color;
-    border-radius: 20px;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-    margin-top: 24px;
-  
-    &:disabled {
-      background-color: #FFBD67;
-      cursor: not-allowed;
-    }
-  }
-  
-  .alert {
-    color: red;
-    height: 1px;
-    padding: 0;
-  }
-  
-  .arrow-left {
-    position: absolute;
-    top: 29px;
-    left: 16.25px;
-    opacity: 1;
-    cursor: pointer;
-  
-    &:hover {
-      opacity: 1;
-    }
-  
-  
-
-  &:focus {
-    outline: none;
-    border: $input-border-color;
-    box-shadow: 0 0 5px $input-border-color;
-  }
-  }
-
+// Login Form
 .loginform {
+  width: 624px;
+  height: 629px;
+  border-width: 1px;
   padding: $padding-large;
-  
 
+  .btn{
+  margin-left: -4rem;
+  }
+  
   .login-logo {
     width: 120px;
     height: auto;
-    margin-left: -7rem;
-    left: 47px;
-    border-radius: 20px 0px 0px 0px;
+    margin-left: -3rem;
+    border-radius: 20px 0 0 0;
     margin-bottom: 45px;
+  }
+  input {
+    width:423px;
   }
 }
 
 h2 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 39px;
+  letter-spacing: -0.01em; 
   margin-bottom: 14px;
 }
 
@@ -266,23 +116,26 @@ h6 {
 
 label {
   padding-bottom: $label-bottom-padding;
-  font-weight: 400;
+  font-weight: 500;
   font-size: $font-size;
   line-height: $line-height;
-  margin-top: 20px;
 }
 
+// Utility styles
 .line-container {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  margin-left: -4rem;
+
 }
 
 .small-hr {
   width: 90px;
   border-top: 2px solid #111;
   margin-bottom: 20px;
+
 }
 
 .join-us-link {
@@ -292,9 +145,11 @@ label {
   text-align: center;
   display: grid;
   place-items: center;
-  margin-bottom: -3rem;
+  margin-bottom: 2rem;
   cursor: pointer;
   color: #000;
+  margin-left: -4rem;
+
 
   &:hover {
     text-decoration: underline;
@@ -344,199 +199,181 @@ a {
   color: red;
   height: 1px;
   padding: 0;
-  margin-bottom:2rem ;
+  margin-bottom: 2rem;
 }
 
 .arrow-left {
-  position: absolute;
-  top: 29px;
-  left: 16.25px;
-  opacity: 1;
-  cursor: pointer;
-
-  &:hover {
-    opacity: 1;
-  }
+ position: absolute;
+ top: 60px;
+ left: 62px;
+ opacity: 1;
+ cursor: pointer;
+ border: 1px solid #D8DADC;
+ padding: 10px;
+ border-radius: 20%;
 }
+
+// Forgot Password Form
 
 .forgot-password-form {
+  margin-left: 3rem;
+  margin-top: 2rem;
   padding: 83px;
-  margin-left: 34px;
   width: 450px;
-  margin-top: 63px;
   height: 480px;
-  
-
-  h2{
-    font-weight: 700;
-    font-family: $primary-font;
-    size: 30px;
-    line-height: 39px;
-    margin-bottom: 13px;
-  }
-  p{
-    margin-top: 0px;
-    color: #000000B2;
-  }
-  .form-item {
-    margin-bottom: 1rem;
-    width: 353px;
-  }
-  
-  .login-btn {
-    margin-top: 1rem;
-    width: 353px;
-  }
-  .arrow-forget {
-    height: 39px;
-    width: 39px;
-    border-radius: 10px;  
-    border: 1px solid #D8DADC;  
-    margin-left: 52px;
-    margin-top: 50px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    -ms-border-radius: 10px;
-    -o-border-radius: 10px;
-  }
-  
-  }
-  .verification-form {
-    padding: 83px;
-    margin-left: 34px;
-    width: 520px;
-    margin-top: 63px;
-    height: 480px;
-    
-    span {
-      font-weight: 500;
-      line-height: 20px; // Fixed typo: "PX" to "px"
-    }
-  
-    h2 {
-      font-weight: 700;
-      font-family: $primary-font;
-      font-size: 30px; // Fixed "size" to "font-size"
-      line-height: 39px;
-      margin-bottom: 13px;
-    }
-  
-    p {
-      font-weight: 400;
-      line-height: 20px; // Fixed typo: "PX" to "px"
-      margin-top: 0px;
-      color: #000000b2;
-    }
-  
-    .form-item {
-      margin-bottom: 1rem;
-      width: 353px;
-    }
-  
-    ng-otp-input {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-  
-      input {
-        margin: 20px 0;
-        width: 51px;
-        height: 51px;
-        border-radius: 15px;
-        border: 1px solid #426990;
-        text-align: center;
-        font-size: 24px;
-        outline: none;
-        box-shadow: none;
-        transition: all 0.3s ease;
-  
-        &:focus {
-          border: 1px solid #000000;
-          box-shadow: none;
-        }
-  
-        &::placeholder {
-          color: #aaa; 
-        }
-      }
-    }
-  
-    .verify-btn {
-      margin-top: 1rem;
-      width: 353px;
-      margin-bottom: 38px;
-    }
-  
-    .arrow-forget {
-      height: 39px;
-      width: 39px;
-      border-radius: 10px;
-      border: 1px solid #d8dadc;
-      margin-left: 52px;
-      margin-top: 50px;
-      -webkit-border-radius: 10px;
-      -moz-border-radius: 10px;
-      -ms-border-radius: 10px;
-      -o-border-radius: 10px;
-    }
-  
-    .resend {
-      text-align: center;
-      display: block;
-      margin-top: 20px;
-  
-      a {
-        font-weight: 600;
-        color: #000000b2;
-        text-decoration: none;
-      }
-  
-      span {
-        font-size: 14px;
-      }
-    }
-  }
-
-
-::ng-deep ng-otp-input input {
-  padding: 10px;
-  border: 1px solid #D8DADC;
-  border-radius: 25px;
-  text-align: center;
-  -webkit-border-radius: 25px;
-  -moz-border-radius: 25px;
-  -ms-border-radius: 25px;
-  -o-border-radius: 25px;
-}
-
-.reset-form {
-  padding: 83px;
-  margin-left: 34px;
-  width: 520px;
-  margin-top: 63px;
-  height: 480px;
-  
-  span {
-    font-weight: 500;
-    line-height: 20px; // Fixed typo: "PX" to "px"
-  }
 
   h2 {
     font-weight: 700;
-    font-family: $primary-font;
-    font-size: 30px; // Fixed "size" to "font-size"
+    font-size: 30px;
     line-height: 39px;
     margin-bottom: 13px;
   }
-
-  p {
-    font-weight: 400;
-    line-height: 20px; // Fixed typo: "PX" to "px"
-    margin-top: 0px;
-    color: #000000b2;
+  .login-btn{
+    margin: 20px auto 0; 
   }
 
-  .form-item {
-    margin-bottom: 1rem;
+  p {
+    color: #000000B2;
+  }
+}
+
+// Verification Form
+.verification-form {
+  max-width: 624px;
+  height: 400px;
+  margin-top: 127px;
+  margin-left: 85px;
+  padding: 20px;
+
+span{
+font-weight: 500;
+}
+
+button {
+  width: 78%;
+}
+ng-otp-input {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-left: -6rem;
+
+  .login-btn{
+    margin: 20px auto 0; 
+  }
+
+  input {
+    margin: 20px 0;
+    width: 51px;
+    height: 51px;
+    border-radius: 15px;
+    border: 1px solid #426990;
+    font-size: 24px;
+    transition: all 0.3s ease;
+
+    &:focus {
+      border-color: #000;
+    }
+  }
+}}
+.reset-password-section {
+  max-width: 624px;
+  height: auto;
+  margin-top: 6rem; /* Adjusted top margin */
+  margin-left: 85px;
+  padding: 20px;
+
+
+  input{
     width: 353px;
-  }}
+
+  }
+  button {
+    width: 353px;
+    margin-top: 20px;
+  }
+}
+
+.resend-container {
+  margin-top: 15px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  margin-left: 6rem;
+  gap: 8px;
+
+  .resend-link {
+    color: #426990;
+    cursor: pointer;
+    
+    &:hover:not(.disabled) {
+      color: #2a476b;
+    }
+
+    &.disabled {
+      color: #999;
+      cursor: not-allowed;
+      text-decoration: none;
+      pointer-events: none;
+    }
+  }
+
+  .timer {
+    color: #666;
+    font-weight: 500;
+  }
+}
+.modal.login-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  overflow: hidden; /* Prevents scrolling on the entire modal */
+  
+  .form-item {
+    display: flex;
+    flex-direction: column; /* Stack label above input */
+    gap: 5px; /* Adds space between label and input */
+  }
+  &.show {
+    display: block;
+  }
+
+  .modal-content {
+    position: relative;
+    background-color: white;
+    margin: 5% auto;
+    padding: 30px;
+    width: 90%;
+    max-width: 624px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    max-height: 600px; /* Prevents excessive height */
+    min-height: 300px; /* Ensures reasonable height */
+    overflow: hidden; /* Removes vertical scrollbar */
+  }
+
+.success-form {
+  text-align: center;
+  padding: 6rem;
+
+  h2 {
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+
+  p {
+    margin-bottom: 2rem;
+  }
+
+  .login-btn {
+    width: 353px;
+    margin-left: 1rem;
+    margin-top: 1rem;
+  }
+}
+}

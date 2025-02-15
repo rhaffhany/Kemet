@@ -1,6 +1,39 @@
-//mafroud yb2a lon primary w f profile bardu
-.navbar{
+body, html {
+  background-color: var(--main-color); // Whole page uses primary color
+  margin: 0;
+  padding: 0;
+    
+}
+
+.navbar {
+  background-color: transparent !important;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  padding-top: 35px;
+  padding-bottom: 25px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.navbar.scrolled {
   background-color: var(--main-color) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+
+.navbar.transparent {
+  background-color: transparent !important;
+  position: absolute; /* Allows content behind it */
+  width: 100%;
+}
+
+
+.profile-dropdown {
+  position: relative;
+  display: inline-block;
 }
 
 .nav-link{
@@ -39,9 +72,17 @@
     
   }
 
-  .card{
-    border-radius: 0px 20px 20px 20px;
+  .card {
+    position: absolute;
+    top: 80px; 
+    right: 0;
+    z-index: 1050; 
+    background-color: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: 180px;
   }
+
   .card-body{
     div{
       &:hover{
