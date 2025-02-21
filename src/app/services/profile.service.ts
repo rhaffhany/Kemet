@@ -13,7 +13,9 @@ export class ProfileService {
 
   constructor(private _HttpClient:HttpClient, private _AuthService:AuthService) { }
 
-  private BaseUrl = 'https://localhost:7051';
+  private DeployUrl = 'https://kemet-server.runasp.net';
+
+  
   getAdventureData(): Observable<any> {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -26,7 +28,7 @@ export class ProfileService {
       'Accept': 'application/json'
     });
 
-    return this._HttpClient.get('https://localhost:7051/api/Profile', { headers })
+    return this._HttpClient.get(`${this.DeployUrl}/api/Profile`, { headers })
       .pipe(
         catchError((error) => {
           console.error('Error fetching adventure data:', error);
@@ -40,7 +42,7 @@ export class ProfileService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
-    return this._HttpClient.get(`${this.BaseUrl}/api/Profile/GetCurrentUserData`,{headers});
+    return this._HttpClient.get(`${this.DeployUrl}/api/Profile/GetCurrentUserData`,{headers});
   }
 
   
@@ -55,7 +57,7 @@ export class ProfileService {
         formData.append(key, updatedData[key]);
       } 
     }
-    return this._HttpClient.put(`${this.BaseUrl}/api/Profile/UpdateUserData`, updatedData, {headers, responseType: 'text'});
+    return this._HttpClient.put(`${this.DeployUrl}/api/Profile/UpdateUserData`, updatedData, {headers, responseType: 'text'});
   }
     
 
@@ -67,7 +69,7 @@ export class ProfileService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${localStorage.getItem('token')}`
     });
-    return this._HttpClient.post(`${this.BaseUrl}/api/Profile/upload-profile-image`, formData, {headers} );
+    return this._HttpClient.post(`${this.DeployUrl}/api/Profile/upload-profile-image`, formData, {headers} );
   }
 
   uploadBackgroundImg(_FormData:FormData):Observable<any>{
@@ -78,7 +80,7 @@ export class ProfileService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${localStorage.getItem('token')}`
     });
-    return this._HttpClient.post(`${this.BaseUrl}/api/Profile/upload-background-image`, _FormData, {headers})
+    return this._HttpClient.post(`${this.DeployUrl}/api/Profile/upload-background-image`, _FormData, {headers})
   }
 
 

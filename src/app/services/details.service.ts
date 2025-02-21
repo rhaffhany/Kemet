@@ -8,9 +8,14 @@ import { Observable } from 'rxjs';
 export class DetailsService {
 
   constructor(private _HttpClient:HttpClient) { }
+  private DeployUrl = 'https://kemet-server.runasp.net';
 
   getDetailedPlace(placeID:any):Observable<any>{
-    return this._HttpClient.get(`https://localhost:7051/Api/Places/GetPlaceByID?PlaceID=${placeID}`);
+    return this._HttpClient.get(`${this.DeployUrl}/Api/Places/GetPlaceByID?PlaceID=${placeID}`);
+  }
+
+  getDetailedActivity(activityID:any):Observable<any>{
+    return this._HttpClient.get(`${this.DeployUrl}/Api/Activities/GetActivityByID?ActivityID=${activityID}`);
   }
 
 

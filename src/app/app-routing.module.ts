@@ -3,6 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { AppLayoutComponent } from './layouts/app-layout/app-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
+import { AuthGuard } from './auth.guard';
+
+// components
 import { HomeComponent } from './components/home/home.component';
 import { ThingsToDoComponent } from './components/things-to-do/things-to-do.component';
 import { PlaceDetailsComponent } from './components/place-details/place-details.component';
@@ -14,51 +17,50 @@ import { PlanComponent } from './components/plan/plan.component';
 import { WishlistComponent } from './components/wishlist/wishlist.component';
 import { CommunityComponent } from './components/community/community.component';
 import { NotfoundComponent } from './components/notfound/notfound.component';
-import { AuthGuard } from './auth.guard';
+import { ReviewComponent } from './components/review/review.component';
+import { ReviewContentComponent } from './components/review-content/review-content.component';
+import { ActivityDetailsComponent } from './components/activity-details/activity-details.component';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: MainLayoutComponent,
-    children: [
+
+  { 
+    path: '',component: MainLayoutComponent, children: [
       { path: 'home', component: HomeComponent, title: 'Home' },
       { path: '', redirectTo: '/home', pathMatch: 'full' },
     ]
   },
+
   {
-    path: '',
-    component: AuthLayoutComponent,
-    children: [
+    path: '',component: AuthLayoutComponent, children: [
       { path: 'login', component: LoginComponent, title: 'Login' },
       { path: 'register', component: RegisterComponent, title: 'Register' },
-      { 
-        path: 'places/:placeID', 
-        component: PlaceDetailsComponent, 
-        title: 'Places', 
-        canActivate: [AuthGuard] 
-      },
+      { path: 'places/:placeID', component: PlaceDetailsComponent, title: 'Places', canActivate: [AuthGuard] },
+      { path: 'activities/:activityID', component: ActivityDetailsComponent, title: 'Activities', canActivate: [AuthGuard] },
     ]
   },
+
+  // Only logged-in users can access
   {
-    path: '',
-    component: AppLayoutComponent,
-    canActivate: [AuthGuard], // Only logged-in users can access
-    children: [
+    path: '',component: AppLayoutComponent, canActivate: [AuthGuard], children: [
       { path: 'profile', component: ProfileComponent, title: 'Profile' },
       { path: 'thingstodo', component: ThingsToDoComponent, title: 'Things To Do' },
-
       { path: 'adventureMode', component: AdventureModeComponent, title: 'Adventure Mode' },
       { path: 'plan', component: PlanComponent, title: 'Plan' },
       { path: 'wishlist', component: WishlistComponent, title: 'WishList' },
       { path: 'community', component: CommunityComponent, title: 'Community' },
-      { 
-        path: 'app-places/:placeID', 
-        component: PlaceDetailsComponent, 
-        title: 'Places' 
-      },
+      { path: 'app-places/:placeID', component: PlaceDetailsComponent, title: 'Places'},
+      { path: 'app-activities/:activityID', component: ActivityDetailsComponent, title: 'Activities'},
+      { path: 'review', component: ReviewComponent, title: 'Review' },
+      { path: 'write-review', component: ReviewContentComponent, title: 'Review' },
+      { path: 'write-review/place/:placeID', component: ReviewContentComponent, title: 'Review-Place' },
+      { path: 'write-review/activity/:activityID', component: ReviewContentComponent, title: 'Review-Activity' },
+
+
     ]
   },
+
   { path: '**', component: NotfoundComponent, title: 'Not Found 404!' }
+  
 ];
 
 @NgModule({

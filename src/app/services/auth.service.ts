@@ -19,7 +19,7 @@ interface RegisterData {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiUrl = 'https://localhost:7051/api/Accounts';
+  private apiUrl = 'https://kemet-server.runasp.net/api/Accounts';
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.isLoggedIn());
 
   constructor(private _HttpClient: HttpClient,private router: Router) {}

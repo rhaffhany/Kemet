@@ -7,9 +7,15 @@
 
 
       <!-- activity msh place -->
-      <div *ngIf="activity.imageURLs?.$values && activity.imageURLs.$values.length > 0" role="button" [routerLink]="['/places',activity.placeId]" >
-        <img [src]="activity.imageURLs.$values[0]" [alt]="activity.name" class="card-image" role="button" routerLink="/activities" >
-      </div>
+      <!-- <div *ngIf="activity.imageURLs?.$values && activity.imageURLs.$values.length > 0" role="button" [routerLink]="['/activities', activity.activityID]" >
+        <img [src]="activity.imageURLs.$values[0]" [alt]="activity.name" class="card-image" role="button">
+      </div> -->
+
+      <div *ngIf="activity.imageURLs?.$values?.length > 0">
+
+        <div *ngIf="activity.imageURLs?.$values?.length > 0" role="button" [routerLink]="['/activities',activity.activityId]" >
+          <img [src]="activity.imageURLs.$values[0]" [alt]="activity.name" class="card-image">
+        </div> 
       
 
       <h3 class="card-title">{{ activity.name }}</h3>

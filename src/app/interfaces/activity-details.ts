@@ -1,0 +1,21 @@
+export interface ActivityDetails {
+    $id: string
+    activityID: number
+    name: string
+    duration: string
+    culturalTips: string
+    description: string
+    openTime: string
+    closeTime: string
+    groupSize: number
+    imageURLs:{ 
+        $id: string
+        $values: string[]
+    }
+    reviews: {
+        $id: string
+        $values: any[]
+    }
+    averageRating: number
+    ratingsCount: number
+}

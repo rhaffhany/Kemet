@@ -1,19 +1,20 @@
-import { ActivityDetails } from 'src/app/interfaces/activity-details';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ActivityDetails } from 'src/app/interfaces/activity-details';
 import { DetailsService } from 'src/app/services/details.service';
 import { ProfileService } from 'src/app/services/profile.service';
 
 @Component({
-  selector: 'app-place-details',
-  templateUrl: './place-details.component.html',
-  styleUrls: ['./place-details.component.scss']
+  selector: 'app-activity-details',
+  templateUrl: './activity-details.component.html',
+  styleUrls: ['./activity-details.component.scss']
 })
-export class PlaceDetailsComponent {
+export class ActivityDetailsComponent {
 
   blackDot:string = "/assets/icons/Ellipse 148.svg";
   ticket:string = "/assets/icons/Ticket.svg"
   searchIcon:string = "/assets/icons/Search.png"
+  profilePic:string = "/assets/icons/profile-pic.svg"
 
   searchResults: any[] = [];  
   errorMessage: string = ''; 
@@ -21,28 +22,8 @@ export class PlaceDetailsComponent {
   userData:any = {};
   updatedData:any = {...this.userData};
 
-
-  placeID:any;
-
-  placeDetails:any = {
-    "$id": " ",
-    "placeID": '',
-    "name": " ",
-    "description": " ",
-    "imageURLs": {
-        "$id": " ",
-        "$values": []
-    },
-    "reviews": {
-        "$id": " ",
-        "$values": []
-    },
-    "averageRating": '',
-    "ratingsCount": ''
-  };
-
-  ActivityDetails:ActivityDetails = {} as ActivityDetails;
-  activityId:any;
+  activityID:any;
+  activityDetails: ActivityDetails = {} as ActivityDetails;
 
   constructor(private _DetailsService:DetailsService, private _ActivatedRoute:ActivatedRoute, private _ProfileService:ProfileService ){}
 
@@ -50,15 +31,15 @@ export class PlaceDetailsComponent {
 
     this._ActivatedRoute.paramMap.subscribe({
       next:(params)=>{
-        this.placeID = params.get('placeID');
-        this.activityId = params.get('activityId');
+        this.activityID = params.get('activityID');
       }
     });
 
-    if (this.placeID) {
-      this._DetailsService.getDetailedPlace(this.placeID).subscribe({
+    if (this.activityID) {
+      this._DetailsService.getDetailedActivity(this.activityID).subscribe({
         next: (response) => {
-          this.placeDetails = response;
+          this.activityDetails = response;
+          console.log(response);
         },
         error: (err) => {
           console.error(err);
@@ -82,30 +63,9 @@ export class PlaceDetailsComponent {
       },
 
     });
-
-  }
-
-
-  getReviewLink(): string[] {
-    if (this.placeID) {
-      return ['/write-review/place', this.placeID];  // Path for place
-    } else if (this.activityId) {
-      return ['/write-review/activity', this.activityId];  // Path for activity
-    }
-    return ['/']; // Default route in case neither ID is present
-  }
   
-  //carsouel
-  updateLargeImage(index: number): void {
-    const largeImage = document.querySelector('.carousel-inner .carousel-item img') as HTMLImageElement;
-    largeImage.src = this.placeDetails.imageURLs.$values[index];
   }
-
-
-  //handle pp
-  
-
-  profilePic:string = "/assets/icons/profile-pic.svg"
+   
   uploadProfileImg(event:any){
     const file = event.target.files[0];
     if (!file) {
@@ -125,19 +85,12 @@ export class PlaceDetailsComponent {
       }
     });
   }
- 
-  //reviews
-  reviews:any=[];
-  // reviews:[] = [
-  //   userData: { profileImageURL: '/path-to-img', city: 'Cairo', country: 'Egypt' },
-  //   updatedData: { firstName: 'John', lastName: 'Doe' },
-  //   title: 'Delicious Food',
-  //   content: 'Amazing food and experience!',
-  //   stars: 5,
-  //   visitDate: 'October 2023',
-  //   travelType: 'with family',
-  //   writtenDate: 'October 5, 2023'
-  // ];
+
+
+  updateLargeImage(index: number): void {
+    const largeImage = document.querySelector('.carousel-inner .carousel-item img') as HTMLImageElement;
+    largeImage.src = this.activityDetails.imageURLs.$values[index];
+  }
 
   carouselOptions = {
     loop: true,

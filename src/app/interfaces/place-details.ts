@@ -9,8 +9,14 @@ export interface placeDetails {
     openTime: string
     closeTime: string
     groupSize: number
-    // imageURLs: ImageUrls
-    // reviews: Reviews
+    imageURLs:{ 
+        $id: string
+        $values: string[]
+    }
+    reviews: {
+        $id: string
+        $values: any[]
+    }
     averageRating: number
     ratingsCount: number
     egyptianAdult: number
@@ -18,11 +24,11 @@ export interface placeDetails {
     touristAdult: number
     touristStudent: number
 }
-export interface ImageUrls {
-    $id: string
-    $values: string[]
-}
-export interface Reviews {
-    $id: string
-    $values: any[]
-}
+// export interface ImageUrls {
+//     $id: string
+//     $values: string[]
+// }
+// export interface Reviews {
+//     $id: string
+//     $values: any[]
+// }

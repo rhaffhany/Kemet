@@ -13,11 +13,15 @@ export class AuthGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
     const isLoggedIn = this.authService.isLoggedIn();
+
     const isPublicPlace = route.url.some(segment => segment.path === 'places'); 
-    const isPrivatePlace = route.url.some(segment => segment.path === 'app-places'); 
+    // const isPrivatePlace = route.url.some(segment => segment.path === 'app-places'); 
+
+    const isPublicActivity = route.url.some(segment => segment.path === 'activities'); 
+    // const isPrivateActivity = route.url.some(segment => segment.path === 'app-activity'); 
 
     if (!isLoggedIn) {
-      if (!isPublicPlace) {
+      if (!isPublicPlace || !isPublicActivity) {
         this.modalService.openLogin(); 
         return false; 
       }
@@ -25,12 +29,24 @@ export class AuthGuard implements CanActivate {
     }
 
   
-    if (isPublicPlace) {
-      const placeID = route.params['placeID'];
-      this.router.navigate([`/app-places/${placeID}`]); 
-      return false;
+    if(isLoggedIn){
+      if (isPublicPlace) {
+        const placeID = route.params['placeID'];
+        this.router.navigate([`/app-places/${placeID}`]); 
+        return false;
+      }else if(isPublicActivity){
+        const activityID = route.params['activityID'];
+        this.router.navigate([`/app-activities/${activityID}`]); 
+        return false;
+      }
+      return true; 
     }
 
-    return true; 
+    return false;
+   
+
+ 
+    
   }
+
 }
