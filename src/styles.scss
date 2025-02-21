@@ -148,6 +148,11 @@ html {
     transform: scale(1.05); 
   }
 }
+.selection-btn.selected {
+  background-color: var(--secondary-color); 
+  color: white;
+  border-color: var(--secondary-color);
+}
 
 .submit-btn{
   border: 1px solid var(--secondary-color);

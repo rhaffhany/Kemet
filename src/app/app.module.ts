@@ -36,10 +36,10 @@ import { NgbCollapseModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavMainComponent } from './components/nav-main/nav-main.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { FaqComponent } from './components/faq/faq.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PlaceDetailsComponent } from './components/place-details/place-details.component';
 import { ReviewComponent } from './components/review/review.component';
 import { ReviewContentComponent } from './components/review-content/review-content.component';
+import { ActivityDetailsComponent } from './components/activity-details/activity-details.component';
 
 @NgModule({
   declarations: [
@@ -73,6 +73,7 @@ import { ReviewContentComponent } from './components/review-content/review-conte
     PlaceDetailsComponent,
     ReviewComponent,
     ReviewContentComponent,
+    ActivityDetailsComponent,
   ],
   imports: [
     BrowserModule,
@@ -84,7 +85,8 @@ import { ReviewContentComponent } from './components/review-content/review-conte
     NgbModule,
     NgbCollapseModule,
     BrowserAnimationsModule,
-    BrowserModule
+    BrowserModule,
+    CarouselModule
     ],
   providers: [provideClientHydration()],
   bootstrap: [AppComponent]

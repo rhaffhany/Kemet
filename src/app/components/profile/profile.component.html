@@ -269,12 +269,12 @@
                                 <label for="Bio">Bio</label>
                             </div>
 
-                            <!-- <div class="form-floating mb-3">
+                            <div class="form-floating mb-3">
                                 <input type="text" class="form-control input-main" id="Location" placeholder="Location" [(ngModel)]="updatedData.city" (ngModelChange)="onEdit()">
                                 <label for="Location">Location</label>
-                            </div> -->
+                            </div>
                             <!-- Country Dropdown -->
-                            <div class="d-flex">
+                            <!-- <div class="d-flex">
                                 <div class="form-floating mb-3 me-1 w-100">
                                     <select class="form-select input-main" id="Country" [(ngModel)]="updatedData.country" (ngModelChange)="onCountryChange()">
                                         <option value="" disabled>Select Country</option>
@@ -283,9 +283,9 @@
                                         </option>
                                     </select>
                                     <label for="Country" class="p-2">Country</label>
-                                </div>
+                                </div> -->
                                 <!-- City Dropdown -->
-                                <div class="form-floating mb-3 w-100">
+                                <!-- <div class="form-floating mb-3 w-100">
                                     <select class="form-select input-main" id="City" [(ngModel)]="updatedData.city" [disabled]="!updatedData.country">
                                         <option value="" disabled>Select City</option>
                                         <option *ngFor="let city of filteredCities" [value]="city">
@@ -294,9 +294,7 @@
                                     </select>
                                     <label for="City" class="p-2">City</label>
                                 </div>
-                            </div>
-                            
-
+                            </div>-->
                             
                             <div class="form-floating mb-3">
                                 <input type="url" class="form-control input-main" id="Website" placeholder="Website" [(ngModel)]="updatedData.websiteLink" (ngModelChange)="onEdit()">
