@@ -9,19 +9,22 @@ export class HomeService {
 
   constructor(private _HttpClient: HttpClient) { }
 
+  private DeployUrl = 'https://kemet-server.runasp.net';
+
+
   fetchPlaces(): Observable<any> {
-    return this._HttpClient.get('https://localhost:7051/api/places');
+    return this._HttpClient.get(`${this.DeployUrl}/api/places`);
   }
 
   fetchPlaceCategory(placeId: number): Observable<any> {
-    return this._HttpClient.get(`https://localhost:7051/api/Places/GetPlaceByID?PlaceID=${placeId}`);
+    return this._HttpClient.get(`${this.DeployUrl}/api/Places/GetPlaceByID?PlaceID=${placeId}`);
   }
 
   fetchActivities(): Observable<any> {
-    return this._HttpClient.get('https://localhost:7051/api/Activities');
+    return this._HttpClient.get(`${this.DeployUrl}/api/Activities`);
   }
 
   fetchTravelAgencyPlan(): Observable<any> {
-    return this._HttpClient.get('https://localhost:7051/api/TravelAgencyPlan');
+    return this._HttpClient.get(`${this.DeployUrl}/api/TravelAgencyPlan`);
   }
 }

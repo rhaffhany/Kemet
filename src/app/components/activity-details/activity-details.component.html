@@ -3,21 +3,21 @@
 
         <div class="row">
             <div class="col-md-6 mt-5">
-                <h1 class="fw-bolder">{{placeDetails.name}}</h1>
+                <h1 class="fw-bolder">{{activityDetails.name}}</h1>
                 <div class="rating d-flex">
                 <span *ngFor="let star of [].constructor(5); let i = index" class="rate">
                 <!-- <i class="fa-regular fa-star"></i> -->
-                <svg width="33" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"  [style.fill]="i < placeDetails.ratingsCount ? '#FAC817' : '#FFE5C2'"
+                <svg width="33" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"  [style.fill]="i < activityDetails.ratingsCount ? '#FAC817' : '#FFE5C2'"
                 stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
                     <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                 </svg>
                 </span>
-                <p style="font-size: 20px;" class="ms-1 mb-0">{{placeDetails.reviews.$values}} reviews</p>
+                <p style="font-size: 20px;" class="ms-1 mb-0">{{activityDetails.reviews.$values}} reviews</p>
                 <img [src]="blackDot" alt="dot" class="mx-2 mt-2">
                 <p style="font-size: 20px;" class="mb-0">Historic Walking Area</p>
                 </div>
                 <div class="mt-2 ">
-                    <a [routerLink]="getReviewLink()" class="text-decoration-none text-black review-link">
+                    <a [routerLink]="['/write-review/activity', activityID]" class="text-decoration-none text-black review-link">
                         <span class="review" style="font-size: 20px; font-weight: 500;">Write a review</span>
                     </a>
                 </div>
@@ -29,12 +29,12 @@
             <div class="col-md-4 p-4 about bg-white ">
                 <h5 class="fw-bold">About</h5>
                 <div class="about-content">
-                    <p style="line-height: 24.2px;" >{{placeDetails.description}}</p>
+                    <p style="line-height: 24.2px;" >{{activityDetails.description}}</p>
                 </div>
                 <div class="about-items">
                     <div class="d-flex align-items-center">
                         <i class="fa-regular fa-clock"></i>
-                        <p class="mb-0 ms-2">Duration {{placeDetails.duration}}</p>
+                        <p class="mb-0 ms-2">Duration {{activityDetails.duration}}</p>
                     </div>
                     <div class="d-flex align-items-center mb-5">
                         <img [src]="ticket" alt="ticket" style="height: 20px; width: 20px;">
@@ -54,13 +54,13 @@
                 <!-- Large Image Display -->
                 <div class="carousel-inner ">
                   <div class="carousel-item active">
-                    <img [src]="placeDetails?.imageURLs?.$values?.[0]" class="d-block w-100 img-lg" alt="Large Image" style="border-radius: 20px;">
+                    <img [src]="activityDetails.imageURLs.$values[0]" class="d-block w-100 img-lg" alt="Large Image" style="border-radius: 20px;">
                   </div>
                 </div>
             
                 <!-- Thumbnail Carousel (Scrollable) -->
                 <div class="carousel-thumbnails d-flex mt-3" style="overflow-x: auto;">
-                  <div *ngFor="let imgUrl of placeDetails.imageURLs?.$values; let i = index" class="thumbnail-item" (click)="updateLargeImage(i)">
+                  <div *ngFor="let imgUrl of activityDetails.imageURLs?.$values; let i = index" class="thumbnail-item" (click)="updateLargeImage(i)">
                     <img [src]="imgUrl" class="img-fluid rounded mb-2" style="cursor: pointer; max-width: 80px; margin-right: 10px;" alt="Thumbnail">
                   </div>
                 </div>
@@ -286,7 +286,7 @@
         </owl-carousel-o>
     </div> -->
       
-    <div class="container mt-5">
+    <div class="container mt-5 py-5">
         <h3 class="fw-bold mb-5">Reviews</h3>
         <div class="row gap-3 align-content-center justify-content-center">
 
@@ -296,7 +296,7 @@
                         <h3 class="fw-bolder me-2">4.5</h3>
                         <span *ngFor="let star of [].constructor(5); let i = index" class="rate mb-2">
                             <!-- <i class="fa-regular fa-star"></i> -->
-                            <svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"  [style.fill]="i < placeDetails.ratingsCount ? '#FAC817' : '#FFFFFF' "
+                            <svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"  [style.fill]="i < activityDetails.ratingsCount ? '#FAC817' : '#FFFFFF' "
                             stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
                                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                             </svg>
@@ -372,7 +372,7 @@
                                 <div class="rating">
                                     <span *ngFor="let star of [].constructor(5); let i = index" class="rate mb-2">
                                         <!-- <i class="fa-regular fa-star"></i> -->
-                                        <svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"  [style.fill]="i < placeDetails.ratingsCount ? '#FAC817' : '#FFFFFF' "
+                                        <svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"  [style.fill]="i < activityDetails.ratingsCount ? '#FAC817' : '#FFFFFF' "
                                         stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
                                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                                         </svg>

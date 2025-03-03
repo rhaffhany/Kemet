@@ -23,11 +23,11 @@ export class RecommendedComponent implements OnInit {
         if (data && Array.isArray(data.$values)) {
           this.places = data.$values;
 
-          console.log('Fetched places:', this.places);
+          // console.log('Fetched places:', this.places);
 
           this.places.forEach((place: any) => {
             if (place.placeID) {
-              console.log('Fetching category for PlaceID:', place.placeID); 
+              // console.log('Fetching category for PlaceID:', place.placeID); 
               this._HomeService.fetchPlaceCategory(place.placeID).subscribe(
                 categoryData => {
                   place.categoryName = categoryData.categoryName;

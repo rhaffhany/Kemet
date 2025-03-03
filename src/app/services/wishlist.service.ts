@@ -8,7 +8,8 @@ import { AuthService } from './auth.service';
   providedIn: 'root',
 })
 export class WishlistService {
-  private baseUrl = 'https://localhost:7051/api/Wishlist'; 
+  private DeployUrl = 'https://kemet-server.runasp.net';
+
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -25,7 +26,7 @@ export class WishlistService {
     });
 
     return this.http
-      .post(`${this.baseUrl}/AddPlaceToWishlist?PlaceID=${placeID}`, {}, { headers })
+      .post(`${this.DeployUrl}/AddPlaceToWishlist?PlaceID=${placeID}`, {}, { headers })
       .pipe(
         catchError((error) => {
           console.error('Error adding place to wishlist:', error);
@@ -47,7 +48,7 @@ export class WishlistService {
     });
 
     return this.http
-      .delete(`${this.baseUrl}/RemovePlaceFromWishlist?PlaceID=${placeID}`, { headers })
+      .delete(`${this.DeployUrl}/RemovePlaceFromWishlist?PlaceID=${placeID}`, { headers })
       .pipe(
         catchError((error) => {
           console.error('Error removing place from wishlist:', error);
