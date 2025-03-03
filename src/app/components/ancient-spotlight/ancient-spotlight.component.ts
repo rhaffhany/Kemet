@@ -60,7 +60,7 @@ export class AncientSpotlightComponent implements OnInit {
     //     }
     //   }
     // );
-
+    
     this._HomeService.fetchPlaces().subscribe(
       data => {
         if (data && Array.isArray(data.$values)) {
