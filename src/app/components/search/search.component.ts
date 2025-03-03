@@ -1,6 +1,6 @@
+import { SearchService } from './../../services/search.service';
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { NgModel } from '@angular/forms';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-search',
@@ -8,54 +8,35 @@ import { NgModel } from '@angular/forms';
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent {
-  searchIcon:string = "/assets/icons/Search.png"
-  query: string = '';  
-  searchResults: any[] = [];  
-  errorMessage: string = ''; 
-  constructor(private http: HttpClient) {}
+  searchIcon = "/assets/icons/Search.png";
+  query = '';
+  searchResults: any[] = [];
+  errorMessage = '';
 
-  onSearchInput() {
-    const query = this.query.trim();
+  constructor(
+    private SearchService: SearchService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
-    if (query.length === 0) {
-      this.clearResults();
-      return;
-    }
-
-    this.fetchSearchResults(query);
-  }
-
-  fetchSearchResults(query: string) {
-    console.log(`Searching for: ${query}`);  
-
-    this.http.get(`https://localhost:7051/api/Search/Search?query=${encodeURIComponent(query)}`)
-      .subscribe(
-        (data: any) => {
-
-          this.updateResults(data);
-          this.errorMessage = '';  
+  onSearchInput(): void {
+    if (this.query.trim()) {
+      this.SearchService.search(this.query).subscribe({
+        next: (results) => {
+          this.searchResults = results;
+          this.errorMessage = results.length === 0 ? 'No results found' : '';
+          this.cdr.detectChanges();
         },
-        (error) => {
-          console.error('Error fetching search results:', error);
-          
-          if (error.error) {
-            console.error('API Error response:', error.error);
-          } else {
-            console.error('Unknown error:', error);
-          }
-
-          this.errorMessage = 'Failed to fetch search results. Please try again later.';
-          this.clearResults();
+        error: (error) => {
+          console.error("Search error:", error);
+          this.errorMessage = error;
+          this.searchResults = [];
+          this.cdr.detectChanges();
         }
-      );
-  }
-
-  updateResults(data: any) {
-    console.log('Search results received:', data);  
-    this.searchResults = data.places || [];  
-  }
-
-  clearResults() {
-    this.searchResults = [];
+      });
+    } else {
+      this.searchResults = [];
+      this.errorMessage = '';
+      this.cdr.detectChanges();
+    }
   }
 }

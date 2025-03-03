@@ -5,10 +5,35 @@
         <a class="navbar-brand" routerLink="home"><img [src]="logo" alt="logo" ></a>
       </div>
   
-      <div class="search-container search-group">
-        <img [src]="searchIcon" alt="searchIcon" class="searchIcon">
-        <input type="text" class="search-input" placeholder="">
+      <div class="search-wrapper" [class.active]="isSearchActive">
+        <div class="search-container search-group" (click)="activateSearch()">
+          <img [src]="searchIcon" alt="searchIcon" class="searchIcon">
+          <input 
+            type="text" 
+            class="search-input" 
+            [(ngModel)]="query"
+            (input)="onSearchInput()"
+            (focus)="activateSearch()"
+            (blur)="deactivateSearch()"
+            placeholder="Search..."
+          >
+        </div>
+      
+        <div *ngIf="searchResults.length > 0" class="search-results-container visible">
+          <div *ngFor="let result of searchResults" 
+               class="result-item"
+               [routerLink]="['/places',result.placeId]"
+               role="button"
+               tabindex="0"
+               (keydown.enter)="navigateToPlaceDetails(result.placeId)">
+            <div class="result-details">
+              <h4 class="result-name">{{ result.name }}</h4>
+              <p class="result-description">{{ result.description }}</p>
+            </div>
+          </div>
+        </div>
       </div>
+      
       
       
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
