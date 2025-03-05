@@ -20,7 +20,7 @@ export class NavAppComponent {
   logo: string = "/assets/logo/kemet.png";
   searchIcon: string = "/assets/icons/Search.png";
   profilePic: string = "/assets/icons/profile-pic.svg";
-    places: any = [];
+  places: any = [];
 
   userData: any = {};
   query = '';

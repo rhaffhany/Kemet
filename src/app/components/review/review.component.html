@@ -16,20 +16,22 @@
             <div class="ms-2">
                 <p class="fw-bold mb-0">place location</p>
                 <p class="text-muted mb-1">cairo, Egypt</p>
-                <span *ngFor="let star of [].constructor(5); let i = index" class="rate">
-                    <svg width="33" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"  [style.fill]="i < placeDetails.ratingsCount ? '#FFBD67' : '#FFFFFF'"
-                    stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                <span *ngFor="let star of [1, 2, 3, 4, 5]; let i = index" class="rate">
+                    <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+                      [style.fill]="i < placeDetails.averageRating ? '#FAC817' : '#FFFFFF'"
+                      stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                     </svg>
                 </span>
             </div>
         </div>
     </div>
 </section>
+
 <!-- past reviews of the user -->
 <section id="past-user-reviews" class="py-5">
     <div class="user-reviews ms-4">
-        <h4 class="fw-bold mb-0">Your Reviews</h4>
+        <h4 class="fw-bold mb-3">Your Reviews</h4>
         <div class="container-fluid">
             <div class="row">
 
@@ -37,8 +39,8 @@
                     <div class="review-info d-flex">
                         <img src=".." alt="place_pic" width="111" height="97">
                         <div class="block">
-                            <h5 class="mb-1" style="font-size: 18px;">place name</h5>
-                            <p class="text-muted"  style="font-size: 16px;">cairo, Egypt</p>
+                            <h5 class="mb-1" style="font-size: 18px;">{{reviewData.reviewTitle}}</h5>
+                            <p class="text-muted"  style="font-size: 16px;">{{userData.nationality}}</p>
                         </div>
                     </div>
                     <div class="review-details">

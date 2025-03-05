@@ -1,9 +1,10 @@
+
 /* General Styles */
-body, html {
-  background-color: var(--main-color); /* Whole page uses primary color */
-  margin: 0;
-  padding: 0;
-}
+// body, html {
+//   background-color: var(--main-color); /* Whole page uses primary color */
+//   margin: 0;
+//   padding: 0;
+// }
 
 /* Navbar */
 .navbar {
@@ -84,6 +85,68 @@ body, html {
     }
   }
 }
+
+// /* Dropdown Card */
+.profile-container {
+  position: relative;
+  display: inline-block;
+
+  .profile-pic {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    transition: transform 0.2s ease-in-out;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10;
+  }
+
+  .menu-card {
+    position: absolute;
+    top: 60px; 
+    right: 0; 
+    width: 180px;
+    background: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+    z-index: 999;
+    padding: 10px;
+
+    .card-body {
+      display: flex;
+      flex-direction: column;
+
+      div {
+        padding: 10px;
+        cursor: pointer;
+        transition: background 0.2s;
+
+        &:hover {
+          border-radius: 20px;
+          border-top-right-radius: 0px;
+          border-bottom-left-radius: 0px;
+          background: #f1f1f1;
+        }
+      }
+    }
+  }
+}
+
 
 /* === Search Results Dropdown === */
 .search-results-container {

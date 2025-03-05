@@ -10,22 +10,20 @@ import { HostListener } from '@angular/core';
 export class NavAuthComponent {
   logo: string = '/assets/logo/kemet.png';
   loginLogoAlt: string = 'Logo';
-  constructor(
-    public ModalService: ModalService,
-    public AuthService: AuthService
-  ){}
 
+  constructor(public ModalService: ModalService, public AuthService: AuthService){}
 
   openLoginModal(event: Event) {
     event.preventDefault();
-    console.log('Sign In button clicked'); // Debugging log
+    // console.log('Sign In button clicked'); 
     this.ModalService.openLogin();
   }
   isLoggedIn$ = this.AuthService.isLoggedIn$;
-
+  
   logout() {
     this.AuthService.logout();
   }
+
   isScrolled = false;
 
     @HostListener('window:scroll', [])
