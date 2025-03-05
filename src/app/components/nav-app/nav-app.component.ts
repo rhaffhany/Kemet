@@ -23,16 +23,17 @@ export class NavAppComponent {
   places: any = [];
 
   userData: any = {};
-  query: string = '';  
-  searchResults: placeDetails[] = []; 
-  errorMessage: string = ''; 
+  query = '';
+  searchResults: any[] = [];
+  errorMessage = '';
 
   constructor(
     private _ProfileService: ProfileService,
     private _AuthService: AuthService,
     private _Router: Router,
-    private _searchService: SearchService,
-    private cdr: ChangeDetectorRef
+    private router: Router,
+    private searchService: SearchService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -65,21 +66,24 @@ export class NavAppComponent {
     this.onWindowScroll();
   }
 
-  @HostListener('window:scroll', [])
-  onWindowScroll() {
-    const navbar = document.querySelector('.navbar') as HTMLElement;
-    if (window.scrollY > 50) {
-      this.isScrolled = true;
-      if (navbar) {
-        navbar.classList.add('scrolled');
-      }
-    } else {
-      this.isScrolled = false;
-      if (navbar) {
-        navbar.classList.remove('scrolled');
-      }
-    }
-  }
+// <<<<<<< HEAD
+//   @HostListener('window:scroll', [])
+//   onWindowScroll() {
+//     const navbar = document.querySelector('.navbar') as HTMLElement;
+//     if (window.scrollY > 50) {
+//       this.isScrolled = true;
+//       if (navbar) {
+//         navbar.classList.add('scrolled');
+//       }
+//     } else {
+//       this.isScrolled = false;
+//       if (navbar) {
+//         navbar.classList.remove('scrolled');
+//       }
+//     }
+//   }
+// =======
+
 
   logout(): void {
     this._AuthService.logout();
@@ -119,21 +123,18 @@ export class NavAppComponent {
   }
 
   // search
-  onSearchInput() {
-    // Your existing search logic
-    this._searchService.search(this.query).subscribe({
-      next: (results) => {
-        console.log('Raw API response:', results); // 👈 Add this
-        this.searchResults = results;
-      },
-      error: (err) => {
-        console.error('Search error:', err);
-      }
-    });
-  }
+
   activateSearch(): void {
     this.isSearchActive = true;
   }
+
+  @HostListener('window:scroll', [])
+  onWindowScroll(): void {
+    this.isScrolled = window.scrollY > 50; // Change background after 50px scroll
+  }
+
+
+
   deactivateSearch(): void {
     setTimeout(() => {
       this.isSearchActive = false;
@@ -154,6 +155,39 @@ export class NavAppComponent {
     this.searchResults = [];
     this.query = '';
   }
+
+  
+  goToDetails(result: any) {
+    console.log('Navigating to:', result);
+
+    // Navigate based on result type
+    if (result.type === 'place') {
+      this.router.navigate(['/app-places', result.id]); 
+    } else if (result.type === 'activity') {
+      this.router.navigate(['/app-activities', result.id]); 
+    }
+  }
   
 
+  onSearchInput(): void {
+    if (this.query.trim()) {
+      this.searchService.search(this.query).subscribe({
+        next: (results) => {
+          this.searchResults = results;
+          this.errorMessage = results.length === 0 ? 'No results found' : '';
+          this.cdr.detectChanges();
+        },
+        error: (error) => {
+          console.error("Search error:", error);
+          this.errorMessage = error;
+          this.searchResults = [];
+          this.cdr.detectChanges();
+        }
+      });
+    } else {
+      this.searchResults = [];
+      this.errorMessage = '';
+      this.cdr.detectChanges();
+    }
+  }
 }
