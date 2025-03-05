@@ -99,3 +99,21 @@
   margin-top: 10px;
   text-align: center;
 }
+.result-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.result-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.result-category {
+  font-size: 12px;
+  font-weight: 600;
+  margin: 0px;
+  color: #555;
+}

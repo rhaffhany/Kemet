@@ -23,16 +23,17 @@ export class NavAppComponent {
     places: any = [];
 
   userData: any = {};
-  query: string = '';  
-  searchResults: placeDetails[] = []; 
-  errorMessage: string = ''; 
+  query = '';
+  searchResults: any[] = [];
+  errorMessage = '';
 
   constructor(
     private _ProfileService: ProfileService,
     private _AuthService: AuthService,
     private _Router: Router,
-    private _searchService: SearchService,
-    private cdr: ChangeDetectorRef
+    private router: Router,
+    private searchService: SearchService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -56,18 +57,7 @@ export class NavAppComponent {
     });
   }
 
-  onSearchInput() {
-    // Your existing search logic
-    this._searchService.search(this.query).subscribe({
-      next: (results) => {
-        console.log('Raw API response:', results); // 👈 Add this
-        this.searchResults = results;
-      },
-      error: (err) => {
-        console.error('Search error:', err);
-      }
-    });
-  }
+
 
   logout(): void {
     this._AuthService.logout();
@@ -112,30 +102,37 @@ export class NavAppComponent {
     }, 200); // Small delay to allow clicking results
   }
 
-  onResultClick(result: placeDetails): void {
-    if (!result?.placeId) {
-      console.error('Invalid place ID:', result);
-      return;
-    }
-
-    this._Router.navigate(['/places', result.placeId.toString()]);
-
-    // Clear search state
-    this.searchResults = [];
-    this.query = '';
-  }
-  navigateToPlaceDetails(placeId: number): void {
-    if (!placeId || typeof placeId !== 'number') {
-      console.error('Invalid placeId:', placeId);
-      return;
-    }
-    this._Router.navigate(['/app-places', placeId]); // Changed to '/app-places'
-    this.clearSearch();
-  }
   
-  private clearSearch(): void {
-    this.searchResults = [];
-    this.query = '';
+  goToDetails(result: any) {
+    console.log('Navigating to:', result);
+
+    // Navigate based on result type
+    if (result.type === 'place') {
+      this.router.navigate(['/app-places', result.id]); 
+    } else if (result.type === 'activity') {
+      this.router.navigate(['/app-activities', result.id]); 
+    }
   }
 
+  onSearchInput(): void {
+    if (this.query.trim()) {
+      this.searchService.search(this.query).subscribe({
+        next: (results) => {
+          this.searchResults = results;
+          this.errorMessage = results.length === 0 ? 'No results found' : '';
+          this.cdr.detectChanges();
+        },
+        error: (error) => {
+          console.error("Search error:", error);
+          this.errorMessage = error;
+          this.searchResults = [];
+          this.cdr.detectChanges();
+        }
+      });
+    } else {
+      this.searchResults = [];
+      this.errorMessage = '';
+      this.cdr.detectChanges();
+    }
+  }
 }
