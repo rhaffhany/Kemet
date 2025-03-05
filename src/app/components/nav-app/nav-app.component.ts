@@ -37,52 +37,26 @@ export class NavAppComponent {
   ) {}
 
   ngOnInit(): void {
-
+    // Listen to navigation events
     this._Router.events
-    .pipe(filter(event => event instanceof NavigationEnd))
-    .subscribe((event: any) => {
-      console.log('Navigation Event:', event);
-
-      // Checking both `event.urlAfterRedirects` and `event.url`
-      const currentUrl = event.urlAfterRedirects || event.url;
-      console.log('Current URL:', currentUrl);
-  
-      this.isHomePage = currentUrl === '/home' || currentUrl === '/';
-      console.log('isHomePage:', this.isHomePage);
-      this.onWindowScroll();
-    });
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: any) => {
+        this.isHomePage = event.urlAfterRedirects === '/home' || event.urlAfterRedirects === '/';
+        this.isScrolled = false; 
+      });
 
     // Fetch user data
     this._ProfileService.getCurrentUserData().subscribe({
       next: (data) => {
         this.userData = data;
-        this.profilePic = this.userData.profileImageURL
+        this.profilePic = this.userData.profileImageURL 
           ? this.userData.profileImageURL 
           : "/assets/icons/profile-pic.svg";
       },
       error: (err) => console.error('Error fetching user data:', err)
     });
-
-    this.onWindowScroll();
   }
 
-// <<<<<<< HEAD
-//   @HostListener('window:scroll', [])
-//   onWindowScroll() {
-//     const navbar = document.querySelector('.navbar') as HTMLElement;
-//     if (window.scrollY > 50) {
-//       this.isScrolled = true;
-//       if (navbar) {
-//         navbar.classList.add('scrolled');
-//       }
-//     } else {
-//       this.isScrolled = false;
-//       if (navbar) {
-//         navbar.classList.remove('scrolled');
-//       }
-//     }
-//   }
-// =======
 
 
   logout(): void {
@@ -113,47 +87,19 @@ export class NavAppComponent {
     this.isCollapsed = true;
   }
 
-  navigateToPlaceDetails(placeId: number): void {
-    if (!placeId || typeof placeId !== 'number') {
-      console.error('Invalid placeId:', placeId);
-      return;
-    }
-    this._Router.navigate(['/app-places', placeId]); // Changed to '/app-places'
-    this.clearSearch();
-  }
-
-  // search
-
-  activateSearch(): void {
-    this.isSearchActive = true;
-  }
-
   @HostListener('window:scroll', [])
   onWindowScroll(): void {
     this.isScrolled = window.scrollY > 50; // Change background after 50px scroll
   }
 
-
+  activateSearch(): void {
+    this.isSearchActive = true;
+  }
 
   deactivateSearch(): void {
     setTimeout(() => {
       this.isSearchActive = false;
     }, 200); // Small delay to allow clicking results
-  }
-  onResultClick(result: placeDetails): void {
-    if (!result?.placeId) {
-      console.error('Invalid place ID:', result);
-      return;
-    }
-    this._Router.navigate(['/places', result.placeId.toString()]);
-
-    // Clear search state
-    this.searchResults = [];
-    this.query = '';
-  }
-  private clearSearch(): void {
-    this.searchResults = [];
-    this.query = '';
   }
 
   
@@ -167,7 +113,6 @@ export class NavAppComponent {
       this.router.navigate(['/app-activities', result.id]); 
     }
   }
-  
 
   onSearchInput(): void {
     if (this.query.trim()) {
