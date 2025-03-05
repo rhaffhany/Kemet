@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -12,10 +13,8 @@ export class ReviewService {
 
   private DeployUrl = 'https://kemet-server.runasp.net';
 
-
   addReview(formData:FormData):Observable<any>{
     const token = this._AuthService.getToken();
-    // const headers = new HttpHeaders({ Authorization: `Bearer ${token}`});
     if(!token){
       throw new Error("not found")
     }
@@ -24,6 +23,18 @@ export class ReviewService {
     });
 
     return this._HttpClient.post(`${this.DeployUrl}/api/Reviews`, formData , {headers, responseType:'text'} );
+  }
+
+
+  private reviewData = new BehaviorSubject<any[]>([]);
+  reviewData$ = this.reviewData.asObservable();
+  
+  setReviewData(review:any):Observable<any> {
+    return this._HttpClient.post(`${this.DeployUrl}/api/Reviews`, review);
+  }
+
+  getReviewData() {
+    return this.reviewData.asObservable();
   }
 
   // saving day of submission

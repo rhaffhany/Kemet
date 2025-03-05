@@ -5,16 +5,16 @@
             <div class="col-md-6 mt-5">
                 <h1 class="fw-bolder">{{placeDetails.name}}</h1>
                 <div class="rating d-flex">
-                <span *ngFor="let star of [].constructor(5); let i = index" class="rate">
-                <!-- <i class="fa-regular fa-star"></i> -->
-                <svg width="33" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"  [style.fill]="i < placeDetails.ratingsCount ? '#FAC817' : '#FFE5C2'"
-                stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                </svg>
-                </span>
-                <p style="font-size: 20px;" class="ms-1 mb-0">{{placeDetails.reviews.$values}} reviews</p>
+                    <span *ngFor="let star of [1, 2, 3, 4, 5]; let i = index" class="rate">
+                        <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+                          [style.fill]="i < placeDetails.averageRating ? '#FAC817' : '#FFE5C2'"
+                          stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                    </span>
+                <p style="font-size: 20px;" class="ms-1 mb-0"> reviews</p>
                 <img [src]="blackDot" alt="dot" class="mx-2 mt-2">
-                <p style="font-size: 20px;" class="mb-0">Historic Walking Area</p>
+                <p style="font-size: 20px;" class="mb-0">{{placeDetails.categoryName}}</p>
                 </div>
                 <div class="mt-2 ">
                     <a [routerLink]="getReviewLink()" class="text-decoration-none text-black review-link">
@@ -34,18 +34,34 @@
                 <div class="about-items">
                     <div class="d-flex align-items-center">
                         <i class="fa-regular fa-clock"></i>
-                        <p class="mb-0 ms-2">Duration {{placeDetails.duration}}</p>
+                        <p class="mb-1 ms-2">Duration {{placeDetails.duration}}</p>
                     </div>
-                    <div class="d-flex align-items-center mb-5">
-                        <img [src]="ticket" alt="ticket" style="height: 20px; width: 20px;">
-                        <p class="mb-0 ms-1">Free entry</p>
+                    <div class="tickets">
+                        <div class="d-flex align-items-center ">
+                            <img [src]="ticket" alt="ticket" style="height: 20px; width: 20px;">
+                            <p class="mb-0 ms-1" style="font-weight:600;">Egyptian:</p>                   
+                        </div>
+                        <div class="d-flex justify-content-around">
+                            <p class="mb-0">Adults <span class="text-muted " style="font-size: 14px;">{{ placeDetails.egyptianAdult | currency:'EGP'}}</span></p>
+                            <p class="mb-0">Students <span class="text-muted " style="font-size: 14px;">{{ placeDetails.egyptianStudent | currency:'EGP'}}</span></p>
+                        </div>
+                    </div>
+                    <div class="tickets">
+                        <div class="d-flex align-items-center ">
+                            <img [src]="ticket" alt="ticket" style="height: 20px; width: 20px;">
+                            <p class="mb-0 ms-1" style="font-weight:600;">Tourist:</p>                   
+                        </div>
+                        <div class="d-flex justify-content-around ">
+                            <p class="mb-4">Adults <span class="text-muted" style="font-size: 14px;">{{ placeDetails.touristAdult | currency:'EGP'}}</span></p>
+                            <p class="mb-4">Students <span class="text-muted" style="font-size: 14px;">{{ placeDetails.touristStudent | currency:'EGP'}}</span></p>
+                        </div>
                     </div>
                 </div>
 
                 <h5 class="fw-bold pt-2">Tours and Experiences</h5>
                 <p style="line-height: 24.2px;">Explore different ways to experience
                     this place.</p>
-                <button class="btn-info w-100 py-3 mt-5">See all options</button>
+                <!-- <button class="btn-info w-100 py-3 mt-5">See all options</button> -->
 
             </div>
 
@@ -71,11 +87,9 @@
 
         <div class="row py-5">
             <div class="col">
-                <p style="font-size: 20px; font-weight: 600;">Culture tips</p>
-                <div class="tips d-flex">
-                    <p class="me-2">Dress Respectfully</p>
-                    <p class="me-2">Respect Prayer Times</p>
-                    <p class="me-2">Embrace Haggling</p>
+                <p class="tips-title text-center" style="font-size: 20px; font-weight: 600;">Culture tips</p>
+                <div class="tips-container d-flex justify-content-center">
+                    <p class="tip-item shadow-lg me-2 ">{{placeDetails.culturalTips}}</p>
                 </div>
             </div>
         </div>
