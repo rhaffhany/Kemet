@@ -39,8 +39,7 @@ import { PlaceDetailsComponent } from './components/place-details/place-details.
 import { ReviewComponent } from './components/review/review.component';
 import { ReviewContentComponent } from './components/review-content/review-content.component';
 import { ActivityDetailsComponent } from './components/activity-details/activity-details.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CarouselModule } from 'ngx-bootstrap/carousel';
+
 
 
 @NgModule({
