@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ActivityDetails } from 'src/app/interfaces/activity-details';
 import { placeDetails } from 'src/app/interfaces/place-details';
@@ -13,14 +13,13 @@ import Swal from 'sweetalert2';
   
 })
 export class ReviewContentComponent implements OnInit{
+
   placeDetails:placeDetails={} as placeDetails;
   placeID:any;
   activityDetails:ActivityDetails = {} as ActivityDetails;
-  activityId:any;
+  activityID:any;
   isPlaceReview:boolean = false;
-  reviewData: any = {}; // Make sure it's not undefined
-
-
+  reviewData: any = {};
 
   constructor(private _ReviewService:ReviewService, private route:ActivatedRoute, private _DetailsService:DetailsService){}
 
@@ -32,37 +31,38 @@ export class ReviewContentComponent implements OnInit{
         this._DetailsService.getDetailedPlace(this.placeID).subscribe(response => {
           this.placeDetails = response;
         });
-      } else if (params.has('activityId')) {
-        this.activityId = params.get('activityId');
+      } else if (params.has('activityID')) {
+        this.activityID = params.get('activityID');
         this.isPlaceReview = false; 
-        this._DetailsService.getDetailedActivity(this.activityId).subscribe(response => {
+        this._DetailsService.getDetailedActivity(this.activityID).subscribe(response => {
           this.activityDetails = response;
         });
       }
     });
+
   }
   
-
   reviewText: string = '';
   reviewTitle: string = '';
   submissionDate:string='';
+  isAdded:boolean = false;
+  loading: boolean = false;
 
   
   submitReview(): void {
-
+    //append formData
     const formData = new FormData();
-
     formData.append('rating', this.rating.toString());
     formData.append('date', this.selectedDate ? this.selectedDate.toString() : '');
     formData.append('visitorType', this.selectedOption);
     formData.append('comment', this.reviewText);
     formData.append('reviewTitle', this.reviewTitle);
-    if (this.selectedImages && this.selectedImages.length > 0) {
-      for (let i = 0; i < this.selectedImages.length; i++) {
-        formData.append('images', this.selectedImages[i]); 
-      }
-    }
-  
+    // if (this.selectedImage && this.selectedImage.length > 0) {
+    //   for (let i = 0; i < this.selectedImage.length; i++) {
+    //     formData.append('images', this.selectedImage[i]); 
+    //   }
+    // }
+
     if (!this.reviewTitle || !this.reviewText || !this.rating || !this.selectedDate) {
       Swal.fire({
         icon: 'warning',
@@ -72,16 +72,43 @@ export class ReviewContentComponent implements OnInit{
       return;
     }
 
-    
+    let reviewData = {
+      rating: this.rating,
+      date: this.selectedDate,
+      visitorType: this.selectedOption,
+      comment: this.reviewText,
+      reviewTitle: this.reviewTitle,
+      // image: this.selectedImage,
+      createdAt: new Date().toISOString().split('T')[0]
+    };
+
+    // const reviewData = {
+    //   rating: this.reviewData.rating,
+    //   visitorType: this.selectedOption,
+    //   reviewTitle: this.reviewTitle,
+    //   comment: this.reviewData.comment,
+    //   createdAt: new Date().toISOString().split('T')[0],
+    //   date: this.selectedDate,
+    //   images: this.selectedImage,
+    // };
+
+    if (!this.isAdded) return;
+    this.loading = true;
+
     this._ReviewService.addReview(formData).subscribe({
       next:()=>{
-        const currentDate = new Date().toISOString().split('T')[0];
-        this._ReviewService.setSubmissionDate(currentDate); 
+        // const currentDate = new Date().toISOString().split('T')[0];
+        // this._ReviewService.setSubmissionDate(currentDate); 
         Swal.fire({
           icon: 'success',
           title: 'Review Submitted!',
           text: 'Thanks for your feedback!',
         });
+        this.clearData();
+        this.loading = false;
+        this.isAdded = false;
+        this._ReviewService.setReviewData(reviewData);
+        console.log("data set",reviewData);
       },
       error:(err) =>{
         Swal.fire({
@@ -89,8 +116,30 @@ export class ReviewContentComponent implements OnInit{
           title: 'Submission Failed',
           text: 'Something went wrong. Please try again later.',
         });
+        this.loading = false;
+      },complete:()=>{
+        this.loading = false;
       }
     });
+  }
+  
+  onReviewChange(event: Event) {
+    const input = event.target as HTMLTextAreaElement;
+    this.isAdded = input.value.trim().length > 0; 
+  }
+
+  clearData(): void{
+    this.rating = 0; 
+    this.hoverRating = 0;
+    this.selectedDate = null;
+    this.selectedOption = '';
+    this.reviewText = '';    
+    this.reviewTitle = '';
+    // this.selectedImage = '';
+    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
   }
 
 
@@ -129,18 +178,20 @@ export class ReviewContentComponent implements OnInit{
   }
 
   // review photos
-  selectedImages:string[]=[];
-  onFileSelected(event: any){
-    const files = event.target.files;
-    this.selectedImages = [];
-    
-    for (let file of files) {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.selectedImages.push(e.target.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  }
+  // selectedImage: string | null = null;
+
+  // onFileSelected(event: Event) {
+  //   const fileInput = event.target as HTMLInputElement;
+  //   if (fileInput.files && fileInput.files.length > 0) {
+  //     const file = fileInput.files[0]; 
+  //     // Read file and set it as the selected image
+  //     const reader = new FileReader();
+  //     reader.onload = (e) => {
+  //       this.selectedImage = e.target?.result as string;
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // }
+  
 
 }

@@ -51,7 +51,7 @@ const routes: Routes = [
       { path: 'app-places/:placeID', component: PlaceDetailsComponent, title: 'Places'},
       { path: 'app-activities/:activityID', component: ActivityDetailsComponent, title: 'Activities'},
       { path: 'review', component: ReviewComponent, title: 'Review' },
-      { path: 'write-review', component: ReviewContentComponent, title: 'Review' },
+      { path: 'write-review', component: ReviewContentComponent, title: 'Review Your Booking' },
       { path: 'write-review/place/:placeID', component: ReviewContentComponent, title: 'Review-Place' },
       { path: 'write-review/activity/:activityID', component: ReviewContentComponent, title: 'Review-Activity' },
 

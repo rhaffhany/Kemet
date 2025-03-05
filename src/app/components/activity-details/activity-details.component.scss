@@ -3,22 +3,39 @@ section{
 }
 
 .review-link {
-    position: relative; 
+  position: relative;
+  display: inline-block;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--white); 
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background-color: rgba(80, 63, 37, 0.15); 
+  transition: all 0.3s ease-in-out;
 
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      height: 2px; 
-      width: 0%; 
-      background-color: var(--black);
-      transition: width 0.5s ease; 
-    }
-  
-    &:hover::after {
-      width: 100%; 
-    }
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    height: 2px;
+    width: 0;
+    background-color: var(--white);
+    transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
+  }
+
+  &:hover::after {
+    width: 100%;
+    left: 0;
+  }
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+    color: var(--white);
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
 }
 
 .about, .photos{
@@ -32,7 +49,7 @@ section{
     &::after {
       content: ''; 
       position: absolute;
-      bottom: -50px;
+      bottom: -3px;
       left: 0;
       width: 100%;
       height: 1px; 
@@ -58,15 +75,16 @@ section{
   }
 }
 
-.tips{
+.tips-container{
   p{
     border: 1px solid var(--secondary-color);
     background-color: var(--white);
-    cursor: pointer;
     border-radius: 20px;
     padding: 2px 20px;
+    cursor: default;
   }
 }
+
 
 .profile-pic{
   width: 56px;

@@ -24,11 +24,3 @@ export interface placeDetails {
     touristAdult: number
     touristStudent: number
 }
-// export interface ImageUrls {
-//     $id: string
-//     $values: string[]
-// }
-// export interface Reviews {
-//     $id: string
-//     $values: any[]
-// }

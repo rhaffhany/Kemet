@@ -16,19 +16,16 @@
                              alt="activity_pic" 
                              width="281" height="244">
                     </ng-template>
-                    
-                    <!-- <img *ngIf="placeDetails.imageURLs.$values?.[0]"
-                    [src]="placeDetails.imageURLs.$values[0]" 
-                    class="card-img-top" 
-                    alt="place_pic" 
-                    width="281" 
-                    height="244"> -->
 
-                    <div class="card-body">
-                      <h5 class="card-text mb-0">place</h5>
-                      <p class="text-muted" style="font-size: 25px;">,</p>
+                    <div class="card-body px-0">
+                      <h5 class="card-text mb-0"*ngIf="isPlaceReview">{{placeDetails.name}}</h5>
+                      <h5 class="card-text mb-0"*ngIf="!isPlaceReview">{{activityDetails.name}}</h5>
+
+                      <p class="text-muted mb-0" style="font-size: 16px;" *ngIf="isPlaceReview">{{placeDetails.averageRating}} <span class="rate"><i class="fa-solid fa-star"></i></span></p>
+                      <p class="text-muted mb-0" style="font-size: 16px;" *ngIf="!isPlaceReview">{{activityDetails.averageRating}} <span class="rate"><i class="fa-solid fa-star"></i></span></p>
                     </div>
                 </div>
+
             </div>
 
             <div class="col-md-8 offset-1">
@@ -65,23 +62,30 @@
                 </div>
                 <!-- review -->
                 <p class="mb-1">Write a review</p>
-                <textarea name="review" id="review" class="review w-50 p-2" rows="5" [(ngModel)]="reviewText"></textarea>
+                <textarea name="review" id="review" class="review w-50 p-2" rows="5" (input)="onReviewChange($event)" [(ngModel)]="reviewText"></textarea>
                 <!-- title of review -->
                 <p class="mb-1">Title your review</p>
                 <input type="text" class="p-2 w-50" [(ngModel)]="reviewTitle">
                 <!-- add photo -->
-                <p class="mb-1">Add some photos <span class="text-muted" style="font-size: 10px;">(optional)</span></p>
+                <!-- <p class="mb-1">Add some photos <span class="text-muted" style="font-size: 10px;">(optional)</span></p>
                 <div class="custom-file-upload w-50 p-5">
-                    <input type="file" id="fileInput" class="d-none" multiple (change)="onFileSelected($event)">
+                    <input type="file" id="fileInput" class="d-none" (change)="onFileSelected($event)" accept="image/*">
                     <label for="fileInput">
                         <i class="fa-solid fa-plus"></i>
                     </label>
                 </div>
                 <div class="preview-container">
-                    <img *ngFor="let img of selectedImages" [src]="img" class="preview-img" />
-                </div>
+                    <img *ngIf="selectedImage" [src]="selectedImage" class="preview-img" />
+                </div> -->
                 <!-- submit -->
-                <button class="submit-btn fw-bold w-50 mt-4" type="submit" (click)="submitReview()">Submit</button>
+                <div>
+                    <button class="submit-btn fw-bold w-50 mt-4" type="submit" (click)="submitReview()" [disabled]="!isAdded || loading">
+                        <span *ngIf="!loading">Submit</span>
+                        <span *ngIf="loading">
+                            <i class="spinner-border spinner-border-sm"></i> Loading...
+                        </span>
+                    </button>
+                </div>
                 
                 
             </div>

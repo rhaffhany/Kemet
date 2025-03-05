@@ -1,39 +1,51 @@
-/* General Styles */
-body, html {
-  background-color: var(--main-color); /* Whole page uses primary color */
-  margin: 0;
-  padding: 0;
-}
+// /* General Styles */
+// body, html {
+// background-color: var(--main-color);
+//   margin: 0;
+//   padding: 0;
+// }
 
-/* Navbar */
 .navbar {
-  background-color: transparent !important;
   position: fixed;
   width: 100%;
   top: 0;
   left: 0;
   z-index: 1000;
-  padding-top: 35px;
+  padding-top: 30px;
   padding-bottom: 25px;
   transition: background-color 0.3s ease-in-out;
 
-  &.scrolled {
+  &.transparent {
+    background-color: transparent !important;
+  }
+
+  &.scrolled, &.default-bg {
     background-color: var(--main-color) !important;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   }
-
-  &.transparent {
-    background-color: transparent !important;
-    position: absolute; /* Allows content behind it */
-    width: 100%;
-  }
 }
+// .navbar {
+//   background-color: transparent !important;
+//   position: fixed;
+//   width: 100%;
+//   top: 0;
+//   left: 0;
+//   z-index: 1000;
+//   padding-top:30px;
+//   padding-bottom: 25px;
+//   transition: background-color 0.3s ease-in-out;
 
-/* Profile Dropdown */
-.profile-dropdown {
-  position: relative;
-  display: inline-block;
-}
+//   &.scrolled {
+//     background-color: var(--main-color) !important;
+//     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  
+//   }
+//   &.default-bg { 
+//     background-color: var(--main-color) !important;
+//   }
+
+// }
+
+
 
 .nav-link {
   font-size: 18px;
@@ -45,12 +57,6 @@ body, html {
     margin: 0 20px;
     color: var(--black);
   }
-}
-
-.profile-pic {
-  width: 33px;
-  height: 33px;
-  border-radius: 50%;
 }
 
 /* Search Wrapper */
@@ -85,9 +91,6 @@ body, html {
   transition: all 0.3s ease-in-out;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15); /* Added shadow */
 
-
-
-
   input {
     width: 100%;
     padding: 3px 8px; /* Reduce padding */
@@ -102,20 +105,7 @@ body, html {
     width: 16px; /* Make search icon smaller */
     height: 16px;
     margin-right: 8px; /* Space between icon and input */
-
-  .card {
-    position: absolute;
-    top: 80px; 
-    right: 0;
-    z-index: 1050; 
-    background-color: white;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 20px;
-    border-top-right-radius: 0px;
-    border-bottom-left-radius: 0px;
-    width: 180px;
   }
-}
 
 /* Search Results */
 .search-results-container {
@@ -139,7 +129,6 @@ body, html {
   -ms-border-radius: 15px;
   -o-border-radius: 15px;
 }
-
 /* Result Items */
 .result-item {
   display: flex;
@@ -158,7 +147,6 @@ body, html {
   background-color: #f4f4f4;
 
 }
-
 .result-description {
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -167,29 +155,6 @@ body, html {
   text-overflow: ellipsis;
   line-height: 1.4em; /* Adjust based on your font size */
   max-height: 2.8em; /* line-height × number of lines */
-}
-/* Dropdown Card */
-.card {
-  position: absolute;
-  top: 80px;
-  right: 0;
-  z-index: 1050;
-  background-color: white;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  width: 180px;
-
-  .card-body {
-    div {
-      &:hover {
-        margin-right: 4px;
-        background-color: var(--secondary-color);
-        padding: 0px 5px;
-        border-radius: 20px;
-        width: fit-content;
-      }
-    }
-  }
 }
 
 /* Responsive Styles */
@@ -216,6 +181,69 @@ body, html {
     .searchIcon {
       width: 14px;
       height: 14px;
+      }
     }
   }
 }
+
+/* Dropdown Card */
+.profile-container {
+  position: relative;
+  display: inline-block;
+
+  .profile-pic {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    transition: transform 0.2s ease-in-out;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10;
+  }
+
+  .menu-card {
+    position: absolute;
+    top: 60px; 
+    right: 0; 
+    width: 180px;
+    background: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+    z-index: 999;
+    padding: 10px;
+
+    .card-body {
+      display: flex;
+      flex-direction: column;
+
+      div {
+        padding: 10px;
+        cursor: pointer;
+        transition: background 0.2s;
+
+        &:hover {
+          border-radius: 20px;
+          border-top-right-radius: 0px;
+          border-bottom-left-radius: 0px;
+          background: #f1f1f1;
+        }
+      }
+    }
+  }
+}
+

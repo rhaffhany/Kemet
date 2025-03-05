@@ -47,8 +47,8 @@
                 <!-- 1 -->
                 <div class="information-items py-5 px-4">
                     <div class="location item d-flex">
-                        <img [src]="locationIcon" alt="locationIcon" class="me-2">
-                        <p class="mb-0">{{updatedData.city}}, {{updatedData.country}}</p>
+                        <i class="fa-regular fa-id-card me-2"></i>
+                        <p class="mb-0">{{updatedData.nationality}}</p>
                     </div>
                     <div class="calendar item d-flex">
                         <img [src]="calendarIcon" alt="calendarIcon" class="me-2">
@@ -56,7 +56,7 @@
                     </div>
                     <div class="website item d-flex">
                         <img [src]="websiteIcon" alt="websiteIcon" class="me-2">
-                        <a class="text-decoration-none text-black mb-0" [href]="updatedData.websiteLink" target="_blank">{{updatedData.websiteLink}}</a>
+                        <a class="text-decoration-none text-black mb-0" [href]="updatedData.websiteLink" target="_blank">{{ displayWebsiteLink }}</a>
                     </div>
                     <div class="bio item d-flex">
                         <img [src]="bioIcon" alt="bioIcon" class="me-2">
@@ -67,20 +67,20 @@
                 <!-- 2 -->
                 <div class="information-items mt-4 py-5 px-5">
                     <div class="signs d-flex align-items-center justify-content-center ">
-                        <button class="me-2 w-100 btn-main">Traveler</button>
-                        <button class="w-100 btn-main">Adventurer</button>
+                        <button class="me-2 w-100 btn-main" style="cursor: default;">Traveler</button>
+                        <button class="w-100 btn-main" style="cursor: default;">Adventurer</button>
                     </div>
                     <div class="signs mt-2 d-flex align-items-center justify-content-center ">
-                        <button class="me-2 w-100 btn-main">Guided</button>
-                        <button class="w-100 btn-main">Historical</button>
+                        <button class="me-2 w-100 btn-main" style="cursor: default;">Guided</button>
+                        <button class="w-100 btn-main" style="cursor: default;">Historical</button>
                     </div>
                     <div class="signs mt-2  d-flex align-items-center justify-content-center ">
-                        <button class="me-2 w-100 btn-main">Solo</button>
-                        <button class="w-100 btn-main">Flexible</button>
+                        <button class="me-2 w-100 btn-main" style="cursor: default;">Solo</button>
+                        <button class="w-100 btn-main" style="cursor: default;">Flexible</button>
                     </div>
                     <div class="signs mt-2  d-flex align-items-center justify-content-center ">
-                        <button class="me-2 w-100 btn-main">Culture</button>
-                        <button class="w-100 btn-main">Fun</button>
+                        <button class="me-2 w-100 btn-main" style="cursor: default;">Culture</button>
+                        <button class="w-100 btn-main" style="cursor: default;">Fun</button>
                     </div>
                 </div>   
                 
@@ -117,11 +117,11 @@
                     <p style="font-weight: 600;">Share your travel advice</p>
                     <div class="d-flex">
                         <img [src]="cameraIcon" class="me-2" alt="cameraIcon" style="width: 24px; height: 24px;">
-                        <p style="font-weight: 500;">Post photos</p>
+                        <p style="font-weight: 500;" role="button">Post photos</p>
                     </div>
                     <div class="d-flex">
                         <img [src]="editIcon" class="me-2" alt="editIcon" style="width: 24px; height: 24px;">
-                        <p style="font-weight: 500;">Post a review</p>
+                        <p style="font-weight: 500;" role="button">Post a review</p>
                     </div>
                 </div>  
 
@@ -202,16 +202,23 @@
     </div>
 
     <!-- edit-box -->
-    <div class="container-fluid editBoxContainer py-2 pt-4" [class.hidden]="showEditSection">
-        <div class="update-box p-1 mt-5  ">
+    <div class="container-fluid editBoxContainer py-2 pt-1" [class.hidden]="showEditSection">
+        <div class="update-box p-1 mt-4" >
             
             <div class="row w-100 pt-1">
                 <div class="d-flex justify-content-between p-0 ps-3">
                     <div class="d-flex align-items-center justify-content-between">
-                        <i class="fa-solid fa-xmark" role="button" style="width: 24px; font-size: 20px;" (click)="toggleEditBox()"></i>
+                        <i class="fa-solid fa-xmark ps-1" role="button" style="width: 24px; font-size: 20px;" (click)="toggleEditBox()"></i>
                         <h5 class="mb-1 ms-4 fw-bold">Edit Profile</h5>
                     </div>
-                    <button class="action-button" aria-label="Close" type="submit" [disabled]="!isEdited"  (click)="updateCurrentData()">Save</button>
+                    <button class="action-button" aria-label="Close" type="submit" [disabled]="!isEdited || isLoading"  (click)="updateCurrentData()"> <ng-container *ngIf="isLoading">
+                        <i class="fas fa-spinner fa-spin me-1"></i>
+                        Saving...
+                        </ng-container>
+                        <ng-container *ngIf="!isLoading">
+                            Save
+                        </ng-container>
+                    </button>
                 </div> 
             </div>
         
@@ -229,7 +236,6 @@
 
             <div class="row update-profile-img p-2 ms-5 ">
                 <div class="blur-wrapper position-relative p-0 w-auto">
-                    <!-- <img [src]="profileImg" alt="profileImg" class="profileImg"> -->
                     <img [src]="profileImg || 'https://localhost:7051' + userData.profileImageURL" alt="Profile Image" class="profileImg rounded-circle" >
                     
                     <div class="blur-overlay position-absolute w-100 h-100"></div>
@@ -241,7 +247,6 @@
                 </div>
             </div>
 
-            <!-- Form Fields -->
             <div class="container update-data">
                 <div class="row ">
                     <div class="col col-sm-12">
@@ -269,10 +274,11 @@
                                 <label for="Bio">Bio</label>
                             </div>
 
-                            <div class="form-floating mb-3">
+                            <!-- location/City -->
+                            <!-- <div class="form-floating mb-3">
                                 <input type="text" class="form-control input-main" id="Location" placeholder="Location" [(ngModel)]="updatedData.city" (ngModelChange)="onEdit()">
                                 <label for="Location">Location</label>
-                            </div>
+                            </div> -->
                             <!-- Country Dropdown -->
                             <!-- <div class="d-flex">
                                 <div class="form-floating mb-3 me-1 w-100">
@@ -325,12 +331,10 @@
                     </div>
                 </div>
             </div>
-            
-
-
-            
+        
 
         </div> 
     </div>
+
 
 </section>

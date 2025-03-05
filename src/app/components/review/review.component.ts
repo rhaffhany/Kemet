@@ -1,8 +1,10 @@
+import { ReviewContentComponent } from './../review-content/review-content.component';
 import { DetailsService } from 'src/app/services/details.service';
 import { placeDetails } from './../../interfaces/place-details';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ReviewService } from 'src/app/services/review.service';
+import { ProfileService } from 'src/app/services/profile.service';
 
 @Component({
   selector: 'app-review',
@@ -16,15 +18,45 @@ export class ReviewComponent {
   placeID:any;
   submissionDate: string='';
 
+  reviewData: any = {};
+
+  userData:any = {
+    "$id": "",
+    "userName": "",
+    "firstName": "",
+    "lastName": "",
+    "dateOfBirth": "",
+    "ssn": "",
+    "gender": "",
+    "nationality": "",
+    "profileImageURL": "",
+    "backgroundImageURL": "",
+    "interestCategoryIds": {
+        "$id": "",
+        "$values": [  ]
+    },
+    "bio": "",
+    "country": "",
+    "city": "",
+    "websiteLink": "",
+    "creationDate": ""
+  };
+
   // will be edited
   
-    constructor(private _ReviewService:ReviewService, private _DetailsService:DetailsService, private _ActivatedRoute:ActivatedRoute ){}
+    constructor(private _ReviewService:ReviewService, private _DetailsService:DetailsService, private _ActivatedRoute:ActivatedRoute, private _ProfileService:ProfileService){}
   
-    ngOnInit(): void {
+    ngOnInit(): void {      
 
       this.submissionDate = this._ReviewService.getSubmissionDate();
+      
 
-  
+      this._ProfileService.getCurrentUserData().subscribe({
+        next:(data) =>{
+          this.userData = data;
+        }
+      });
+
       this._ActivatedRoute.paramMap.subscribe({
         next:(params)=>{
           this.placeID = params.get('placeID');
@@ -43,10 +75,13 @@ export class ReviewComponent {
         });
       }
     }
-
+  
     deletePlace(){
       // places.splice(index,1);
       // display
     }
+
+    // user reviews
+
 
 }
