@@ -1,4 +1,4 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, ElementRef, NgZone } from '@angular/core';
 import { ProfileService } from 'src/app/services/profile.service';
 import Swal from 'sweetalert2';
 
@@ -11,7 +11,7 @@ import Swal from 'sweetalert2';
 
 export class ProfileComponent {
 
-  constructor(private _ProfileService:ProfileService, private ngZone: NgZone){}
+  constructor(private _ProfileService:ProfileService, private ngZone: NgZone, private eRef:ElementRef){}
 
   // assets
   layoutPic:string = "/assets/img/sunset-5314319_640.png";
@@ -49,6 +49,7 @@ export class ProfileComponent {
   isUsernameEditable: boolean = false;
 
   isEdited = false;
+  isLoading = false;
 
 
   onEdit(): void {
@@ -76,7 +77,6 @@ export class ProfileComponent {
       "websiteLink": "",
       "creationDate": ""
   };
-
   updatedData:any = {...this.userData};
 
 
@@ -104,7 +104,7 @@ export class ProfileComponent {
         //   this.updatedData.userName = this.userData.userName;
         // }
 
-        console.log("userData>>",data);
+        // console.log("userData>>",data);
 
       },
       error: (err) => {
@@ -120,6 +120,9 @@ export class ProfileComponent {
 
   updateCurrentData(): void {
 
+    if (!this.isEdited) return;
+    this.isLoading = true;
+
     // Ensure dateOfBirth is correctly formatted
     if (this.selectedMonth && this.selectedDay && this.selectedYear) {
       const monthIndex = this.months.indexOf(this.selectedMonth) + 1; 
@@ -133,7 +136,6 @@ export class ProfileComponent {
       this.updatedData.interestCategoryIds = [...this.updatedData.interestCategoryIds.$values];
     }
 
-    // Validate and sanitize fields (e.g., websiteLink must start with http/https)
     if (this.updatedData.websiteLink && !this.updatedData.websiteLink.startsWith('http')) {
       this.updatedData.websiteLink = `https://${this.updatedData.websiteLink}`;
     }
@@ -200,9 +202,17 @@ export class ProfileComponent {
           });
         }
       },
+      complete: () =>{
+        this.isLoading = false;
+      }
+      
     });
   }
 
+  get displayWebsiteLink(): string {
+    return this.updatedData.websiteLink?.replace(/^https?:\/\//, '') || '';
+  }
+  
   onMonthChange() {
     // Update the days based on the selected month
     const monthIndex = this.months.indexOf(this.selectedMonth);
@@ -307,6 +317,7 @@ export class ProfileComponent {
   toggleEditBox(): void {
     this.showEditSection = !this.showEditSection; 
   }
+
 
 
 

@@ -1,3 +1,4 @@
+import { placeDetails } from 'src/app/interfaces/place-details';
 import { ActivityDetails } from 'src/app/interfaces/activity-details';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -28,6 +29,7 @@ export class PlaceDetailsComponent {
     "$id": " ",
     "placeID": '',
     "name": " ",
+    "culturalTips":" ",
     "description": " ",
     "imageURLs": {
         "$id": " ",
@@ -43,6 +45,8 @@ export class PlaceDetailsComponent {
 
   ActivityDetails:ActivityDetails = {} as ActivityDetails;
   activityId:any;
+
+  culturalTipsArray:[] = [];
 
   constructor(private _DetailsService:DetailsService, private _ActivatedRoute:ActivatedRoute, private _ProfileService:ProfileService ){}
 
@@ -82,6 +86,13 @@ export class PlaceDetailsComponent {
       },
 
     });
+
+
+    let tips = this.placeDetails.culturalTips || ''; // Ensure it's a string
+    this.culturalTipsArray = tips
+    .split("\n") // Split by newlines
+    .map((tip: string) => tip.replace('*', '').trim()) // Explicitly define 'tip' as a string
+    .filter((tip: string) => tip.length > 0);
 
   }
 

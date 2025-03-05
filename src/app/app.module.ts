@@ -1,12 +1,13 @@
 import { CarouselModule } from 'ngx-bootstrap/carousel';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import { NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
 import { HomeComponent } from './components/home/home.component';
 import { ThingsToDoComponent } from './components/things-to-do/things-to-do.component';
 import { AdventureModeComponent } from './components/adventure-mode/adventure-mode.component';
@@ -28,7 +29,6 @@ import { NotfoundComponent } from './components/notfound/notfound.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { AppLayoutComponent } from './layouts/app-layout/app-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChangePipe } from './pipe/change.pipe';
 import { NgOtpInputModule } from 'ng-otp-input';
 import { InterestsFormComponent } from './components/interests-form/interests-form.component';
@@ -40,6 +40,7 @@ import { PlaceDetailsComponent } from './components/place-details/place-details.
 import { ReviewComponent } from './components/review/review.component';
 import { ReviewContentComponent } from './components/review-content/review-content.component';
 import { ActivityDetailsComponent } from './components/activity-details/activity-details.component';
+
 @NgModule({
   declarations: [
     AppComponent,

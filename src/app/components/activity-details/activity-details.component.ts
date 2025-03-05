@@ -39,7 +39,7 @@ export class ActivityDetailsComponent {
       this._DetailsService.getDetailedActivity(this.activityID).subscribe({
         next: (response) => {
           this.activityDetails = response;
-          console.log(response);
+          // console.log(response);
         },
         error: (err) => {
           console.error(err);

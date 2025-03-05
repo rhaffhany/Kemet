@@ -18,4 +18,8 @@ export interface ActivityDetails {
     }
     averageRating: number
     ratingsCount: number
+    egyptianAdult: number,
+    egyptianStudent : number,
+    touristAdult: number,
+    touristStudent: number
 }
