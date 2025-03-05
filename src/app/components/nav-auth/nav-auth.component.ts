@@ -8,7 +8,7 @@ import { HostListener } from '@angular/core';
   styleUrls: ['./nav-auth.component.scss']
 })
 export class NavAuthComponent {
-  loginLogoSrc: string = '/assets/logo/logo.png';
+  logo: string = '/assets/logo/kemet.png';
   loginLogoAlt: string = 'Logo';
   constructor(
     public ModalService: ModalService,

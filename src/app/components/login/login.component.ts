@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
 export class LoginComponent implements OnDestroy {
   // Assets
   arrowLeftIcon: string = '/assets/icons/chevron-left.svg';
-  loginLogoSrc: string = '/assets/logo/logo.png';
+  loginLogoSrc: string = '/assets/logo/kemet.png';
   loginLogoAlt: string = 'Logo';
 
   // Modal state
