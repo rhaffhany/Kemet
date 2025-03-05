@@ -5,8 +5,8 @@
         <a class="navbar-brand" routerLink="home"><img [src]="logo" alt="logo" ></a>
       </div>
   
-      <div class="search-wrapper" [class.active]="isSearchActive">
-        <div class="search-container search-group" (click)="activateSearch()">
+      <div class="search-wrapper">
+        <div class="search-container search-group">
           <img [src]="searchIcon" alt="searchIcon" class="searchIcon">
           <input 
             type="text" 
@@ -19,22 +19,20 @@
           >
         </div>
       
+
         <div *ngIf="searchResults.length > 0" class="search-results-container visible">
-          <div *ngFor="let result of searchResults" 
-               class="result-item"
-               [routerLink]="['/places',result.placeId]"
-               role="button"
-               tabindex="0"
-               (keydown.enter)="navigateToPlaceDetails(result.placeId)">
+          <div *ngFor="let result of searchResults" class="result-item" (click)="goToDetails(result)">
+            <img [src]="result.image" alt="{{ result.name }}" class="result-image">
             <div class="result-details">
               <h4 class="result-name">{{ result.name }}</h4>
-              <p class="result-description">{{ result.description }}</p>
+              <p class="result-description">
+                {{ result.description.length > 50 ? (result.description | slice:0:55) + '...' : result.description }}
+              </p>
+              <p class="result-category"> {{ result.category }}</p>  
             </div>
           </div>
         </div>
-      </div>
-      
-      
+      </div>             
       
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
