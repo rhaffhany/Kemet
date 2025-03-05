@@ -1,6 +1,7 @@
-import { SearchService } from './../../services/search.service';
 import { Component } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
+import { Router } from '@angular/router'; // Import Router
+import { SearchService } from './../../services/search.service';
 
 @Component({
   selector: 'app-search',
@@ -14,13 +15,25 @@ export class SearchComponent {
   errorMessage = '';
 
   constructor(
-    private SearchService: SearchService,
-    private cdr: ChangeDetectorRef
+    private searchService: SearchService,
+    private cdr: ChangeDetectorRef,
+    private router: Router 
   ) {}
+
+  goToDetails(result: any) {
+    console.log('Navigating to:', result);
+
+    // Navigate based on result type
+    if (result.type === 'place') {
+      this.router.navigate(['/app-places', result.id]); 
+    } else if (result.type === 'activity') {
+      this.router.navigate(['/app-activities', result.id]); 
+    }
+  }
 
   onSearchInput(): void {
     if (this.query.trim()) {
-      this.SearchService.search(this.query).subscribe({
+      this.searchService.search(this.query).subscribe({
         next: (results) => {
           this.searchResults = results;
           this.errorMessage = results.length === 0 ? 'No results found' : '';

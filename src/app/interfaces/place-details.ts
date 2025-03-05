@@ -1,4 +1,6 @@
 export interface placeDetails {
+image: any
+category: any
     $id: string
     placeId: number
     name: string
