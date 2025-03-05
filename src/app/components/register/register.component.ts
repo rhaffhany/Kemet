@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 })
 export class RegisterComponent implements OnInit {
   arrowLeftIcon: string = '/assets/icons/chevron-left.svg';
-  registerLogoSrc: string = '/assets/logo/logo.png';
+  registerLogoSrc: string = '/assets/logo/kemet.png';
   registerLogoAlt: string = 'Logo';
 
   registerForm!: FormGroup;

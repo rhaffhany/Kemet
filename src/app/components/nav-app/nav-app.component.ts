@@ -17,7 +17,7 @@ export class NavAppComponent {
   isHomePage = false;
   isSearchActive = false;
 
-  logo: string = "/assets/logo/logo.png";
+  logo: string = "/assets/logo/kemet.png";
   searchIcon: string = "/assets/icons/Search.png";
   profilePic: string = "/assets/icons/profile-pic.svg";
   places: any = [];
