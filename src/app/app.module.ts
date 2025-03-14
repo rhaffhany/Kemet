@@ -1,5 +1,4 @@
 
-
 import { NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
@@ -86,7 +85,7 @@ import { ActivityDetailsComponent } from './components/activity-details/activity
     NgbModule,
     NgbCollapseModule,
     BrowserAnimationsModule,
-    CarouselModule
+    
   ],
   
   providers: [provideClientHydration()],
