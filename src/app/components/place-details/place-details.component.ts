@@ -15,6 +15,7 @@ export class PlaceDetailsComponent {
   blackDot:string = "/assets/icons/Ellipse 148.svg";
   ticket:string = "/assets/icons/Ticket.svg"
   searchIcon:string = "/assets/icons/Search.png"
+  notFoundImg:string = "/assets/img/not found.jpg"
 
   searchResults: any[] = [];  
   errorMessage: string = ''; 
@@ -22,53 +23,40 @@ export class PlaceDetailsComponent {
   userData:any = {};
   updatedData:any = {...this.userData};
 
-
+  placeDetails:placeDetails = {} as placeDetails;
   placeID:any;
 
-  placeDetails:any = {
-    "$id": " ",
-    "placeID": '',
-    "name": " ",
-    "culturalTips":" ",
-    "description": " ",
-    "imageURLs": {
-        "$id": " ",
-        "$values": []
-    },
-    "reviews": {
-        "$id": " ",
-        "$values": []
-    },
-    "averageRating": '',
-    "ratingsCount": ''
-  };
-
   ActivityDetails:ActivityDetails = {} as ActivityDetails;
-  activityId:any;
+  activityID:any;
 
   culturalTipsArray:[] = [];
 
-  constructor(private _DetailsService:DetailsService, private _ActivatedRoute:ActivatedRoute, private _ProfileService:ProfileService ){}
+  reviewsData:any[] =[];
+  updatedReviewData:any[] = [...this.reviewsData];
+
+  constructor(private _DetailsService:DetailsService, 
+              private _ActivatedRoute:ActivatedRoute, 
+              private _ProfileService:ProfileService ){}
 
   ngOnInit(): void {
 
     this._ActivatedRoute.paramMap.subscribe({
       next:(params)=>{
         this.placeID = params.get('placeID');
-        this.activityId = params.get('activityId');
+        this.activityID = params.get('activityID');
       }
     });
-
-    if (this.placeID) {
-      this._DetailsService.getDetailedPlace(this.placeID).subscribe({
-        next: (response) => {
-          this.placeDetails = response;
-        },
-        error: (err) => {
-          console.error(err);
-        },
-      });
-    }
+    
+    this._DetailsService.getDetailedPlace(this.placeID).subscribe({
+      next: (response) => {
+        this.placeDetails = response;
+        this.reviewsData = response.reviews.$values[0].place.reviews.$values;
+        console.log("reviews of this place:",this.reviewsData);
+      },
+      error: (err) => {
+        console.error(err);
+      },
+    });
 
     this._ProfileService.getCurrentUserData().subscribe({
       next:(data)=>{
@@ -87,21 +75,44 @@ export class PlaceDetailsComponent {
 
     });
 
-
-    let tips = this.placeDetails.culturalTips || ''; // Ensure it's a string
-    this.culturalTipsArray = tips
-    .split("\n") // Split by newlines
-    .map((tip: string) => tip.replace('*', '').trim()) // Explicitly define 'tip' as a string
-    .filter((tip: string) => tip.length > 0);
-
   }
 
+  deleteReview(reviewId: number) {
+    if (confirm("Are you sure you want to delete this review?")) {
+      this._DetailsService.getDetailedPlace(this.placeID).subscribe({
+        next: (response) => {
+          this.reviewsData = response.reviews.$values[0].place.reviews.$values;
+          this.updatedReviewData = this.reviewsData.filter(
+            (review: any) => review.$id !== reviewId
+          );
+          // const updatedPlace = { ...response, reviews: { $values: this.updatedReviewData } };
+
+          console.log("reviews of this place after delete:",this.updatedReviewData);
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+
+      this._DetailsService.getDetailedPlace(this.placeID).subscribe({
+        next: () => {
+          this.reviewsData = this.updatedReviewData;
+          console.log("Review deleted successfully!");
+        },
+        error: (err) => {
+          console.error("Error updating place:", err);
+        },
+      });
+      
+    }
+  }
+  
 
   getReviewLink(): string[] {
     if (this.placeID) {
       return ['/write-review/place', this.placeID];  // Path for place
-    } else if (this.activityId) {
-      return ['/write-review/activity', this.activityId];  // Path for activity
+    } else if (this.activityID) {
+      return ['/write-review/activity', this.activityID];  // Path for activity
     }
     return ['/']; // Default route in case neither ID is present
   }
@@ -137,19 +148,6 @@ export class PlaceDetailsComponent {
     });
   }
  
-  //reviews
-  reviews:any=[];
-  // reviews:[] = [
-  //   userData: { profileImageURL: '/path-to-img', city: 'Cairo', country: 'Egypt' },
-  //   updatedData: { firstName: 'John', lastName: 'Doe' },
-  //   title: 'Delicious Food',
-  //   content: 'Amazing food and experience!',
-  //   stars: 5,
-  //   visitDate: 'October 2023',
-  //   travelType: 'with family',
-  //   writtenDate: 'October 5, 2023'
-  // ];
-
   carouselOptions = {
     loop: true,
     margin: 10,

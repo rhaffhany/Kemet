@@ -1,4 +1,5 @@
 <section class="py-5">
+
     <div class="container">
 
         <div class="row">
@@ -70,10 +71,9 @@
                 <!-- Large Image Display -->
                 <div class="carousel-inner ">
                   <div class="carousel-item active">
-                    <img [src]="placeDetails?.imageURLs?.$values?.[0]" class="d-block w-100 img-lg" alt="Large Image" style="border-radius: 20px;">
+                    <img [src]="placeDetails.imageURLs.$values[0] || notFoundImg" class="d-block w-100 img-lg" alt="Large Image" style="border-radius: 20px;">
                   </div>
                 </div>
-            
                 <!-- Thumbnail Carousel (Scrollable) -->
                 <div class="carousel-thumbnails d-flex mt-3" style="overflow-x: auto;">
                   <div *ngFor="let imgUrl of placeDetails.imageURLs?.$values; let i = index" class="thumbnail-item" (click)="updateLargeImage(i)">
@@ -96,210 +96,59 @@
 
     </div>
 
-    <div class="container-fluid">
-        <h3 class="text-center pb-5" style="font-weight: 600;">See what travelers are saying</h3>
+    <!-- Past Reviews -->
+    <div class="container">
+        <h3 class="text-center pb-3" style="font-weight: 600;">See what travelers are saying</h3>
+
         <div class="row gap-2 align-items-center justify-content-center">
+            <div class="scrollable-reviews">
+                <div class="col-md-3 reviews bg-light-subtle p-4 mb-3"
+                    *ngFor="let review of reviewsData.slice(1);" style="border-radius: 20px;">
 
-            <div class="col-md-3 reviews bg-light-subtle p-4" style="border-radius: 20px;">
-
-                <div class="profile-info d-flex justify-content-between">
-                    <div class="d-flex">
-                        <img [src]="profilePic || 'https://localhost:7051' + userData.profileImageURL"  class="profile-pic rounded-circle" alt="profile-pic" (change)="uploadProfileImg($event)" >
-                        <div class="ms-2 d-block">
-                            <p class="fw-bold m-0">{{updatedData.firstName}} {{updatedData.lastName}}</p>
-                            <p>{{updatedData.city}}, {{updatedData.country}}</p>
-                            <div class="rating">
-                                <span *ngFor="let star of [].constructor(3); let i = index" class="star rate">
-                                <svg width="45" height="40" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                                </svg>
-                                </span>
+                    <div class="profile-info d-flex justify-content-between">
+                        <div class="d-flex">
+                            <img [src]="userData.profileImageURL" class="profile-pic rounded-circle" alt="profile-pic">
+                            <div class="ms-2 d-block">
+                                <p class="fw-bold m-0">{{updatedData.firstName}} {{updatedData.lastName}}</p>
+                                <p class="text-muted mb-1" style="font-size:13px;">{{userData.nationality}}</p>
+                                <div class="rating">
+                                    <span *ngFor="let star of [1, 2, 3, 4, 5]; let i = index" class="rate">
+                                        <svg width="24" height="24" viewBox="0 0 24 24"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            [style.fill]="i < review.rating ? '#FAC817' : '#FFFFFF'"
+                                            stroke="currentColor" stroke-width="1"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                        </svg>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div>
-                        <i class="fa-solid fa-ellipsis" role="button"></i>
-                    </div>
-                </div>
-
-                <div class="review-content">
-                    <h5 class="mt-3" style="font-weight: 600;">Delicious Food</h5>
-                    <p style="line-height: 16.94px; font-size: 14px;">Delicious local food, friendly and knowledgeable guide,
-                        Mohammad Boogie, Driver Aemn, and even photographer
-                        Abdul! Had the best Falafel, loved learning about other
-                        Egyptian food! We got to pick 2 “side quest” - we choose
-                        the spices and oils, where we learned a lot about both! 
-                        Got some rare blue lotus to make some tea of! Looking 
-                        forward to trying that! Also had camel for the 1st time! 
-                        Quite the experience. Be sure to not plan anything promptly
-                        after your tour. 1.) It might be longer b/c of traffic,etc. and 
-                        2.) You will be full and might need to take a nap after! Lol
-                    </p>
-                </div>
-
-                <div class="review-info">
-                    <p class="m-0" style="font-size: 14px;">Visited <span class="fw-bold">October 2023</span></p>
-                    <p style="font-size: 14px;">Traveled <span class="fw-bold">with family</span></p>
-                </div>
-
-                <div class="additional-info">
-                    <p style="font-size: 13px;">Written October 5, 2023</p>
-                </div>
-
-            </div>
-
-            <div class="col-md-3 reviews bg-light-subtle p-4" style="border-radius: 20px;">
-
-                <div class="profile-info d-flex justify-content-between">
-                    <div class="d-flex">
-                        <img [src]="profilePic || 'https://localhost:7051' + userData.profileImageURL"  class="profile-pic rounded-circle" alt="profile-pic" (change)="uploadProfileImg($event)" >
-                        <div class="ms-2 d-block">
-                            <p class="fw-bold m-0">{{updatedData.firstName}} {{updatedData.lastName}}</p>
-                            <p>{{updatedData.city}}, {{updatedData.country}}</p>
-                            <div class="rating">
-                                <span *ngFor="let star of [].constructor(3); let i = index" class="star rate">
-                                <svg width="45" height="40" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                                </svg>
-                                </span>
-                            </div>
+                        <div>
+                            <i class="fa-regular fa-trash-can" role="button" (click)="deleteReview(review.$id)"></i>
                         </div>
                     </div>
-                    <div>
-                        <i class="fa-solid fa-ellipsis" role="button"></i>
+
+                    <div class="review-content">
+                        <h5 class="mt-3" style="font-weight: 600;">{{review.reviewTitle}}</h5>
+                        <p style="line-height: 16.94px; font-size: 14px;">{{review.comment}}</p>
                     </div>
-                </div>
 
-                <div class="review-content">
-                    <h5 class="mt-3" style="font-weight: 600;">Delicious Food</h5>
-                    <p style="line-height: 16.94px; font-size: 14px;">Delicious local food, friendly and knowledgeable guide,
-                        Mohammad Boogie, Driver Aemn, and even photographer
-                        Abdul! Had the best Falafel, loved learning about other
-                        Egyptian food! We got to pick 2 “side quest” - we choose
-                        the spices and oils, where we learned a lot about both! 
-                        Got some rare blue lotus to make some tea of! Looking 
-                        forward to trying that! Also had camel for the 1st time! 
-                        Quite the experience. Be sure to not plan anything promptly
-                        after your tour. 1.) It might be longer b/c of traffic,etc. and 
-                        2.) You will be full and might need to take a nap after! Lol
-                    </p>
-                </div>
+                    <div class="review-info">
+                        <p class="m-0" style="font-size: 14px;">Visited <span class="fw-bold">October 2023</span></p>
+                        <p style="font-size: 14px;">Traveled <span class="fw-bold">with family</span></p>
+                    </div>
 
-                <div class="review-info">
-                    <p class="m-0" style="font-size: 14px;">Visited <span class="fw-bold">October 2023</span></p>
-                    <p style="font-size: 14px;">Traveled <span class="fw-bold">with family</span></p>
-                </div>
+                    <div class="additional-info">
+                        <p style="font-size: 13px;">Written {{review.createdAt | date: 'MMMM d, y' }}</p>
+                    </div>
 
-                <div class="additional-info">
-                    <p style="font-size: 13px;">Written October 5, 2023</p>
                 </div>
-
             </div>
-
-            <div class="col-md-3 reviews bg-light-subtle p-4" style="border-radius: 20px;">
-
-                <div class="profile-info d-flex justify-content-between">
-                    <div class="d-flex">
-                        <img [src]="profilePic || 'https://localhost:7051' + userData.profileImageURL"  class="profile-pic rounded-circle" alt="profile-pic" (change)="uploadProfileImg($event)" >
-                        <div class="ms-2 d-block">
-                            <p class="fw-bold m-0">{{updatedData.firstName}} {{updatedData.lastName}}</p>
-                            <p>{{updatedData.city}}, {{updatedData.country}}</p>
-                            <div class="rating">
-                                <span *ngFor="let star of [].constructor(3); let i = index" class="star rate">
-                                <svg width="45" height="40" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                                </svg>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <i class="fa-solid fa-ellipsis" role="button"></i>
-                    </div>
-                </div>
-
-                <div class="review-content">
-                    <h5 class="mt-3" style="font-weight: 600;">Delicious Food</h5>
-                    <p style="line-height: 16.94px; font-size: 14px;">Delicious local food, friendly and knowledgeable guide,
-                        Mohammad Boogie, Driver Aemn, and even photographer
-                        Abdul! Had the best Falafel, loved learning about other
-                        Egyptian food! We got to pick 2 “side quest” - we choose
-                        the spices and oils, where we learned a lot about both! 
-                        Got some rare blue lotus to make some tea of! Looking 
-                        forward to trying that! Also had camel for the 1st time! 
-                        Quite the experience. Be sure to not plan anything promptly
-                        after your tour. 1.) It might be longer b/c of traffic,etc. and 
-                        2.) You will be full and might need to take a nap after! Lol
-                    </p>
-                </div>
-
-                <div class="review-info">
-                    <p class="m-0" style="font-size: 14px;">Visited <span class="fw-bold">October 2023</span></p>
-                    <p style="font-size: 14px;">Traveled <span class="fw-bold">with family</span></p>
-                </div>
-
-                <div class="additional-info">
-                    <p style="font-size: 13px;">Written October 5, 2023</p>
-                </div>
-
-            </div>
-
         </div>
     </div>
-    
 
-    <!-- ll api bta3 reviews lma yegy -->
-    <!-- <div class="container-fluid">
-        <h3 class="text-center" style="font-weight: 600;">See what travelers are saying</h3>
-        <owl-carousel-o [options]="carouselOptions">
-          <ng-template carouselSlide *ngFor="let review of reviews">
-            <div class="col-md-3 bg-light-subtle p-4" style="border-radius: 20px;">
 
-              <div class="profile-info d-flex justify-content-between">
-
-                <div class="d-flex">
-                  <img 
-                    [src]="profilePic || 'https://localhost:7051' + review.userData.profileImageURL" 
-                    class="profile-pic rounded-circle" 
-                    alt="profile-pic">
-                  <div class="ms-2 d-block">
-                    <p class="fw-bold m-0">{{ review.updatedData.firstName }} {{ review.updatedData.lastName }}</p>
-                    <p>{{ review.updatedData.city }}, {{ review.updatedData.country }}</p>
-                    <div class="rating">
-                      <span *ngFor="let star of [].constructor(3); let i = index" class="star rate">
-                        <svg width="45" height="40" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                        </svg>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <i class="fa-solid fa-ellipsis" role="button"></i>
-                </div>
-
-              </div>
-
-              <div class="review-content">
-                <h5 class="mt-3" style="font-weight: 600;">{{ review.title }}</h5>
-                <p style="line-height: 16.94px; font-size: 14px;">{{ review.content }}</p>
-              </div>
-
-              <div class="review-info">
-                <p class="m-0" style="font-size: 14px;">Visited <span class="fw-bold">{{ review.visitDate }}</span></p>
-                <p style="font-size: 14px;">Traveled <span class="fw-bold">{{ review.travelType }}</span></p>
-              </div>
-
-              <div class="additional-info">
-                <p style="font-size: 13px;">Written {{ review.writtenDate }}</p>
-              </div>
-
-            </div>
-          </ng-template>
-        </owl-carousel-o>
-    </div> -->
-      
     <div class="container mt-5">
         <h3 class="fw-bold mb-5">Reviews</h3>
         <div class="row gap-3 align-content-center justify-content-center">

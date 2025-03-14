@@ -15,7 +15,7 @@
 
 <div *ngIf="searchResults.length > 0" class="search-results-container visible">
   <div *ngFor="let result of searchResults" class="result-item" (click)="goToDetails(result)">
-    <img [src]="result.image" alt="{{ result.name }}" class="result-image">
+    <img [src]="result.image || notFoundImg" alt="{{ result.name }}" class="result-image">
     <div class="result-details">
       <h4 class="result-name">{{ result.name }}</h4>
       <p class="result-description">{{ result.description }}</p>

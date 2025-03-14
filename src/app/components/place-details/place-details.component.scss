@@ -1,6 +1,7 @@
 section{
-    background-color: var(--main-color) ;
+  background-color: var(--main-color) ;
 }
+
 
 .review-link {
   position: relative;
@@ -97,8 +98,25 @@ section{
   box-shadow: 0 4px 6px 2px rgba(0, 0, 0, 0.1);
 }
 
-//search
+// scrollable reviews
+.scrollable-reviews {
+  max-height: 600px; 
+  overflow-x: auto;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
 
+.scrollable-reviews::-webkit-scrollbar {
+  height: 5px;
+}
+
+.scrollable-reviews::-webkit-scrollbar-thumb {
+  background: var(--secondary-color);
+  border-radius: 15px;
+}
+
+//search
 .search-bar {
   display: flex;
   align-items: center;

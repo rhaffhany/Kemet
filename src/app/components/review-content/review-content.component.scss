@@ -4,6 +4,7 @@ section{
 
 .card{
     border-color: var(--secondary-color);
+    box-shadow: 0 4px 8px rgba(27, 25, 25, 0.1);
     img{
         border: 1px solid var(--secondary-color);
         border-radius: 0;

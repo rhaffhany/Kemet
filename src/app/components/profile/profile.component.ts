@@ -47,6 +47,7 @@ export class ProfileComponent {
 
   usernameError: boolean = false;
   isUsernameEditable: boolean = false;
+  profileImgLoading = false;
 
   isEdited = false;
   isLoading = false;
@@ -259,13 +260,20 @@ export class ProfileComponent {
       console.error('No file selected!');
       return;
     }
+
+    this.profileImgLoading = true;
+
     const formData:FormData = new FormData();
     formData.append('model',file);
 
     this._ProfileService.uploadProfileImg(formData).subscribe({
       next:(response)=>{
-        this.profileImg = `https://localhost:7051/${response.filePath}`;
+        this.profileImg = `http://kemet-server.runasp.net/${response.filePath}`;
         this.isEdited = true;
+        setTimeout(() => {
+          this.profileImg = URL.createObjectURL(file);
+          this.profileImgLoading = false; 
+        }, 2000);
         Swal.fire({
           title: 'Success!',
           text: 'Your profile photo has been updated successfully.',
@@ -275,7 +283,7 @@ export class ProfileComponent {
         });
       },
       error:(err)=>{
-        console.error('Upload Error:', err);
+        this.profileImgLoading = false; 
       }
     });
   }
