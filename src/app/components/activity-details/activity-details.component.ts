@@ -15,6 +15,7 @@ export class ActivityDetailsComponent {
   ticket:string = "/assets/icons/Ticket.svg"
   searchIcon:string = "/assets/icons/Search.png"
   profilePic:string = "/assets/icons/profile-pic.svg"
+  notFoundImg:string = "/assets/img/not found.jpg";
 
   searchResults: any[] = [];  
   errorMessage: string = ''; 
@@ -24,6 +25,10 @@ export class ActivityDetailsComponent {
 
   activityID:any;
   activityDetails: ActivityDetails = {} as ActivityDetails;
+
+  reviewsData:any[] =[];
+  updatedReviewData:any[] = [...this.reviewsData];
+
 
   constructor(private _DetailsService:DetailsService, private _ActivatedRoute:ActivatedRoute, private _ProfileService:ProfileService ){}
 
@@ -39,7 +44,8 @@ export class ActivityDetailsComponent {
       this._DetailsService.getDetailedActivity(this.activityID).subscribe({
         next: (response) => {
           this.activityDetails = response;
-          // console.log(response);
+          this.reviewsData = response.reviews.$values[0].activity.reviews.$values;
+          console.log("reviews of this activity:",this.reviewsData);
         },
         error: (err) => {
           console.error(err);
@@ -64,6 +70,36 @@ export class ActivityDetailsComponent {
 
     });
   
+  }
+
+  deleteReview(reviewId: number) {
+    if (confirm("Are you sure you want to delete this review?")) {
+      this._DetailsService.getDetailedActivity(this.activityID).subscribe({
+        next: (response) => {
+          this.reviewsData = response.reviews.$values[0].activity.reviews.$values;
+          this.updatedReviewData = this.reviewsData.filter(
+            (review: any) => review.$id !== reviewId
+          );
+          // const updatedPlace = { ...response, reviews: { $values: this.updatedReviewData } };
+
+          console.log("reviews of this place after delete:",this.updatedReviewData);
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+
+      this._DetailsService.getDetailedActivity(this.activityID).subscribe({
+        next: () => {
+          this.reviewsData = this.updatedReviewData;
+          console.log("Review deleted successfully!");
+        },
+        error: (err) => {
+          console.error("Error updating place:", err);
+        },
+      });
+      
+    }
   }
    
   uploadProfileImg(event:any){

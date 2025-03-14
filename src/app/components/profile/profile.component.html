@@ -1,5 +1,5 @@
 <section class="pb-5">
-    <img [src]="layoutPic || 'https://localhost:7051' + userData.backgroundImageURL" alt="layoutPic" class="w-100" >
+    <img [src]="layoutPic || userData.backgroundImageURL" alt="layoutPic" class="w-100" >
 
     <div class="container">
         <div class="row justify-content-center align-items-center">
@@ -9,7 +9,7 @@
               <div class="col-md-3 text-center">
                 <div class="profile-pic rounded-circle">
                   <img 
-                    [src]="profileImg || 'https://localhost:7051' + userData.profileImageURL" 
+                    [src]="profileImg || userData.profileImageURL" 
                     alt="Profile Image" 
                     class="profile-img rounded-circle" 
                     (change)="uploadProfileImg($event)">
@@ -134,7 +134,7 @@
                 <div class="posts d-flex pt-4 px-3 mb-1">
                     <div class="col-md-1 posts-content">
                         <div class="content rounded-circle">
-                            <img [src]=" profileImg || 'https://localhost:7051' + userData.profileImageURL " alt="profileImg" (change)="updateCurrentData()" accept="image/*" class="file-input pic" >
+                            <img [src]=" profileImg || userData.profileImageURL " alt="profileImg" (change)="updateCurrentData()" accept="image/*" class="file-input pic" >
                         </div>
                     </div>
                     <div class="col-md-10 ms-3 pt-2">
@@ -165,7 +165,7 @@
                 <div class="posts d-flex pt-4 px-3">
                     <div class="col-md-1 posts-content">
                         <div class="content rounded-circle">
-                            <img [src]=" profileImg || 'https://localhost:7051' + userData.profileImageURL " alt="profileImg" class="pic" (change)="uploadProfileImg($event)">
+                            <img [src]=" profileImg || userData.profileImageURL " alt="profileImg" class="pic" (change)="uploadProfileImg($event)">
                         </div>
                     </div>
                     <div class="col-12 col-md-10 ms-md-3 pt-2">
@@ -224,7 +224,7 @@
         
             <div class="row backgroundImgEdit p-2">
                 <div class="blur-wrapper position-relative p-0">
-                    <img [src]="backgroundEdit || 'https://localhost:7051' + userData.backgroundImageURL" alt="background" class="background-image w-100 "  >
+                    <img [src]="backgroundEdit || userData.backgroundImageURL" alt="background" class="background-image w-100 "  >
                     <div class="blur-overlay position-absolute w-100 h-100"></div>
                     <div class="update-icons d-flex justify-content-evenly align-items-center">
                         <input type="file" #backgroundFileInput (change)="uploadBackgroundImg($event)" hidden>
@@ -236,13 +236,14 @@
 
             <div class="row update-profile-img p-2 ms-5 ">
                 <div class="blur-wrapper position-relative p-0 w-auto">
-                    <img [src]="profileImg || 'https://localhost:7051' + userData.profileImageURL" alt="Profile Image" class="profileImg rounded-circle" >
+                    <img [src]="profileImg || userData.profileImageURL" alt="Profile Image" class="profileImg rounded-circle" >
                     
                     <div class="blur-overlay position-absolute w-100 h-100"></div>
 
                     <div class="update-icons d-flex justify-content-evenly align-items-center">
                         <input type="file" #fileInput (change)="uploadProfileImg($event)" hidden>
-                        <i class="fa-solid fa-pen-to-square" role="button" (click)="fileInput.click()" ></i>
+                        <i *ngIf="!profileImgLoading" class="fa-solid fa-pen-to-square" role="button" (click)="fileInput.click()"></i>
+                        <i *ngIf="profileImgLoading" class="fas fa-spinner fa-spin"></i>
                     </div>
                 </div>
             </div>

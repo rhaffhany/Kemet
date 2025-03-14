@@ -21,20 +21,14 @@ export class ReviewService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${localStorage.getItem('token')}`
     });
-
     return this._HttpClient.post(`${this.DeployUrl}/api/Reviews`, formData , {headers, responseType:'text'} );
   }
 
 
   private reviewData = new BehaviorSubject<any[]>([]);
-  reviewData$ = this.reviewData.asObservable();
   
   setReviewData(review:any):Observable<any> {
     return this._HttpClient.post(`${this.DeployUrl}/api/Reviews`, review);
-  }
-
-  getReviewData() {
-    return this.reviewData.asObservable();
   }
 
   // saving day of submission
