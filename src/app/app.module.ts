@@ -1,8 +1,8 @@
+import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CarouselModule } from 'ngx-owl-carousel-o';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -39,8 +39,6 @@ import { PlaceDetailsComponent } from './components/place-details/place-details.
 import { ReviewComponent } from './components/review/review.component';
 import { ReviewContentComponent } from './components/review-content/review-content.component';
 import { ActivityDetailsComponent } from './components/activity-details/activity-details.component';
-
-
 
 @NgModule({
   declarations: [
@@ -86,7 +84,7 @@ import { ActivityDetailsComponent } from './components/activity-details/activity
     NgbModule,
     NgbCollapseModule,
     BrowserAnimationsModule,
-    CarouselModule
+    CarouselModule,
   ],
   
   providers: [provideClientHydration()],
