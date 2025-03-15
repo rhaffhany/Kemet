@@ -135,4 +135,8 @@ export class NavAppComponent {
       this.cdr.detectChanges();
     }
   }
+<<<<<<< Updated upstream
 }
+=======
+}
+>>>>>>> Stashed changes
