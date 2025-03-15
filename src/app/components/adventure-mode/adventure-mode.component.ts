@@ -7,7 +7,7 @@ import { ProfileService } from 'src/app/services/profile.service';
   styleUrls: ['./adventure-mode.component.scss'],
 })
 export class AdventureModeComponent {
-  logoImage: string = 'assets/logo/k.png';
+  logoImage: string = 'assets/logo/K.PNG';
   imageURLs: string = ''; 
   name: string = ''; 
   errorMessage: string = '';

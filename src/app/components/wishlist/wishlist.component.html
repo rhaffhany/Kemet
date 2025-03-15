@@ -1,15 +1,34 @@
 <section>
-    <h1 class="title">My Wishlist</h1>
-    <div class="card">
-      <div class="card-body">
-        <div class="card-content">
-          <img src="/assets/img/promote1.png" alt="Wishlist item photo" class="card-photo" />
-          <div class="card-text">
-            <h2 class="card-title">Title</h2>
-            <p class="card-subtitle">Subtitle</p>
-          </div>
+  <h1 class="title">My Wishlist</h1>
+
+  <button>Plan a trip with AI</button>
+
+  <div *ngIf="loading">Loading...</div>
+  <div *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <div *ngIf="wishlist.length === 0 && !loading">No items in wishlist.</div>
+
+  <div class="card" *ngFor="let item of wishlist; let i = index">
+    <div class="card-body">
+      <!-- Three Dots Menu -->
+      <div class="menu-container">
+        <button class="menu-btn" (click)="toggleMenu(i)">
+        </button>
+        <div *ngIf="menuOpenIndex === i" class="menu-dropdown">
+          <button>Remove</button>
         </div>
       </div>
+
+      <img [src]="item.imageURLs[0] || '/assets/img/default.png'" alt="{{ item.name }}" class="card-photo" />
+      <div class="card-text">
+        <h2 class="card-title">{{ item.name }}</h2>
+
+        <!-- Show category for places -->
+        <p *ngIf="item.type === 'place'" class="card-subtitle"> {{ item.categoryName }}</p>
+
+        <!-- Show duration for activities -->
+        <p *ngIf="item.type === 'activity'" class="card-subtitle">Activity</p>
+      </div>
     </div>
-  </section>
-  
+  </div>
+</section>

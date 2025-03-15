@@ -81,15 +81,25 @@ export class AuthService {
   }
 
   // Log in an existing user
-loginForm(userData: object): Observable<any> {
-  return this._HttpClient.post(`${this.apiUrl}/Login`, userData).pipe(
-    tap((response: any) => {
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('userName', response.userName);
-      this.updateLoginStatus();
-    })
-  );
-}
+  loginForm(userData: object): Observable<any> {
+    return this._HttpClient.post(`${this.apiUrl}/Login`, userData).pipe(
+      tap((response: any) => {
+        if (response && response.token) {
+          console.log('Storing Token:', response.token); // Debugging
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('userName', response.userName);
+          this.updateLoginStatus();
+        } else {
+          console.error('Login response did not contain a token.');
+        }
+      }),
+      catchError(error => {
+        console.error('Login Error:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+  
   // Forgot password
   forgotPassword(data: { email: string }): Observable<any> {
     return this._HttpClient.post(`${this.apiUrl}/Forgot-password`, data).pipe(
