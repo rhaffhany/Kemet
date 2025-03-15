@@ -136,6 +136,9 @@ export class NavAppComponent {
     }
   }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+>>>>>>> Stashed changes
 }
 =======
 }

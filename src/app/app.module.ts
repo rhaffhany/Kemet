@@ -1,5 +1,8 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import { CarouselModule } from 'ngx-bootstrap/carousel';
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 import { NgModule } from '@angular/core';
@@ -42,8 +45,11 @@ import { ReviewComponent } from './components/review/review.component';
 import { ReviewContentComponent } from './components/review-content/review-content.component';
 import { ActivityDetailsComponent } from './components/activity-details/activity-details.component';
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 
