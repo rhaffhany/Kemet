@@ -1,14 +1,11 @@
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
+
 import { CarouselModule } from 'ngx-bootstrap/carousel';
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
 import { NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -44,14 +41,8 @@ import { PlaceDetailsComponent } from './components/place-details/place-details.
 import { ReviewComponent } from './components/review/review.component';
 import { ReviewContentComponent } from './components/review-content/review-content.component';
 import { ActivityDetailsComponent } from './components/activity-details/activity-details.component';
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -99,7 +90,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BrowserAnimationsModule,
     BrowserModule,
     CarouselModule
-    ],
+
   providers: [provideClientHydration()],
   bootstrap: [AppComponent]
 })

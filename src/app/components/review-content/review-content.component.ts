@@ -1,3 +1,4 @@
+import { filter } from 'rxjs/operators';
 import { Component, OnInit} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ActivityDetails } from 'src/app/interfaces/activity-details';
@@ -19,9 +20,17 @@ export class ReviewContentComponent implements OnInit{
   activityDetails:ActivityDetails = {} as ActivityDetails;
   activityID:any;
   isPlaceReview:boolean = false;
-  reviewData: any = {};
+  reviewData: any[] = [];
+  reviewText: string = '';
+  reviewTitle: string = '';
+  submissionDate:string='';
 
-  constructor(private _ReviewService:ReviewService, private route:ActivatedRoute, private _DetailsService:DetailsService){}
+  isAdded:boolean = false;
+  loading: boolean = false;
+
+  constructor(private _ReviewService:ReviewService, 
+              private route:ActivatedRoute, 
+              private _DetailsService:DetailsService){}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -30,26 +39,36 @@ export class ReviewContentComponent implements OnInit{
         this.isPlaceReview = true; 
         this._DetailsService.getDetailedPlace(this.placeID).subscribe(response => {
           this.placeDetails = response;
+          this.placeDetails.averageRating = Math.round(this.placeDetails.averageRating * 10) / 10;
+          this.reviewData = response.reviews.$values[0].place.reviews.$values;
         });
       } else if (params.has('activityID')) {
         this.activityID = params.get('activityID');
         this.isPlaceReview = false; 
         this._DetailsService.getDetailedActivity(this.activityID).subscribe(response => {
           this.activityDetails = response;
+          this.activityDetails.averageRating = Math.round(this.activityDetails.averageRating * 10) / 10;
+          this.reviewData = response.reviews.$values[0].activity.reviews.$values;
+          console.log(this.reviewData);
         });
       }
     });
 
   }
   
-  reviewText: string = '';
-  reviewTitle: string = '';
-  submissionDate:string='';
-  isAdded:boolean = false;
-  loading: boolean = false;
-
-  
   submitReview(): void {
+    if (!this.reviewTitle || !this.reviewText || !this.rating || !this.selectedDate) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Incomplete Data',
+        text: 'Please enter all required fields before submitting!',
+      });
+      return;
+    }
+
+    let currentDate:string = '' ;
+    this._ReviewService.setSubmissionDate(currentDate);
+  
     //append formData
     const formData = new FormData();
     formData.append('rating', this.rating.toString());
@@ -57,58 +76,35 @@ export class ReviewContentComponent implements OnInit{
     formData.append('visitorType', this.selectedOption);
     formData.append('comment', this.reviewText);
     formData.append('reviewTitle', this.reviewTitle);
-    // if (this.selectedImage && this.selectedImage.length > 0) {
-    //   for (let i = 0; i < this.selectedImage.length; i++) {
-    //     formData.append('images', this.selectedImage[i]); 
-    //   }
-    // }
-
-    if (!this.reviewTitle || !this.reviewText || !this.rating || !this.selectedDate) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Incomplete Data',
-        text: 'Please enter all required fields (Title, Review, Rating, and Date) before submitting!',
-      });
-      return;
-    }
-
-    let reviewData = {
-      rating: this.rating,
-      date: this.selectedDate,
-      visitorType: this.selectedOption,
-      comment: this.reviewText,
-      reviewTitle: this.reviewTitle,
-      // image: this.selectedImage,
-      createdAt: new Date().toISOString().split('T')[0]
-    };
-
-    // const reviewData = {
-    //   rating: this.reviewData.rating,
-    //   visitorType: this.selectedOption,
-    //   reviewTitle: this.reviewTitle,
-    //   comment: this.reviewData.comment,
-    //   createdAt: new Date().toISOString().split('T')[0],
-    //   date: this.selectedDate,
-    //   images: this.selectedImage,
-    // };
+    formData.append('createdAt', currentDate);
+    this.route.paramMap.subscribe(params => {
+      if (params.has('placeID')) {
+        this.placeID = params.get('placeID');
+        this.isPlaceReview = true; 
+        formData.append('placeID', this.placeID); 
+      } else if (params.has('activityID')) {
+        this.activityID = params.get('activityID');
+        this.isPlaceReview = false;
+        formData.append('activityID', this.activityID);
+      }
+    });
 
     if (!this.isAdded) return;
     this.loading = true;
 
     this._ReviewService.addReview(formData).subscribe({
-      next:()=>{
-        // const currentDate = new Date().toISOString().split('T')[0];
-        // this._ReviewService.setSubmissionDate(currentDate); 
+      next:(data)=>{
         Swal.fire({
           icon: 'success',
           title: 'Review Submitted!',
           text: 'Thanks for your feedback!',
         });
-        this.clearData();
+        // this.clearData();
         this.loading = false;
         this.isAdded = false;
-        this._ReviewService.setReviewData(reviewData);
-        console.log("data set",reviewData);
+
+        console.log("review data:",data);
+        this._ReviewService.setReviewData(data);        
       },
       error:(err) =>{
         Swal.fire({
@@ -141,6 +137,11 @@ export class ReviewContentComponent implements OnInit{
       fileInput.value = '';
     }
   }
+
+
+
+
+  
 
 
   // selected options
@@ -176,22 +177,5 @@ export class ReviewContentComponent implements OnInit{
     const day = date.day.toString().padStart(2, '0');
     this.selectedDate = `${date.year}-${date.month}-${date.day}`;     
   }
-
-  // review photos
-  // selectedImage: string | null = null;
-
-  // onFileSelected(event: Event) {
-  //   const fileInput = event.target as HTMLInputElement;
-  //   if (fileInput.files && fileInput.files.length > 0) {
-  //     const file = fileInput.files[0]; 
-  //     // Read file and set it as the selected image
-  //     const reader = new FileReader();
-  //     reader.onload = (e) => {
-  //       this.selectedImage = e.target?.result as string;
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
   
-
 }

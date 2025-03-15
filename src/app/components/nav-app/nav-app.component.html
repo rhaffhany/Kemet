@@ -1,128 +1,8 @@
-<!-- <nav class="navbar navbar-expand-lg" [ngClass]="{ 'transparent': isHomePage && !isScrolled,'default-bg': !isHomePage }">
-  <nav class="navbar navbar-expand-sm navbar-light bg-light" [class.scrolled]="isScrolled">
-    <div class="container">
-
-        <div >
-          <a class="navbar-brand" routerLink="home"><img [src]="logo" alt="logo" ></a>
-        </div>
-    
-        <div class="search-wrapper" [class.active]="isSearchActive">
-          <div class="search-container search-group" (click)="activateSearch()">
-            <img [src]="searchIcon" alt="searchIcon" class="searchIcon">
-            <input 
-              type="text" 
-              class="search-input" 
-              [(ngModel)]="query"
-              (input)="onSearchInput()"
-              (focus)="activateSearch()"
-              (blur)="deactivateSearch()"
-              placeholder="Search..."
-            >
-          </div>
-        
-          <div *ngIf="searchResults.length > 0" class="search-results-container visible">
-            <div *ngFor="let result of searchResults" 
-                class="result-item"
-                [routerLink]="['/places',result.placeId]"
-                role="button"
-                tabindex="0"
-                (keydown.enter)="navigateToPlaceDetails(result.placeId)">
-              <div class="result-details">
-                <h4 class="result-name">{{ result.name }}</h4>
-                <p class="result-description">{{ result.description }}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        
-        
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-  
-      <div class="search-wrapper">
-        <div class="search-container search-group">
-          <img [src]="searchIcon" alt="searchIcon" class="searchIcon">
-          <input 
-            type="text" 
-            class="search-input" 
-            [(ngModel)]="query"
-            (input)="onSearchInput()"
-            (focus)="activateSearch()"
-            (blur)="deactivateSearch()"
-            placeholder="Search..."
-          >
-        </div>
-      
-
-        <div *ngIf="searchResults.length > 0" class="search-results-container visible">
-          <div *ngFor="let result of searchResults" class="result-item" (click)="goToDetails(result)">
-            <img [src]="result.image" alt="{{ result.name }}" class="result-image">
-            <div class="result-details">
-              <h4 class="result-name">{{ result.name }}</h4>
-              <p class="result-description">
-                {{ result.description.length > 50 ? (result.description | slice:0:55) + '...' : result.description }}
-              </p>
-              <p class="result-category"> {{ result.category }}</p>  
-            </div>
-          </div>
-        </div>
-      </div>             
-      
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-        <div class="collapse navbar-collapse d-flex align-items-center justify-content-around" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" routerLink="thingstodo" routerLinkActive="active-link">Things to do</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLink="adventureMode" routerLinkActive="active-link" >Adventure mode</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLink="plan" routerLinkActive="active-link" >Plan</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLink="wishlist" routerLinkActive="active-link" >Wishlist</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLink="community" routerLinkActive="active-link" >Community</a>
-            </li>
-          </ul>
-        </div>
-
-        <div class="profile-container">
-          <p>
-            <a type="button" class="ms-2" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed">
-              <img [src]="profilePic || 'https://localhost:7051' + userData.profileImageURL" class="profile-pic rounded-circle" alt="profile-pic">
-            </a>
-          </p>
-          <div class="overlay" *ngIf="!isCollapsed" (click)="isCollapsed = true"></div>
-          <div class="menu-card" *ngIf="!isCollapsed">
-            <div class="card-body">
-              <div role="button" routerLink="profile" class="mb-1" (click)="closeCollapse()">Profile</div>
-              <div role="button" routerLink="review" class="mb-1" (click)="closeCollapse()">Write a review</div>
-              <div role="button" routerLink="" class="mb-1" (click)="closeCollapse()">Booking</div>
-              <div role="button" routerLink="" class="mb-1" (click)="closeCollapse()">Settings</div>
-              <div role="button" routerLink="" class="mb-1" (click)="logout()">Sign out</div>
-            </div>
-          </div>
-        </div>
-        
-      
-
-      </div>
-    </nav> -->
-
-    <nav class="navbar navbar-expand-lg" [ngClass]="{ 'transparent': isHomePage && !isScrolled, 'scrolled': !isHomePage || isScrolled }">
+<nav class="navbar navbar-expand-lg" [ngClass]="{ 'transparent': isHomePage && !isScrolled, 'scrolled': !isHomePage || isScrolled }">
       <div class="container">
     
           <div >
-            <a class="navbar-brand" routerLink="home"><img [src]="logo" alt="logo" ></a>
+            <a class="navbar-brand " routerLink="home"><img [src]="logo" alt="logo" ></a>
           </div>
       
           <div class="search-wrapper">
@@ -154,7 +34,8 @@
             </div>
           </div>             
           
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
     
@@ -182,7 +63,7 @@
         <div class="profile-container">
           <p>
             <a type="button" class="ms-2" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed">
-              <img [src]="profilePic || 'https://localhost:7051' + userData.profileImageURL" class="profile-pic rounded-circle" alt="profile-pic">
+              <img [src]="profilePic || userData.profileImageURL" class="profile-pic rounded-circle" alt="profile-pic">
             </a>
           </p>
           <div class="overlay" *ngIf="!isCollapsed" (click)="isCollapsed = true"></div>

@@ -33,32 +33,28 @@
     <div class="user-reviews ms-4">
         <h4 class="fw-bold mb-3">Your Reviews</h4>
         <div class="container-fluid">
-            <div class="row">
-
+            <div class="row" *ngFor="let review of reviewData">
+                
                 <div class="col-md-6">
                     <div class="review-info d-flex">
                         <img src=".." alt="place_pic" width="111" height="97">
                         <div class="block">
-                            <h5 class="mb-1" style="font-size: 18px;">{{reviewData.reviewTitle}}</h5>
+                            <h5 class="mb-1" style="font-size: 18px;">{{placeDetails.name}}</h5>
                             <p class="text-muted"  style="font-size: 16px;">{{userData.nationality}}</p>
                         </div>
                     </div>
                     <div class="review-details">
                         <span *ngFor="let star of [].constructor(5); let i = index" class="rate">
-                            <svg width="33" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"  [style.fill]="i < placeDetails.ratingsCount ? '#FFBD67' : '#FFE5C2'"
+                            <svg width="33" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"  [style.fill]="i < review.rating ? '#FFBD67' : '#FFE5C2'"
                             stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
                                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                             </svg>
                         </span>
-                        <h6 class="my-1" style="font-size: 16px;">Trip Title</h6>
-                        <p class="text-muted mb-2"  style="font-size: 14px;">Trip date</p>
-                        <p class="lead" style="font-size:16px;">Our family trip to the Pyramids of Giza was incredible! We were awestruck by the Great Pyramid 
-                            and enjoyed learning its history from our guide. Riding camels was a hit with the kids, 
-                            and we loved taking photos with the Sphinx. The delicious lunch with a view of the pyramids was
-                            the perfect way to end the day. It was a fantastic mix of fun and education, creating unforgettable
-                            memories for our family! Highly recommended!</p>
+                        <h6 class="my-1" style="font-size: 16px;">{{review.reviewTitle}}</h6>
+                        <p class="text-muted mb-2"  style="font-size: 14px;">{{review.date}}</p>
+                        <p class="lead" style="font-size:16px;">{{review.comment}}</p>
 
-                        <p class="text-muted mb-2"  style="font-size: 12px;">Written in <span>{{ submissionDate | date: 'longDate' }}</span></p>
+                        <p class="text-muted mb-2"  style="font-size: 12px;">Written in <span>{{ review.createdAt | date: 'longDate' }}</span></p>
                     </div>
                 </div>
 

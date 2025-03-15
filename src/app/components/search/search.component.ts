@@ -13,6 +13,7 @@ export class SearchComponent {
   query = '';
   searchResults: any[] = [];
   errorMessage = '';
+  notFoundImg:string = "/assets/img/not found.jpg";
 
   constructor(
     private searchService: SearchService,
@@ -21,8 +22,7 @@ export class SearchComponent {
   ) {}
 
   goToDetails(result: any) {
-    console.log('Navigating to:', result);
-
+    // console.log('Navigating to:', result);
     // Navigate based on result type
     if (result.type === 'place') {
       this.router.navigate(['/app-places', result.id]); 
