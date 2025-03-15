@@ -52,7 +52,6 @@ export class AuthService {
     }
   }
 
-
   // Get logged-in user's name
   getUserName(): string | null {
     return localStorage.getItem('userName');
@@ -100,6 +99,7 @@ export class AuthService {
     );
   }
   
+
   // Forgot password
   forgotPassword(data: { email: string }): Observable<any> {
     return this._HttpClient.post(`${this.apiUrl}/Forgot-password`, data).pipe(

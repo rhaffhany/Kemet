@@ -1,3 +1,4 @@
+import { TravelAgencyProfileComponent } from './components/travel-agency-profile/travel-agency-profile.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppLayoutComponent } from './layouts/app-layout/app-layout.component';
@@ -54,7 +55,7 @@ const routes: Routes = [
       { path: 'write-review', component: ReviewContentComponent, title: 'Review Your Booking' },
       { path: 'write-review/place/:placeID', component: ReviewContentComponent, title: 'Review-Place' },
       { path: 'write-review/activity/:activityID', component: ReviewContentComponent, title: 'Review-Activity' },
-
+      { path: 'travelAgency-profile', component: TravelAgencyProfileComponent, title: 'TravelAgency-profile' },
 
     ]
   },

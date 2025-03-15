@@ -61,8 +61,7 @@
     display: flex;
     align-items: center;
     padding: 8px 12px;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
+
     border-radius: 20px;
     border: 1px solid #ccc;
     background-color: #f9f9f9;
@@ -116,6 +115,7 @@
     z-index: 10;
   }
 
+
   .menu-card {
     position: absolute;
     top: 60px; 
@@ -144,14 +144,12 @@
           border-bottom-left-radius: 0px;
           background: #f1f1f1;
         }
-=======
-    border-radius: 20px;
-=======
-    border-radius: 20px;
->>>>>>> Stashed changes
-    border: 1px solid #ccc;
-    background-color: #f9f9f9;
-    transition: box-shadow 0.3s ease-in-out;
+        // border-radius: 20px;
+        // border: 1px solid #ccc;
+        // background-color: #f9f9f9;
+        // transition: box-shadow 0.3s ease-in-out;
+      }
+    }
 
     &:focus-within {
       box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
@@ -239,17 +237,12 @@
         font-weight: 600;
         margin: 0px;
         color: #555;
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
       }
     }
   }
 }
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 
 /* === Search Results Dropdown === */
 .search-results-container {
@@ -321,11 +314,6 @@
     }
   }
 }
-
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 .profile-pic {
   width: 40px;
   height: 40px;

@@ -44,8 +44,8 @@ export class ActivityDetailsComponent {
       this._DetailsService.getDetailedActivity(this.activityID).subscribe({
         next: (response) => {
           this.activityDetails = response;
-          this.reviewsData = response.reviews.$values[0].activity.reviews.$values;
-          console.log("reviews of this activity:",this.reviewsData);
+          this.reviewsData = response.reviews.$values;
+          this.activityDetails.averageRating = Math.round(this.activityDetails.averageRating * 10) / 10;
         },
         error: (err) => {
           console.error(err);

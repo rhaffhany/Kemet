@@ -55,7 +55,18 @@ export class ReviewContentComponent implements OnInit{
     });
 
   }
-  
+
+  // Date selection
+  selectedDate: string  = '';
+  onDateSelect(date: any) {
+    if (date && date.year && date.month && date.day) {
+        const month = date.month.toString().padStart(2, '0');
+        const day = date.day.toString().padStart(2, '0');
+        this.selectedDate = `${date.year}-${month}-${day}`;
+        console.log("Selected Date:", this.selectedDate);
+    }
+  }
+
   submitReview(): void {
     if (!this.reviewTitle || !this.reviewText || !this.rating || !this.selectedDate) {
       Swal.fire({
@@ -72,7 +83,7 @@ export class ReviewContentComponent implements OnInit{
     //append formData
     const formData = new FormData();
     formData.append('rating', this.rating.toString());
-    formData.append('date', this.selectedDate ? this.selectedDate.toString() : '');
+    formData.append('date', this.selectedDate.toString());
     formData.append('visitorType', this.selectedOption);
     formData.append('comment', this.reviewText);
     formData.append('reviewTitle', this.reviewTitle);
@@ -104,7 +115,7 @@ export class ReviewContentComponent implements OnInit{
         this.isAdded = false;
 
         console.log("review data:",data);
-        this._ReviewService.setReviewData(data);        
+        this._ReviewService.setReviewData(data);              
       },
       error:(err) =>{
         Swal.fire({
@@ -112,7 +123,7 @@ export class ReviewContentComponent implements OnInit{
           title: 'Submission Failed',
           text: 'Something went wrong. Please try again later.',
         });
-        this.loading = false;
+        this.loading = false;        
       },complete:()=>{
         this.loading = false;
       }
@@ -127,7 +138,7 @@ export class ReviewContentComponent implements OnInit{
   clearData(): void{
     this.rating = 0; 
     this.hoverRating = 0;
-    this.selectedDate = null;
+    this.selectedDate = '';
     this.selectedOption = '';
     this.reviewText = '';    
     this.reviewTitle = '';
@@ -137,12 +148,6 @@ export class ReviewContentComponent implements OnInit{
       fileInput.value = '';
     }
   }
-
-
-
-
-  
-
 
   // selected options
   options: string[] = ['Business', 'Couples', 'Family', 'Solo'];
@@ -170,12 +175,6 @@ export class ReviewContentComponent implements OnInit{
     return index < Math.max(this.rating, this.hoverRating);
   }
 
-  // Date selection
-  selectedDate: string | null = null;
-  onDateSelect(date: any) {
-    const month = date.month.toString().padStart(2, '0');
-    const day = date.day.toString().padStart(2, '0');
-    this.selectedDate = `${date.year}-${date.month}-${date.day}`;     
-  }
+  
   
 }

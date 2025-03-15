@@ -1,5 +1,5 @@
+import { CarouselModule } from 'ngx-owl-carousel-o';
 
-import { CarouselModule } from 'ngx-bootstrap/carousel';
 
 import { NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
@@ -41,6 +41,7 @@ import { PlaceDetailsComponent } from './components/place-details/place-details.
 import { ReviewComponent } from './components/review/review.component';
 import { ReviewContentComponent } from './components/review-content/review-content.component';
 import { ActivityDetailsComponent } from './components/activity-details/activity-details.component';
+import { TravelAgencyProfileComponent } from './components/travel-agency-profile/travel-agency-profile.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -77,6 +78,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ReviewComponent,
     ReviewContentComponent,
     ActivityDetailsComponent,
+    TravelAgencyProfileComponent,
   ],
   imports: [
     BrowserModule,
@@ -90,7 +92,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BrowserAnimationsModule,
     BrowserModule,
     CarouselModule
-
+  ],
   providers: [provideClientHydration()],
   bootstrap: [AppComponent]
 })
