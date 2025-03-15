@@ -1,0 +1,43 @@
+<section class="pb-5">
+    <img [src]="layoutPic || userData.backgroundImageURL" alt="layoutPic" class="w-100" >
+
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+          <div class="col-md-11 p-0 profile-box">
+            <div class="row align-items-center my-md-5 ps-md-2">
+              <!-- Profile Picture -->
+              <div class="col-md-3 text-center">
+                <!-- <div class="profile-pic rounded-circle">
+                  <img 
+                    [src]="profileImg || userData.profileImageURL" 
+                    alt="Profile Image" 
+                    class="profile-img rounded-circle" 
+                    (change)="uploadProfileImg($event)">
+                </div> -->
+              </div>
+      
+              <!-- Profile Info -->
+              <div class="col-md-6">
+                <div class="profile-info">
+                  <h5 class="name fw-bold mb-1">{{ userData.firstName }} {{ userData.lastName }}</h5>
+                  <p class="lead username">{{ user }}{{updatedData.userName}}</p>
+                  <div class="d-flex mt-md-5 info">
+                    <h5 class="fw-bold me-3" >0 Followers</h5>
+                    <h5 class="fw-bold">0 Following</h5>
+                  </div>
+                </div>
+              </div>
+      
+              <!-- Edit Profile Button -->
+              <div class="col-md-3 text-md-end text-center px-md-4 mt-md-0 edit-button">
+                <!-- <button class="btn btn-outline-dark fw-bold " (click)="toggleEditBox()">
+                    Edit profile
+                </button> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+ 
+</section>

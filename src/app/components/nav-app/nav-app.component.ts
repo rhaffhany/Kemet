@@ -135,3 +135,4 @@ export class NavAppComponent {
       this.cdr.detectChanges();
     }
   }
+}

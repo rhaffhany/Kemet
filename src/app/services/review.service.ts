@@ -30,6 +30,9 @@ export class ReviewService {
   setReviewData(review:any):Observable<any> {
     return this._HttpClient.post(`${this.DeployUrl}/api/Reviews`, review);
   }
+  getReviewData(): Observable<any[]> {
+    return this.reviewData.asObservable();
+  }
 
   // saving day of submission
   submissionDate: string = '';
