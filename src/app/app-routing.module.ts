@@ -21,6 +21,7 @@ import { NotfoundComponent } from './components/notfound/notfound.component';
 import { ReviewComponent } from './components/review/review.component';
 import { ReviewContentComponent } from './components/review-content/review-content.component';
 import { ActivityDetailsComponent } from './components/activity-details/activity-details.component';
+import { AgencyLayoutComponent } from './layouts/agency-layout/agency-layout.component';
 
 const routes: Routes = [
 
@@ -55,8 +56,11 @@ const routes: Routes = [
       { path: 'write-review', component: ReviewContentComponent, title: 'Review Your Booking' },
       { path: 'write-review/place/:placeID', component: ReviewContentComponent, title: 'Review-Place' },
       { path: 'write-review/activity/:activityID', component: ReviewContentComponent, title: 'Review-Activity' },
+    ]
+  },
+  {
+    path: '',component: AgencyLayoutComponent, canActivate: [AuthGuard], children: [
       { path: 'travelAgency-profile', component: TravelAgencyProfileComponent, title: 'TravelAgency-profile' },
-
     ]
   },
 

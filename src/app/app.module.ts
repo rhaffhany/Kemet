@@ -1,9 +1,9 @@
-import { CarouselModule } from 'ngx-owl-carousel-o';
 
 
 import { NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+import { CarouselModule } from 'ngx-owl-carousel-o';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
@@ -44,6 +44,9 @@ import { ActivityDetailsComponent } from './components/activity-details/activity
 import { TravelAgencyProfileComponent } from './components/travel-agency-profile/travel-agency-profile.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NavTravelAgencyComponent } from './components/nav-travel-agency/nav-travel-agency.component';
+import { AgencyLayoutComponent } from './layouts/agency-layout/agency-layout.component';
+import { KcurrencyPipe } from './pipe/kcurrency.pipe';
 
 @NgModule({
   declarations: [
@@ -79,6 +82,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ReviewContentComponent,
     ActivityDetailsComponent,
     TravelAgencyProfileComponent,
+    NavTravelAgencyComponent,
+    AgencyLayoutComponent,
+    KcurrencyPipe,
   ],
   imports: [
     BrowserModule,
