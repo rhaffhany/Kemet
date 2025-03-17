@@ -14,9 +14,10 @@
       <div class="menu-container">
         <button class="menu-btn" (click)="toggleMenu(i)">
         </button>
-        <div *ngIf="menuOpenIndex === i" class="menu-dropdown">
-          <button>Remove</button>
-        </div>
+        <button (click)="removeItemFromWishlist(item, i)" class="remove-btn">
+          Remove
+        </button>
+        
       </div>
 
       <img [src]="item.imageURLs[0] || '/assets/img/default.png'" alt="{{ item.name }}" class="card-photo" />

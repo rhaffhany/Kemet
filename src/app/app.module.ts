@@ -1,11 +1,8 @@
-
-
 import { NgModule } from '@angular/core';
-import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-import { CarouselModule } from 'ngx-owl-carousel-o';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -31,9 +28,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { AppLayoutComponent } from './layouts/app-layout/app-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { ChangePipe } from './pipe/change.pipe';
-import { NgOtpInputModule } from 'ng-otp-input';
 import { InterestsFormComponent } from './components/interests-form/interests-form.component';
-import { NgbCarouselModule, NgbCollapseModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavMainComponent } from './components/nav-main/nav-main.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { FaqComponent } from './components/faq/faq.component';
@@ -41,12 +36,11 @@ import { PlaceDetailsComponent } from './components/place-details/place-details.
 import { ReviewComponent } from './components/review/review.component';
 import { ReviewContentComponent } from './components/review-content/review-content.component';
 import { ActivityDetailsComponent } from './components/activity-details/activity-details.component';
-import { TravelAgencyProfileComponent } from './components/travel-agency-profile/travel-agency-profile.component';
 
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NavTravelAgencyComponent } from './components/nav-travel-agency/nav-travel-agency.component';
-import { AgencyLayoutComponent } from './layouts/agency-layout/agency-layout.component';
-import { KcurrencyPipe } from './pipe/kcurrency.pipe';
+import { NgOtpInputModule } from 'ng-otp-input';
+import { NgbModule, NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { CarouselModule } from 'ngx-bootstrap/carousel'; 
 
 @NgModule({
   declarations: [
@@ -81,10 +75,6 @@ import { KcurrencyPipe } from './pipe/kcurrency.pipe';
     ReviewComponent,
     ReviewContentComponent,
     ActivityDetailsComponent,
-    TravelAgencyProfileComponent,
-    NavTravelAgencyComponent,
-    AgencyLayoutComponent,
-    KcurrencyPipe,
   ],
   imports: [
     BrowserModule,
@@ -96,10 +86,10 @@ import { KcurrencyPipe } from './pipe/kcurrency.pipe';
     NgbModule,
     NgbCollapseModule,
     BrowserAnimationsModule,
-    BrowserModule,
-    CarouselModule
+    CarouselModule,
+    MatProgressBarModule,
   ],
-  providers: [provideClientHydration()],
-  bootstrap: [AppComponent]
+  providers: [],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

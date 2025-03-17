@@ -134,5 +134,4 @@ export class NavAppComponent {
       this.errorMessage = '';
       this.cdr.detectChanges();
     }
-  }
-}
+

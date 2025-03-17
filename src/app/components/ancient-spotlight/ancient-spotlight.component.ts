@@ -135,9 +135,5 @@ import { catchError, throwError } from 'rxjs';
     }
     
     
-    // onImageError(event: Event) {
-    //   (event.target as HTMLImageElement).src = 'assets/default-image.jpg';
-    // }
-    
   }
   
