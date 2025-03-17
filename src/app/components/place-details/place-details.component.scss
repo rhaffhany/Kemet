@@ -97,23 +97,8 @@ section{
 .about, .reviews, .reviews-avg-box{
   box-shadow: 0 4px 6px 2px rgba(0, 0, 0, 0.1);
 }
-
-// scrollable reviews
-.scrollable-reviews {
-  max-height: 600px; 
-  overflow-x: auto;
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-}
-
-.scrollable-reviews::-webkit-scrollbar {
-  height: 5px;
-}
-
-.scrollable-reviews::-webkit-scrollbar-thumb {
-  background: var(--secondary-color);
-  border-radius: 15px;
+.reviews-box{
+  height: 450px;
 }
 
 //search

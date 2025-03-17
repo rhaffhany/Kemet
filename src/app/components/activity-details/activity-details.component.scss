@@ -95,9 +95,13 @@ section{
   box-shadow: 0 4px 6px 2px rgba(0, 0, 0, 0.1);
 }
 
+.reviews-box{
+  height: 450px;
+}
+
 // scrollable reviews
 .scrollable-reviews {
-  max-height: 600px; 
+  max-height: 500px; 
   overflow-x: auto;
   display: flex;
   flex-direction: row;

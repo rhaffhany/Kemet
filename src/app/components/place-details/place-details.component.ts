@@ -34,6 +34,7 @@ export class PlaceDetailsComponent {
   reviewsData:any[] =[];
   updatedReviewData:any[] = [...this.reviewsData];
 
+
   constructor(private _DetailsService:DetailsService, 
               private _ActivatedRoute:ActivatedRoute, 
               private _ProfileService:ProfileService ){}
@@ -50,8 +51,8 @@ export class PlaceDetailsComponent {
     this._DetailsService.getDetailedPlace(this.placeID).subscribe({
       next: (response) => {
         this.placeDetails = response;
-        this.reviewsData = response.reviews.$values[0].place.reviews.$values;
-        console.log("reviews of this place:",this.reviewsData);
+        this.reviewsData = response.reviews.$values;
+        this.placeDetails.averageRating = Math.round(this.placeDetails.averageRating * 10) / 10;
       },
       error: (err) => {
         console.error(err);
@@ -77,6 +78,7 @@ export class PlaceDetailsComponent {
 
   }
 
+  // lesa 3leha shewya
   deleteReview(reviewId: number) {
     if (confirm("Are you sure you want to delete this review?")) {
       this._DetailsService.getDetailedPlace(this.placeID).subscribe({
@@ -97,11 +99,8 @@ export class PlaceDetailsComponent {
       this._DetailsService.getDetailedPlace(this.placeID).subscribe({
         next: () => {
           this.reviewsData = this.updatedReviewData;
-          console.log("Review deleted successfully!");
-        },
-        error: (err) => {
-          console.error("Error updating place:", err);
-        },
+          // console.log("Review deleted successfully!");
+        }
       });
       
     }
@@ -125,8 +124,6 @@ export class PlaceDetailsComponent {
 
 
   //handle pp
-  
-
   profilePic:string = "/assets/icons/profile-pic.svg"
   uploadProfileImg(event:any){
     const file = event.target.files[0];
@@ -164,5 +161,8 @@ export class PlaceDetailsComponent {
     },
     nav: true
   };
+
+
+
 
 }

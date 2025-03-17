@@ -9,7 +9,10 @@ export interface userData {
     nationality: string
     profileImageURL: string
     backgroundImageURL: string
-    interestCategoryIds: InterestCategoryIds
+    interestCategoryIds: { 
+        $id: string
+        $values: number[]
+    }
     bio: string
     country: string
     city: string
@@ -17,9 +20,4 @@ export interface userData {
     creationDate: string
 }
 
-export interface InterestCategoryIds {
-    $id: string
-    $values: number[]
-}
-  
   

@@ -45,7 +45,6 @@ export class ProfileService {
     return this._HttpClient.get(`${this.DeployUrl}/api/Profile/GetCurrentUserData`,{headers});
   }
 
-  
   updateCurrentData(updatedData: any):Observable<any>{
     const token = this._AuthService.getToken();
     this._AuthService.getUserName();
@@ -60,7 +59,6 @@ export class ProfileService {
     return this._HttpClient.put(`${this.DeployUrl}/api/Profile/UpdateUserData`, updatedData, {headers, responseType: 'text'});
   }
     
-
   uploadProfileImg(formData:FormData):Observable<any>{
     const token = this._AuthService.getToken();
     if(!token){
@@ -83,17 +81,7 @@ export class ProfileService {
     return this._HttpClient.post(`${this.DeployUrl}/api/Profile/upload-background-image`, _FormData, {headers})
   }
 
-
-
 }
 
-  
-  // saveUser(){
-  //   const encode = localStorage.getItem('token');
-  //   if(encode){
-  //     const decode = jwtDecode(encode);
-  //     //  = decode;
-  //   }
-  // }
 
 

@@ -1,4 +1,5 @@
 <section class="py-5">
+
     <div class="container">
 
         <div class="row">
@@ -6,13 +7,33 @@
                 <h1 class="fw-bolder">{{activityDetails.name}}</h1>
                 <div class="rating d-flex">
                     <span *ngFor="let star of [1, 2, 3, 4, 5]; let i = index" class="rate">
-                        <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
-                          [style.fill]="i < activityDetails.averageRating ? '#FAC817' : '#FFE5C2'"
-                          stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                        <!-- Full Star -->
+                        <svg *ngIf="i + 1 <= activityDetails.averageRating" width="24" height="24" viewBox="0 0 24 24"
+                             xmlns="http://www.w3.org/2000/svg" fill="#FAC817" stroke="currentColor"
+                             stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
                           <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                         </svg>
+                      
+                        <!-- Half Star -->
+                        <svg *ngIf="i < activityDetails.averageRating && i + 1 > activityDetails.averageRating" width="24" height="24" viewBox="0 0 24 24"
+                             xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1"
+                             stroke-linecap="round" stroke-linejoin="round">
+                          <defs>
+                            <linearGradient id="half-fill" x1="0" x2="1" y1="0" y2="0">
+                              <stop offset="50%" stop-color="#FAC817"/>
+                              <stop offset="50%" stop-color="#FFE5C2"/>
+                            </linearGradient>
+                          </defs>
+                          <polygon fill="url(#half-fill)" points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                          <!-- Empty Star -->
+                          <svg *ngIf="i + 1 > activityDetails.averageRating" width="24" height="24" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg" fill="#FFE5C2" stroke="currentColor"
+                            stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
                     </span>
-                <p style="font-size: 20px;" class="ms-1 mb-0">{{activityDetails.reviews.$values}} reviews</p>
+                <p style="font-size: 20px;" class="ms-1 mb-0">reviews</p>
                 <!-- <img [src]="blackDot" alt="dot" class="mx-2 mt-2">
                 <p style="font-size: 20px;" class="mb-0">Historic Walking Area</p> -->
                 </div>
@@ -96,59 +117,55 @@
     </div>
 
    <!-- Past Reviews -->
-   <div class="container">
-    <h3 class="text-center pb-3" style="font-weight: 600;">See what travelers are saying</h3>
+   <div class="container-fluid">
+    <h3 class="text-center pb-5" style="font-weight: 600;">See what travelers are saying</h3>
+    <div class="row gap-2 align-items-center justify-content-center" >
 
-    <div class="row gap-2 align-items-center justify-content-center">
-        <div class="scrollable-reviews">
-            <div class="col-md-3 reviews bg-light-subtle p-4 mb-3"
-                *ngFor="let review of reviewsData.slice(1);" style="border-radius: 20px;">
+        <div class="col-md-3 reviews reviews-box bg-light-subtle p-4" *ngFor="let review of reviewsData.slice(1,4); " style="border-radius: 20px;">
 
-                <div class="profile-info d-flex justify-content-between">
-                    <div class="d-flex">
-                        <img [src]="userData.profileImageURL" class="profile-pic rounded-circle" alt="profile-pic">
-                        <div class="ms-2 d-block">
-                            <p class="fw-bold m-0">{{updatedData.firstName}} {{updatedData.lastName}}</p>
-                            <p class="text-muted mb-1" style="font-size:13px;">{{userData.nationality}}</p>
-                            <div class="rating">
-                                <span *ngFor="let star of [1, 2, 3, 4, 5]; let i = index" class="rate">
-                                    <svg width="24" height="24" viewBox="0 0 24 24"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        [style.fill]="i < review.rating ? '#FAC817' : '#FFFFFF'"
-                                        stroke="currentColor" stroke-width="1"
-                                        stroke-linecap="round" stroke-linejoin="round">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                                    </svg>
-                                </span>
-                            </div>
+            <div class="profile-info d-flex justify-content-between">
+                <div class="d-flex">
+                    <img [src]="userData.profileImageURL"  class="profile-pic rounded-circle" alt="profile-pic" (change)="uploadProfileImg($event)" >
+                    <div class="ms-2 d-block">
+                        <p class="fw-bold m-0">{{updatedData.firstName}} {{updatedData.lastName}}</p>
+                        <p class="text-muted mb-1" style="font-size:13px;">{{userData.nationality}}</p>
+                        <div class="rating">
+                            <span *ngFor="let star of [1, 2, 3, 4, 5]; let i = index" class="rate">
+                                <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+                                  [style.fill]="i < review.rating ? '#FAC817' : '#FFFFFF'"
+                                  stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                </svg>
+                            </span>
                         </div>
                     </div>
-                    <div>
-                        <i class="fa-regular fa-trash-can" role="button" (click)="deleteReview(review.$id)"></i>
-                    </div>
                 </div>
-
-                <div class="review-content">
-                    <h5 class="mt-3" style="font-weight: 600;">{{review.reviewTitle}}</h5>
-                    <p style="line-height: 16.94px; font-size: 14px;">{{review.comment}}</p>
-                </div>
-
-                <div class="review-info">
-                    <p class="m-0" style="font-size: 14px;">Visited <span class="fw-bold">October 2023</span></p>
-                    <p style="font-size: 14px;">Traveled <span class="fw-bold">with family</span></p>
-                </div>
-
-                <div class="additional-info">
-                    <p style="font-size: 13px;">Written {{review.createdAt | date: 'MMMM d, y' }}</p>
-                </div>
-
+                <div>
+                    <i class="fa-solid fa-ellipsis" role="button"></i>
                 </div>
             </div>
+
+            <div class="review-content">
+                <h5 class="mt-3" style="font-weight: 600;">{{review.reviewTitle}}</h5>
+                <p style="line-height: 16.94px; font-size: 14px;">{{review.comment}}</p>
+            </div>
+
+            <div class="review-info">
+                <p class="m-0" style="font-size: 14px;">Visited <span class="fw-bold">{{review.date | date: 'MMMM y' }}</span></p>
+                <p style="font-size: 14px;">Traveled <span class="fw-bold">with {{review.visitorType}}</span></p>
+            </div>
+
+            <div class="additional-info">
+                <p style="font-size: 13px;">Written {{review.createdAt | date: 'MMMM d, y' }}</p>
+            </div>
+
         </div>
+
     </div>
+   </div>
     
 
-      
+    <!-- All Reviews -->
     <div class="container mt-5 py-5">
         <h3 class="fw-bold mb-5">Reviews</h3>
         <div class="row gap-3 align-content-center justify-content-center">
@@ -156,15 +173,37 @@
             <div class="col-lg-3 col-md-5 col-sm-6">
                 <div class="reviews-avg-box bg-white p-3" style="border-radius: 20px;">
                     <div class="d-flex align-items-center">
-                        <h3 class="fw-bolder me-2">4.5</h3>
-                        <span *ngFor="let star of [].constructor(5); let i = index" class="rate mb-2">
-                            <!-- <i class="fa-regular fa-star"></i> -->
-                            <svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"  [style.fill]="i < activityDetails.ratingsCount ? '#FAC817' : '#FFFFFF' "
-                            stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        <h3 class="fw-bolder me-2">{{activityDetails.averageRating}}</h3>
+                        <span *ngFor="let star of [1, 2, 3, 4, 5]; let i = index" class="rate">
+                            <!-- Full Star -->
+                            <svg *ngIf="i + 1 <= activityDetails.averageRating" width="24" height="24" viewBox="0 0 24 24"
+                                 xmlns="http://www.w3.org/2000/svg" fill="#FAC817" stroke="currentColor"
+                                 stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                             </svg>
+                          
+                            <!-- Half Star -->
+                            <svg *ngIf="i < activityDetails.averageRating && i + 1 > activityDetails.averageRating" width="24" height="24" viewBox="0 0 24 24"
+                                 xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                              <defs>
+                                <linearGradient id="half-fill" x1="0" x2="1" y1="0" y2="0">
+                                  <stop offset="50%" stop-color="#FAC817"/>
+                                  <stop offset="50%" stop-color="#FFFFFF"/>
+                                </linearGradient>
+                              </defs>
+                              <polygon fill="url(#half-fill)" points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                            </svg>
+
+                             <!-- Empty Star -->
+                            <svg *ngIf="i + 1 > activityDetails.averageRating" width="24" height="24" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg" fill="#FFFFFF" stroke="currentColor"
+                                stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                            </svg>
+
                         </span>
-                        <p class="mb-1 ms-2" style="font-size: 13px; color: rgba(51, 51, 51, 0.63);">2,256,896</p>
+                        <!-- <p class="mb-1 ms-2" style="font-size: 13px; color: rgba(51, 51, 51, 0.63);">2,256,896</p> -->
                     </div>
 
                     <div class="rating-rate d-block align-items-center p-2">
@@ -225,44 +264,51 @@
                     <button class="mt-3">Most Recent</button>
                 </div>
 
-                <div class="reviews mt-3 bg-light bg-light-subtle p-4" style="border-radius: 20px;">
-                    <div class="profile-info d-flex justify-content-between">
-                        <div class="d-flex">
-                            <img [src]="profilePic || 'https://localhost:7051' + userData.profileImageURL"  class="profile-pic rounded-circle" alt="profile-pic" (change)="uploadProfileImg($event)" >
-                            <div class="ms-2 d-block">
-                                <p class="fw-bold m-0">{{updatedData.firstName}} {{updatedData.lastName}}</p>
-                                <p class="m-0">{{updatedData.city}}, {{updatedData.country}}</p>
-                                <div class="rating">
-                                    <span *ngFor="let star of [].constructor(5); let i = index" class="rate mb-2">
-                                        <!-- <i class="fa-regular fa-star"></i> -->
-                                        <svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"  [style.fill]="i < activityDetails.ratingsCount ? '#FAC817' : '#FFFFFF' "
-                                        stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                                        </svg>
-                                    </span>
+                      
+                <div class="reviews-container " style="max-height: 400px; overflow-y: auto;">
+                    <div class="reviews mt-3 bg-light bg-light-subtle p-4" 
+                        *ngFor="let review of reviewsData.slice(1)" 
+                        style="border-radius: 20px;">
+                                    
+                        <div class="profile-info d-flex justify-content-between">
+                            <div class="d-flex">
+                                <img [src]="userData.profileImageURL || profilePic" class="profile-pic rounded-circle" 
+                                    alt="profile-pic" (change)="uploadProfileImg($event)">
+                                <div class="ms-2 d-block">
+                                    <p class="fw-bold m-0">{{updatedData.firstName}} {{updatedData.lastName}}</p>
+                                    <p class="m-0">{{userData.nationality}}</p>
+                                    <div class="rating">
+                                        <span *ngFor="let star of [1, 2, 3, 4, 5]; let i = index" class="rate">
+                                            <svg width="24" height="24" viewBox="0 0 24 24"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                [style.fill]="i < review.rating ? '#FAC817' : '#FFFFFF'"
+                                                stroke="currentColor" stroke-width="1"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                            </svg>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
+                            <div>
+                                <i class="fa-solid fa-ellipsis" role="button"></i>
+                            </div>
                         </div>
-                        <div>
-                            <i class="fa-solid fa-ellipsis" role="button"></i>
+                
+                        <div class="review-content">
+                            <p class="mt-3 mb-1" style="font-weight: 600;">{{review.reviewTitle}}</p>
+                            <p style="font-size: 14px;">{{review.date | date: 'MMMM y'}}<span class="fw-bolder">.</span> {{review.vistorType}}</p>
+                            <p style="line-height: 16.94px; font-size: 14px;">
+                                {{review.comment}}
+                            </p>
                         </div>
+                
+                        <div class="review-info">
+                            <p class="m-0" style="font-size: 11px; line-height: 13.31px;">Written {{review.createdAt | date: 'MMMM d, y' }}</p>
+                        </div>
+                
                     </div>
-    
-                    <div class="review-content">
-                        <p class="mt-3 mb-1" style="font-weight: 600;">Must Visit in Cairo</p>
-                        <p style="font-size: 14px;">Nov 2024 <span class="fw-bolder">.</span> Family</p>
-
-                        <p style="line-height: 16.94px; font-size: 14px;">One of the most iconic places to visit in cairo. The building itself is phenomenal.
-                            There is so much to see as well as explore.
-                        </p>
-                    </div>
-    
-                    <div class="review-info">
-                        <p class="m-0" style="font-size: 11px; line-height: 13.31px;">Written November 24, 2024</p>
-                    </div>
-
                 </div>
-
             </div>
         </div>
       
