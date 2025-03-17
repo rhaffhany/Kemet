@@ -1,0 +1,49 @@
+<section class="personalized-plan">
+    <header>
+        <img [src]= "egypt" alt="Egypt">
+        <div class="headerContent">
+            <h1>Step Into Your Perfect<br>Egyptian Experience</h1>
+            <button class="print">Print as PDF</button>
+        </div>
+    </header>
+    <main>
+        <section class="day">
+            <div class="day-container">
+                <h2>DAY 1</h2>
+                <div class="location">
+                <img class="locationIcon" [src]= "location" alt="Egypt">
+                <p>Giza, Egypt</p>
+            </div>
+            <div class="book-btn">
+                <button class="btn">Book</button>
+            </div>
+                <div class="todo">
+                    <div class="place">
+                        <img [src] ='pyramids' alt="Great Pyramids">
+                        <div class="info">
+                            <h3>Great Pyramids</h3>
+                            <p class="category">Historical</p>
+                            <p class="description">The Great Pyramids of Giza are one of the Seven Wonders of the Ancient World, standing as a testament to Egypt's rich history and architectural brilliance. Built over 4,500 years ago, these pyramids served as royal tombs for the pharaohs.</p>
+                        </div>
+                        <div #regenerateIcons>
+                            <img [src]="regenerate" class="regenerate">
+                          </div>
+                           <p class="price">700 LE</p>
+                    </div>
+                    <div class="activity">
+                        <img [src] ='pyramids' alt="Great Pyramids">
+                        <div class="info">
+                            <h3>Great Pyramids</h3>
+                            <p class="category">Historical</p>
+                            <p class="description">The Great Pyramids of Giza are one of the Seven Wonders of the Ancient World, standing as a testament to Egypt's rich history and architectural brilliance. Built over 4,500 years ago, these pyramids served as royal tombs for the pharaohs.</p>
+                        </div>
+                        <div #regenerateIcons>
+                            <img [src]="regenerate" class="regenerate">
+                          </div>
+                            <p class="price">700 LE</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</section>
