@@ -1,13 +1,13 @@
 <section class="plan">
+  <!-- Start Section -->
   <section class="start" [ngClass]="{'hide-section': hideStartSection}">
     <div class="gallery-wrapper">
       <div class="gallery">
         <div class="gallery-container">
-          <div
-            *ngFor="let image of images; let i = index"
+          <div *ngFor="let image of images; let i = index"
             class="gallery-item gallery-item-{{ i + 1 }}"
-            [style.backgroundImage]="'url(' + image + ')'"
-          ></div>
+            [style.backgroundImage]="'url(' + image + ')'">
+          </div>
         </div>
       </div>
       <div class="text-content">
@@ -26,8 +26,7 @@
       <h2>1. What type of experiences do you enjoy?</h2>
       <div class="options-wrapper">
         <div class="options-row">
-          <button 
-            *ngFor="let option of experiencesOptions.slice(0, 4)" 
+          <button *ngFor="let option of experiencesOptions.slice(0, 4)" 
             class="option" 
             [ngClass]="{'selected': selectedOptions.includes(option)}"
             (click)="toggleSelection(option)">
@@ -35,8 +34,7 @@
           </button>
         </div>
         <div class="options-row">
-          <button 
-            *ngFor="let option of experiencesOptions.slice(4)" 
+          <button *ngFor="let option of experiencesOptions.slice(4)" 
             class="option" 
             [ngClass]="{'selected': selectedOptions.includes(option)}"
             (click)="toggleSelection(option)">
@@ -44,13 +42,10 @@
           </button>
         </div>
       </div>
-      <p>
-        <span>DONE:</span>
-        <span class="percentage">{{ progressValue }}%</span>
-      </p>
+      <p><span>DONE:</span> <span class="percentage">{{ progressValue }}%</span></p>
       <mat-progress-bar mode="determinate"  style="--mdc-linear-progress-active-indicator-color: #FBBC05;" [value]="progressValue"></mat-progress-bar>
       <div class="btn-container">
-        <img class="backimg" [src]="backimg" (click)="goBackToStart()" />
+        <img class="backimg" [src]="backimg" (click)="goBackToPreviousQuestion()" />
         <button class="next-btn" [disabled]="isNextButtonDisabled()" (click)="nextQuestion()">
           <span>Next</span> →
         </button>
@@ -64,8 +59,7 @@
       <h2>2. How long is your trip?</h2>
       <div class="options-wrapper">
         <div class="options-row">
-          <button 
-            *ngFor="let option of tripDurationOptions.slice(0, 4)" 
+          <button *ngFor="let option of tripDurationOptions.slice(0, 4)" 
             class="option" 
             [ngClass]="{'selected': selectedTripDuration === option}"
             (click)="toggleTripDurationSelection(option)">
@@ -73,8 +67,7 @@
           </button>
         </div>
         <div class="options-row">
-          <button 
-            *ngFor="let option of tripDurationOptions.slice(4)" 
+          <button *ngFor="let option of tripDurationOptions.slice(4)" 
             class="option" 
             [ngClass]="{'selected': selectedTripDuration === option}"
             (click)="toggleTripDurationSelection(option)">
@@ -82,17 +75,133 @@
           </button>
         </div>
       </div>
-      <p>
-        <span>DONE:</span>
-        <span class="percentage">{{ progressValue }}%</span>
-      </p>
+      <p><span>DONE:</span> <span class="percentage">{{ progressValue }}%</span></p>
       <mat-progress-bar mode="determinate"  style="--mdc-linear-progress-active-indicator-color: #FBBC05;" [value]="progressValue"></mat-progress-bar>
       <div class="btn-container">
-        <img class="backimg" [src]="backimg" (click)="goBackToStart()" />
-        <button class="next-btn" [disabled]="isTripDurationNextDisabled()">
+        <img class="backimg" [src]="backimg" (click)="goBackToPreviousQuestion()" />
+        <button class="next-btn" [disabled]="isTripDurationNextDisabled()" (click)="nextQuestion()">
           <span>Next</span> →
         </button>
       </div>
     </div>
   </section>
+
+  <!-- Third Question Section -->
+  <section class="question-section" [ngClass]="{'show-section': showThirdQuestionSection}">
+    <div class="question-container">
+      <h2>3. What type of places do you want to visit?</h2>
+      <div class="options-wrapper">
+        <div class="options-row">
+          <button *ngFor="let option of placesOptions.slice(0, 4)" 
+            class="option" 
+            [ngClass]="{'selected': selectedPlaces.includes(option)}"
+            (click)="togglePlacesSelection(option)">
+            {{ option }}
+          </button>
+        </div>
+        <div class="options-row">
+          <button *ngFor="let option of placesOptions.slice(4)" 
+            class="option" 
+            [ngClass]="{'selected': selectedPlaces.includes(option)}"
+            (click)="togglePlacesSelection(option)">
+            {{ option }}
+          </button>
+        </div>
+      </div>
+      <p><span>DONE:</span> <span class="percentage">{{ progressValue }}%</span></p>
+      <mat-progress-bar mode="determinate"  style="--mdc-linear-progress-active-indicator-color: #FBBC05;" [value]="progressValue"></mat-progress-bar>
+      <div class="btn-container">
+        <img class="backimg" [src]="backimg" (click)="goBackToPreviousQuestion()" />
+        <button class="next-btn" [disabled]="isPlacesNextDisabled()" (click)="nextQuestion()">
+          <span>Next</span> →
+        </button>
+      </div>
+    </div>
+  </section>
+  
+  
+  <!-- fourth Question Section -->
+  <section class="question-section" [ngClass]="{'show-section': showFourthQuestionSection}">
+    <div class="question-container">
+      <h2>4. What type of activities do you want to do?</h2>
+      <div class="options-wrapper">
+        <div class="options-row">
+          <button *ngFor="let option of activitiesOptions.slice(0, 4)" 
+            class="option" 
+            [ngClass]="{'selected': selectedActivities.includes(option)}"
+            (click)="toggleActivitiesSelection(option)">
+            {{ option }}
+          </button>
+        </div>
+        <div class="options-row">
+          <button *ngFor="let option of activitiesOptions.slice(4)" 
+            class="option" 
+            [ngClass]="{'selected': selectedActivities.includes(option)}"
+            (click)="toggleActivitiesSelection(option)">
+            {{ option }}
+          </button>
+        </div>
+      </div>
+      <p><span>DONE:</span> <span class="percentage">{{ progressValue }}%</span></p>
+      <mat-progress-bar mode="determinate"  style="--mdc-linear-progress-active-indicator-color: #FBBC05;" [value]="progressValue"></mat-progress-bar>
+      <div class="btn-container">
+        <img class="backimg" [src]="backimg" (click)="goBackToPreviousQuestion()" />
+        <button class="next-btn" [disabled]="isActivitiesNextDisabled()" (click)="nextQuestion()">
+          <span>Next</span> →
+        </button>
+      </div>
+    </div>
+  </section>
+
+<!-- Fifth Question Section -->
+<section class="question-section" [ngClass]="{'show-section': showFifthQuestionSection}">
+  <div class="question-container">
+    <h2>5. What time of year are you planning to visit?</h2>
+    <div class="image-options-wrapper">
+      <div *ngFor="let option of travelTimeOptions" 
+        class="image-option" 
+        [ngClass]="{'selected': selectedTravelTime === option.label}" 
+        (click)="toggleTravelTimeSelection(option.label)">
+        
+        <img [src]="option.image" [alt]="option.label">
+        <span>{{ option.label }}</span>
+      </div>
+    </div>
+    <p><span>DONE:</span> <span class="percentage">{{ progressValue }}%</span></p>
+    <mat-progress-bar mode="determinate"  style="--mdc-linear-progress-active-indicator-color: #FBBC05;" [value]="progressValue"></mat-progress-bar>
+    <div class="btn-container">
+      <img class="backimg" [src]="backimg" (click)="goBackToPreviousQuestion()" />
+      <button class="next-btn" [disabled]="isTravelTimeNextDisabled()" (click)="nextQuestion()">
+        <span>Next</span> →
+      </button>
+    </div>
+  </div>
+</section>
+
+  
+      <!-- sixth Question Section -->
+      <section class="question-section" [ngClass]="{'show-section': showSixthQuestionSection}">
+        <div class="question-container">
+          <h2>6. What is your total budget for this trip?</h2>
+          <div class="options-wrapper">
+            <div class="options-row">
+              <button *ngFor="let option of budgetOptions" 
+                class="option" 
+                [ngClass]="{'selected': selectedBudget === option}"
+                (click)="toggleBudgetSelection(option)">
+                {{ option }}
+              </button>
+            </div>
+          </div>
+          <p><span>DONE:</span> <span class="percentage">{{ progressValue }}%</span></p>
+          <mat-progress-bar mode="determinate"  style="--mdc-linear-progress-active-indicator-color: #FBBC05;" [value]="progressValue"></mat-progress-bar>
+          <div class="btn-container">
+            <img class="backimg" [src]="backimg" (click)="goBackToPreviousQuestion()" />
+            <button class="next-btn" [disabled]="isBudgetNextDisabled()" (click)="nextQuestion()">
+              <span>Next</span> →
+            </button>
+          </div>
+        </div>
+      </section>
+
 </section>

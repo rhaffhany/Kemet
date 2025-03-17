@@ -2,6 +2,9 @@ import { userData } from 'src/app/interfaces/user-data';
 import { ProfileService } from './../../services/profile.service';
 import { Component, OnInit } from '@angular/core';
 import { OwlOptions } from 'ngx-owl-carousel-o';
+import { CommonModule } from '@angular/common';
+import { KcurrencyPipe } from 'src/app/pipe/kcurrency.pipe';
+import { NgbDatepicker } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-travel-agency-profile',

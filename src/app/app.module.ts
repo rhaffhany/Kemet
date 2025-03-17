@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common'; 
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -38,9 +39,15 @@ import { ReviewContentComponent } from './components/review-content/review-conte
 import { ActivityDetailsComponent } from './components/activity-details/activity-details.component';
 
 import { NgOtpInputModule } from 'ng-otp-input';
-import { NgbModule, NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbCollapseModule, NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
+import { CarouselModule } from 'ngx-owl-carousel-o';
+import { AgencyLayoutComponent } from './layouts/agency-layout/agency-layout.component';
+import { KcurrencyPipe } from './pipe/kcurrency.pipe';
+import { TravelAgencyProfileComponent } from './components/travel-agency-profile/travel-agency-profile.component';
+import { NavTravelAgencyComponent } from './components/nav-travel-agency/nav-travel-agency.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { CarouselModule } from 'ngx-bootstrap/carousel'; 
+import { PersonalizedPlanComponent } from './components/personalized-plan/personalized-plan.component';
+
 
 @NgModule({
   declarations: [
@@ -75,20 +82,29 @@ import { CarouselModule } from 'ngx-bootstrap/carousel';
     ReviewComponent,
     ReviewContentComponent,
     ActivityDetailsComponent,
+    AgencyLayoutComponent,
+    KcurrencyPipe,
+    TravelAgencyProfileComponent,
+    NavTravelAgencyComponent,
+    PersonalizedPlanComponent,
+  
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    NgOtpInputModule,
-    NgbModule,
-    NgbCollapseModule,
-    BrowserAnimationsModule,
-    CarouselModule,
-    MatProgressBarModule,
-  ],
+imports: [
+  BrowserModule,
+  CommonModule, 
+  AppRoutingModule,
+  FormsModule,
+  ReactiveFormsModule,
+  HttpClientModule,
+  NgOtpInputModule,
+  NgbModule,
+  NgbCollapseModule,
+  BrowserAnimationsModule,
+  CarouselModule,
+  NgbDatepickerModule,
+  NgbDatepickerModule,
+  MatProgressBarModule
+],
   providers: [],
   bootstrap: [AppComponent],
 })

@@ -22,6 +22,7 @@ import { ReviewComponent } from './components/review/review.component';
 import { ReviewContentComponent } from './components/review-content/review-content.component';
 import { ActivityDetailsComponent } from './components/activity-details/activity-details.component';
 import { AgencyLayoutComponent } from './layouts/agency-layout/agency-layout.component';
+import { PersonalizedPlanComponent } from './components/personalized-plan/personalized-plan.component';
 
 const routes: Routes = [
 
@@ -48,6 +49,7 @@ const routes: Routes = [
       { path: 'thingstodo', component: ThingsToDoComponent, title: 'Things To Do' },
       { path: 'adventureMode', component: AdventureModeComponent, title: 'Adventure Mode' },
       { path: 'plan', component: PlanComponent, title: 'Plan' },
+      { path: 'personalized-plan', component: PersonalizedPlanComponent, title: 'personalizedPlan' },
       { path: 'wishlist', component: WishlistComponent, title: 'WishList' },
       { path: 'community', component: CommunityComponent, title: 'Community' },
       { path: 'app-places/:placeID', component: PlaceDetailsComponent, title: 'Places'},
