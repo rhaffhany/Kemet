@@ -3,6 +3,7 @@ import { DetailsService } from 'src/app/services/details.service';
 import { Component, OnInit } from '@angular/core';
 
 interface WishlistItem {
+  id: any;
   type: string;
   activityName: any;
   placeID: number;
@@ -82,6 +83,28 @@ export class WishlistComponent implements OnInit {
         console.error('Error fetching wishlist:', error);
         this.errorMessage = 'Failed to load wishlist.';
         this.loading = false;
+      }
+    });
+  }
+  
+  removeItemFromWishlist(item: WishlistItem, index: number): void {
+    if (!item.id) {
+      console.error('Invalid item ID');
+      return;
+    }
+  
+    // Determine the item type dynamically
+    const itemType = item.type === 'place' ? 'place' : 'activity';
+  
+    // Call the service with both `id` and `itemType`
+    this.WishlistService.removeFromWishlist(item.id, itemType).subscribe({
+      next: () => {
+        console.log(`Successfully removed ${item.name} from wishlist.`);
+        this.wishlist.splice(index, 1); // Remove item from local array
+      },
+      error: (error) => {
+        console.error('Error removing item:', error);
+        this.errorMessage = 'Failed to remove item from wishlist.';
       }
     });
   }

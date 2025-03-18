@@ -5,6 +5,10 @@ import { OwlOptions } from 'ngx-owl-carousel-o';
 import { HomeService } from 'src/app/services/home.service';
 import { PackageDetails } from 'src/app/interfaces/package-details';
 
+import { CommonModule } from '@angular/common';
+import { KcurrencyPipe } from 'src/app/pipe/kcurrency.pipe';
+import { NgbDatepicker } from '@ng-bootstrap/ng-bootstrap';
+
 @Component({
   selector: 'app-travel-agency-profile',
   templateUrl: './travel-agency-profile.component.html',

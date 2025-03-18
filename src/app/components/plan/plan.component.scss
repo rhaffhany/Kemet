@@ -1,0 +1,361 @@
+html,
+body {
+  height: 60vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+section.plan {
+  position: relative;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  background: linear-gradient(243.57deg, #FFE5C2 0%, rgba(250, 200, 23, 0) 37.75%), linear-gradient(0deg, #FFF2E0 100%, #FFF2E0 100%);
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.start {
+  height: 100vh;
+  width: 100vw;
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+
+  &.hide-section {
+    transform: translateX(-100%);
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.gallery-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 50px;
+}
+
+.gallery {
+  flex: 1;
+  margin-bottom: 25px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.gallery-container {
+  display: flex;
+  height: 600px;
+  position: relative;
+  align-items: center;
+}
+
+.gallery-item {
+  position: absolute;
+  transition: all 0.25s ease-in-out;
+  z-index: 0;
+  border-radius: 15px;
+  background-size: cover;
+}
+
+.gallery-item-1 {
+  left: 10%;
+  opacity: 0.2;
+  transform: translateX(-50%) scale(0.8);
+  display: none;
+}
+
+.gallery-item-2 {
+  height: 429px;
+  width: 350px;
+  left: 30%;
+  opacity: 0.6;
+  z-index: 1;
+  transform: translateX(-50%) scale(0.9);
+}
+
+.gallery-item-3 {
+  box-shadow: -2px 5px 33px 6px rgba(0, 0, 0, 0.35);
+  height: 509px;
+  width: 339px;
+  left: 50%;
+  opacity: 1;
+  z-index: 2;
+  transform: translateX(-50%) scale(1);
+}
+
+.gallery-item-4 {
+  height: 429px;
+  width: 350px;
+  left: 70%;
+  opacity: 0.6;
+  z-index: 1;
+  transform: translateX(-50%) scale(0.9);
+}
+
+.gallery-item-5 {
+  left: 90%;
+  opacity: 0.2;
+  display: none;
+  transform: translateX(-50%) scale(0.8);
+}
+
+.text-content {
+  flex: 1;
+  text-align: left;
+  max-width: 750px;
+  margin-left: -30px;
+  padding-left: 0;
+
+  h1 {
+    font-size: 55px;
+    color: #000;
+    margin-bottom: 10px;
+    font-weight: 800;
+    max-width: 600px;
+    line-height: 0.9;
+  }
+
+  h4 {
+    font-size: 22px;
+    color: #666;
+    max-width: 700px;
+  }
+
+  .start-btn {
+    position: relative;
+    background-color: #FFBD67;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: black;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+    z-index: 100;
+
+    &:hover {
+      background-color: #ffa726;
+      transform: translateY(-2px);
+    }
+  }
+}
+
+.question-section {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+
+  &.show-section {
+    transform: translateX(-100%);
+    opacity: 1;
+    pointer-events: auto;
+    transition: transform 0.25s ease-in-out, opacity 0.25s ease-in-out;
+  }
+
+  &.hide-section {
+    transform: translateX(100%);
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.question-container {
+  flex-direction: column;
+  width: 100%;
+
+  h2 {
+    font-size: 32px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #333;
+    position: absolute;
+    top: 100px;
+    left: 8%;
+  }
+
+  .options-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .options-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .option {
+    background-color: #fff;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: 400;
+    color: black;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+
+    &:hover {
+      background-color: #FFBD67;
+      transform: translateY(-2px);
+    }
+
+    &.selected {
+      background-color: #FFBD67;
+      color: white;
+    }
+  }
+
+  mat-progress-bar {
+    width: 969px;
+    position: fixed;
+    bottom: 20%;
+    left: 40%;
+    transform: translateX(-50%);
+    z-index: 1000;
+  }
+
+  p {
+    position: fixed;
+    font-size: 18px;
+    left: 9%;
+    bottom: 25%;
+    font-weight: 400;
+
+    .percentage {
+      font-size: 20px;
+      margin-left: 30px;
+      color: #FBBC05;
+    }
+  }
+
+  .btn-container {
+    z-index: 2;
+    position: fixed;
+    bottom: 18%;
+    right: 10%;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .backimg {
+    width: 40px;
+    height: auto;
+    cursor: pointer;
+  }
+
+  .next-btn {
+    background-color: #ccc;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+    width: 150px;
+    height: 50px;
+    color: #666;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: not-allowed;
+    transition: background-color 0.2s ease-in-out;
+
+    &:not([disabled]) {
+      background-color: #FFBD67;
+      color: #000;
+      cursor: pointer;
+    }
+  }
+  .image-options-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+  
+  .image-option {
+    position: relative;
+    width: 220px;
+    height: 250px;
+    cursor: pointer;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+    
+  }
+  
+  .image-option img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+  
+  .image-option span {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    text-align: center;
+    background: white;
+    font-weight: 500;
+    align-content: center;
+    align-items: center;
+    color: black;
+    padding: 10px;
+    font-size: 18px;
+    z-index: 2;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+  
+  .image-option.selected {
+    border: 2px solid #FFBD67; 
+    transform: scale(1.05);
+}
+
+.image-option.selected span {
+    background: #FFBD67; 
+    border: 2px solid #FFBD67; 
+    color: white;
+}
+
+  
+}
+
+@media (max-width: 1024px) {
+  .gallery-wrapper {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .text-content {
+    text-align: center;
+    padding-left: 0;
+    margin-left: 0;
+  }
+
+  .gallery {
+    width: 100%;
+  }
+}
