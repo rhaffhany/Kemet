@@ -27,4 +27,5 @@ export class HomeService {
   fetchTravelAgencyPlan(): Observable<any> {
     return this._HttpClient.get(`${this.DeployUrl}/api/TravelAgencyPlan`);
   }
+
 }

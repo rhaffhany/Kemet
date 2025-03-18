@@ -5,7 +5,7 @@
     <img [src]="package.imageURLs" alt="{{ package.planName }}">
     <div class="package-details">
       <h3>{{ package.planName }}
-        <span class="price">{{ package.egyptianAdult + " £" }}</span>
+        <span class="price">{{ package.egyptianAdult | currency:  '£' }}</span>
       </h3>
 
       <p class="duration">

@@ -2,6 +2,9 @@ import { userData } from 'src/app/interfaces/user-data';
 import { ProfileService } from './../../services/profile.service';
 import { Component, OnInit } from '@angular/core';
 import { OwlOptions } from 'ngx-owl-carousel-o';
+import { HomeService } from 'src/app/services/home.service';
+import { PackageDetails } from 'src/app/interfaces/package-details';
+
 import { CommonModule } from '@angular/common';
 import { KcurrencyPipe } from 'src/app/pipe/kcurrency.pipe';
 import { NgbDatepicker } from '@ng-bootstrap/ng-bootstrap';
@@ -13,7 +16,8 @@ import { NgbDatepicker } from '@ng-bootstrap/ng-bootstrap';
 })
 export class TravelAgencyProfileComponent implements OnInit {
 
-  constructor(private _ProfileService:ProfileService){}
+  constructor(private _ProfileService:ProfileService,
+              private _HomeService:HomeService){}
   
   layoutPic:string = "/assets/img/agency-background.png";
   profileImg: string = 'assets/img/default-profile.png';
@@ -35,10 +39,18 @@ export class TravelAgencyProfileComponent implements OnInit {
   searchResults: any[] = [];  
   errorMessage: string = ''; 
 
+  packageDetails:PackageDetails = {} as PackageDetails;
+  planID:any;
+  
+  packages: any[] = []; 
+
   userData:userData = {} as userData;
   updatedData:any = {...this.userData};
 
   ngOnInit(): void {
+
+    this.loadPackages();
+
     this._ProfileService.getCurrentUserData().subscribe({
       next:(data)=>{
         this.userData = data;
@@ -59,13 +71,24 @@ export class TravelAgencyProfileComponent implements OnInit {
     return this.updatedData.websiteLink?.replace(/^https?:\/\//, '') || '';
   }
 
+  loadPackages(): void {
+    this._HomeService.fetchTravelAgencyPlan().subscribe((data: any) => {
+      this.packages = data.$values;
+    });
+  }
+
   // lhad ma api yegy
   images = [
-    '/assets/img/Credits20Al20-The20Newspaper 1.png',
-    '/assets/img/Credits20Al20-The20Newspaper 1.png',
-    '/assets/img/Credits20Al20-The20Newspaper 1.png',
-    '/assets/img/Credits20Al20-The20Newspaper 1.png',
-
+    '/assets/img/agency1.jpg',
+    '/assets/img/agency2.jpg',
+    '/assets/img/agency3.jpg',
+    '/assets/img/agency4.jpg',
+    '/assets/img/agency5.jpg',
+    '/assets/img/agency6.jpg',
+    '/assets/img/agency7.jpg',
+    '/assets/img/agency8.jpg',
+    '/assets/img/agency9.jpg',
+    '/assets/img/agency10.jpg',
   ];
   photoSlider:OwlOptions = {
     loop: true,

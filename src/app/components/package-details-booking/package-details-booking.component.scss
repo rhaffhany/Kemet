@@ -1,0 +1,23 @@
+section{
+    background-color: var(--primary-color);
+}
+.package-photos{
+    .photo{
+        height: 400px;
+    }
+    img{
+        box-shadow: 0px 4px 6px rgba(8, 8, 8, 0.2);
+        height: 400px;
+    }
+    .photo-stack img {
+        height: 198px;
+    }
+}
+.details{
+    border-radius: 10px;
+    box-shadow: 0px 5px 10px rgba(8, 8, 8, 0.2);
+    .agency-pp img{
+        width: 70px;
+        height: 70px;
+    }
+}
