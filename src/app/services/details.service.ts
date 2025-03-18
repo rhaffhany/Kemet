@@ -18,5 +18,8 @@ export class DetailsService {
     return this._HttpClient.get(`${this.DeployUrl}/Api/Activities/GetActivityByID?ActivityID=${activityID}`);
   }
 
+  getDetaliedPlan(planID:any):Observable<any>{
+    return this._HttpClient.get(`${this.DeployUrl}/Api/TravelAgencyPlan/GetTRavelAgencyPlanByID?PlanId=${planID}`);
+  }
 
 }

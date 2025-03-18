@@ -20,4 +20,5 @@ export class TopSellingComponent implements OnInit {
       this.packages = data.$values.slice(0, 3); // Get the first 3 packages
     });
   }
+  
 }

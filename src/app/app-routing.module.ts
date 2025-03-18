@@ -1,4 +1,3 @@
-import { TravelAgencyProfileComponent } from './components/travel-agency-profile/travel-agency-profile.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppLayoutComponent } from './layouts/app-layout/app-layout.component';
@@ -22,6 +21,9 @@ import { ReviewComponent } from './components/review/review.component';
 import { ReviewContentComponent } from './components/review-content/review-content.component';
 import { ActivityDetailsComponent } from './components/activity-details/activity-details.component';
 import { AgencyLayoutComponent } from './layouts/agency-layout/agency-layout.component';
+import { TravelAgencyProfileComponent } from './components/travel-agency-profile/travel-agency-profile.component';
+import { PackageDetailsBookingComponent } from './components/package-details-booking/package-details-booking.component';
+
 
 const routes: Routes = [
 
@@ -61,6 +63,7 @@ const routes: Routes = [
   {
     path: '',component: AgencyLayoutComponent, canActivate: [AuthGuard], children: [
       { path: 'travelAgency-profile', component: TravelAgencyProfileComponent, title: 'TravelAgency-profile' },
+      { path: 'Package-details/:planID', component: PackageDetailsBookingComponent, title: 'Package Details' },
     ]
   },
 

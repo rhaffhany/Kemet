@@ -161,14 +161,14 @@
               </div>
 
               <div class="packages-booking mt-3">
-                <div class="package bg-white p-3 d-flex">
+                <div class="package bg-white p-3 d-flex mb-2" *ngFor="let package of packages" >
 
-                  <div class="col-md-9 d-flex">
-                    <img src="../../../assets/img/luxor.png" alt="pic" class="package-pic" width="170" height="170">
+                  <div class="col-md-9 d-flex " [routerLink]="['/Package-details',package.planId]">
+                    <img [src]="package.imageURLs" alt="pic" class="package-pic" width="170" height="170">
                     <div class="d-block ms-3 ">
-                      <p class="location text-muted mb-1" style="font-size: 18px;">Cairo, Luxor & Aswan</p>
-                      <p><i class="fa-solid fa-location-arrow"></i> <span class="ms-1 text-muted">10 Days Trip</span></p>
-                      <p class="text-muted">{{ 5420 | kcurrency }}</p>
+                      <p class="location text-muted mb-1" style="font-size: 18px;">{{package.planName}}, {{package.description}}</p>
+                      <p><i class="fa-solid fa-location-arrow"></i> <span class="ms-1 text-muted">{{package.duration}} Days Trip</span></p>
+                      <p class="text-muted">{{package.egyptianStudent | currency: '£'}} - {{ package.touristAdult | kcurrency }}</p>
                     </div>
                   </div>
                   <div class="col-md-3 book-btn">

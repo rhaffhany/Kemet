@@ -1,5 +1,3 @@
-
-
 import { NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
@@ -47,6 +45,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavTravelAgencyComponent } from './components/nav-travel-agency/nav-travel-agency.component';
 import { AgencyLayoutComponent } from './layouts/agency-layout/agency-layout.component';
 import { KcurrencyPipe } from './pipe/kcurrency.pipe';
+import { PackageDetailsBookingComponent } from './components/package-details-booking/package-details-booking.component';
 
 @NgModule({
   declarations: [
@@ -85,6 +84,7 @@ import { KcurrencyPipe } from './pipe/kcurrency.pipe';
     NavTravelAgencyComponent,
     AgencyLayoutComponent,
     KcurrencyPipe,
+    PackageDetailsBookingComponent,
   ],
   imports: [
     BrowserModule,
