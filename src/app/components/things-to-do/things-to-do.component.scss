@@ -1,4 +1,4 @@
-section{
+section {
     background-color: var(--main-color);
 }
 
@@ -6,4 +6,24 @@ section{
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #222;
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: #555;
+}
+
+.header h2 {
+    font-weight: 800;
+    font-size: 35px;
+}
+
+.header p {
+    font-size: 1.2rem;
 }

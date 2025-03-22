@@ -4,7 +4,7 @@
 
         <div class="row">
             <div class="col-md-6 mt-5">
-                <h1 class="fw-bolder">{{activityDetails.name}}</h1>
+                <h1 class="fw-bolder mb-1">{{activityDetails.name}}</h1>
                 <div class="rating d-flex">
                     <span *ngFor="let star of [1, 2, 3, 4, 5]; let i = index" class="rate">
                         <!-- Full Star -->
@@ -37,7 +37,7 @@
                 <!-- <img [src]="blackDot" alt="dot" class="mx-2 mt-2">
                 <p style="font-size: 20px;" class="mb-0">Historic Walking Area</p> -->
                 </div>
-                <div class="mt-2 ">
+                <div class="mt-2">
                     <a [routerLink]="['/write-review/activity', activityID]" class="text-decoration-none text-black review-link">
                         <span class="review" style="font-size: 20px; font-weight: 500;">Write a review</span>
                     </a>
@@ -48,7 +48,7 @@
         <div class="row gap-4 mt-3">
 
             <div class="col-md-4 p-4 about bg-white ">
-                <h5 class="fw-bold">About</h5>
+                <h5 class="fw-bold" style="font-size: 20px;">About</h5>
                 <div class="about-content">
                     <p style="line-height: 24.2px;" >{{activityDetails.description}}</p>
                 </div>
@@ -57,7 +57,7 @@
                         <i class="fa-regular fa-clock"></i>
                         <p class="mb-1 ms-2">Duration {{activityDetails.duration}}</p>
                     </div>
-                    <div class="tickets">
+                    <!-- <div class="tickets">
                         <div class="d-flex align-items-center ">
                             <img [src]="ticket" alt="ticket" style="height: 20px; width: 20px;">
                             <p class="mb-0 ms-1" style="font-weight:600;">Egyptian:</p>                   
@@ -76,12 +76,33 @@
                             <p class="mb-4">Adults <span class="text-muted" style="font-size: 14px;">{{ activityDetails.touristAdult | currency:'EGP'}}</span></p>
                             <p class="mb-4">Students <span class="text-muted" style="font-size: 14px;">{{ activityDetails.touristStudent | currency:'EGP'}}</span></p>
                         </div>
+                    </div> -->
+
+                    <div class="tourist-prices mt-3 d-flex">
+                        <i class="fa-solid fa-earth-americas pe-3" style="font-size: 45px;"></i>
+                        <div class="d-block">
+                            <p class="" style="font-size: 15px; font-weight: 500;">Tourist</p>  
+                            <p class="text-muted">Adult : {{activityDetails.touristAdult | currency: '£'}}</p> 
+                            <p class="text-muted">Student : {{activityDetails.touristStudent | currency: '£'}}</p> 
+                        </div>
+                    </div>
+                    <div class="egyptian-prices mt-3 d-flex">
+                        <img [src]="egyptFlag" alt="Egypt Flag" class="pe-3" style="width: 65px; height: 50px;">
+                        <div class="d-block">
+                            <p class="mt-1" style="font-size: 15px; font-weight: 500;">Egyptian</p>  
+                            <p class="text-muted">Adult : {{activityDetails.egyptianAdult | currency: '£'}}</p> 
+                            <p class="text-muted">Student : {{activityDetails.egyptianStudent | currency: '£'}}</p> 
+                        </div>
                     </div>
                 </div>
 
-                <h5 class="fw-bold pt-3 mb-3">Admission Tickets</h5>
+                <h5 class="fw-bold pt-2">Tours and Experiences</h5>
+                <p style="line-height: 24.2px;">Explore different ways to experience
+                    this place.</p>
+
+                <!-- <h5 class="fw-bold pt-3 mb-3">Admission Tickets</h5>
                 <p style="line-height: 24.2px;">from <span class="fw-bolder" style="font-size: 24px;">{{activityDetails.egyptianStudent | currency:'EGP'}}</span></p>
-                <button class="btn-info w-100 py-3 mt-3">See Tickets</button>
+                <button class="btn-info w-100 py-3 mt-3">See Tickets</button> -->
 
             </div>
 
@@ -121,14 +142,18 @@
     <h3 class="text-center pb-5" style="font-weight: 600;">See what travelers are saying</h3>
     <div class="row gap-2 align-items-center justify-content-center" >
 
-        <div class="col-md-3 reviews reviews-box bg-light-subtle p-4" *ngFor="let review of reviewsData.slice(1,4); " style="border-radius: 20px;">
+        <div class="col-md-3 reviews reviews-box bg-light-subtle p-4" *ngFor="let review of reviewsData.slice(0,3); " style="border-radius: 20px;">
 
             <div class="profile-info d-flex justify-content-between">
                 <div class="d-flex">
-                    <img [src]="userData.profileImageURL"  class="profile-pic rounded-circle" alt="profile-pic" (change)="uploadProfileImg($event)" >
+                    <img [src]="review?.userImageURl " 
+                    class="profile-pic rounded-circle" 
+                    alt="profile-pic"
+                    (error)="handleImageError($event)"
+                    (change)="uploadProfileImg($event)">
                     <div class="ms-2 d-block">
-                        <p class="fw-bold m-0">{{updatedData.firstName}} {{updatedData.lastName}}</p>
-                        <p class="text-muted mb-1" style="font-size:13px;">{{userData.nationality}}</p>
+                        <p class="fw-bold m-0">{{review.username}}</p>
+                        <p class="text-muted mb-1" style="font-size:13px;">{{review.nationality}}</p>
                         <div class="rating">
                             <span *ngFor="let star of [1, 2, 3, 4, 5]; let i = index" class="rate">
                                 <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
@@ -267,16 +292,19 @@
                       
                 <div class="reviews-container " style="max-height: 400px; overflow-y: auto;">
                     <div class="reviews mt-3 bg-light bg-light-subtle p-4" 
-                        *ngFor="let review of reviewsData.slice(1)" 
+                        *ngFor="let review of reviewsData" 
                         style="border-radius: 20px;">
                                     
                         <div class="profile-info d-flex justify-content-between">
                             <div class="d-flex">
-                                <img [src]="userData.profileImageURL || profilePic" class="profile-pic rounded-circle" 
-                                    alt="profile-pic" (change)="uploadProfileImg($event)">
+                                <img [src]="review?.userImageURl " 
+                                class="profile-pic rounded-circle" 
+                                alt="profile-pic"
+                                (error)="handleImageError($event)"
+                                (change)="uploadProfileImg($event)">
                                 <div class="ms-2 d-block">
-                                    <p class="fw-bold m-0">{{updatedData.firstName}} {{updatedData.lastName}}</p>
-                                    <p class="m-0">{{userData.nationality}}</p>
+                                    <p class="fw-bold m-0">{{review.username}}</p>
+                                    <p class="m-0">{{review.nationality}}</p>
                                     <div class="rating">
                                         <span *ngFor="let star of [1, 2, 3, 4, 5]; let i = index" class="rate">
                                             <svg width="24" height="24" viewBox="0 0 24 24"

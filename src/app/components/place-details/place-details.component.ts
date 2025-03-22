@@ -12,10 +12,13 @@ import { ProfileService } from 'src/app/services/profile.service';
 })
 export class PlaceDetailsComponent {
 
+  profileImg: string = 'assets/img/default-profile.png';
   blackDot:string = "/assets/icons/Ellipse 148.svg";
   ticket:string = "/assets/icons/Ticket.svg"
   searchIcon:string = "/assets/icons/Search.png"
   notFoundImg:string = "/assets/img/not found.jpg"
+  egyptFlag:string= '/assets/img/egyptFlag.png';
+
 
   searchResults: any[] = [];  
   errorMessage: string = ''; 
@@ -78,42 +81,47 @@ export class PlaceDetailsComponent {
 
   }
 
-  // lesa 3leha shewya
-  deleteReview(reviewId: number) {
-    if (confirm("Are you sure you want to delete this review?")) {
-      this._DetailsService.getDetailedPlace(this.placeID).subscribe({
-        next: (response) => {
-          this.reviewsData = response.reviews.$values[0].place.reviews.$values;
-          this.updatedReviewData = this.reviewsData.filter(
-            (review: any) => review.$id !== reviewId
-          );
-          // const updatedPlace = { ...response, reviews: { $values: this.updatedReviewData } };
-
-          console.log("reviews of this place after delete:",this.updatedReviewData);
-        },
-        error: (err) => {
-          console.error(err);
-        }
-      });
-
-      this._DetailsService.getDetailedPlace(this.placeID).subscribe({
-        next: () => {
-          this.reviewsData = this.updatedReviewData;
-          // console.log("Review deleted successfully!");
-        }
-      });
-      
-    }
+  handleImageError(event: Event): void {
+    (event.target as HTMLImageElement).src = this.profileImg;
   }
+  
+
+  // lesa 3leha shewya
+  // deleteReview(reviewId: number) {
+  //   if (confirm("Are you sure you want to delete this review?")) {
+  //     this._DetailsService.getDetailedPlace(this.placeID).subscribe({
+  //       next: (response) => {
+  //         this.reviewsData = response.reviews.$values[0].place.reviews.$values;
+  //         this.updatedReviewData = this.reviewsData.filter(
+  //           (review: any) => review.$id !== reviewId
+  //         );
+  //         // const updatedPlace = { ...response, reviews: { $values: this.updatedReviewData } };
+
+  //         console.log("reviews of this place after delete:",this.updatedReviewData);
+  //       },
+  //       error: (err) => {
+  //         console.error(err);
+  //       }
+  //     });
+
+  //     this._DetailsService.getDetailedPlace(this.placeID).subscribe({
+  //       next: () => {
+  //         this.reviewsData = this.updatedReviewData;
+  //         // console.log("Review deleted successfully!");
+  //       }
+  //     });
+      
+  //   }
+  // }
   
 
   getReviewLink(): string[] {
     if (this.placeID) {
-      return ['/write-review/place', this.placeID];  // Path for place
+      return ['/write-review/place', this.placeID]; 
     } else if (this.activityID) {
-      return ['/write-review/activity', this.activityID];  // Path for activity
+      return ['/write-review/activity', this.activityID];  
     }
-    return ['/']; // Default route in case neither ID is present
+    return ['/']; 
   }
   
   //carsouel

@@ -13,6 +13,13 @@ export class PackageDetailsBookingComponent implements OnInit{
   constructor(private _ActivatedRoute:ActivatedRoute, 
               private _DetailsService:DetailsService){}
 
+
+  egyptFlag:string= '/assets/img/egyptFlag.png';
+  searchIcon:string = "/assets/icons/Search.png"
+
+  searchResults: any[] = [];  
+  errorMessage: string = ''; 
+
   packageDetails:PackageDetails = {} as PackageDetails;
   planID:any;
 
@@ -30,7 +37,21 @@ export class PackageDetailsBookingComponent implements OnInit{
         
       }
     });
-
   }
+
+  selectedNationality = 'Nationality';
+  selectedUserType = 'User';
+  selectedBoard = '';
+
+  updateNationality(value: string) {
+    this.selectedNationality = value;
+  }
+  updateUserType(value: string) {
+    this.selectedUserType = value;
+  }
+  updateBoard(value: string) {
+    this.selectedBoard = value;
+  }
+
 
 }

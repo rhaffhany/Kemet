@@ -1,6 +1,6 @@
 import { filter } from 'rxjs/operators';
 import { Component, OnInit} from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ActivityDetails } from 'src/app/interfaces/activity-details';
 import { placeDetails } from 'src/app/interfaces/place-details';
 import { DetailsService } from 'src/app/services/details.service';
@@ -29,18 +29,19 @@ export class ReviewContentComponent implements OnInit{
   loading: boolean = false;
 
   constructor(private _ReviewService:ReviewService, 
-              private route:ActivatedRoute, 
-              private _DetailsService:DetailsService){}
+              private _ActivatedRoute:ActivatedRoute, 
+              private _DetailsService:DetailsService,
+              private _Router:Router){}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
+    this._ActivatedRoute.paramMap.subscribe(params => {
       if (params.has('placeID')) {
         this.placeID = params.get('placeID');
         this.isPlaceReview = true; 
         this._DetailsService.getDetailedPlace(this.placeID).subscribe(response => {
           this.placeDetails = response;
           this.placeDetails.averageRating = Math.round(this.placeDetails.averageRating * 10) / 10;
-          this.reviewData = response.reviews.$values[0].place.reviews.$values;
+          this.reviewData = response.reviews.$values;
         });
       } else if (params.has('activityID')) {
         this.activityID = params.get('activityID');
@@ -48,7 +49,7 @@ export class ReviewContentComponent implements OnInit{
         this._DetailsService.getDetailedActivity(this.activityID).subscribe(response => {
           this.activityDetails = response;
           this.activityDetails.averageRating = Math.round(this.activityDetails.averageRating * 10) / 10;
-          this.reviewData = response.reviews.$values[0].activity.reviews.$values;
+          this.reviewData = response.reviews.$values;
           console.log(this.reviewData);
         });
       }
@@ -88,7 +89,7 @@ export class ReviewContentComponent implements OnInit{
     formData.append('comment', this.reviewText);
     formData.append('reviewTitle', this.reviewTitle);
     formData.append('createdAt', currentDate);
-    this.route.paramMap.subscribe(params => {
+    this._ActivatedRoute.paramMap.subscribe(params => {
       if (params.has('placeID')) {
         this.placeID = params.get('placeID');
         this.isPlaceReview = true; 
@@ -99,6 +100,7 @@ export class ReviewContentComponent implements OnInit{
         formData.append('activityID', this.activityID);
       }
     });
+  
 
     if (!this.isAdded) return;
     this.loading = true;
@@ -110,12 +112,18 @@ export class ReviewContentComponent implements OnInit{
           title: 'Review Submitted!',
           text: 'Thanks for your feedback!',
         });
-        // this.clearData();
+        this.clearData();
         this.loading = false;
         this.isAdded = false;
 
-        console.log("review data:",data);
-        this._ReviewService.setReviewData(data);              
+        if (this.isPlaceReview) {
+          this._Router.navigate(['/places', this.placeID]);
+        } else {
+          this._Router.navigate(['/activities', this.activityID]);
+        }
+
+        // console.log("review data:",data);
+        // this._ReviewService.setReviewData(data);              
       },
       error:(err) =>{
         Swal.fire({

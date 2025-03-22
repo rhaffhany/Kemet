@@ -1,7 +1,7 @@
 // Variables
-$font-size: 18px;
-$font-weight: 400;
-$line-height: 30px;
+// $font-size: 18px;
+// $font-weight: 400;
+// $line-height: 30px;
 $text-color: var(--link-color);
 $background-color: var(--main-color);
 $heading-color: #170F49;
@@ -12,12 +12,6 @@ $footer-border-color: #D9DBE9;
 
 // Footer styling
 footer {
-  font-size: $font-size;
-  font-weight: $font-weight;
-  line-height: $line-height;
-  text-align: left;
-  text-underline-position: from-font;
-  text-decoration-skip-ink: none;
   color: $text-color;
   background-color: $background-color;
 
@@ -40,12 +34,13 @@ footer {
 
   h4 {
     color: $heading-color;
-    font-weight: $heading-font-weight;
-    font-size: $heading-font-size;
-    line-height: $heading-line-height;
   }
 
   h5 {
-    line-height: 30px;
+    line-height: 20px;
+  }
+
+  .submit-btn{
+    padding: 4px 60px;
   }
 }
