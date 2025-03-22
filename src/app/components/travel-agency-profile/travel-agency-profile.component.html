@@ -41,7 +41,7 @@
                 </div>
               </div>
       
-              <!-- Edit Profile Button -->
+              <!-- Review Button -->
               <div class="col-md-3 text-md-end text-center px-md-4 mt-md-0 edit-button">
                 <button class="btn btn-outline-warning review-btn" (click)="openModal()">
                     Add Review
@@ -160,11 +160,15 @@
                 </owl-carousel-o>
               </div>
 
+              <!-- All Pacakages -->
               <div class="packages-booking mt-3">
                 <div class="package bg-white p-3 d-flex mb-2" *ngFor="let package of packages" >
 
-                  <div class="col-md-9 d-flex " [routerLink]="['/Package-details',package.planId]">
-                    <img [src]="package.imageURLs" alt="pic" class="package-pic" width="170" height="170">
+                  <div class="col-md-9 d-flex" [routerLink]="['/Package-details',package.planId]">
+                    <div class="package-container">
+                      <img [src]="package.imageURLs" alt="pic" class="package-pic" width="170" height="170">
+                      <i class="fa-regular fa-heart favorite-icon"></i>
+                    </div>
                     <div class="d-block ms-3 ">
                       <p class="location text-muted mb-1" style="font-size: 18px;">{{package.planName}}, {{package.description}}</p>
                       <p><i class="fa-solid fa-location-arrow"></i> <span class="ms-1 text-muted">{{package.duration}} Days Trip</span></p>
@@ -309,7 +313,4 @@
       </div>
   </div>
 
-  
-    
- 
 </section>

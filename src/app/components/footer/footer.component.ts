@@ -8,10 +8,11 @@ import { Component } from '@angular/core';
 export class FooterComponent {
   logo:string = "/assets/logo/kemet.png";
   facebookLogo:string = "/assets/icons/Facebook.svg";
-  twitterLogo:string = "/assets/icons/Twitter.svg";
+  twitterLogo:string = "/assets/icons/twitter.png";
   instagramLogo:string = "/assets/icons/Instagram.svg";
-  linkedinLogo:string = "/assets/icons/LinkedIn.svg";
-  youtubeLogo:string = "/assets/icons/YouTube.svg";
+  tiktokLogo:string = "/assets/icons/tiktok.png";
+
+  user:string = '@';
 
   emailLogo:string = "/assets/icons/Email.svg";
   phoneLogo:string = "/assets/icons/Phone.svg";

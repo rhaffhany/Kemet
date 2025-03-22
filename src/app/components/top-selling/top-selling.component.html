@@ -1,7 +1,7 @@
 <div class="packages-container">
   <h2>Top Selling</h2>
   <h1>Exclusive Packages</h1>
-  <div class="package-card" *ngFor="let package of packages">
+  <div class="package-card" *ngFor="let package of packages" [routerLink]="['/Package-details',package.planId]">
     <img [src]="package.imageURLs" alt="{{ package.planName }}">
     <div class="package-details">
       <h3>{{ package.planName }}

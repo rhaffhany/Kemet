@@ -4,10 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { HomeService } from 'src/app/services/home.service';
 import { PackageDetails } from 'src/app/interfaces/package-details';
-
-import { CommonModule } from '@angular/common';
-import { KcurrencyPipe } from 'src/app/pipe/kcurrency.pipe';
-import { NgbDatepicker } from '@ng-bootstrap/ng-bootstrap';
+import { AgencyService } from 'src/app/services/agency.service';
 
 @Component({
   selector: 'app-travel-agency-profile',
@@ -17,11 +14,12 @@ import { NgbDatepicker } from '@ng-bootstrap/ng-bootstrap';
 export class TravelAgencyProfileComponent implements OnInit {
 
   constructor(private _ProfileService:ProfileService,
-              private _HomeService:HomeService){}
+              private _HomeService:HomeService,
+              private _AgencyService:AgencyService){}
   
   layoutPic:string = "/assets/img/agency-background.png";
-  profileImg: string = 'assets/img/default-profile.png';
-  travelpp:string = 'assets/img/Agency pp.png'
+  profileImg: string = '/assets/img/default-profile.png';
+  travelpp:string = '/assets/img/Agency pp.png'
   user:string = "@";
 
   //icons
@@ -47,6 +45,10 @@ export class TravelAgencyProfileComponent implements OnInit {
   userData:userData = {} as userData;
   updatedData:any = {...this.userData};
 
+  travelAgencyData: any;
+  username: string = '';
+
+
   ngOnInit(): void {
 
     this.loadPackages();
@@ -65,6 +67,19 @@ export class TravelAgencyProfileComponent implements OnInit {
         console.error('Error fetching user data:', err);
       },
     });
+
+    if (this.username) {
+      this._AgencyService.getTravelAgencyData(this.username).subscribe({
+        next: (data) => {
+          this.travelAgencyData = data;
+          console.log('Travel Agency Data:', this.travelAgencyData);
+        },
+        error: (err) => {
+          console.error('Error fetching travel agency data:', err);
+        }
+      });
+    }
+  
   }
 
   get displayWebsiteLink(): string {
