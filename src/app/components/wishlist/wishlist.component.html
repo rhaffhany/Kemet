@@ -12,12 +12,13 @@
     <div class="card-body">
       <!-- Three Dots Menu -->
       <div class="menu-container">
-        <button class="menu-btn" (click)="toggleMenu(i)">
-        </button>
-        <button (click)="removeItemFromWishlist(item, i)" class="remove-btn">
-          Remove
-        </button>
+        <button class="menu-btn" (click)="toggleMenu(i)">⋮</button>
         
+        <div *ngIf="menuOpenIndex === i" class="menu-dropdown">
+          <button (click)="removeItemFromWishlist(item, i)" class="remove-btn">
+            Remove
+          </button>
+        </div>
       </div>
 
       <img [src]="item.imageURLs[0] || '/assets/img/default.png'" alt="{{ item.name }}" class="card-photo" />
