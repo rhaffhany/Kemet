@@ -70,6 +70,7 @@ export class LoginComponent implements OnDestroy {
     private fb: FormBuilder,
     private cdr: ChangeDetectorRef
   ) {
+    
     // Initialize forms
     this.loginForm = this.createLoginForm();
     this.forgotPasswordForm = this.createForgotPasswordForm();

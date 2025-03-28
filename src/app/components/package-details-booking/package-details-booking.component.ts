@@ -1,119 +1,55 @@
 import { Component, OnInit } from '@angular/core';
-import { OwlOptions } from 'ngx-owl-carousel-o';
-import { HomeService } from 'src/app/services/home.service';
+import { ActivatedRoute } from '@angular/router';
 import { PackageDetails } from 'src/app/interfaces/package-details';
-import { AgencyService } from 'src/app/services/agency.service';
+import { DetailsService } from 'src/app/services/details.service';
 import { ReviewService } from 'src/app/services/review.service';
 import Swal from 'sweetalert2';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-travel-agency-profile',
-  templateUrl: './travel-agency-profile.component.html',
-  styleUrls: ['./travel-agency-profile.component.scss']
+  selector: 'app-package-details-booking',
+  templateUrl: './package-details-booking.component.html',
+  styleUrls: ['./package-details-booking.component.scss']
 })
-export class TravelAgencyProfileComponent implements OnInit {
+export class PackageDetailsBookingComponent implements OnInit{
 
-  constructor(private _ReviewService:ReviewService,
-              private _HomeService:HomeService,
-              private _AgencyService:AgencyService,
-              private _ActivatedRoute:ActivatedRoute){}
-  
-  layoutPic:string = "/assets/img/agency-background.png";
-  profileImg: string = '/assets/img/default-profile.png';
-  travelpp:string = '/assets/img/Agency pp.png'
-  user:string = "@";
+  constructor(private _ActivatedRoute:ActivatedRoute, 
+              private _DetailsService:DetailsService,
+              private _ReviewService:ReviewService){}
 
-  //icons
-  locationIcon:string = "/assets/icons/Location.png";
-  calendarIcon:string = "/assets/icons/Calendar.png";
-  websiteIcon:string = "/assets/icons/Discovery.png";
-  bioIcon:string = "/assets/icons/Edit.png"
-  chatIcon:string = "/assets/icons/Chat.png";
-  heartIcon:string = "/assets/icons/Heart.png";
-  sendIcon:string = "/assets/icons/Send.png";
-  lockIcon:string = "/assets/icons/Lock.png";
-  editIcon:string = "/assets/icons/Edit Square.png";
-  searchIcon:string = "/assets/icons/Search.png"
+
+  egyptFlag:string= '/assets/img/egyptFlag.png';
+  searchIcon:string = "/assets/icons/Search.png";
+  profileImg: string = 'assets/img/default-profile.png';
+
 
   searchResults: any[] = [];  
   errorMessage: string = ''; 
 
   packageDetails:PackageDetails = {} as PackageDetails;
   planID:any;
-  
-  packages: any[] = []; 
 
-  travelAgencyData:any = {};
-
-  reviews:any[] = [];
-
+  reviewData:any[] = [];
 
   ngOnInit(): void {
+    this._ActivatedRoute.paramMap.subscribe({
+      next:(params)=>{
+        this.planID = params.get('planID'); 
 
-    this.loadPackages();
-
-    this._AgencyService.getTravelAgencyData('GlobalTravel').subscribe({
-      next: (data) => {
-        this.travelAgencyData = data;
-        this.reviews = data.reviews.$values;
-        console.log("Reviews",this.reviews);
-        // console.log('Travel Agency Data:', this.travelAgencyData);
-      },
-      error: (err) => {
-        console.error('Error fetching travel agency data:', err);
+        this._DetailsService.getDetaliedPlan(this.planID).subscribe({
+          next: (response)=>{
+            this.packageDetails = response;
+            this.packageDetails.averageRating = Math.round(this.packageDetails.averageRating * 10) / 10;
+            this.reviewData = this.packageDetails.reviews.$values;
+            console.log("reviews",this.reviewData);
+            
+            console.log("Fetched package details:", this.packageDetails);
+          }
+        });
       }
     });
-    
-  
-  }
 
-  // get displayWebsiteLink(): string {
-  //   return this.updatedData.websiteLink?.replace(/^https?:\/\//, '') || '';
-  // }
 
-  loadPackages(): void {
-    this._HomeService.fetchTravelAgencyPlan().subscribe((data: any) => {
-      this.packages = data.$values;
-    });
-  }
 
-  // lhad ma api yegy
-  images = [
-    '/assets/img/agency1.jpg',
-    '/assets/img/agency2.jpg',
-    '/assets/img/agency3.jpg',
-    '/assets/img/agency4.jpg',
-    '/assets/img/agency5.jpg',
-    '/assets/img/agency6.jpg',
-    '/assets/img/agency7.jpg',
-    '/assets/img/agency8.jpg',
-    '/assets/img/agency9.jpg',
-    '/assets/img/agency10.jpg',
-  ];
-  photoSlider:OwlOptions = {
-    loop: true,
-    mouseDrag: true,
-    touchDrag: true,
-    pullDrag: true,
-    dots: false,
-    navSpeed: 700,
-    navText: ['<i class="fa-solid fa-chevron-left"></i>', '<i class="fa-solid fa-chevron-right"></i>'],
-    responsive: {
-      0: {
-        items: 1
-      },
-      400: {
-        items: 2
-      },
-      740: {
-        items: 3
-      },
-      940: {
-        items: 4
-      }
-    },
-    nav: true
   }
 
   showModal: boolean = false;
@@ -147,6 +83,8 @@ export class TravelAgencyProfileComponent implements OnInit {
   getMaxRating(index: number): boolean {
     return index < Math.max(this.rating, this.hoverRating);
   }
+  
+
   onDateSelect(date: any) {
     if (date && date.year && date.month && date.day) {
         const month = date.month.toString().padStart(2, '0');
@@ -154,7 +92,7 @@ export class TravelAgencyProfileComponent implements OnInit {
         this.selectedDate = `${date.year}-${month}-${day}`;
     }
   }
-  
+
   clearData(): void{
     this.rating = 0; 
     this.hoverRating = 0;
@@ -162,6 +100,7 @@ export class TravelAgencyProfileComponent implements OnInit {
     this.reviewText = '';    
     this.reviewTitle = '';
   }
+
   onReviewChange(event: Event) {
     const input = event.target as HTMLTextAreaElement;
     this.isAdded = input.value.trim().length > 0; 
@@ -222,6 +161,20 @@ export class TravelAgencyProfileComponent implements OnInit {
     }, 2000);
   }
 
+
+  selectedNationality = 'Nationality';
+  selectedUserType = 'User';
+  selectedBoard = '';
+
+  updateNationality(value: string) {
+    this.selectedNationality = value;
+  }
+  updateUserType(value: string) {
+    this.selectedUserType = value;
+  }
+  updateBoard(value: string) {
+    this.selectedBoard = value;
+  }
 
 
 }

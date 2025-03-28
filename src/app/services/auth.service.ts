@@ -11,10 +11,10 @@ interface LoginData {
 }
 
 interface RegisterData {
+  userName:string,
   email: string;
   password: string;
   confirmPassword: string;
-  userName: string;
 }
 
 @Injectable({ providedIn: 'root' })

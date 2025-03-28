@@ -15,7 +15,10 @@ export class ActivityDetailsComponent {
   ticket:string = "/assets/icons/Ticket.svg"
   searchIcon:string = "/assets/icons/Search.png"
   profilePic:string = "/assets/icons/profile-pic.svg"
+  profileImg: string = 'assets/img/default-profile.png';
   notFoundImg:string = "/assets/img/not found.jpg";
+  egyptFlag:string= '/assets/img/egyptFlag.png';
+
 
   searchResults: any[] = [];  
   errorMessage: string = ''; 
@@ -72,35 +75,39 @@ export class ActivityDetailsComponent {
   
   }
 
-  deleteReview(reviewId: number) {
-    if (confirm("Are you sure you want to delete this review?")) {
-      this._DetailsService.getDetailedActivity(this.activityID).subscribe({
-        next: (response) => {
-          this.reviewsData = response.reviews.$values[0].activity.reviews.$values;
-          this.updatedReviewData = this.reviewsData.filter(
-            (review: any) => review.$id !== reviewId
-          );
-          // const updatedPlace = { ...response, reviews: { $values: this.updatedReviewData } };
-
-          console.log("reviews of this place after delete:",this.updatedReviewData);
-        },
-        error: (err) => {
-          console.error(err);
-        }
-      });
-
-      this._DetailsService.getDetailedActivity(this.activityID).subscribe({
-        next: () => {
-          this.reviewsData = this.updatedReviewData;
-          console.log("Review deleted successfully!");
-        },
-        error: (err) => {
-          console.error("Error updating place:", err);
-        },
-      });
-      
-    }
+  handleImageError(event: Event): void {
+    (event.target as HTMLImageElement).src = this.profileImg;
   }
+  
+  // deleteReview(reviewId: number) {
+  //   if (confirm("Are you sure you want to delete this review?")) {
+  //     this._DetailsService.getDetailedActivity(this.activityID).subscribe({
+  //       next: (response) => {
+  //         this.reviewsData = response.reviews.$values[0].activity.reviews.$values;
+  //         this.updatedReviewData = this.reviewsData.filter(
+  //           (review: any) => review.$id !== reviewId
+  //         );
+  //         // const updatedPlace = { ...response, reviews: { $values: this.updatedReviewData } };
+
+  //         console.log("reviews of this place after delete:",this.updatedReviewData);
+  //       },
+  //       error: (err) => {
+  //         console.error(err);
+  //       }
+  //     });
+
+  //     this._DetailsService.getDetailedActivity(this.activityID).subscribe({
+  //       next: () => {
+  //         this.reviewsData = this.updatedReviewData;
+  //         console.log("Review deleted successfully!");
+  //       },
+  //       error: (err) => {
+  //         console.error("Error updating place:", err);
+  //       },
+  //     });
+      
+  //   }
+  // }
    
   uploadProfileImg(event:any){
     const file = event.target.files[0];

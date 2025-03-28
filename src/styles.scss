@@ -1,6 +1,3 @@
-// Color Variables
-// @import "node_modules/ngx-bootstrap/datepicker/bs-datepicker";
-// @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
 :root {
   --main-color: #FFE5C2;
@@ -20,7 +17,7 @@
 .hidden{
   display: none;
 }
-  
+
   // Global styles
   *{
     box-sizing: border-box;
@@ -28,12 +25,17 @@
     padding: 0;
   }
   
-  html {
-    font-family: "Inter", sans-serif;
+  html, body {
+    height: auto !important;
+    overflow: visible !important;
+    scroll-behavior: auto !important;
+    margin: 0; 
+    font-family: Roboto, "Helvetica Neue", sans-serif;
     text-underline-position: from-font;
     text-decoration-skip-ink: none;
   }
   
+  //buttons
   .btn-main {
     border: 2px solid var(--secondary-color);
     background-color: var(--white);
@@ -71,21 +73,21 @@
 
 
 // Global styles
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+// * {
+//   box-sizing: border-box;
+//   margin: 0;
+//   padding: 0;
+// }
 
-html, body {
-  overflow-x: hidden; 
-}
+// html, body {
+//   overflow-x: hidden; 
+// }
 
-html {
-  font-family: Inter;
-  text-underline-position: from-font;
-  text-decoration-skip-ink: none;
-}
+// html {
+//   font-family: Inter;
+//   text-underline-position: from-font;
+//   text-decoration-skip-ink: none;
+// }
 
 // Scrollbar design
 ::-webkit-scrollbar {
@@ -165,8 +167,3 @@ html {
     transform: scale(1.05);
   }
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

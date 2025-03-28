@@ -43,6 +43,9 @@ import { NgbModule, NgbCollapseModule, NgbDatepickerModule } from '@ng-bootstrap
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { AgencyLayoutComponent } from './layouts/agency-layout/agency-layout.component';
 import { KcurrencyPipe } from './pipe/kcurrency.pipe';
+
+import { PackageDetailsBookingComponent } from './components/package-details-booking/package-details-booking.component';
+
 import { TravelAgencyProfileComponent } from './components/travel-agency-profile/travel-agency-profile.component';
 import { NavTravelAgencyComponent } from './components/nav-travel-agency/nav-travel-agency.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -84,6 +87,7 @@ import { PersonalizedPlanComponent } from './components/personalized-plan/person
     ActivityDetailsComponent,
     AgencyLayoutComponent,
     KcurrencyPipe,
+    PackageDetailsBookingComponent,
     TravelAgencyProfileComponent,
     NavTravelAgencyComponent,
     PersonalizedPlanComponent,
