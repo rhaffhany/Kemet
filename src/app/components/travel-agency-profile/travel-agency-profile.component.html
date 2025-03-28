@@ -1,5 +1,5 @@
 <section class="pb-5">
-    <img [src]="layoutPic || userData.backgroundImageURL" alt="layoutPic" class="w-100 mt-5 pt-5" >
+    <img [src]="layoutPic" alt="layoutPic" class="w-100 mt-5 pt-5" >
 
     <!-- profile info -->
     <div class="container">
@@ -20,8 +20,8 @@
               <!-- Profile Info -->
               <div class="col-md-6">
                 <div class="profile-info">
-                  <h5 class="name fw-bold mb-1">odyssey</h5>
-                  <p class="lead username">{{ user }}odysseytravel_1</p>
+                  <h5 class="name fw-bold mb-1">{{travelAgencyData?.userName}}</h5>
+                  <p class="lead username" style="font-size: 12px;">{{ user }}{{travelAgencyData?.userName}}</p>
 
                   <!-- <span *ngFor="let star of [1, 2, 3, 4, 5]; let i = index" class="rate">
                     <svg width="24" height="24" viewBox="0 0 24 24"
@@ -62,27 +62,32 @@
                 <div class="information-items py-5 px-4">
                     <div class="location item d-flex">
                         <i class="fa-regular fa-id-card me-2"></i>
-                        <p class="mb-0">{{updatedData.nationality}}</p>
+                        <p class="mb-0">{{travelAgencyData.address}}</p>
                     </div>
                     <div class="calendar item d-flex">
                         <img [src]="calendarIcon" alt="calendarIcon" class="me-2">
                         <p class="mb-0">Joined Oct 2024</p>
                     </div>
                     <div class="website item d-flex">
-                        <img [src]="websiteIcon" alt="websiteIcon" class="me-2">
-                        <a class="text-decoration-none text-black mb-0" [href]="updatedData.websiteLink" target="_blank">{{ displayWebsiteLink }}</a>
+                      <!-- <img [src]="websiteIcon" alt="websiteIcon" class="me-2"> -->
+                      <i class="fa-brands fa-instagram me-2"></i>
+                      <a class="text-decoration-none text-black mb-0" [href]="travelAgencyData.instagramURL" target="_blank"></a>
                     </div>
+                    <div class="website item d-flex">
+                      <i class="fa-brands fa-facebook-f me-2"></i>
+                      <a class="text-decoration-none text-black mb-0" [href]="travelAgencyData.facebookURL" target="_blank"></a>
+                  </div>
                     <div class="bio item d-flex">
                         <img [src]="bioIcon" alt="bioIcon" class="me-2">
-                        <p class="mb-0">{{updatedData.bio}}</p>
+                        <p class="mb-0">{{travelAgencyData.description}}</p>
                     </div>
                 </div>
 
                 <!-- rating box -->
-                <div class="reviews-avg-box information-items p-3 mt-5">
+                <!-- <div class="reviews-avg-box information-items p-3 mt-5">
                     <div class="d-flex align-items-center">
-                        <h3 class="fw-bolder me-2">{{4.5}}</h3>
-                        <!-- <span *ngFor="let star of [1, 2, 3, 4, 5]; let i = index" class="rate">
+                        <h3 class="fw-bolder me-2">{{travelAgencyData.}}</h3>
+                        <span *ngFor="let star of [1, 2, 3, 4, 5]; let i = index" class="rate">
                             <svg *ngIf="i + 1 <= placeDetails.averageRating" width="24" height="24" viewBox="0 0 24 24"
                                  xmlns="http://www.w3.org/2000/svg" fill="#FAC817" stroke="currentColor"
                                  stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
@@ -107,9 +112,8 @@
                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                             </svg>
 
-                        </span> -->
+                        </span>
                           
-                        <!-- <p class="mb-1 ms-2" style="font-size: 13px; color: rgba(51, 51, 51, 0.63);">2,256,896</p> -->
                     </div>
 
                     <div class="rating-rate d-block align-items-center p-2">                          
@@ -145,7 +149,7 @@
                         </div>
                     </div>
                     
-                </div>
+                </div> -->
 
             </div>
 
@@ -257,8 +261,10 @@
                       </div>
               
                   </div>
-              </div>
-               -->
+              </div> -->
+
+              <p *ngIf="reviews.length === 0" class="mt-4 text-center text-danger">No reviews yet.</p>
+
           </div>
       </div>
     
@@ -266,7 +272,7 @@
     </div>
 
     <!-- reviews box -->
-    <div *ngIf="showModal" class="overlay" (click)="closeModal($event)">
+   <div *ngIf="showModal" class="overlay" (click)="closeModal($event)">
       <div class="modal-container text-center" (click)="$event.stopPropagation()">
           <button class="close-btn" (click)="showModal = false"><i class="fa-solid fa-xmark"></i></button>
   
@@ -311,6 +317,6 @@
               </button>
           </div>
       </div>
-  </div>
+   </div>
 
 </section>

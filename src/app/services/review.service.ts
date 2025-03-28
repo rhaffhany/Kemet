@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 @Injectable({
   providedIn: 'root'
 })
+
 export class ReviewService {
 
   constructor(private _HttpClient:HttpClient, private _AuthService:AuthService) {}
