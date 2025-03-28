@@ -1,14 +1,15 @@
 import { WishlistService } from 'src/app/services/wishlist.service';
 import { DetailsService } from 'src/app/services/details.service';
 import { Component, OnInit } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 
 interface WishlistItem {
-  id: any;
+  id: number;
   type: string;
-  activityName: any;
-  placeID: number;
+  activityName?: string;
+  placeID?: number;
   name: string;
-  categoryName?: string; // Category fetched separately
+  categoryName?: string;
   imageURLs: string[];
 }
 
@@ -22,61 +23,61 @@ export class WishlistComponent implements OnInit {
   loading = false;
   errorMessage = '';
   menuOpenIndex: number | null = null;
-  
-  constructor(private WishlistService: WishlistService, private DetailsService: DetailsService) {}
+
+  constructor(
+    private wishlistService: WishlistService,
+    private detailsService: DetailsService
+  ) {}
 
   ngOnInit(): void {
     this.getWishlist();
   }
+
   toggleMenu(index: number): void {
-    this.menuOpenIndex = this.menuOpenIndex === index ? null : index; // Toggle menu
-  }  
+    this.menuOpenIndex = this.menuOpenIndex === index ? null : index;
+  }
 
   getWishlist(): void {
     this.loading = true;
-    this.WishlistService.getWishlist().subscribe({
+    this.wishlistService.getWishlist().subscribe({
       next: (response) => {
-        console.log('API Response:', response); // Debugging
-  
-        if (response) {
-          this.wishlist = [];
-  
-          if (response.places?.$values) {
-            this.wishlist.push(
-              ...response.places.$values.map((place: any) => ({
-                type: 'place',
-                placeID: place.placeID,
-                name: place.name,
-                description: place.description || '',
-                imageURLs: place.imageURLs?.$values || [],
-                categoryName: '',
-                activityName: ''  
-              }))
-            );
-          }
-  
-          // ✅ Extract activities
-          if (response.activities?.$values) {
-            this.wishlist.push(
-              ...response.activities.$values.map((activity: any) => ({
-                type: 'activity', // To identify it as an activity
-                activityID: activity.activityId,
-                name: activity.name,
-                imageURLs: activity.imageURLs?.$values || [],
-                categoryName: activity.category,  // Empty because it's an activity
-                activityName: activity.name // Use activity name directly
-              }))
-            );
-          }
-  
-          // Fetch category details for places
-          this.wishlist.forEach((item, index) => {
-            if (item.type === 'place') {
-              this.getCategory(item.placeID, index);
-            }
-          });
+        console.log('API Response:', response);
+        this.wishlist = [];
+
+        if (response?.places?.$values) {
+          this.wishlist.push(
+            ...response.places.$values.map((place: any) => ({
+              id: place.placeID,
+              type: 'place',
+              placeID: place.placeID,
+              name: place.name,
+              description: place.description || '',
+              imageURLs: place.imageURLs?.$values || [],
+              categoryName: '',
+              activityName: ''
+            }))
+          );
         }
-  
+
+        if (response?.activities?.$values) {
+          this.wishlist.push(
+            ...response.activities.$values.map((activity: any) => ({
+              id: activity.activityId,
+              type: 'activity',
+              name: activity.name,
+              imageURLs: activity.imageURLs?.$values || [],
+              categoryName: activity.category,
+              activityName: activity.name
+            }))
+          );
+        }
+
+        this.wishlist.forEach((item, index) => {
+          if (item.type === 'place' && item.placeID) {
+            this.getCategory(item.placeID, index);
+          }
+        });
+
         this.loading = false;
       },
       error: (error) => {
@@ -86,32 +87,33 @@ export class WishlistComponent implements OnInit {
       }
     });
   }
-  
-  removeItemFromWishlist(item: WishlistItem, index: number): void {
-    if (!item.id) {
-      console.error('Invalid item ID');
-      return;
-    }
-  
-    // Determine the item type dynamically
-    const itemType = item.type === 'place' ? 'place' : 'activity';
-  
-    // Call the service with both `id` and `itemType`
-    this.WishlistService.removeFromWishlist(item.id, itemType).subscribe({
-      next: () => {
-        console.log(`Successfully removed ${item.name} from wishlist.`);
-        this.wishlist.splice(index, 1); // Remove item from local array
-      },
-      error: (error) => {
-        console.error('Error removing item:', error);
-        this.errorMessage = 'Failed to remove item from wishlist.';
-      }
-    });
+
+// wishlist.component.ts
+removeItemFromWishlist(item: WishlistItem, index: number): void {
+  if (!item.id || !item.type) {
+    console.error('Invalid item ID or Type:', item);
+    return;
   }
-  
-  
+
+  console.log(`Removing item: ${item.name} (ID: ${item.id}, Type: ${item.type})`);
+
+  this.wishlistService.removeFromWishlist(item.id, item.type).subscribe({
+    next: () => {
+      console.log(`Successfully removed ${item.name} from wishlist.`);
+      this.wishlist.splice(index, 1); // Remove the item from the UI
+    },
+    error: (error: HttpErrorResponse) => {
+      console.error('Error removing item:', error);
+      if (error.status === 404) {
+        this.errorMessage = `Item not found in wishlist: ${item.name}`;
+      } else {
+        this.errorMessage = `Failed to remove item from wishlist: ${error.message}`;
+      }
+    }
+  });
+}
   getDetails(placeID: number, index: number): void {
-    this.DetailsService.getDetailedPlace(placeID).subscribe({
+    this.detailsService.getDetailedPlace(placeID).subscribe({
       next: (detail) => {
         if (detail) {
           this.wishlist[index].categoryName = detail.categoryName || 'Unknown Category';
@@ -123,12 +125,16 @@ export class WishlistComponent implements OnInit {
       }
     });
   }
-  
 
   getCategory(placeID: number, index: number): void {
-    this.DetailsService.getDetailedPlace(placeID).subscribe({
+    if (!placeID) {
+      console.warn(`Skipping category fetch for invalid placeID: ${placeID}`);
+      return;
+    }
+
+    this.detailsService.getDetailedPlace(placeID).subscribe({
       next: (detail) => {
-        if (detail && detail.categoryName) {
+        if (detail?.categoryName) {
           this.wishlist[index].categoryName = detail.categoryName;
         }
       },
