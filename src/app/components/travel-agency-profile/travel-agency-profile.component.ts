@@ -1,10 +1,11 @@
-import { userData } from 'src/app/interfaces/user-data';
-import { ProfileService } from './../../services/profile.service';
 import { Component, OnInit } from '@angular/core';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { HomeService } from 'src/app/services/home.service';
 import { PackageDetails } from 'src/app/interfaces/package-details';
 import { AgencyService } from 'src/app/services/agency.service';
+import { ReviewService } from 'src/app/services/review.service';
+import Swal from 'sweetalert2';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-travel-agency-profile',
@@ -13,9 +14,10 @@ import { AgencyService } from 'src/app/services/agency.service';
 })
 export class TravelAgencyProfileComponent implements OnInit {
 
-  constructor(private _ProfileService:ProfileService,
+  constructor(private _ReviewService:ReviewService,
               private _HomeService:HomeService,
-              private _AgencyService:AgencyService){}
+              private _AgencyService:AgencyService,
+              private _ActivatedRoute:ActivatedRoute){}
   
   layoutPic:string = "/assets/img/agency-background.png";
   profileImg: string = '/assets/img/default-profile.png';
@@ -42,49 +44,33 @@ export class TravelAgencyProfileComponent implements OnInit {
   
   packages: any[] = []; 
 
-  userData:userData = {} as userData;
-  updatedData:any = {...this.userData};
+  travelAgencyData:any = {};
 
-  travelAgencyData: any;
-  username: string = '';
+  reviews:any[] = [];
 
 
   ngOnInit(): void {
 
     this.loadPackages();
 
-    this._ProfileService.getCurrentUserData().subscribe({
-      next:(data)=>{
-        this.userData = data;
-        this.updatedData = { ...this.userData };
-        // if (!this.userData.profileImageURL) {
-        //   this.profileImg;
-        // }else{
-        //   this.profileImg = this.userData.profileImageURL;
-        // }
+    this._AgencyService.getTravelAgencyData('GlobalTravel').subscribe({
+      next: (data) => {
+        this.travelAgencyData = data;
+        this.reviews = data.reviews.$values;
+        console.log("Reviews",this.reviews);
+        // console.log('Travel Agency Data:', this.travelAgencyData);
       },
       error: (err) => {
-        console.error('Error fetching user data:', err);
-      },
+        console.error('Error fetching travel agency data:', err);
+      }
     });
-
-    if (this.username) {
-      this._AgencyService.getTravelAgencyData(this.username).subscribe({
-        next: (data) => {
-          this.travelAgencyData = data;
-          console.log('Travel Agency Data:', this.travelAgencyData);
-        },
-        error: (err) => {
-          console.error('Error fetching travel agency data:', err);
-        }
-      });
-    }
+    
   
   }
 
-  get displayWebsiteLink(): string {
-    return this.updatedData.websiteLink?.replace(/^https?:\/\//, '') || '';
-  }
+  // get displayWebsiteLink(): string {
+  //   return this.updatedData.websiteLink?.replace(/^https?:\/\//, '') || '';
+  // }
 
   loadPackages(): void {
     this._HomeService.fetchTravelAgencyPlan().subscribe((data: any) => {
@@ -134,8 +120,6 @@ export class TravelAgencyProfileComponent implements OnInit {
   rating: number = 0; 
   hoverRating: number = 0;
   selectedDate: string  = '';
-  options: string[] = ['Business', 'Couples', 'Family', 'Solo'];
-  selectedOption: string = '';
   reviewText: string = '';
   reviewTitle: string = '';
   isAdded: boolean = false;
@@ -163,37 +147,74 @@ export class TravelAgencyProfileComponent implements OnInit {
   getMaxRating(index: number): boolean {
     return index < Math.max(this.rating, this.hoverRating);
   }
-  
-  selectOption(option: string): void {
-    this.selectedOption = option;
-  }
-
   onDateSelect(date: any) {
     if (date && date.year && date.month && date.day) {
         const month = date.month.toString().padStart(2, '0');
         const day = date.day.toString().padStart(2, '0');
         this.selectedDate = `${date.year}-${month}-${day}`;
-        console.log("Selected Date:", this.selectedDate);
     }
   }
-
+  
   clearData(): void{
     this.rating = 0; 
     this.hoverRating = 0;
     this.selectedDate = '';
-    this.selectedOption = '';
     this.reviewText = '';    
     this.reviewTitle = '';
   }
-
   onReviewChange(event: Event) {
     const input = event.target as HTMLTextAreaElement;
     this.isAdded = input.value.trim().length > 0; 
   }
 
-  // wiil be edited
-  submitReview() {
-    this.loading = true;
+  submitReview():void {
+     if (!this.reviewTitle || !this.reviewText || !this.rating || !this.selectedDate) {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Incomplete Data',
+            text: 'Please enter all required fields before submitting!',
+          });
+          return;
+        }
+    
+        let currentDate:string = '' ;
+        this._ReviewService.setSubmissionDate(currentDate);
+      
+        //append formData
+        const formData = new FormData();
+        formData.append('rating', this.rating.toString());
+        formData.append('date', this.selectedDate.toString());
+        formData.append('comment', this.reviewText);
+        formData.append('reviewTitle', this.reviewTitle);
+        formData.append('createdAt', currentDate);
+
+        if (!this.isAdded) return;
+        this.loading = true;
+    
+        this._ReviewService.addReview(formData).subscribe({
+          next:(data)=>{
+            Swal.fire({
+              icon: 'success',
+              title: 'Review Submitted!',
+              text: 'Thanks for your feedback!',
+            });
+            this.clearData();
+            this.loading = false;
+            this.isAdded = false;
+
+            console.log("review data:",data);              
+          },
+          error:(err) =>{
+            Swal.fire({
+              icon: 'error',
+              title: 'Submission Failed',
+              text: 'Something went wrong. Please try again later.',
+            });
+            this.loading = false;        
+          },complete:()=>{
+            this.loading = false;
+          }
+        });
     setTimeout(() => {
       this.loading = false;
       this.isAdded = true;

@@ -2,6 +2,105 @@ section{
     background-color: var(--primary-color);
 }
 
+.review-link {
+  position: relative;
+  display: inline-block;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--white); 
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background-color: rgba(80, 63, 37, 0.15); 
+  transition: all 0.3s ease-in-out;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    height: 2px;
+    width: 0;
+    background-color: var(--white);
+    transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
+  }
+
+  &:hover::after {
+    width: 100%;
+    left: 0;
+  }
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+    color: var(--white);
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+}
+
+// review Modal
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Modal Container */
+.modal-container {
+  background: white;
+  padding: 30px 40px;
+  width: 50%;
+  max-width: 500px;
+  height: fit-content;
+  border-radius: 30px;
+  position: relative;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Close Button */
+.close-btn {
+  position: absolute;
+  top: 6px;
+  right: 15px;
+  color: var(--black);
+  background-color: transparent;
+  border: none;
+  font-size: 25px;
+  cursor: pointer;
+  &:hover{
+    color: red;
+  }
+}
+
+// rating
+.stars {
+  font-size: 20px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.star i.fa-solid {
+  transition: color 0.3s;
+  color: #FAC817; 
+}
+
+// review
+.review, .input, .custom-file-upload{
+  border: 1px solid var(--secondary-color);
+  border-radius: 10px;
+  resize: none;
+}
+
+
+
 .package-photos{
     .photo{
         height: 400px;

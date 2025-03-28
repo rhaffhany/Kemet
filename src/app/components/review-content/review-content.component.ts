@@ -125,7 +125,7 @@ export class ReviewContentComponent implements OnInit{
         // console.log("review data:",data);
         // this._ReviewService.setReviewData(data);              
       },
-      error:(err) =>{
+      error:() =>{
         Swal.fire({
           icon: 'error',
           title: 'Submission Failed',
