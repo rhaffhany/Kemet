@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, map } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -13,25 +13,77 @@ export class WishlistService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   getWishlist(): Observable<any> {
-    return this.http.get(this.DeployUrl, { headers: this.getHeaders() }).pipe(
-      tap(response => console.log('Wishlist Response:', response)),
+    const token = this.authService.getToken();
+    if (!token) {
+      return throwError(() => new Error('No authentication token available'));
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get(`${this.DeployUrl}`, { headers }).pipe(
+      tap(response => {
+        console.log('Wishlist response:', response);
+      }),
       catchError(this.handleError)
     );
   }
 
   addPlaceToWishlist(placeID: number): Observable<any> {
-    return this.http.post(`${this.DeployUrl}/AddPlaceToWishlist?PlaceID=${placeID}`, {}, { headers: this.getHeaders() }).pipe(
+    const headers = this.getHeaders();
+    return this.http.post(`${this.DeployUrl}/AddPlaceToWishlist?PlaceID=${placeID}`, {}, { headers }).pipe(
+      tap(response => console.log('Add to wishlist response:', response)),
       catchError(this.handleError)
     );
   }
 
-  removeFromWishlist(itemId: number, itemType: string): Observable<any> {
-    const url = `${this.DeployUrl}/RemoveFromWishlist?itemId=${itemId}&itemType=${itemType}`;
-    const headers = this.getHeaders();
+  removeFromWishlist(index: number): Observable<any> {
+    const token = this.authService.getToken();
+    if (!token) {
+      console.error('No authentication token available');
+      return throwError(() => new Error('User is not authenticated'));
+    }
 
-    console.log(`Removing item: ID=${itemId}, Type=${itemType}`); // Log the request
-    return this.http.delete(url, { headers }).pipe(
-      catchError(this.handleError) // Handle errors
+    const url = `${this.DeployUrl}/RemoveFromWishlist?itemId=${index}&itemType=place`;
+    
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    console.log('Removing from wishlist:', { 
+      url,
+      index,
+      token: token.substring(0, 10) + '...',
+      headers: headers.keys()
+    });
+    
+    return this.http.delete(url, { 
+      headers,
+      observe: 'response'
+    }).pipe(
+      tap(response => {
+        console.log('Remove from wishlist response:', {
+          status: response.status,
+          statusText: response.statusText,
+          headers: response.headers,
+          body: response.body
+        });
+      }),
+      map(response => response.body),
+      catchError(error => {
+        console.error('Error in removeFromWishlist:', {
+          error,
+          url,
+          index,
+          status: error.status,
+          message: error.message,
+          headers: headers.keys()
+        });
+        return throwError(() => error);
+      })
     );
   }
 
@@ -42,7 +94,7 @@ export class WishlistService {
       throw new Error('User is not authenticated.');
     }
     return new HttpHeaders({
-      Authorization: `Bearer ${token}`,
+      'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     });
   }
@@ -50,10 +102,8 @@ export class WishlistService {
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'An unknown error occurred!';
     if (error.error instanceof ErrorEvent) {
-      // Client-side or network error
       errorMessage = `Error: ${error.error.message}`;
     } else {
-      // Server-side error
       switch (error.status) {
         case 401:
           errorMessage = 'Unauthorized! Please log in again.';
@@ -71,7 +121,7 @@ export class WishlistService {
           errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
       }
     }
-    console.error('HTTP Error:', errorMessage); // Log the error for debugging
+    console.error('HTTP Error:', errorMessage, error);
     return throwError(() => new Error(errorMessage));
   }
 }

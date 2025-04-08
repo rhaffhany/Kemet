@@ -1,144 +1,114 @@
-   
-    .title {
-        font-size: 2rem;
-        font-weight: 800;
-        color: #222;
-      }
-    
-      .category {
-        font-size: 25px;
-        color: #1E1E1E;
-        margin-top: 17px;
-        margin-bottom: 87px;
-        font-weight: 300;
-        size: 22px;
-      }
-    
-      .carousel {
-        position: relative;
-        align-items: center;
-        height: auto;
-        left: 0;
-        display: flex;
-        max-width: max-content;
+.section-wrapper {
+  max-width: 1300px;
+  margin: 0 120px;
+  position: relative;
 
-    
-        .cards-container {
-          display: flex;
-          overflow-x: hidden; 
-          gap: 15px;
-          flex-wrap: nowrap; 
-        }
-    
-        .cards {
-          display: flex;
-          transition: transform 0.5s ease;
-          flex-shrink: 0;
-          overflow: hidden; 
-          -webkit-transition: transform 0.5s ease;
-          -moz-transition: transform 0.5s ease;
-          -ms-transition: transform 0.5s ease;
-          -o-transition: transform 0.5s ease;
-        }
-    
-        .card {
-          background: transparent;
-          height: auto;
-          flex: 0 0 250px;  
-          text-align: left;
-          margin: 0 0.5rem;
-          border: none;
-          position: relative;
-          overflow: hidden;
-          display: flex;
-          flex-direction: column;
-    
-          .heart-icon {
-            position: absolute;
-            top: 23px;
-            right: 17px;
-            width: 24px;
-            height: 24px;
-            opacity: 0.8;
-            z-index: 10;
-          }
-    
-          .card-image {
-            width: 250px;
-            height: 234px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-bottom: 10px;
-          }
-    
-          .card-title {
-            font-size: 25px;
-            font-weight: 600;
-            line-height: 30.26px;
-            text-align: left;
-            width: 205px;
-            margin-top: 17px;
-            color: #000000;
-            flex-grow: auto;
-          }
-    
-          .card-description {
-            width: 210px;
-            font-size: 22px;
-            font-weight: 300;
-            line-height: 26.63px;
-            text-align: left;
-            color: #000000;
-            margin-top: 1px;
-          }
-    
-          .rating {
-            width: 200px;
-            height: 50px;
-            padding-top: 12px;
-            display: flex;
-            justify-content: left;
-            margin-top: 1px;
-    
-            .star {
-              color: gold;
-            }
-          }
-        }
-    
-        .cards-container {
-          display: flex;
-          flex-wrap: nowrap;
-          justify-content: flex-start;
-          transition: transform 0.5s ease-in-out;
-        }
-    
-        .nav-button {
-          position: absolute;
-          top: 25%;
-          cursor: pointer;
-          width: 50px;
-          height: 50px;
-          z-index: 2;
-    
-          &.left {
-            left: -20px;
-          }
-    
-          &.right {
-            right: -20px;
-          }
-        }
+  /* Card styles */
+  .card {
+    width: 250px;
+    height: 365.5px;
+    border-radius: 15px;
+    overflow: hidden;
+    background: transparent;
+    position: relative;
+    border: none;
+    padding: 0 10px;
+    box-sizing: border-box;
+
+    .card-image {
+      width: 100%;
+      height: 234px;
+      border-radius: 20px;
+      object-fit: cover;
+    }
+
+    .heart-icon {
+      width: 24px;
+      height: 24px;
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      fill: red;
+      cursor: pointer;
+    }
+
+    .card-title {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 22px;
+      line-height: 1.3;
+      text-align: left;
+      padding: 0 10px;
+      margin: 10px 0 4px;
+      min-height: 52px;
+      overflow: hidden;
+    }
+
+    .category {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      font-size: 18px;
+      line-height: 1;
+      letter-spacing: 0;
+      padding: 0 10px;
+      text-align: left;
+      color: #555;
+      margin-bottom: 3px;
+    }
+
+    .card-duration {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      font-size: 18px;
+      line-height: 1;
+      letter-spacing: 0;
+      padding: 0 10px;
+      text-align: left;
+      color: #555;
+      margin-bottom: 3px;
+    }
+
+    .stars {
+      display: flex;
+      justify-content: center;
+      padding: 0 10px;
+      margin-top: 0px;
+      
+      svg {
+        width: 37px;
+        height: 37px;
+        fill: #FFD700;
+        margin-right: 5px;
       }
-    
-      .rectangle {
-        width: 70px;
-        height: 100px;
-        top: -60px;
-        position: absolute;
-        border-radius: 30px 0px 10px 0px;
-        background-color: #59B1E6;
-        z-index: -1;
-      }
-    
-    
+    }
+  }
+
+  /* Custom Navigation Arrows */
+  .nav-button {
+    position: absolute;
+    top: 30%;
+    cursor: pointer;
+    z-index: 10;
+    width: 50px; /* Adjust as needed */
+    height: 50px; /* Adjust as needed */
+
+    &.left {
+      left: -20px; /* Adjust left position */
+    }
+
+    &.right {
+      right: -30px; /* Adjust right position */
+    }
+  }
+  .owl-nav button.owl-prev,
+.owl-nav button.owl-next {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.owl-nav button.owl-prev:active,
+.owl-nav button.owl-next:active {
+  transform: scale(1.2); /* Scale up when clicked */
+}
+
+}

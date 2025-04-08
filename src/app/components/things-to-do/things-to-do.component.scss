@@ -1,20 +1,31 @@
 section {
     background-color: var(--main-color);
+    margin-top: -50px;
 }
 
+  
 .container-fluid {
     display: flex;
     flex-direction: column;
     align-items: center;
+    
 }
 
+.section-wrapper{
+    max-width: 1300px;
+    margin: 0 100px;
+    position: relative;
+  
+}
 .title {
+    margin-left: 120px;
     font-size: 2rem;
     font-weight: 800;
     color: #222;
 }
 
 .subtitle {
+    margin-left: 120px;
     font-size: 1rem;
     color: #555;
 }

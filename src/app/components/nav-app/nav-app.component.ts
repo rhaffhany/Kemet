@@ -1,26 +1,27 @@
-import { SearchService } from './../../services/search.service';
-import { ChangeDetectorRef, Component, HostListener } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { Router, NavigationEnd, Event } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
 import { ProfileService } from 'src/app/services/profile.service';
-import { filter } from 'rxjs/operators';
-import { placeDetails } from 'src/app/interfaces/place-details';
+import { SearchService } from '../../services/search.service';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-nav-app',
   templateUrl: './nav-app.component.html',
   styleUrls: ['./nav-app.component.scss']
 })
-export class NavAppComponent {
+export class NavAppComponent implements OnInit {
   isCollapsed = true;
   isScrolled = false;
-  isHomePage = false;
+  showSearchBar = true;
   isSearchActive = false;
+  isHomePage = false;
+  isThingsToDoPage = false;  // Move this here only once
 
-  logo: string = "/assets/logo/kemet.png";
-  searchIcon: string = "/assets/icons/Search.png";
-  profilePic: string = "/assets/icons/profile-pic.svg";
-  places: any = [];
+  logo = "/assets/logo/kemet.png";
+  searchIcon = "/assets/icons/Search.png";
+  profilePic = "/assets/icons/profile-pic.svg";
 
   userData: any = {};
   query = '';
@@ -28,68 +29,52 @@ export class NavAppComponent {
   errorMessage = '';
 
   constructor(
-    private _ProfileService: ProfileService,
-    private _AuthService: AuthService,
-    private _Router: Router,
+    private profileService: ProfileService,
+    private authService: AuthService,
     private router: Router,
     private searchService: SearchService,
-    private cdr: ChangeDetectorRef,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    // Listen to navigation events
-    this._Router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe((event: any) => {
-        this.isHomePage = event.urlAfterRedirects === '/home' || event.urlAfterRedirects === '/';
-        this.isScrolled = false; 
-      });
+    this.checkCurrentRoute();
+    this.setupRouteListener();
+    this.loadUserData();
+  }
 
-    // Fetch user data
-    this._ProfileService.getCurrentUserData().subscribe({
+  private checkCurrentRoute(): void {
+    const currentUrl = this.router.url.split('?')[0];
+    this.isHomePage = currentUrl === '/home' || currentUrl === '/';
+    this.isThingsToDoPage = currentUrl.includes('thingstodo');  // Adjust based on your actual URL structure for Things to Do
+    this.showSearchBar = !(this.isHomePage || this.isThingsToDoPage);  // Hide search bar on Home and Things to Do
+  }
+
+  private setupRouteListener(): void {
+    this.router.events.pipe(
+      filter((event: Event): event is NavigationEnd => event instanceof NavigationEnd)
+    ).subscribe((event: NavigationEnd) => {
+      const url = event.urlAfterRedirects.split('?')[0];
+      this.isHomePage = url === '/home' || url === '/';
+      this.isThingsToDoPage = url.includes('thingstodo');  // Adjust based on your actual URL structure for Things to Do
+      this.showSearchBar = !(this.isHomePage || this.isThingsToDoPage);  // Hide search bar on Home and Things to Do
+      this.isScrolled = false;
+      this.searchResults = [];
+    });
+  }
+
+  private loadUserData(): void {
+    this.profileService.getCurrentUserData().subscribe({
       next: (data) => {
         this.userData = data;
-        this.profilePic = this.userData.profileImageURL 
-          ? this.userData.profileImageURL 
-          : "/assets/icons/profile-pic.svg";
+        this.profilePic = this.userData.profileImageURL || this.profilePic;
       },
       error: (err) => console.error('Error fetching user data:', err)
     });
   }
 
-
-
-  logout(): void {
-    this._AuthService.logout();
-  }
-
-  uploadProfileImg(event: any): void {
-    const file = event.target.files[0];
-    if (!file) {
-      console.error('No file selected!');
-      return;
-    }
-
-    const formData: FormData = new FormData();
-    formData.append('ProfileImage', file);
-
-    this._ProfileService.uploadProfileImg(formData).subscribe({
-      next: (response) => {
-        this.profilePic = `https://localhost:7051/${response.filePath}`;
-      },
-      error: (err) => {
-        console.error('Upload Error:', err);
-      }
-    });
-  }
-
-  closeCollapse(): void {
-    this.isCollapsed = true;
-  }
-
-  @HostListener('window:scroll', [])
+  @HostListener('window:scroll')
   onWindowScroll(): void {
-    this.isScrolled = window.scrollY > 50; // Change background after 50px scroll
+    this.isScrolled = window.scrollY > 50;
   }
 
   activateSearch(): void {
@@ -97,21 +82,7 @@ export class NavAppComponent {
   }
 
   deactivateSearch(): void {
-    setTimeout(() => {
-      this.isSearchActive = false;
-    }, 200); // Small delay to allow clicking results
-  }
-
-  
-  goToDetails(result: any) {
-    console.log('Navigating to:', result);
-
-    // Navigate based on result type
-    if (result.type === 'place') {
-      this.router.navigate(['/app-places', result.id]); 
-    } else if (result.type === 'activity') {
-      this.router.navigate(['/app-activities', result.id]); 
-    }
+    setTimeout(() => this.isSearchActive = false, 200);
   }
 
   onSearchInput(): void {
@@ -119,12 +90,12 @@ export class NavAppComponent {
       this.searchService.search(this.query).subscribe({
         next: (results) => {
           this.searchResults = results;
-          this.errorMessage = results.length === 0 ? 'No results found' : '';
+          this.errorMessage = results.length ? '' : 'No results found';
           this.cdr.detectChanges();
         },
         error: (error) => {
           console.error("Search error:", error);
-          this.errorMessage = error;
+          this.errorMessage = 'Error performing search';
           this.searchResults = [];
           this.cdr.detectChanges();
         }
@@ -132,7 +103,42 @@ export class NavAppComponent {
     } else {
       this.searchResults = [];
       this.errorMessage = '';
-      this.cdr.detectChanges();
     }
+  }
+
+  goToDetails(result: any): void {
+    if (result.type === 'place') {
+      this.router.navigate(['/app-places', result.id]);
+    } else if (result.type === 'activity') {
+      this.router.navigate(['/app-activities', result.id]);
+    }
+    this.searchResults = [];
+  }
+
+  uploadProfileImg(event: any): void {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('ProfileImage', file);
+
+    this.profileService.uploadProfileImg(formData).subscribe({
+      next: (response) => {
+        this.profilePic = `https://localhost:7051/${response.filePath}`;
+      },
+      error: (err) => console.error('Upload Error:', err)
+    });
+  }
+
+  closeCollapse(): void {
+    this.isCollapsed = true;
+  }
+
+  toggleProfileMenu(): void {
+    this.isCollapsed = !this.isCollapsed;
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 }

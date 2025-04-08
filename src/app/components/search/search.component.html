@@ -1,26 +1,28 @@
-<div class="search-bar mb-5">
-  <img [src]="searchIcon" alt="Search Icon" class="search-icon">
-  <input 
-    type="text" 
-    class="search-input w-auto" 
-    [(ngModel)]="query" 
-    (input)="onSearchInput()" 
-    placeholder="Search..."
-  />
-</div>
+<div class="floating-search">
 
-<div *ngIf="errorMessage" class="error-message text-center">
-  {{ errorMessage }}
-</div>
+  <div class="search-bar">
+    <input 
+      type="text" 
+      class="search-input" 
+      [(ngModel)]="query" 
+      (input)="onSearchInput()" 
+      placeholder="Search..."
+    />
+    
+  </div>
 
-<div *ngIf="searchResults.length > 0" class="search-results-container visible">
-  <div *ngFor="let result of searchResults" class="result-item" (click)="goToDetails(result)">
-    <img [src]="result.image || notFoundImg" alt="{{ result.name }}" class="result-image">
-    <div class="result-details">
-      <h4 class="result-name">{{ result.name }}</h4>
-      <p class="result-description">{{ result.description }}</p>
-      <p class="result-category">{{ result.category }}</p>  
+  <div *ngIf="errorMessage" class="error-message text-center">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="searchResults.length > 0" class="search-results-container">
+    <div *ngFor="let result of searchResults" class="result-item" (click)="goToDetails(result)">
+      <img [src]="result.image || notFoundImg" alt="{{ result.name }}" class="result-image" />
+      <div class="result-details">
+        <h4 class="result-name">{{ result.name }}</h4>
+        <p class="result-description">{{ result.description }}</p>
+        <p class="result-category">{{ result.category }}</p>  
+      </div>
     </div>
   </div>
 </div>
-

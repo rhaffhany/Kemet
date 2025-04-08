@@ -1,7 +1,9 @@
 <section>
+  <img src="assets/icons/Heart2.png" alt="Heart Icon" class="wishlist-icon" />
+  
   <h1 class="title">My Wishlist</h1>
 
-  <button>Plan a trip with AI</button>
+  <button routerLink="/plan">Plan a trip with AI</button>
 
   <div *ngIf="loading">Loading...</div>
   <div *ngIf="errorMessage">{{ errorMessage }}</div>
@@ -10,7 +12,6 @@
 
   <div class="card" *ngFor="let item of wishlist; let i = index">
     <div class="card-body">
-      <!-- Three Dots Menu -->
       <div class="menu-container">
         <button class="menu-btn" (click)="toggleMenu(i)">⋮</button>
         
@@ -25,12 +26,9 @@
       <div class="card-text">
         <h2 class="card-title">{{ item.name }}</h2>
 
-        <!-- Show category for places -->
         <p *ngIf="item.type === 'place'" class="card-subtitle"> {{ item.categoryName }}</p>
-
-        <!-- Show duration for activities -->
         <p *ngIf="item.type === 'activity'" class="card-subtitle">Activity</p>
       </div>
     </div>
-  </div>
+  </div> 
 </section>

@@ -1,49 +1,79 @@
 <section class="personalized-plan">
+    <!-- Print Logo -->
+    <div class="logo-print" [style.--logo-path]="'url(' + logoPath + ')'"></div>
+    
+    <!-- Header Section -->
     <header>
-        <img [src]= "egypt" alt="Egypt">
-        <div class="headerContent">
-            <h1>Step Into Your Perfect<br>Egyptian Experience</h1>
-            <button class="print">Print as PDF</button>
-        </div>
+      <img [src]="egyptBanner" alt="Egypt">
+      <div class="headerContent">
+        <h1>Your Personalized Egyptian Adventure</h1>
+        <button class="print" (click)="printAsPDF()">Print as PDF</button>
+      </div>
     </header>
-    <main>
-        <section class="day">
-            <div class="day-container">
-                <h2>DAY 1</h2>
-                <div class="location">
-                <img class="locationIcon" [src]= "location" alt="Egypt">
-                <p>Giza, Egypt</p>
+  
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-state">
+      <div class="spinner"></div>
+    </div>
+  
+    <!-- Error State -->
+    <div *ngIf="errorMessage" class="error-state">
+      <p>{{ errorMessage }}</p>
+      <button class="btn" (click)="generateNewPlan()">Generate New Plan</button>
+    </div>
+  
+    <!-- Plan Content -->
+    <main *ngIf="!isLoading && !errorMessage && travelPlan.length > 0">
+      <section *ngFor="let day of travelPlan; let dayIndex = index" class="day">
+        <div class="day-container">
+          <h2>DAY {{ day.dayNumber }}</h2>
+          
+          <div class="location">
+            <img class="locationIcon" [src]="locationIcon" alt="Location">
+            <p>{{ day.location }}</p>
+          </div>
+          
+          <div class="book-btn">
+            <button class="btn">Book This Day</button>
+          </div>
+          
+          <div class="todo">
+            <!-- Places -->
+            <div *ngFor="let place of day.places; let placeIndex = index" 
+                 class="place" (click)="navigateToPlace(place.placeId)">
+              <img [src]="place.image" [alt]="place.name">
+              <div class="info">
+                <h3>{{ place.name }}</h3>
+                <p class="category {{ getCategoryClass(place.category) }}">
+                  {{ place.category }}
+                </p>
+                <p class="description">{{ place.description }}</p>
+              </div>
+              <div class="regenerate-icon" (click)="regenerateItem(dayIndex, 'place', placeIndex); $event.stopPropagation()">
+                <img [src]="regenerateIcon" class="regenerate" [class.rotate]="isRegenerating(dayIndex, 'place', placeIndex)">
+              </div>
+              <p class="price">{{ place.price }}</p>
             </div>
-            <div class="book-btn">
-                <button class="btn">Book</button>
+            
+            <!-- Activities -->
+            <div *ngFor="let activity of day.activities; let activityIndex = index" 
+                 class="activity" (click)="navigateToActivity(activity.activityId)">
+              <img [src]="activity.image" [alt]="activity.name">
+              <div class="info">
+                <h3>{{ activity.name }}</h3>
+                <p class="category {{ getCategoryClass(activity.category) }}">
+                  {{ activity.category }}
+                </p>
+                <p class="description">{{ activity.description }}</p>
+              </div>
+              <div class="regenerate-icon" (click)="regenerateItem(dayIndex, 'activity', activityIndex); $event.stopPropagation()">
+                <img [src]="regenerateIcon" class="regenerate" [class.rotate]="isRegenerating(dayIndex, 'activity', activityIndex)">
+              </div>
+              <p class="price">{{ activity.price }}</p>
             </div>
-                <div class="todo">
-                    <div class="place">
-                        <img [src] ='pyramids' alt="Great Pyramids">
-                        <div class="info">
-                            <h3>Great Pyramids</h3>
-                            <p class="category">Historical</p>
-                            <p class="description">The Great Pyramids of Giza are one of the Seven Wonders of the Ancient World, standing as a testament to Egypt's rich history and architectural brilliance. Built over 4,500 years ago, these pyramids served as royal tombs for the pharaohs.</p>
-                        </div>
-                        <div #regenerateIcons>
-                            <img [src]="regenerate" class="regenerate">
-                          </div>
-                           <p class="price">700 LE</p>
-                    </div>
-                    <div class="activity">
-                        <img [src] ='pyramids' alt="Great Pyramids">
-                        <div class="info">
-                            <h3>Great Pyramids</h3>
-                            <p class="category">Historical</p>
-                            <p class="description">The Great Pyramids of Giza are one of the Seven Wonders of the Ancient World, standing as a testament to Egypt's rich history and architectural brilliance. Built over 4,500 years ago, these pyramids served as royal tombs for the pharaohs.</p>
-                        </div>
-                        <div #regenerateIcons>
-                            <img [src]="regenerate" class="regenerate">
-                          </div>
-                            <p class="price">700 LE</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+          </div>
+        </div>
+      </section>
     </main>
-</section>
+
+  </section>
