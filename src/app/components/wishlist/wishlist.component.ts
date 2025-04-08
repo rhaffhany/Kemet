@@ -11,6 +11,8 @@ interface WishlistItem {
   name: string;
   categoryName?: string;
   imageURLs: string[];
+  $id: string;
+  description?: string;
 }
 
 @Component({
@@ -37,40 +39,92 @@ export class WishlistComponent implements OnInit {
     this.menuOpenIndex = this.menuOpenIndex === index ? null : index;
   }
 
+  removeItemFromWishlist(item: WishlistItem, index: number): void {
+    console.log(`Attempting to remove item:`, {
+      name: item.name,
+      index: index
+    });
+
+    this.wishlistService.removeFromWishlist(index).subscribe({
+      next: () => {
+        console.log(`Successfully removed ${item.name} from wishlist.`);
+        this.wishlist.splice(index, 1); // Remove the item from the UI
+        this.menuOpenIndex = null; // Close the menu
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error removing item:', {
+          error,
+          index,
+          status: error.status,
+          message: error.message,
+          url: error.url
+        });
+        if (error.status === 404) {
+          this.errorMessage = `Item not found in wishlist: ${item.name} (Index: ${index})`;
+        } else if (error.status === 401) {
+          this.errorMessage = 'Please log in to remove items from your wishlist';
+        } else {
+          this.errorMessage = `Failed to remove item from wishlist: ${error.message}`;
+        }
+      }
+    });
+  }
+
   getWishlist(): void {
     this.loading = true;
     this.wishlistService.getWishlist().subscribe({
       next: (response) => {
-        console.log('API Response:', response);
+        console.log('Raw API Response:', JSON.stringify(response, null, 2));
         this.wishlist = [];
 
         if (response?.places?.$values) {
+          console.log('Processing places:', JSON.stringify(response.places.$values, null, 2));
           this.wishlist.push(
-            ...response.places.$values.map((place: any) => ({
-              id: place.placeID,
-              type: 'place',
-              placeID: place.placeID,
-              name: place.name,
-              description: place.description || '',
-              imageURLs: place.imageURLs?.$values || [],
-              categoryName: '',
-              activityName: ''
-            }))
+            ...response.places.$values.map((place: any) => {
+              console.log('Processing place:', {
+                name: place.name,
+                placeID: place.placeID,
+                $id: place.$id,
+                fullPlace: place
+              });
+              
+              const item = {
+                id: place.placeID,
+                type: 'place',
+                placeID: place.placeID,
+                name: place.name,
+                description: place.description || '',
+                imageURLs: place.imageURLs?.$values || [],
+                categoryName: '',
+                activityName: '',
+                $id: place.$id
+              };
+              console.log('Created place item:', JSON.stringify(item, null, 2));
+              return item;
+            })
           );
         }
 
         if (response?.activities?.$values) {
+          console.log('Processing activities:', JSON.stringify(response.activities.$values, null, 2));
           this.wishlist.push(
-            ...response.activities.$values.map((activity: any) => ({
-              id: activity.activityId,
-              type: 'activity',
-              name: activity.name,
-              imageURLs: activity.imageURLs?.$values || [],
-              categoryName: activity.category,
-              activityName: activity.name
-            }))
+            ...response.activities.$values.map((activity: any) => {
+              const item = {
+                id: activity.activityId,
+                type: 'activity',
+                name: activity.name,
+                imageURLs: activity.imageURLs?.$values || [],
+                categoryName: activity.category,
+                activityName: activity.name,
+                $id: activity.$id
+              };
+              console.log('Created activity item:', JSON.stringify(item, null, 2));
+              return item;
+            })
           );
         }
+
+        console.log('Final wishlist:', JSON.stringify(this.wishlist, null, 2));
 
         this.wishlist.forEach((item, index) => {
           if (item.type === 'place' && item.placeID) {
@@ -88,30 +142,6 @@ export class WishlistComponent implements OnInit {
     });
   }
 
-// wishlist.component.ts
-removeItemFromWishlist(item: WishlistItem, index: number): void {
-  if (!item.id || !item.type) {
-    console.error('Invalid item ID or Type:', item);
-    return;
-  }
-
-  console.log(`Removing item: ${item.name} (ID: ${item.id}, Type: ${item.type})`);
-
-  this.wishlistService.removeFromWishlist(item.id, item.type).subscribe({
-    next: () => {
-      console.log(`Successfully removed ${item.name} from wishlist.`);
-      this.wishlist.splice(index, 1); // Remove the item from the UI
-    },
-    error: (error: HttpErrorResponse) => {
-      console.error('Error removing item:', error);
-      if (error.status === 404) {
-        this.errorMessage = `Item not found in wishlist: ${item.name}`;
-      } else {
-        this.errorMessage = `Failed to remove item from wishlist: ${error.message}`;
-      }
-    }
-  });
-}
   getDetails(placeID: number, index: number): void {
     this.detailsService.getDetailedPlace(placeID).subscribe({
       next: (detail) => {

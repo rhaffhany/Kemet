@@ -1,3 +1,4 @@
+import { SwiperModule } from './../../node_modules/swiper/types/shared.d';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common'; 
@@ -51,7 +52,6 @@ import { NavTravelAgencyComponent } from './components/nav-travel-agency/nav-tra
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { PersonalizedPlanComponent } from './components/personalized-plan/personalized-plan.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -91,7 +91,6 @@ import { PersonalizedPlanComponent } from './components/personalized-plan/person
     TravelAgencyProfileComponent,
     NavTravelAgencyComponent,
     PersonalizedPlanComponent,
-  
   ],
 imports: [
   BrowserModule,
@@ -107,7 +106,8 @@ imports: [
   CarouselModule,
   NgbDatepickerModule,
   NgbDatepickerModule,
-  MatProgressBarModule
+  MatProgressBarModule,
+  
 ],
   providers: [],
   bootstrap: [AppComponent],

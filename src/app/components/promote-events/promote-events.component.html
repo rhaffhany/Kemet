@@ -1,8 +1,38 @@
 <div class="promote-events-carousel">
   <div class="carousel-wrapper">
     <div class="carousel-images">
-      <div class="carousel-image" *ngFor="let image of images | slice:0:2">
-        <img [src]="image" />
+      <div class="carousel-image" *ngFor="let image of images">
+        <img [src]="image" alt="Promote Event Image" />
+      </div>
+    </div>
+  </div>
+
+  <div class="floating-search">
+    <h2>Grand Opening of the <br> Grand Egyptian Museum</h2>
+    <h6>Officially open on July 3, 2025.</h6>
+    <div class="search-bar">
+      <input 
+        type="text" 
+        class="search-input" 
+        [(ngModel)]="query" 
+        (input)="onSearchInput()" 
+        placeholder="Search..."
+      />
+      
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message text-center">
+      {{ errorMessage }}
+    </div>
+
+    <div *ngIf="searchResults.length > 0" class="search-results-container">
+      <div *ngFor="let result of searchResults" class="result-item" (click)="goToDetails(result)">
+        <img [src]="result.image || notFoundImg" alt="{{ result.name }}" class="result-image" />
+        <div class="result-details">
+          <h4 class="result-name">{{ result.name }}</h4>
+          <p class="result-description">{{ result.description }}</p>
+          <p class="result-category">{{ result.category }}</p>  
+        </div>
       </div>
     </div>
   </div>

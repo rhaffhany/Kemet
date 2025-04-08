@@ -1,4 +1,3 @@
-
 :root {
   --main-color: #FFE5C2;
   --primary-color: #FFF2E0;
@@ -165,5 +164,34 @@
   transition: transform 0.3s ease;
   &:hover{
     transform: scale(1.05);
+  }
+}
+
+@media print {
+  app-navbar, .navbar, nav, app-footer, footer, .footer {
+    display: none !important;
+  }
+
+  body {
+    font-size: 12px !important;
+    background: white !important;
+    color: black !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  @page {
+    margin: 1cm;
+    @top-left {
+      content: url('assets/icons/logo.png');
+      width: 30px;
+      height: 30px;
+      margin: 10px;
+    }
+  }
+
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 }

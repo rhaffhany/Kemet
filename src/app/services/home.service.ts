@@ -28,4 +28,5 @@ export class HomeService {
     return this._HttpClient.get(`${this.DeployUrl}/api/TravelAgencyPlan`);
   }
 
+  
 }
