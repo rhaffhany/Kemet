@@ -19,7 +19,7 @@ export class PackageDetailsBookingComponent implements OnInit{
 
   egyptFlag:string= '/assets/img/egyptFlag.png';
   searchIcon:string = "/assets/icons/Search.png";
-  profileImg: string = 'assets/img/default-profile.png';
+  profileImg: string = '/assets/img/default-profile.png';
 
 
   searchResults: any[] = [];  
