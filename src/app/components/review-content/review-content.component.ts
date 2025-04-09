@@ -89,6 +89,7 @@ export class ReviewContentComponent implements OnInit{
     formData.append('comment', this.reviewText);
     formData.append('reviewTitle', this.reviewTitle);
     formData.append('createdAt', currentDate);
+
     this._ActivatedRoute.paramMap.subscribe(params => {
       if (params.has('placeID')) {
         this.placeID = params.get('placeID');
@@ -106,7 +107,7 @@ export class ReviewContentComponent implements OnInit{
     this.loading = true;
 
     this._ReviewService.addReview(formData).subscribe({
-      next:(data)=>{
+      next:()=>{
         Swal.fire({
           icon: 'success',
           title: 'Review Submitted!',
