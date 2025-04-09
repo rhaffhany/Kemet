@@ -1,139 +1,176 @@
 import { HomeService } from './../../services/home.service';
+import { OwlOptions } from 'ngx-owl-carousel-o';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { CarouselComponent } from 'ngx-owl-carousel-o';
+import { AuthService } from '../../services/auth.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { WishlistService } from '../../services/wishlist.service';
 
-  import { Component, OnInit } from '@angular/core';
-  import { WishlistService } from 'src/app/services/wishlist.service';
-  import { AuthService } from 'src/app/services/auth.service';
-import { HttpHeaders } from '@angular/common/http';
-import { catchError, throwError } from 'rxjs';
-  
-  @Component({
-    selector: 'app-ancient-spotlight',
-    templateUrl: './ancient-spotlight.component.html',
-    styleUrls: ['./ancient-spotlight.component.scss']
-  })
-  export class AncientSpotlightComponent implements OnInit {
-    ancientPlaces = [
-      { id: 1, name: 'Great Pyramid of Giza', image: 'giza.jpg' },
-      { id: 2, name: 'Machu Picchu', image: 'machu-picchu.jpg' },
-      { id: 3, name: 'Colosseum', image: 'colosseum.jpg' }
-    ]; // Hardcoded data
-    
+@Component({
+  selector: 'app-ancient-spotlight',
+  templateUrl: './ancient-spotlight.component.html',
+  styleUrls: ['./ancient-spotlight.component.scss']
+})
+export class AncientSpotlightComponent implements OnInit {
+  @ViewChild('owlCarousel') owlCarousel: CarouselComponent | undefined;
+  places: any[] = [];
+  leftArrowSrc: string = '../../../assets/icons/arrow-left-circle.svg';
+  rightArrowSrc: string = '../../../assets/icons/arrow-right-circle.svg';
+  carouselReady: boolean = false;
+  DeployUrl = 'https://kemet-server.runasp.net';
+  wishlistItems: Set<number> = new Set();
 
-    places: any = [];
-    currentIndex: number = 0;
-    heartStates: boolean[] = [];
-    totalSlides: number = 5;
-    leftArrowSrc: string = '../../../assets/icons/arrow-left-circle.svg';
-    rightArrowSrc: string = '../../../assets/icons/arrow-right-circle.svg';
-    http: any;
-  
-    constructor(
-      private wishlistService: WishlistService,
-      private authService: AuthService,
-      private _HomeService: HomeService
-    ) {}
-  
-    ngOnInit(): void {
-      this.heartStates = new Array(this.ancientPlaces.length).fill(false);
-    
-      // Fetch the wishlist from the server
-      this.wishlistService.getWishlist().subscribe(
-        (wishlist) => {
-          if (wishlist && Array.isArray(wishlist.$values)) {
-            const wishlistPlaceIDs = wishlist.$values.map((item: any) => item.placeID);
-    
-            // Mark places that are already in the wishlist
-            this.ancientPlaces.forEach((place, index) => {
-              if (wishlistPlaceIDs.includes(place.id)) {
-                this.heartStates[index] = true; // Keep it red
-              }
-            });
-          }
-        },
-        (error) => {
-          console.error('Error fetching wishlist:', error);
-        }
-      );
-    
-      this._HomeService.fetchPlaces().subscribe(
-        (data) => {
-          if (data && Array.isArray(data.$values)) {
-            this.places = data.$values;
-          }
-        },
-        (error) => {
-          console.error('Error fetching places data:', error);
-        }
-      );
+  constructor(
+    private _HomeService: HomeService,
+    private authService: AuthService,
+    private http: HttpClient,
+    private wishlistService: WishlistService
+  ) {}
+
+  ngOnInit() {
+    this.loadPlaces();
+    if (this.authService.isLoggedIn()) {
+      this.loadWishlistItems();
     }
-    
-  
-    toggleHeart(index: number, placeID: number): void {
-      if (this.authService.isTokenExpired()) {
-        console.log('Token expired. Please log in again.');
-        return;
-      }
-    
-      if (this.heartStates[index]) {
-        console.log('Already in wishlist.'); // Prevent duplicate addition
-        return;
-      }
-    
-      this.heartStates[index] = true; // Change to red immediately
-    
-      this.wishlistService.addPlaceToWishlist(placeID).subscribe(
-        () => console.log('Added to wishlist'),
-        (error) => {
-          console.error('Error adding to wishlist:', error);
-          this.heartStates[index] = false; // Revert if failed
-        }
-      );
-    }
-    
-    
-    addPlaceToWishlist(placeID: number) {
-      const url = `https://kemet-server.runasp.net/api/Wishlist/AddPlaceToWishlist?PlaceID=${placeID}`;
-      const headers = new HttpHeaders({
-        'Authorization': `Bearer ${this.authService.getToken()}` // If authentication is needed
-      });
-    
-      return this.http.post(url, {}, { headers }).pipe(
-        catchError(error => {
-          console.error('Error adding place to wishlist:', error);
-          return throwError(() => new Error('Failed to add place to wishlist.'));
-        })
-      );
-    }
-    
-    prevSlide() {
-      if (this.currentIndex > 0) {
-        this.currentIndex--;
-      }
-    }
-  
-    nextSlide(): void {
-      if (this.currentIndex < this.places.length - this.totalSlides) {
-        this.currentIndex++;
-      }
-    }
-  
-    getDisplayedPlaces(): any[] {
-      const endIndex = Math.min(this.currentIndex + this.totalSlides, this.places.length);
-      return this.places.slice(this.currentIndex, endIndex);
-    }
-  
-    
-    updateSlide() {
-      const cardsContainer = document.querySelector('.cards-container') as HTMLElement;
-      if (this.currentIndex === this.places.length - 1) {
-        cardsContainer.classList.add('swiped');
-      } else {
-        cardsContainer.classList.remove('swiped');
-      }
-      // Update the transform property to slide
-      cardsContainer.style.transform = `translateX(-${this.currentIndex * 250}px)`;
-    }
-    
-    
   }
-  
+
+  loadPlaces() {
+    this._HomeService.fetchPlaces().subscribe(
+      data => {
+        if (data && Array.isArray(data.$values)) {
+          this.places = data.$values;
+          this.carouselReady = true;
+          console.log('Loaded places:', this.places);
+          
+          // Fetch category for each place
+          this.places.forEach(place => {
+            this._HomeService.fetchPlaceCategory(place.placeID).subscribe(
+              categoryData => {
+                if (categoryData && categoryData.categoryName) {
+                  place.categoryName = categoryData.categoryName;
+                }
+              },
+              error => {
+                console.error(`Error fetching category for place ${place.placeID}:`, error);
+              }
+            );
+          });
+        } else {
+          console.error('Expected $values array, but received:', data);
+        }
+      },
+      error => {
+        console.error('Error fetching places:', error);
+      }
+    );
+  }
+
+  loadWishlistItems() {
+    if (!this.authService.isLoggedIn()) {
+      console.log('User not logged in, skipping wishlist load');
+      return;
+    }
+
+    this.wishlistService.getWishlist().subscribe(
+      (response: any) => {
+        console.log('Raw Wishlist Response:', response);
+        this.wishlistItems.clear();
+
+        // Handle different response formats
+        let wishlistItems = [];
+        if (response && response.places && response.places.$values) {
+          wishlistItems = response.places.$values;
+        } else if (Array.isArray(response)) {
+          wishlistItems = response;
+        } else if (response && response.$values) {
+          wishlistItems = response.$values;
+        }
+        
+        console.log('Processed wishlist items:', wishlistItems);
+        
+        wishlistItems.forEach((item: any) => {
+          console.log('Processing wishlist item:', item);
+          if (item && item.placeID) {
+            this.wishlistItems.add(item.placeID);
+            console.log('Added placeID to wishlist:', item.placeID);
+          }
+        });
+
+        console.log('Final Wishlist Items:', Array.from(this.wishlistItems));
+      },
+      error => {
+        console.error('Error loading wishlist:', error);
+      }
+    );
+  }
+
+  toggleWishlist(placeId: number, event: Event) {
+    event.stopPropagation();
+    if (!this.authService.isLoggedIn()) {
+      return;
+    }
+
+    const isInWishlist = this.wishlistItems.has(placeId);
+    
+    if (isInWishlist) {
+      // Remove from wishlist
+      this.wishlistService.removeFromWishlist(placeId).subscribe({
+        next: () => {
+          this.wishlistItems.delete(placeId);
+          console.log('Removed from wishlist:', placeId);
+        },
+        error: (error) => {
+          console.error('Error removing from wishlist:', error);
+        }
+      });
+    } else {
+      // Add to wishlist
+      this.wishlistService.addPlaceToWishlist(placeId).subscribe({
+        next: () => {
+          this.wishlistItems.add(placeId);
+          console.log('Added to wishlist:', placeId);
+        },
+        error: (error) => {
+          console.error('Error adding to wishlist:', error);
+        }
+      });
+    }
+  }
+
+  isInWishlist(placeId: number): boolean {
+    return this.wishlistItems.has(placeId);
+  }
+
+  customOptions: OwlOptions = {
+    loop: true,
+    margin: 10,
+    nav: false,
+    dots: false,
+    autoplay: true,
+    autoplayTimeout: 3000,
+    autoplayHoverPause: false,
+    responsive: {
+      0: {
+        items: 1.2
+      },
+      768: {
+        items: 3
+      },
+      1024: {
+        items: 5 
+      }
+    }
+  };
+
+  onPrev() {
+    if (this.owlCarousel) {
+      this.owlCarousel.prev();
+    }
+  }
+
+  onNext() {
+    if (this.owlCarousel) {
+      this.owlCarousel.next();
+    }
+  }
+}

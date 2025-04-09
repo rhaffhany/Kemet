@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-footer',
@@ -20,4 +21,9 @@ export class FooterComponent {
 
   email:string = "contact@company.com";
 
+  constructor(private router: Router) {}
+
+  navigateToPlan(): void {
+    this.router.navigate(['/plan']);
+  }
 }

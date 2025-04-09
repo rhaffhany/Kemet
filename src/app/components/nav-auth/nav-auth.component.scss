@@ -6,17 +6,19 @@ $font-weight: 600;
 $line-height: 21.78px;
 $color-default: #000;
 $color-hover: #FFBD67;
+$main-color:#FFBD67;
 
 body, html {
-  background-color: var(--main-color); 
+  background-color: var(--main-color) !important;
   margin: 0;
   padding: 0;
 }
 
 .navbar {
-  background-color: transparent !important;
+  background-color: var(--main-color) !important;
   position: fixed;
   width: 100%;
+  height: 90px;
   top: 0;
   left: 0;
   z-index: 1000;
@@ -41,7 +43,7 @@ body, html {
   .logo {
    
     height: auto;
-    margin-left: 65px;
+    margin-left: 105px;
   }
   
   .navbar-nav {
@@ -57,7 +59,7 @@ body, html {
   .navbar-nav .nav-item .nav-link {
     font-family: 'inter';
     font-size: $font-size;
-    font-weight: $font-weight;
+    font-weight: 200!important;
     color: $color-default;
     line-height: $line-height;
     margin-right: 40px;
@@ -79,7 +81,7 @@ body, html {
     display: inline-block;
     position: relative;
     margin-left: auto;
-    margin-right: 20px;
+    margin-right: 105px;
   }
 
   .sign-in-button {
@@ -89,11 +91,11 @@ body, html {
     color: $color-default;
     font-family: $font-family;
     font-size: $font-size;
-    font-weight: 800px;
+    font-weight: 200;
     line-height: $line-height;
     text-align: center;
     border-radius: 20px;
-    border: 2px solid $color-default;
+    border: 1px solid $color-default;
     cursor: pointer;
     display: flex;
     justify-content: center;
