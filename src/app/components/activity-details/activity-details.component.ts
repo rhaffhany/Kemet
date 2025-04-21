@@ -19,10 +19,6 @@ export class ActivityDetailsComponent {
   notFoundImg:string = "/assets/img/not found.jpg";
   egyptFlag:string= '/assets/img/egyptFlag.png';
 
-
-  searchResults: any[] = [];  
-  errorMessage: string = ''; 
-
   userData:any = {};
   updatedData:any = {...this.userData};
 
@@ -31,7 +27,10 @@ export class ActivityDetailsComponent {
 
   reviewsData:any[] =[];
   updatedReviewData:any[] = [...this.reviewsData];
+  filteredReviews:any[] = [];
 
+  ratingCounts: { [key: number]: number } = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+  ratingPercents: { [key: number]: number } = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
 
   constructor(private _DetailsService:DetailsService, private _ActivatedRoute:ActivatedRoute, private _ProfileService:ProfileService ){}
 
@@ -48,6 +47,24 @@ export class ActivityDetailsComponent {
         next: (response) => {
           this.activityDetails = response;
           this.reviewsData = response.reviews.$values;
+          this.filteredReviews = [...this.reviewsData];
+
+          this.ratingCounts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+          this.reviewsData.forEach(review => {
+            const rating = review.rating;
+            if (this.ratingCounts[rating] !== undefined) {
+              this.ratingCounts[rating]++;
+            }
+          });
+          
+          // Calculate percentages
+          const totalReviews = this.reviewsData.length;
+          for (let i = 1; i <= 5; i++) {
+            this.ratingPercents[i] = totalReviews > 0
+              ? Math.round((this.ratingCounts[i] / totalReviews) * 100)
+              : 0;
+          }
+
           this.activityDetails.averageRating = Math.round(this.activityDetails.averageRating * 10) / 10;
         },
         error: (err) => {
@@ -151,5 +168,48 @@ export class ActivityDetailsComponent {
     },
     nav: true
   };
+
+   //reviews filters
+   toggleFilterOptions:boolean = false;
+
+
+   sortByMostRecent() {
+     this.reviewsData.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+   }
+ 
+   filterByRating(order: 'high' | 'low') {
+     this.reviewsData.sort((a, b) => {
+       return order === 'high' ? b.rating - a.rating : a.rating - b.rating;
+     });
+   }
+   resetFilters() {
+     return this.reviewsData = [...this.filteredReviews];
+   }
+
+     //search 
+  searchText: string = ''; 
+  searchResults: any[] = [];
+  errorMessage: string = ''; 
+
+  onSearch() {
+    const query = this.searchText.trim().toLowerCase();
+  
+    if (query === '') {
+      this.searchResults = [];
+      this.errorMessage = '';
+      return;
+    }
+  
+    this.searchResults = this.reviewsData.filter(review =>
+      Object.values(review).some(value =>
+        value && value.toString().toLowerCase().includes(query)
+      )
+    );
+  
+    this.errorMessage = this.searchResults.length === 0 ? 'No results found.' : '';
+  }
+
+
+ 
 
 }

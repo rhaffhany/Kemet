@@ -4,11 +4,15 @@ export interface PackageDetails {
     planName: string
     duration: string
     description: string
+    planLocation: string
     imageURLs: string
     reviews:{
         $id: string,
         $values:any[]
     }
+    travelAgencyName: string
+    travelAgencyDescription: string
+    travelAgencyAddress: string
     averageRating: number
     ratingsCount: number
     egyptianAdult: number

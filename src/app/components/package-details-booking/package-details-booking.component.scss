@@ -1,5 +1,6 @@
 section{
-    background-color: var(--primary-color);
+    // background-color: var(--primary-color);
+    background-color: #FFF2E0;
 }
 
 .review-link {
@@ -181,6 +182,22 @@ section{
     border-radius: 15px;
     padding:5px 10px;
     color: var(--secondary-color);
+}
+//num of people
+.peopleCount {
+  background-color: #f8f9fa;
+  color: #495057;
+  border-color: transparent;
+
+  &:focus {
+    outline: none;
+    box-shadow: none;
+    border-color: transparent;
+  }
+
+  &:hover {
+    background-color: #e9ecef;
+  }
 }
 
 .book-btn{

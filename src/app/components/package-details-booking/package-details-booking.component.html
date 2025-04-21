@@ -3,7 +3,7 @@
     <div class="container pt-5 mt-3">
         <div class="row  mt-5">
             <div class="col-md-12">
-                <h1 class="fw-bolder">{{packageDetails.description}}: {{packageDetails.planName}}</h1>
+                <h1 class="fw-bolder">{{packageDetails.planName}}: {{packageDetails.description}}</h1>
                 <div class="rating d-flex">
                     <p class="fw-bold me-1 mb-0" style="font-size: 20px;">{{packageDetails.averageRating}}</p>
                     <span *ngFor="let star of [1, 2, 3, 4, 5]; let i = index" class="rate">
@@ -68,26 +68,24 @@
             <div class="col-md-8">
                 <div class="details bg-white mt-5 p-3">
                     <div class="agency-pp d-flex w-50">
-                        <img src="../../../assets/img/Agency pp.png" alt="agency-profile-pic" class="rounded" routerLink="/travelAgency-profile"  style="cursor: pointer;" >
+                        <img [src]="" alt="agency-profile-pic" class="rounded" routerLink="/travelAgency-profile"  style="cursor: pointer;" >
                         <div class="d-block ms-3">
-                            <p class="fw-bolder pt-2 mb-1" routerLink="/travelAgency-profile"  style="cursor: pointer;" >Odyssey</p>
-                            <p><i class="fa-solid fa-location-dot"></i> <span class="text-muted"> {{packageDetails.description}}</span></p>
+                            <p class="fw-bolder pt-2 mb-1" routerLink="/travelAgency-profile"  style="cursor: pointer;" >{{packageDetails.travelAgencyName}}</p>
+                            <p><i class="fa-solid fa-location-dot"></i> <span class="text-muted"> {{packageDetails.travelAgencyAddress}}</span></p>
                         </div>
                     </div>
                     <div class="desc">
-                        <p class="lead px-2 py-1 " style="font-size: 15px; line-height: 10x; font-weight: 500;">Dahab, a breathtaking town in South Sinai, Egypt, is known for its golden beaches, crystal-clear waters, and vibrant coral reefs. The Blue Hole, a world-famous diving site, 
-                            attracts snorkelers and divers with its stunning marine life. Adventure seekers can enjoy a Jeep safari through the Colored Canyon, 
-                            marveling at its unique rock formations. Evenings come alive with a Bedouin dinner under the stars, offering traditional flavors and warm hospitality. 
-                            Visitors can also explore local markets for handmade crafts and souvenirs. Whether for relaxation or adventure, Dahab offers an unforgettable experience.</p>
+                        <p class="lead px-2 py-1 mt-2 " style="font-size: 15px; line-height: 10x; font-weight: 500;">{{packageDetails.travelAgencyDescription}}</p>
                     </div>
                 </div>
             </div>
 
+            <!-- book a trip -->
             <div class="col-md-3">  
 
                 <div class="booking bg-white mt-5 p-3">
                     <label for="dateSelection" class="form-label fw-bold d-none"></label>
-                    <input type="date" id="dateSelection" class="form-control dateSelection mb-3">
+                    <input type="date" id="dateSelection" class="form-control dateSelection mb-3" [(ngModel)]="bookData.reserveDate">
                     <div class="d-flex gap-2">
                         <div ngbDropdown class="w-50">
                             <button class="btn btn-light w-100 d-flex align-items-center justify-content-between" 
@@ -131,8 +129,16 @@
                             No Board
                         </button>
                     </div>
-                    <div class="d-flex justify-content-end mt-4">
-                        <button class="btn book-btn fw-bolder">Book</button>
+
+                    <div class="my-3">
+                        <label for="peopleCount" class=" form-label fw-bold">Number of People:</label>
+                        <input type="number" id="peopleCount" class="peopleCount form-control" [(ngModel)]="bookData.numOfPeople" name="numOfPeople" min="1" (input)="updateBookedPrice()">
+                    </div>
+
+                    <p class="text-center mt-3 mb-0 fw-bold">Total Price: {{ bookedPrice | currency:'£' }}</p>
+
+                    <div class="d-flex justify-content-end mt-3">
+                        <button class="btn book-btn fw-bolder" (click)="bookTrip()">Book</button>
                     </div>
                 </div>
 

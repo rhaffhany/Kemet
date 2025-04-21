@@ -122,7 +122,6 @@ export class ReviewContentComponent implements OnInit{
         } else {
           this._Router.navigate(['/activities', this.activityID]);
         }
-
         // console.log("review data:",data);
         // this._ReviewService.setReviewData(data);              
       },

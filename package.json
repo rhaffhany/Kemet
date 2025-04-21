@@ -33,6 +33,8 @@
     "ng-otp-input": "^1.9.3",
     "ng-zorro-antd": "^16.0.0",
     "ngx-owl-carousel-o": "^16.0.0",
+    "primeicons": "^7.0.0",
+    "primeng": "^16.0.0",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.14.5",
     "swiper": "^11.2.6",
