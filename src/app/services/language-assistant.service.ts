@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 declare global {
   interface Window {
@@ -15,34 +15,35 @@ declare global {
 
 export class LanguageAssistantService {
 
-  // private DeployURL = 'https://kemet-server.runasp.net';
-  private translationUrl = 'https://kemet-server.runasp.net/translateText';
-  private ttsUrl = 'https://kemet-server.runasp.net/textToSpeech';
+  private translationUrl = 'https://kemet-server.runasp.net/api/translation/translate';
+  private speechToTextUrl = 'https://kemet-server.runasp.net/api/translation/recognize';
+  private textToSpeechUrl = `https://kemet-server.runasp.net/api/translation/Synthesize`;
 
 
   constructor(private _HttpClient: HttpClient) {}
 
   translate(text: string, sourceLang: string, targetLang: string) {
-    return this._HttpClient.post<{ translation: string }>(`${this.translationUrl}`, { text, sourceLang, targetLang });
-  }  
+    return this._HttpClient.post(
+      this.translationUrl,
+      { text, sourceLang, targetLang },
+      { responseType: 'text' }
+    ).pipe(
+      map(res => ({ translation: res }))
+    );
+  }
 
   getSpeech(text: string, languageCode: string) {
-    return this._HttpClient.post(`${this.ttsUrl}`, { text, languageCode }, { responseType: 'blob' });
+    return this._HttpClient.post(this.textToSpeechUrl, {
+      text,
+      languageCode
+    }, { responseType: 'blob' });
   }
 
-  speechToText(audioBase64: string, lang: string): Observable<any> {
-    return this._HttpClient.post<any>('https://kemet-server.runasp.net/speechToText', {
-      audio: audioBase64,
-      lang: lang
+  speechToText(audioBase64: string, languageCode: string): Observable<any> {
+    return this._HttpClient.post<any>(this.speechToTextUrl, {
+      audioBase64,
+      languageCode
     });
   }
-
-  // translate(text: string, source: string, target: string): Observable<any> {
-  //   return this._HttpClient.post<any>(this.translationUrl, { text, source, target });
-  // }
-
-  // getSpeech(text: string, lang: string): Observable<Blob> {
-  //   return this._HttpClient.post(this.ttsUrl, { text, lang }, { responseType: 'blob' });
-  // }
 
 }

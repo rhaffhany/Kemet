@@ -121,9 +121,7 @@ export class ReviewContentComponent implements OnInit{
           this._Router.navigate(['/places', this.placeID]);
         } else {
           this._Router.navigate(['/activities', this.activityID]);
-        }
-        // console.log("review data:",data);
-        // this._ReviewService.setReviewData(data);              
+        }             
       },
       error:() =>{
         Swal.fire({
