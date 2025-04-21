@@ -24,29 +24,7 @@ export class ReviewComponent {
   submissionDate: string='';
 
   reviewData: any[] = [];
-  // userData:any = {
-  //   "$id": "",
-  //   "userName": "",
-  //   "firstName": "",
-  //   "lastName": "",
-  //   "dateOfBirth": "",
-  //   "ssn": "",
-  //   "gender": "",
-  //   "nationality": "",
-  //   "profileImageURL": "",
-  //   "backgroundImageURL": "",
-  //   "interestCategoryIds": {
-  //       "$id": "",
-  //       "$values": [  ]
-  //   },
-  //   "bio": "",
-  //   "country": "",
-  //   "city": "",
-  //   "websiteLink": "",
-  //   "creationDate": ""
-  // };
 
-  // will be edited
   userData: userData = {} as userData;
 
   constructor(private _ReviewService:ReviewService, 
@@ -68,18 +46,6 @@ export class ReviewComponent {
           this.activityID = params.get('activityID');
         }
       });
-  
-      // if (this.placeID) {
-      //   this._DetailsService.getDetailedPlace(this.placeID).subscribe({
-      //     next: (response) => {
-      //       // this.reviewData = response.reviews.$values[0].place.reviews;
-      //       console.log("review data",response);
-      //     },
-      //     error: (err) => {
-      //       console.error(err);
-      //     },
-      //   });
-      // }
       
     }
   
@@ -88,7 +54,6 @@ export class ReviewComponent {
       // display
     }
 
-    // user reviews
 
 
 }

@@ -22,7 +22,7 @@
         justify-content: center;
         cursor: pointer;
         transition: transform 0.3s ease;
-
+      
         &:hover {
             color: var(--black);
             background-color: var(--secondary-color);
@@ -41,7 +41,7 @@
 
     &:hover .mic {
         opacity: 1;
-        pointer-events: auto; // Make it clickable on hover
+        pointer-events: auto; 
     }
 
     .iframe-wrapper {
@@ -105,8 +105,8 @@
     width: 100vw;
     height: 100vh;
     background-color: rgba(0,0,0,0.4);
-    backdrop-filter: blur(4px);
-    z-index: -1;
+    backdrop-filter: blur(5px);
+    z-index: -2;
 }
 
 .language-assistant {
@@ -173,23 +173,21 @@
   }
   
 
-  .recording-indicator {
-    display: flex;
-    align-items: center;
-    font-weight: 500;
-    border-radius: 50%;
-    color: var(--black);
+  .recording i.fa-microphone {
+    animation: pulse 1s infinite;
+    color: white;
   }
   
-  .recording-indicator .dot {
-    width: 10px;
-    height: 10px;
-    background-color: red;
-    border-radius: 50%;
-    animation: blink 1s infinite;
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
   }
 
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.2; }
+  .form-control:focus {
+    border-color: var(--secondary-color);
+    box-shadow: none;
+    outline: none;
+    background-color: #fff;
   }
+  

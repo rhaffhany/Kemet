@@ -27,15 +27,14 @@ export class PackageDetailsBookingComponent implements OnInit{
   profileImg: string = '/assets/img/default-profile.png';
 
 
-  searchResults: any[] = [];  
-  errorMessage: string = ''; 
-
   travelAgencyID: string = '';
 
   packageDetails:PackageDetails = {} as PackageDetails;
   planID:any;
 
   reviewData:any[] = [];
+  updatedReviewData:any[] = [...this.reviewData];
+  filteredReviews:any[] = [];
 
   ngOnInit(): void {
     this._ActivatedRoute.paramMap.subscribe({
@@ -47,8 +46,8 @@ export class PackageDetailsBookingComponent implements OnInit{
             this.packageDetails = response;
             this.packageDetails.averageRating = Math.round(this.packageDetails.averageRating * 10) / 10;
             this.reviewData = this.packageDetails.reviews.$values;
-            // console.log("reviews",this.reviewData);
-            // console.log("Fetched package details:", this.packageDetails);
+            this.filteredReviews = [...this.reviewData];
+            this.planID = response.planId;
           }
         });
       }
@@ -213,6 +212,13 @@ export class PackageDetailsBookingComponent implements OnInit{
     this.isAdded = input.value.trim().length > 0; 
   }
 
+  options: string[] = ['Business', 'Couples', 'Family', 'Solo'];
+  selectedOption: string = '';
+
+  selectOption(option: string): void {
+    this.selectedOption = option;
+  }
+
   submitReview():void {
      if (!this.reviewTitle || !this.reviewText || !this.rating || !this.selectedDate) {
           Swal.fire({
@@ -229,10 +235,13 @@ export class PackageDetailsBookingComponent implements OnInit{
         //append formData
         const formData = new FormData();
         formData.append('rating', this.rating.toString());
-        formData.append('date', this.selectedDate.toString());
+        formData.append('Date', this.selectedDate.toString());
         formData.append('comment', this.reviewText);
-        formData.append('reviewTitle', this.reviewTitle);
-        formData.append('createdAt', currentDate);
+        formData.append('VisitorType', this.selectedOption);
+        formData.append('ReviewTitle', this.reviewTitle);
+        formData.append('TravelAgencyPlanId', this.planID);
+        // formData.append('Image', this.image);
+        // formData.append('createdAt', currentDate);
 
         if (!this.isAdded) return;
         this.loading = true;
@@ -259,13 +268,48 @@ export class PackageDetailsBookingComponent implements OnInit{
             this.loading = false;        
           },complete:()=>{
             this.loading = false;
+            this.showModal = false;
           }
         });
-    setTimeout(() => {
-      this.loading = false;
-      this.isAdded = true;
-      this.showModal = false;
-    }, 2000);
   }
+  
+   //reviews filters
+   toggleFilterOptions:boolean = false;
+
+   sortByMostRecent() {
+     this.reviewData.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+   }
+ 
+   filterByRating(order: 'high' | 'low') {
+     this.reviewData.sort((a, b) => {
+       return order === 'high' ? b.rating - a.rating : a.rating - b.rating;
+     });
+   }
+   resetFilters() {
+     return this.reviewData = [...this.filteredReviews];
+   }
+ 
+   //search 
+   searchText: string = ''; 
+   searchResults: any[] = [];
+   errorMessage: string = ''; 
+ 
+   onSearch() {
+     const query = this.searchText.trim().toLowerCase();
+   
+     if (query === '') {
+       this.searchResults = [];
+       this.errorMessage = '';
+       return;
+     }
+   
+     this.searchResults = this.reviewData.filter(review =>
+       Object.values(review).some(value =>
+         value && value.toString().toLowerCase().includes(query)
+       )
+     );
+   
+     this.errorMessage = this.searchResults.length === 0 ? 'No results found.' : '';
+   }
 
 }

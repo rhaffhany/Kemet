@@ -19,6 +19,7 @@ export class FaqComponent {
   showChat: boolean = false;
 
   userInput: string = '';
+  isRecording = false;
   sourceLang: string = 'en';
   targetLang: string = 'ar';
   messages: { text: string, type: 'user' | 'bot' }[] = [];
@@ -32,6 +33,8 @@ export class FaqComponent {
     this._LanguageAssistantService.translate(userMsg, this.sourceLang, this.targetLang)
       .subscribe(res => {
         const translatedText = res.translation;
+        console.log("translatedText:",translatedText);
+        
         this.messages.push({ text: translatedText, type: 'bot' });
 
         this._LanguageAssistantService.getSpeech(translatedText, this.targetLang)
@@ -64,15 +67,24 @@ export class FaqComponent {
     recognition.start();
   }
 
-  // sourceLang(userMsg: string, sourceLang: any, targetLang: any) {
-  //   throw new Error('Method not implemented.');
-  // }
-  // targetLang(userMsg: string, sourceLang: any, targetLang: any) {
-  //   throw new Error('Method not implemented.');
-  // }
+  toggleVoiceInput() {
+    this.isRecording = !this.isRecording;
   
+    if (this.isRecording) {
+      this.startVoiceInput();
+    } else {
+      return;
+    }
+  }
+
   toggleChatBot() {
       this.showChat = !this.showChat;
+  }
+  
+  showAssistant = false;
+
+  toggleAssistant() {
+    this.showAssistant = !this.showAssistant;
   }
 
 
