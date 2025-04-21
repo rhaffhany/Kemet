@@ -171,3 +171,25 @@ section{
     }
   }
 }
+
+//bar
+.satisfaction-bar {
+  width: 100%;
+  background-color: #d9d9d99d;
+  border-radius: 30px;
+  overflow: hidden;
+  height: 10px;
+  margin: 10px auto;
+}
+
+.bar-fill {
+  background-color: #FFBD67;
+  height: 100%;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  transition: width 0.5s ease;
+}

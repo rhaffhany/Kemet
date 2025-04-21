@@ -14,7 +14,7 @@
                     class="profile-img rounded-circle" 
                     (change)="uploadProfileImg($event)">
                 </div>
-              </div>
+              </div>        
       
               <!-- Profile Info -->
               <div class="col-md-6">
@@ -211,7 +211,8 @@
                         <i class="fa-solid fa-xmark ps-1" role="button" style="width: 24px; font-size: 20px;" (click)="toggleEditBox()"></i>
                         <h5 class="mb-1 ms-4 fw-bold">Edit Profile</h5>
                     </div>
-                    <button class="action-button" aria-label="Close" type="submit" [disabled]="!isEdited || isLoading"  (click)="updateCurrentData()"> <ng-container *ngIf="isLoading">
+                    <button class="action-button" aria-label="Close" type="submit" [disabled]="!isEdited || isLoading"  (click)="updateCurrentData()"> 
+                        <ng-container *ngIf="isLoading">
                         <i class="fas fa-spinner fa-spin me-1"></i>
                         Saving...
                         </ng-container>

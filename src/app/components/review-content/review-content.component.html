@@ -55,7 +55,8 @@
                     <p *ngIf="selectedDate" class="selected-date ms-3 fw-bold mb-1">{{ selectedDate | date: 'longDate' }}</p>
                 </div>
                 <!-- Q3 -->
-                <p class="mb-1">who did you go ? <span class="text-muted" style="font-size: 10px;">(optional)</span></p>
+                <p class="mb-1">who did you go ? </p>
+                <!-- <span class="text-muted" style="font-size: 10px;">(optional)</span> -->
                 <div class="chocies">
                     <button class="selection-btn me-1"
                     *ngFor="let option of options"
