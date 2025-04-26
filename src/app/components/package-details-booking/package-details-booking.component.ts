@@ -1,6 +1,9 @@
+import { userData } from './../../interfaces/user-data';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PackageDetails } from 'src/app/interfaces/package-details';
+import { AgencyService } from 'src/app/services/agency.service';
+import { BookingService } from 'src/app/services/booking.service';
 import { DetailsService } from 'src/app/services/details.service';
 import { ReviewService } from 'src/app/services/review.service';
 import Swal from 'sweetalert2';
@@ -14,21 +17,24 @@ export class PackageDetailsBookingComponent implements OnInit{
 
   constructor(private _ActivatedRoute:ActivatedRoute, 
               private _DetailsService:DetailsService,
-              private _ReviewService:ReviewService){}
+              private _ReviewService:ReviewService,
+              private _BookingService:BookingService,
+              private _AgencyService:AgencyService){}
 
 
   egyptFlag:string= '/assets/img/egyptFlag.png';
   searchIcon:string = "/assets/icons/Search.png";
-  profileImg: string = 'assets/img/default-profile.png';
+  profileImg: string = '/assets/img/default-profile.png';
 
 
-  searchResults: any[] = [];  
-  errorMessage: string = ''; 
+  travelAgencyID: string = '';
 
   packageDetails:PackageDetails = {} as PackageDetails;
   planID:any;
 
   reviewData:any[] = [];
+  updatedReviewData:any[] = [...this.reviewData];
+  filteredReviews:any[] = [];
 
   ngOnInit(): void {
     this._ActivatedRoute.paramMap.subscribe({
@@ -40,16 +46,117 @@ export class PackageDetailsBookingComponent implements OnInit{
             this.packageDetails = response;
             this.packageDetails.averageRating = Math.round(this.packageDetails.averageRating * 10) / 10;
             this.reviewData = this.packageDetails.reviews.$values;
-            console.log("reviews",this.reviewData);
-            
-            console.log("Fetched package details:", this.packageDetails);
+            this.filteredReviews = [...this.reviewData];
+            this.planID = response.planId;
           }
         });
       }
     });
 
+    this._AgencyService.getTravelAgencyData('GlobalTravel').subscribe({
+      next:(res) =>{        
+        this.travelAgencyID = res.travelAgencyId;        
+      }
+    })
+  }
 
+  bookData:any = {};
 
+  selectedNationality: string = 'Nationality'; 
+  selectedUserType: string = 'User'; 
+  selectedBoard: string = ''; 
+  reserveDate: string = '';
+  numOfPeople: number = 0;
+  selectedBookedDate: string = ''; 
+  bookedPrice: number = 0; 
+
+  updateNationality(nationality: string): void {
+    this.selectedNationality = nationality;
+    this.bookData.selectedNationality = nationality; 
+    this.updateBookedPrice();
+  }
+  
+  updateUserType(userType: string): void {
+    this.selectedUserType = userType;
+    this.bookData.selectedUserType = userType; 
+    this.updateBookedPrice();
+  }
+  
+  updateBoard(boardType: string): void {
+    this.selectedBoard = boardType;
+    this.bookData.selectedBoard = boardType;
+  }
+
+  updateBookedPrice(): void {
+    if (!this.packageDetails) return;
+  
+    if (this.selectedNationality === 'Egyptian') {
+      if (this.selectedUserType === 'Adult') {
+        this.bookedPrice = this.packageDetails.egyptianAdult;
+      } else {
+        this.bookedPrice = this.packageDetails.egyptianStudent;
+      }
+    } else if (this.selectedNationality === 'Foreigner') {
+      if (this.selectedUserType === 'Adult') {
+        this.bookedPrice = this.packageDetails.touristAdult;
+      } else {
+        this.bookedPrice = this.packageDetails.touristStudent;
+      }
+    }
+
+    this.bookedPrice = this.bookedPrice * this.bookData.numOfPeople;
+    this.bookData.bookedPrice = this.bookedPrice;
+  }
+  
+  
+
+  bookTrip():void{
+    
+    if (!this.bookData.reserveDate || !this.bookData.selectedNationality || !this.bookData.selectedUserType || !this.selectedBoard || !this.bookData.numOfPeople) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Incomplete Information',
+        text: 'Please fill in all booking fields!',
+      });
+      return;
+    }
+
+    this.bookData.travelAgencyID = this.travelAgencyID;
+    this.bookData.travelAgencyPlanID = this.packageDetails.planId;
+    this.bookData.reserveType = this.selectedBoard;
+    this.bookData.bookedPrice = this.bookedPrice;
+
+    this._BookingService.bookTrip(this.bookData).subscribe({
+      next: (res) => {
+      Swal.fire({
+          icon: 'success',
+          title: 'Trip Booked Successfully!',
+          text: 'Thanks for choosing us. Get ready for your adventure!',
+      });
+
+      this.resetData();
+      },
+      error: (err) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops! Something went wrong',
+          text: 'Failed to book your trip. Please try again later.',
+        });
+        console.error('Booking failed:', err);
+      }
+    });
+
+  }
+
+  resetData(){
+    this.bookData = {};
+    this.selectedNationality = 'Nationality';
+    this.selectedUserType = 'User';
+    this.selectedBoard = '';
+    this.reserveDate = '';
+    this.numOfPeople = 0;
+    this.selectedBookedDate = '';
+    this.bookedPrice = 0;
   }
 
   showModal: boolean = false;
@@ -83,7 +190,6 @@ export class PackageDetailsBookingComponent implements OnInit{
   getMaxRating(index: number): boolean {
     return index < Math.max(this.rating, this.hoverRating);
   }
-  
 
   onDateSelect(date: any) {
     if (date && date.year && date.month && date.day) {
@@ -106,6 +212,13 @@ export class PackageDetailsBookingComponent implements OnInit{
     this.isAdded = input.value.trim().length > 0; 
   }
 
+  options: string[] = ['Business', 'Couples', 'Family', 'Solo'];
+  selectedOption: string = '';
+
+  selectOption(option: string): void {
+    this.selectedOption = option;
+  }
+
   submitReview():void {
      if (!this.reviewTitle || !this.reviewText || !this.rating || !this.selectedDate) {
           Swal.fire({
@@ -122,10 +235,13 @@ export class PackageDetailsBookingComponent implements OnInit{
         //append formData
         const formData = new FormData();
         formData.append('rating', this.rating.toString());
-        formData.append('date', this.selectedDate.toString());
+        formData.append('Date', this.selectedDate.toString());
         formData.append('comment', this.reviewText);
-        formData.append('reviewTitle', this.reviewTitle);
-        formData.append('createdAt', currentDate);
+        formData.append('VisitorType', this.selectedOption);
+        formData.append('ReviewTitle', this.reviewTitle);
+        formData.append('TravelAgencyPlanId', this.planID);
+        // formData.append('Image', this.image);
+        // formData.append('createdAt', currentDate);
 
         if (!this.isAdded) return;
         this.loading = true;
@@ -152,29 +268,48 @@ export class PackageDetailsBookingComponent implements OnInit{
             this.loading = false;        
           },complete:()=>{
             this.loading = false;
+            this.showModal = false;
           }
         });
-    setTimeout(() => {
-      this.loading = false;
-      this.isAdded = true;
-      this.showModal = false;
-    }, 2000);
   }
+  
+   //reviews filters
+   toggleFilterOptions:boolean = false;
 
-
-  selectedNationality = 'Nationality';
-  selectedUserType = 'User';
-  selectedBoard = '';
-
-  updateNationality(value: string) {
-    this.selectedNationality = value;
-  }
-  updateUserType(value: string) {
-    this.selectedUserType = value;
-  }
-  updateBoard(value: string) {
-    this.selectedBoard = value;
-  }
-
+   sortByMostRecent() {
+     this.reviewData.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+   }
+ 
+   filterByRating(order: 'high' | 'low') {
+     this.reviewData.sort((a, b) => {
+       return order === 'high' ? b.rating - a.rating : a.rating - b.rating;
+     });
+   }
+   resetFilters() {
+     return this.reviewData = [...this.filteredReviews];
+   }
+ 
+   //search 
+   searchText: string = ''; 
+   searchResults: any[] = [];
+   errorMessage: string = ''; 
+ 
+   onSearch() {
+     const query = this.searchText.trim().toLowerCase();
+   
+     if (query === '') {
+       this.searchResults = [];
+       this.errorMessage = '';
+       return;
+     }
+   
+     this.searchResults = this.reviewData.filter(review =>
+       Object.values(review).some(value =>
+         value && value.toString().toLowerCase().includes(query)
+       )
+     );
+   
+     this.errorMessage = this.searchResults.length === 0 ? 'No results found.' : '';
+   }
 
 }

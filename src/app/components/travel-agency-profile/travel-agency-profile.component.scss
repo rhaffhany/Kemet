@@ -1,5 +1,5 @@
   section{
-    background-color: var(--primary-color);
+    background-color: var(--bejie-color);
   }
   
   // Profile box section
@@ -178,6 +178,11 @@
   }
 }
 
+//reviews
+.profile-img{
+  width: 56px;
+  height: 55px;
+}
 
 //search
 .search-bar {

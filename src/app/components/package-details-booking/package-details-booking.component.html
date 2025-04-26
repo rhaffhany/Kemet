@@ -1,9 +1,9 @@
 <section class="py-5">
     <!-- package info -->
-    <div class="container pt-5 mt-3">
-        <div class="row  mt-5">
-            <div class="col-md-12">
-                <h1 class="fw-bolder">{{packageDetails.description}}: {{packageDetails.planName}}</h1>
+    <div class="container ms-5 ps-5 px-0 pt-5 mt-3">
+        <div class="row ms-4 mt-5">
+            <div class="col-md-12 px-0">
+                <h1 class="fw-bolder">{{packageDetails.planName}}: {{packageDetails.description}}</h1>
                 <div class="rating d-flex">
                     <p class="fw-bold me-1 mb-0" style="font-size: 20px;">{{packageDetails.averageRating}}</p>
                     <span *ngFor="let star of [1, 2, 3, 4, 5]; let i = index" class="rate">
@@ -68,26 +68,24 @@
             <div class="col-md-8">
                 <div class="details bg-white mt-5 p-3">
                     <div class="agency-pp d-flex w-50">
-                        <img src="../../../assets/img/Agency pp.png" alt="agency-profile-pic" class="rounded" routerLink="/travelAgency-profile"  style="cursor: pointer;" >
+                        <img [src]="" alt="agency-profile-pic" class="rounded" routerLink="/travelAgency-profile"  style="cursor: pointer;" >
                         <div class="d-block ms-3">
-                            <p class="fw-bolder pt-2 mb-1" routerLink="/travelAgency-profile"  style="cursor: pointer;" >Odyssey</p>
-                            <p><i class="fa-solid fa-location-dot"></i> <span class="text-muted"> {{packageDetails.description}}</span></p>
+                            <p class="fw-bolder pt-2 mb-1" routerLink="/travelAgency-profile"  style="cursor: pointer;" >{{packageDetails.travelAgencyName}}</p>
+                            <p><i class="fa-solid fa-location-dot"></i> <span class="text-muted"> {{packageDetails.travelAgencyAddress}}</span></p>
                         </div>
                     </div>
                     <div class="desc">
-                        <p class="lead px-2 py-1 " style="font-size: 15px; line-height: 10x; font-weight: 500;">Dahab, a breathtaking town in South Sinai, Egypt, is known for its golden beaches, crystal-clear waters, and vibrant coral reefs. The Blue Hole, a world-famous diving site, 
-                            attracts snorkelers and divers with its stunning marine life. Adventure seekers can enjoy a Jeep safari through the Colored Canyon, 
-                            marveling at its unique rock formations. Evenings come alive with a Bedouin dinner under the stars, offering traditional flavors and warm hospitality. 
-                            Visitors can also explore local markets for handmade crafts and souvenirs. Whether for relaxation or adventure, Dahab offers an unforgettable experience.</p>
+                        <p class="lead px-2 py-1 mt-2 " style="font-size: 15px; line-height: 10x; font-weight: 500;">{{packageDetails.travelAgencyDescription}}</p>
                     </div>
                 </div>
             </div>
 
+            <!-- book a trip -->
             <div class="col-md-3">  
 
                 <div class="booking bg-white mt-5 p-3">
                     <label for="dateSelection" class="form-label fw-bold d-none"></label>
-                    <input type="date" id="dateSelection" class="form-control dateSelection mb-3">
+                    <input type="date" id="dateSelection" class="form-control dateSelection mb-3" [(ngModel)]="bookData.reserveDate">
                     <div class="d-flex gap-2">
                         <div ngbDropdown class="w-50">
                             <button class="btn btn-light w-100 d-flex align-items-center justify-content-between" 
@@ -131,8 +129,16 @@
                             No Board
                         </button>
                     </div>
-                    <div class="d-flex justify-content-end mt-4">
-                        <button class="btn book-btn fw-bolder">Book</button>
+
+                    <div class="my-3">
+                        <label for="peopleCount" class=" form-label fw-bold">Number of People:</label>
+                        <input type="number" id="peopleCount" class="peopleCount form-control" [(ngModel)]="bookData.numOfPeople" name="numOfPeople" min="1" (input)="updateBookedPrice()">
+                    </div>
+
+                    <p class="text-center mt-3 mb-0 fw-bold">Total Price: {{ bookedPrice | currency:'£' }}</p>
+
+                    <div class="d-flex justify-content-end mt-3">
+                        <button class="btn book-btn fw-bolder" (click)="bookTrip()">Book</button>
                     </div>
                 </div>
 
@@ -166,32 +172,49 @@
   
                 <div class="search-bar p-2">
                     <img [src]="searchIcon" alt="searchIcon" class="search-icon">
-                    <input type="text" class="search-input w-100" placeholder="Search reviews" />
-                </div>
-  
-                  <div *ngIf="errorMessage" class="error-message text-center">
+                    <input
+                    type="search"
+                    class="search-input w-100"
+                    placeholder="Search reviews"
+                    [(ngModel)]="searchText"
+                    (input)="onSearch()"
+                  />
+                  </div>
+    
+                  <div *ngIf="errorMessage" class="error-message text-center text-danger pt-2">
                     {{ errorMessage }}
                   </div>
                   <div *ngIf="searchResults.length > 0" id="searchResults">
-                    <div *ngFor="let result of searchResults" class="result-item  text-center">
+                    <div *ngFor="let result of searchResults" class="result-item  text-center ">
                       {{ result.name }}
                     </div>
-  
-                </div>
-  
-                <div class="filter-reviews">
-                    <button class="mt-3 me-2">Filters</button>
-                    <button class="mt-3">Most Recent</button>
+                  </div>
+
+                <div class="filter-reviews ">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <button class="mt-3 me-2" (click)="toggleFilterOptions = !toggleFilterOptions">Filters</button>
+                            <button class="mt-3" (click)="sortByMostRecent()">Most Recent</button>
+                        </div>
+                      
+                        <button class="mt-3 mx-1" (click)="resetFilters()">Reset</button>
+                    </div>
+                    
+                  
+                    <div *ngIf="toggleFilterOptions" class="mt-2 ">
+                      <button class="me-2 btn btn-outline-secondary" (click)="filterByRating('high')">Highest Rating</button>
+                      <button class="btn btn-outline-secondary" (click)="filterByRating('low')">Lowest Rating</button>
+                    </div>
                 </div>
                 
                 <div class="reviews-container " style="max-height: 400px; overflow-y: auto;">
                     <div class="reviews mt-3 bg-light bg-light-subtle p-4" 
-                        *ngFor="let review of reviewData" 
+                        *ngFor="let review of reviewData | reviewFilter: searchText" 
                         style="border-radius: 20px;">
                                     
                         <div class="profile-info d-flex justify-content-between">
                             <div class="d-flex">
-                                <img [src]="review.profileImageURL || profileImg" class="profile-pic rounded-circle" 
+                                <img [src]="review.userImageURl || profileImg" class="profile-img rounded-circle" 
                                     alt="profile-pic" >
                                 <div class="ms-2 d-block">
                                     <p class="fw-bold m-0">{{review.username}}</p>
@@ -233,12 +256,12 @@
                 </div>
 
             </div>
+
         </div>
       
   
     </div>
-
-    
+ 
     <!-- reviews box -->
    <div *ngIf="showModal" class="overlay" (click)="closeModal($event)">
     <div class="modal-container text-center" (click)="$event.stopPropagation()">
@@ -265,6 +288,16 @@
             <button class="selection-btn mt-1 w-50" (click)="d.toggle()">Select Date</button>
             <input type="text" ngbDatepicker #d="ngbDatepicker" (dateSelect)="onDateSelect($event)" class="visually-hidden" />
             <p *ngIf="selectedDate" class="selected-date ms-3 fw-bold mb-1">{{ selectedDate | date: 'longDate' }}</p>
+        </div>
+
+        <p class="mb-1">who did you go ? </p>
+        <div class="chocies">
+            <button class="selection-btn me-2 mb-2"
+            *ngFor="let option of options"
+            [class.selected]="selectedOption === option"
+            (click)="selectOption(option)">
+            {{ option }}
+            </button>
         </div>
 
         <!-- Review Textarea -->

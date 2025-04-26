@@ -36,18 +36,17 @@ export class TravelAgencyProfileComponent implements OnInit {
   editIcon:string = "/assets/icons/Edit Square.png";
   searchIcon:string = "/assets/icons/Search.png"
 
-  searchResults: any[] = [];  
-  errorMessage: string = ''; 
-
   packageDetails:PackageDetails = {} as PackageDetails;
   planID:any;
   
   packages: any[] = []; 
 
   travelAgencyData:any = {};
+  travelAgencyId:any;
 
   reviews:any[] = [];
-
+  updatedReviewData:any[] = [...this.reviews];
+  filteredReviews:any[] = [];
 
   ngOnInit(): void {
 
@@ -57,20 +56,16 @@ export class TravelAgencyProfileComponent implements OnInit {
       next: (data) => {
         this.travelAgencyData = data;
         this.reviews = data.reviews.$values;
-        console.log("Reviews",this.reviews);
-        // console.log('Travel Agency Data:', this.travelAgencyData);
+        this.filteredReviews = [...this.reviews];
+        this.travelAgencyId = data.travelAgencyId;
       },
       error: (err) => {
         console.error('Error fetching travel agency data:', err);
       }
     });
-    
-  
+
   }
 
-  // get displayWebsiteLink(): string {
-  //   return this.updatedData.websiteLink?.replace(/^https?:\/\//, '') || '';
-  // }
 
   loadPackages(): void {
     this._HomeService.fetchTravelAgencyPlan().subscribe((data: any) => {
@@ -78,7 +73,6 @@ export class TravelAgencyProfileComponent implements OnInit {
     });
   }
 
-  // lhad ma api yegy
   images = [
     '/assets/img/agency1.jpg',
     '/assets/img/agency2.jpg',
@@ -86,7 +80,6 @@ export class TravelAgencyProfileComponent implements OnInit {
     '/assets/img/agency4.jpg',
     '/assets/img/agency5.jpg',
     '/assets/img/agency6.jpg',
-    '/assets/img/agency7.jpg',
     '/assets/img/agency8.jpg',
     '/assets/img/agency9.jpg',
     '/assets/img/agency10.jpg',
@@ -122,6 +115,7 @@ export class TravelAgencyProfileComponent implements OnInit {
   selectedDate: string  = '';
   reviewText: string = '';
   reviewTitle: string = '';
+  image:any;
   isAdded: boolean = false;
   loading: boolean = false;
 
@@ -134,7 +128,6 @@ export class TravelAgencyProfileComponent implements OnInit {
   closeModal(event: Event) {
     this.showModal = false;
   }
-
   rate(value: number) {
     this.rating = value;
   }
@@ -147,6 +140,7 @@ export class TravelAgencyProfileComponent implements OnInit {
   getMaxRating(index: number): boolean {
     return index < Math.max(this.rating, this.hoverRating);
   }
+
   onDateSelect(date: any) {
     if (date && date.year && date.month && date.day) {
         const month = date.month.toString().padStart(2, '0');
@@ -167,6 +161,13 @@ export class TravelAgencyProfileComponent implements OnInit {
     this.isAdded = input.value.trim().length > 0; 
   }
 
+  options: string[] = ['Business', 'Couples', 'Family', 'Solo'];
+  selectedOption: string = '';
+
+  selectOption(option: string): void {
+    this.selectedOption = option;
+  }
+
   submitReview():void {
      if (!this.reviewTitle || !this.reviewText || !this.rating || !this.selectedDate) {
           Swal.fire({
@@ -183,10 +184,13 @@ export class TravelAgencyProfileComponent implements OnInit {
         //append formData
         const formData = new FormData();
         formData.append('rating', this.rating.toString());
-        formData.append('date', this.selectedDate.toString());
+        formData.append('Date', this.selectedDate.toString());
         formData.append('comment', this.reviewText);
-        formData.append('reviewTitle', this.reviewTitle);
-        formData.append('createdAt', currentDate);
+        formData.append('VisitorType', this.selectedOption);
+        formData.append('ReviewTitle', this.reviewTitle);
+        formData.append('TravelAgencyId', this.travelAgencyId);
+        // formData.append('Image', this.image);
+        // formData.append('createdAt', currentDate);
 
         if (!this.isAdded) return;
         this.loading = true;
@@ -213,15 +217,50 @@ export class TravelAgencyProfileComponent implements OnInit {
             this.loading = false;        
           },complete:()=>{
             this.loading = false;
+            this.showModal = false;
           }
         });
-    setTimeout(() => {
-      this.loading = false;
-      this.isAdded = true;
-      this.showModal = false;
-    }, 2000);
   }
 
+  //reviews filters
+  toggleFilterOptions:boolean = false;
+
+
+  sortByMostRecent() {
+    this.reviews.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }
+
+  filterByRating(order: 'high' | 'low') {
+    this.reviews.sort((a, b) => {
+      return order === 'high' ? b.rating - a.rating : a.rating - b.rating;
+    });
+  }
+  resetFilters() {
+    return this.reviews = [...this.filteredReviews];
+  }
+
+  //search 
+  searchText: string = ''; 
+  searchResults: any[] = [];
+  errorMessage: string = ''; 
+
+  onSearch() {
+    const query = this.searchText.trim().toLowerCase();
+  
+    if (query === '') {
+      this.searchResults = [];
+      this.errorMessage = '';
+      return;
+    }
+  
+    this.searchResults = this.reviews.filter(review =>
+      Object.values(review).some(value =>
+        value && value.toString().toLowerCase().includes(query)
+      )
+    );
+  
+    this.errorMessage = this.searchResults.length === 0 ? 'No results found.' : '';
+  }
 
 
 }

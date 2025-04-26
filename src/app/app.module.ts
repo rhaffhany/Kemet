@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -51,6 +53,7 @@ import { TravelAgencyProfileComponent } from './components/travel-agency-profile
 import { NavTravelAgencyComponent } from './components/nav-travel-agency/nav-travel-agency.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { PersonalizedPlanComponent } from './components/personalized-plan/personalized-plan.component';
+import { ReviewFilterPipe } from './pipe/review-filter.pipe';
 
 @NgModule({
   declarations: [
@@ -91,6 +94,7 @@ import { PersonalizedPlanComponent } from './components/personalized-plan/person
     TravelAgencyProfileComponent,
     NavTravelAgencyComponent,
     PersonalizedPlanComponent,
+    ReviewFilterPipe,
   ],
 imports: [
   BrowserModule,
@@ -107,9 +111,11 @@ imports: [
   NgbDatepickerModule,
   NgbDatepickerModule,
   MatProgressBarModule,
-  
+  ToastModule
 ],
-  providers: [],
+  providers: [
+    MessageService
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

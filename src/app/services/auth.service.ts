@@ -1,3 +1,4 @@
+import { userData } from './../interfaces/user-data';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
@@ -20,8 +21,11 @@ interface RegisterData {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private apiUrl = 'https://kemet-server.runasp.net/api/Accounts';
+  
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.isLoggedIn());
 
+  userData:any;
+  
   constructor(private _HttpClient: HttpClient,private router: Router) {}
 
   // Observable for login state
@@ -80,11 +84,11 @@ export class AuthService {
   }
 
   // Log in an existing user
-  loginForm(userData: object): Observable<any> {
+  loginForm(userData: any): Observable<any> {
     return this._HttpClient.post(`${this.apiUrl}/Login`, userData).pipe(
       tap((response: any) => {
         if (response && response.token) {
-          console.log('Storing Token:', response.token); // Debugging
+          // console.log('Storing Token:', response.token); 
           localStorage.setItem('token', response.token);
           localStorage.setItem('userName', response.userName);
           this.updateLoginStatus();
@@ -156,6 +160,14 @@ private updateLoginStatus() {
 
 isLoggedIn(): boolean {
   return !!localStorage.getItem('token');
+}
+
+saveUser(){
+  const encode = localStorage.getItem('token');
+  if(encode){
+    const decode = jwtDecode(encode);
+    this.userData = decode;
+  }
 }
 
 

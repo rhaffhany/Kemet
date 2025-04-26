@@ -208,6 +208,7 @@ export class ProfileComponent {
       }
       
     });
+
   }
 
   get displayWebsiteLink(): string {
@@ -279,7 +280,7 @@ export class ProfileComponent {
           text: 'Your profile photo has been updated successfully.',
           icon: 'success',
           confirmButtonText: 'OK',
-          confirmButtonColor: 'var(--secondary-color)',
+          confirmButtonColor: 'var(--secondaryColor)',
         });
       },
       error:(err)=>{
