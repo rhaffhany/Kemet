@@ -1,4 +1,3 @@
-import { SwiperModule } from './../../node_modules/swiper/types/shared.d';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common'; 
@@ -7,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { CreditCardDirectivesModule } from 'angular-cc-library';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -54,6 +54,8 @@ import { NavTravelAgencyComponent } from './components/nav-travel-agency/nav-tra
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { PersonalizedPlanComponent } from './components/personalized-plan/personalized-plan.component';
 import { ReviewFilterPipe } from './pipe/review-filter.pipe';
+import { ToastrModule } from 'ngx-toastr';
+import { PaymentComponent } from './components/payment/payment.component';
 
 @NgModule({
   declarations: [
@@ -95,6 +97,7 @@ import { ReviewFilterPipe } from './pipe/review-filter.pipe';
     NavTravelAgencyComponent,
     PersonalizedPlanComponent,
     ReviewFilterPipe,
+    PaymentComponent,
   ],
 imports: [
   BrowserModule,
@@ -111,7 +114,9 @@ imports: [
   NgbDatepickerModule,
   NgbDatepickerModule,
   MatProgressBarModule,
-  ToastModule
+  ToastModule,
+  ToastrModule.forRoot(),
+  CreditCardDirectivesModule
 ],
   providers: [
     MessageService
