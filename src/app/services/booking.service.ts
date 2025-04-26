@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -11,6 +11,10 @@ export class BookingService {
   constructor(private _HttpClient:HttpClient, private _AuthService:AuthService) { }
 
   private DeployURL = 'https://kemet-server.runasp.net';
+
+  bookedPrice:BehaviorSubject<number> = new BehaviorSubject(0);
+  selectedBookedDate:BehaviorSubject<string> = new BehaviorSubject(''); 
+  selectedBoard:BehaviorSubject<string> = new BehaviorSubject(''); 
 
   bookTrip(bookData:any):Observable<any>{
     const token = this._AuthService.getToken();

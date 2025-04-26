@@ -1,0 +1,59 @@
+<section class="mt-5 py-5 vh-100">
+
+    <div class="container p-5 mt-5 ">
+        <div class="payemnt-box row shadow rounded">
+
+            <div class="col-md-6 bg-white rounded border border-bottom-0 border-top-0 p-5">
+                <h2 class="h6 pb-2 border-bottom">Payment</h2>
+                <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()" novalidate>
+                    <div class="form-item mb-3">
+                        <label class="fw-bold mb-1" for="cardNumber">Card Number</label>
+                        <input id="cardNumber" type="tel" class="form-control" placeholder="1234  5678  9101  1121" id="cardNumber" formControlName="cardNumber" autocomplete="cardNumber" ccNumber #ccNumber="ccNumber">
+                        <span class="scheme mt-1">{{ccNumber.resolvedScheme$ | async}}</span>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <div class="form-item w-50">
+                            <label class="fw-bold mb-1" for="expireDate">Expiration Date</label>
+                            <input id="expireDate" type="tel" class="form-control" placeholder="MM/YY" autocomplete="cc-exp" ccExp>
+                        </div>
+                        <div class="form-item w-50">
+                            <label class="fw-bold mb-1" for="CVV">CVV</label>
+                            <input id="CVV" type="tel" class="form-control" placeholder="123" autocomplete="off" ccCVC>
+                        </div>
+                    </div>
+                   
+                    <button class="btn btn-success w-100 mt-4">CheckOut</button>
+                    <p class="text-muted mt-3 text-center" style="font-size: 11px; line-height:14px;">Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our privacy policy.</p>
+                </form>
+            </div>
+
+            <div class="col-md-6 bg-light rounded p-5 text-black">
+                <h2 class="h6 pb-2 border-bottom">Booking Summary</h2>
+                <div class="booking-info d-flex mt-2 justify-content-between">
+                    <div class="d-flex">
+                        <img [src]="packageDetails.imageURLs" alt="trip-photo" width="70" height="70">
+                        <p class="ms-2 col-md-9">{{packageDetails.planName}}: {{packageDetails.description}}</p>
+                    </div>
+                    <p class="col-md-2">{{bookedPrice | currency:'£'}}</p>
+                </div>
+                <div class="booking-details text-muted mx-auto col-md-8" style="font-size: 13px;">
+                    <div class="d-flex justify-content-between">
+                        <p class="mb-0">Egyptian Adult</p>
+                        <p class="mb-0">{{selectedBookedDate | date:'MMM d, y' }}</p>
+                    </div>
+                    <p>{{selectedBoard}}</p>
+                </div>
+                <div class="border-bottom"></div>
+                <div class="price hstack justify-content-between">
+                    <div>
+                        <h3 class="mt-1 mb-0">Total</h3>
+                        <p class="text-muted" style="font-size: 12px;">Including $0.0 in taxes</p>
+                    </div>
+                    <p class="col-md-2 fw-bold">{{bookedPrice | currency:'£'}}</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</section>

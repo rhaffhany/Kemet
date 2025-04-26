@@ -1,6 +1,6 @@
-import { userData } from './../../interfaces/user-data';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { PackageDetails } from 'src/app/interfaces/package-details';
 import { AgencyService } from 'src/app/services/agency.service';
 import { BookingService } from 'src/app/services/booking.service';
@@ -19,7 +19,9 @@ export class PackageDetailsBookingComponent implements OnInit{
               private _DetailsService:DetailsService,
               private _ReviewService:ReviewService,
               private _BookingService:BookingService,
-              private _AgencyService:AgencyService){}
+              private _AgencyService:AgencyService,
+              private _ToastrService: ToastrService,
+              private _Router:Router){}
 
 
   egyptFlag:string= '/assets/img/egyptFlag.png';
@@ -61,6 +63,7 @@ export class PackageDetailsBookingComponent implements OnInit{
   }
 
   bookData:any = {};
+  bookingID:number = 0;
 
   selectedNationality: string = 'Nationality'; 
   selectedUserType: string = 'User'; 
@@ -68,7 +71,7 @@ export class PackageDetailsBookingComponent implements OnInit{
   reserveDate: string = '';
   numOfPeople: number = 0;
   selectedBookedDate: string = ''; 
-  bookedPrice: number = 0; 
+  bookedPrice: number = 0;
 
   updateNationality(nationality: string): void {
     this.selectedNationality = nationality;
@@ -108,16 +111,10 @@ export class PackageDetailsBookingComponent implements OnInit{
     this.bookData.bookedPrice = this.bookedPrice;
   }
   
-  
-
   bookTrip():void{
     
     if (!this.bookData.reserveDate || !this.bookData.selectedNationality || !this.bookData.selectedUserType || !this.selectedBoard || !this.bookData.numOfPeople) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Incomplete Information',
-        text: 'Please fill in all booking fields!',
-      });
+      this._ToastrService.warning('Please fill in all booking fields!','Incomplete Information')
       return;
     }
 
@@ -126,23 +123,21 @@ export class PackageDetailsBookingComponent implements OnInit{
     this.bookData.reserveType = this.selectedBoard;
     this.bookData.bookedPrice = this.bookedPrice;
 
+    this._BookingService.bookedPrice.next(this.bookedPrice);
+    this._BookingService.selectedBoard.next(this.selectedBoard);
+    this._BookingService.selectedBookedDate.next(this.reserveDate);
+
     this._BookingService.bookTrip(this.bookData).subscribe({
       next: (res) => {
-      Swal.fire({
-          icon: 'success',
-          title: 'Trip Booked Successfully!',
-          text: 'Thanks for choosing us. Get ready for your adventure!',
-      });
+      this.bookingID = res.bookingId;
+      this._ToastrService.success('Thanks for choosing us. Get ready for your adventure!',res.message);
+      this._Router.navigate(['/payment',this.planID,this.bookingID]);
 
       this.resetData();
       },
       error: (err) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops! Something went wrong',
-          text: 'Failed to book your trip. Please try again later.',
-        });
-        console.error('Booking failed:', err);
+        this._ToastrService.error('Failed to book your trip. Please try again later.','Oops! Something went wrong');
+        // console.error('Booking failed:', err);
       }
     });
 
