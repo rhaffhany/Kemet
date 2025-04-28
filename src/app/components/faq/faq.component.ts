@@ -1,8 +1,5 @@
 import { LanguageAssistantService } from './../../services/language-assistant.service';
 import { Component } from '@angular/core';
-import { Injectable } from '@angular/core';
-
-@Injectable({ providedIn: 'root' })
 
 @Component({
   selector: 'app-faq',

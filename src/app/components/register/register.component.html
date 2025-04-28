@@ -1,156 +1,163 @@
-<div class="modal register-modal" 
-     [class.show]="showRegisterModal" 
-     (click)="closeOnOutsideClick($event)">
+<div class="modal register-modal" [class.show]="showRegisterModal" (click)="closeOnOutsideClick($event)">
   <div class="modal-content" (click)="$event.stopPropagation()">
+    <img [src]="arrowLeftIcon" alt="Back" class="arrow-left" (click)="backToLogin()" />
+    <span class="close" (click)="closeModal()">×</span>
+    <img class="register-logo" [src]="registerLogoSrc" [alt]="registerLogoAlt" />
 
-<div *ngIf="!isLoginInfoModalOpen">
-    <form [formGroup]="registerForm" class="registerform">
-      <img class="register-logo" [src]="registerLogoSrc" [alt]="registerLogoAlt" />
-      <h2>Join us now for <br>the best experience</h2>
 
-      <div class="form-row">
-        <div class="form-item">
-          <label for="firstName">First Name</label>
-          <input class="form-control" formControlName="firstName" type="text" id="firstName" />
-          <div *ngIf="registerForm.get('firstName')?.touched && registerForm.get('firstName')?.errors" class="alert">
-            <p *ngIf="registerForm.get('firstName')?.hasError('required')">First Name is required</p>
-            <p *ngIf="registerForm.get('firstName')?.hasError('minlength')">Minimum 3 characters</p>
-            <p *ngIf="registerForm.get('firstName')?.hasError('maxlength')">Maximum 20 characters</p>
+    <div *ngIf="!isLoginInfoModalOpen">
+      <form [formGroup]="registerForm" class="registerform">
+        <h2>Join us now for <br>the best experience</h2>
+
+        <div class="form-row">
+          <div class="form-item">
+            <label for="firstName">First Name</label>
+            <input class="form-control" formControlName="firstName" type="text" id="firstName" />
+            <div *ngIf="registerForm.get('firstName')?.touched && registerForm.get('firstName')?.errors" class="alert">
+              <p *ngIf="registerForm.get('firstName')?.hasError('required')">First Name is required</p>
+              <p *ngIf="registerForm.get('firstName')?.hasError('minlength')">Minimum 3 characters</p>
+              <p *ngIf="registerForm.get('firstName')?.hasError('maxlength')">Maximum 20 characters</p>
+            </div>
           </div>
-        </div>
-  
-        <div class="form-item">
-          <label for="lastName">Last Name</label>
-          <input class="form-control" formControlName="lastName" type="text" id="lastName" />
-          <div *ngIf="registerForm.get('lastName')?.touched && registerForm.get('lastName')?.errors" class="alert">
-            <p *ngIf="registerForm.get('lastName')?.hasError('required')">Last Name is required</p>
-            <p *ngIf="registerForm.get('lastName')?.hasError('minlength')">Minimum 3 characters</p>
-            <p *ngIf="registerForm.get('lastName')?.hasError('maxlength')">Maximum 20 characters</p>
-          </div>
-        </div>
-      </div>
-  
-      <div class="form-item">
-        <label for="gender">What’s your gender?</label>
-        <div id="gender">
-          <input type="radio" id="female" formControlName="gender" value="Female" />
-          <label for="female">Female</label>
-          <input type="radio" id="male" formControlName="gender" value="Male" />
-          <label for="male">Male</label>
-          <input type="radio" id="nonBinary" formControlName="gender" value="Non-Binary">
-          <label for="nonBinary">Non-Binary</label>
-          <input type="radio" id="ratherNotSay" formControlName="gender" value="Rather not say">
-          <label for="ratherNotSay">Rather not say</label>
-        </div>
-      </div>
-  
-      <div class="form-item">
-        <label for="phoneNumber">Phone Number</label>
-        <div class="phone-input">
-            <span class="phonePrefix">+20</span>
-            <input class="form-control" formControlName="phoneNumber" type="tel" id="phoneNumber" />
-        </div>
-        <div *ngIf="registerForm.get('phoneNumber')?.touched && registerForm.get('phoneNumber')?.errors" class="alert">
-            <p *ngIf="registerForm.get('phoneNumber')?.hasError('required')">Phone Number is required</p>
-            <p *ngIf="registerForm.get('phoneNumber')?.hasError('pattern')">Invalid phone number</p>
-        </div>
-    </div>
-  
-    <div class="form-item">
-        <label for="dateOfBirth">What’s your date of birth?</label>
-        <input class="form-control" formControlName="dateOfBirth" type="date" id="dateOfBirth" placeholder="month/day/year" />
-        <div *ngIf="registerForm.get('dateOfBirth')?.touched && registerForm.get('dateOfBirth')?.errors" class="alert">
-            <p *ngIf="registerForm.get('dateOfBirth')?.hasError('required')">Date of Birth is required</p>
-        </div>
-    </div>
-
-    <div class="form-item">
-        <label for="nationality">What is your nationality?</label>
-        <input class="form-control" formControlName="nationality" type="text" id="nationality" />
-        <div *ngIf="registerForm.get('nationality')?.touched && registerForm.get('nationality')?.errors" class="alert">
-            <p *ngIf="registerForm.get('nationality')?.hasError('required')">Nationality is required</p>
-        </div>
-    </div>
-
-    <div class="form-item">
-        <label for="ssn">What is your SSN?</label>
-        <input class="form-control" formControlName="ssn" type="text" id="ssn" />
-        <div *ngIf="registerForm.get('ssn')?.touched && registerForm.get('ssn')?.errors" class="alert">
-            <p *ngIf="registerForm.get('ssn')?.hasError('required')">SSN is required</p>
-            <p *ngIf="registerForm.get('ssn')?.hasError('pattern')">Invalid SSN</p>
-        </div>
-    </div>
-
-    <div class="line-container">
-      <hr class="small-hr">
-      <h6>One last step</h6>
-      <hr class="small-hr">
-    </div>
-
-      <button type="button" class="register-btn" (click)="toggleLoginInfoModal()" [disabled]="!registerForm.valid">
-        Login Info
-      </button>
-    </form>
-  </div>
-  
-
-
-
-  <div *ngIf="isLoginInfoModalOpen">
     
-    <form [formGroup]="loginInfoForm" class="login-info-form">
-      
-  <img class="login-logo" [src]="registerLogoSrc" [alt]="registerLogoAlt">
-  <h2>One Step Away <br>for the best experience</h2>
+          <div class="form-item">
+            <label for="lastName">Last Name</label>
+            <input class="form-control" formControlName="lastName" type="text" id="lastName" />
+            <div *ngIf="registerForm.get('lastName')?.touched && registerForm.get('lastName')?.errors" class="alert">
+              <p *ngIf="registerForm.get('lastName')?.hasError('required')">Last Name is required</p>
+              <p *ngIf="registerForm.get('lastName')?.hasError('minlength')">Minimum 3 characters</p>
+              <p *ngIf="registerForm.get('lastName')?.hasError('maxlength')">Maximum 20 characters</p>
+            </div>
+          </div>
+        </div>
+    
+        <div class="form-item">
+          <label for="gender">What’s your gender?</label>
+          <div id="gender">
+            <input type="radio" id="female" formControlName="gender" value="Female" />
+            <label for="female">Female</label>
+            <input type="radio" id="male" formControlName="gender" value="Male" />
+            <label for="male">Male</label>
+            <input type="radio" id="nonBinary" formControlName="gender" value="Non-Binary">
+            <label for="nonBinary">Non-Binary</label>
+            <input type="radio" id="ratherNotSay" formControlName="gender" value="Rather not say">
+            <label for="ratherNotSay">Rather not say</label>
+          </div>
+        </div>
+    
+        <div class="form-item">
+          <label for="phoneNumber">Phone Number</label>
+          <div class="phone-input">
+              <span class="phonePrefix">+20</span>
+              <input class="form-control" formControlName="phoneNumber" type="tel" id="phoneNumber" />
+          </div>
+          <div *ngIf="registerForm.get('phoneNumber')?.touched && registerForm.get('phoneNumber')?.errors" class="alert">
+              <p *ngIf="registerForm.get('phoneNumber')?.hasError('required')">Phone Number is required</p>
+              <p *ngIf="registerForm.get('phoneNumber')?.hasError('pattern')">Invalid phone number</p>
+          </div>
+        </div>
+    
+      <div class="form-item">
+          <label for="dateOfBirth">What’s your date of birth?</label>
+          <input class="form-control" formControlName="dateOfBirth" type="date" id="dateOfBirth" placeholder="month/day/year" />
+          <div *ngIf="registerForm.get('dateOfBirth')?.touched && registerForm.get('dateOfBirth')?.errors" class="alert">
+              <p *ngIf="registerForm.get('dateOfBirth')?.hasError('required')">Date of Birth is required</p>
+          </div>
+      </div>
 
-  <div class="form-item">
-        <label for="userName">UserName</label>
-        <input class="form-control" formControlName="userName" type="text" id="userName" />
-      </div>
-  
       <div class="form-item">
-        <label for="email">Email Address</label>
-        <input class="form-control" formControlName="email" type="email" id="email" />
-        <div *ngIf="loginInfoForm.get('email')?.errors && (loginInfoForm.get('email')?.touched || loginInfoForm.get('email')?.value.length > 0)" class="alert">
-          <p *ngIf="loginInfoForm.get('email')?.getError('required')">Email is required</p>
-          <p *ngIf="loginInfoForm.get('email')?.getError('email')">Invalid email format</p>
-        </div>
+          <label for="nationality">What is your nationality?</label>
+          <input class="form-control" formControlName="nationality" type="text" id="nationality" />
+          <div *ngIf="registerForm.get('nationality')?.touched && registerForm.get('nationality')?.errors" class="alert">
+              <p *ngIf="registerForm.get('nationality')?.hasError('required')">Nationality is required</p>
+          </div>
       </div>
-  
 
       <div class="form-item">
-        <label for="password">Create a Password</label>
-        
-        <div class="password-icon" (click)="togglePasswordVisibility()">
-          <i class="iconly-Show-Broken"></i> 
-        </div>
-        
-        <input 
-          class="form-control" 
-          formControlName="password" 
-          [type]="passwordVisible ? 'text' : 'password'" 
-          id="password" 
-        />
-      
-        <div *ngIf="loginInfoForm.get('password')?.errors && 
-                    (loginInfoForm.get('password')?.touched || loginInfoForm.get('password')?.value.length > 0)" 
-             class="alert">
-          <p *ngIf="loginInfoForm.get('password')?.getError('required')">Password is required</p>
-          <p *ngIf="loginInfoForm.get('password')?.getError('minlength')">Password must be at least 6 characters</p>
-        </div>
+          <label for="ssn">What is your SSN?</label>
+          <input class="form-control" formControlName="ssn" type="text" id="ssn" />
+          <div *ngIf="registerForm.get('ssn')?.touched && registerForm.get('ssn')?.errors" class="alert">
+              <p *ngIf="registerForm.get('ssn')?.hasError('required')">SSN is required</p>
+              <p *ngIf="registerForm.get('ssn')?.hasError('pattern')">Invalid SSN</p>
+          </div>
       </div>
-  
-      <div class="form-item">
-        <label for="confirmPassword">Confirm Password</label>
-        <input class="form-control" formControlName="confirmPassword" type="password" id="confirmPassword" />
-        <div *ngIf="loginInfoForm.get('confirmPassword')?.errors?.['mismatch']" class="alert">
-          Passwords do not match.
+
+
+      <div class="form-action">
+      <div class="line-container">
+        <hr class="small-hr">
+        <h6>One last step</h6>
+        <hr class="small-hr">
+      </div>
+
+        <button type="button" class="register-btn" (click)="toggleLoginInfoModal()" [disabled]="!registerForm.valid">
+          Login Info
+        </button>
         </div>
-      </div>
-      
-      <div class="submit">
-        <button type="button" class="register-btn login-info-btn" (click)="handleRegister()">Sign in</button>
-      </div>
-    </form>
+      </form>
+    </div>
+
+    <!-- Login Info Form -->
+    <div *ngIf="isLoginInfoModalOpen" class="login-info-form">
+      <form [formGroup]="loginInfoForm" (ngSubmit)="handleRegister()" class="registerform">
+        <img [src]="arrowLeftIcon" alt="Back" class="back-arrow" (click)="backToRegister()" />
+        <h2>One Step Away <br> for the best experience</h2>
+
+        <div class="form-item">
+          <label for="userName">Username</label>
+          <input class="form-control" formControlName="userName" type="text" id="userName" />
+          <div *ngIf="loginInfoForm.get('userName')?.touched && loginInfoForm.get('userName')?.errors" class="alert">
+            <p *ngIf="loginInfoForm.get('userName')?.hasError('required')">Username is required</p>
+          </div>
+        </div>
+
+        <div class="form-item">
+          <label for="email">Email</label>
+          <input class="form-control" formControlName="email" type="email" id="email" />
+          <div *ngIf="loginInfoForm.get('email')?.touched && loginInfoForm.get('email')?.errors" class="alert">
+            <p *ngIf="loginInfoForm.get('email')?.hasError('required')">Email is required</p>
+            <p *ngIf="loginInfoForm.get('email')?.hasError('email')">Invalid email format</p>
+          </div>
+        </div>
+
+        <div class="form-item">
+          <label for="password">Password</label>
+          <input 
+            class="form-control" 
+            formControlName="password" 
+            [type]="passwordVisible ? 'text' : 'password'" 
+            id="password" 
+          />
+          <i class="password-toggle" (click)="togglePasswordVisibility()">
+            <span class="iconly-Show-Broken"></span>
+          </i>
+          <div *ngIf="loginInfoForm.get('password')?.touched && loginInfoForm.get('password')?.errors" class="alert">
+            <p *ngIf="loginInfoForm.get('password')?.hasError('required')">Password is required</p>
+            <p *ngIf="loginInfoForm.get('password')?.hasError('minlength')">Password must be at least 6 characters</p>
+          </div>
+        </div>
+
+        <div class="form-item">
+          <label for="confirmPassword">Confirm Password</label>
+          <input 
+            class="form-control" 
+            formControlName="confirmPassword" 
+            [type]="passwordVisible ? 'text' : 'password'" 
+            id="confirmPassword" 
+          />
+          <div *ngIf="loginInfoForm.get('confirmPassword')?.touched && loginInfoForm.get('confirmPassword')?.errors" class="alert">
+            <p *ngIf="loginInfoForm.get('confirmPassword')?.hasError('required')">Please confirm your password</p>
+            <p *ngIf="loginInfoForm.get('confirmPassword')?.hasError('mismatch')">Passwords do not match</p>
+          </div>
+        </div>
+
+        <button type="submit" class="register-btn" [disabled]="loginInfoForm.invalid || isLoading">
+          Register <span *ngIf="isLoading"><i class="fas fa-spin fa-spinner"></i></span>
+        </button>
+
+        <p *ngIf="errorMsg" class="alert alert-danger">{{ errorMsg }}</p>
+        <p *ngIf="successMsg" class="alert alert-success">{{ successMsg }}</p>
+      </form>
+    </div>
   </div>
-  
+</div>

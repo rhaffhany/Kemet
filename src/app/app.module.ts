@@ -1,3 +1,4 @@
+import { CdkDragDrop, CdkDragPreview, DragDropModule } from '@angular/cdk/drag-drop';
 import { SwiperModule } from './../../node_modules/swiper/types/shared.d';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -13,7 +14,6 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { ThingsToDoComponent } from './components/things-to-do/things-to-do.component';
 import { AdventureModeComponent } from './components/adventure-mode/adventure-mode.component';
-import { CommunityComponent } from './components/community/community.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
@@ -22,7 +22,7 @@ import { WishlistComponent } from './components/wishlist/wishlist.component';
 import { SearchComponent } from './components/search/search.component';
 import { AncientSpotlightComponent } from './components/ancient-spotlight/ancient-spotlight.component';
 import { PromoteEventsComponent } from './components/promote-events/promote-events.component';
-import { RecommendedComponent } from './components/recommended/recommended.component';
+import { RecommendedComponent } from './components/recommended-places/recommended-places.component';
 import { TopSellingComponent } from './components/top-selling/top-selling.component';
 import { NewAdventureComponent } from './components/new-adventure/new-adventure.component';
 import { NavAppComponent } from './components/nav-app/nav-app.component';
@@ -54,14 +54,15 @@ import { NavTravelAgencyComponent } from './components/nav-travel-agency/nav-tra
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { PersonalizedPlanComponent } from './components/personalized-plan/personalized-plan.component';
 import { ReviewFilterPipe } from './pipe/review-filter.pipe';
-
+import { PaymentHistoryComponent } from './components/payment-history/payment-history.component';
+import { RecommendedActivitiesComponent } from './components/recommended-activities/recommended-activities.component';
+import { SearchResultsComponent } from './components/search-results/search-results.component';
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     ThingsToDoComponent,
     AdventureModeComponent,
-    CommunityComponent,
     FooterComponent,
     LoginComponent,
     RegisterComponent,
@@ -94,9 +95,13 @@ import { ReviewFilterPipe } from './pipe/review-filter.pipe';
     TravelAgencyProfileComponent,
     NavTravelAgencyComponent,
     PersonalizedPlanComponent,
+    PaymentHistoryComponent,
     ReviewFilterPipe,
+    RecommendedActivitiesComponent,
+    SearchResultsComponent,
+    
   ],
-imports: [
+  imports: [
   BrowserModule,
   CommonModule, 
   AppRoutingModule,
@@ -111,11 +116,13 @@ imports: [
   NgbDatepickerModule,
   NgbDatepickerModule,
   MatProgressBarModule,
-  ToastModule
+  ToastModule,
+  DragDropModule
+
 ],
   providers: [
     MessageService
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

@@ -29,7 +29,7 @@ export class LoginComponent implements OnDestroy {
   showResetPasswordForm = false;
   showPasswordChangedSuccess = false;
   showLoginModal = false;
-
+  showRegisterModal = false; // Add this property to control the register modal
 
   // Status flags
   isLoading = false;
@@ -98,7 +98,7 @@ export class LoginComponent implements OnDestroy {
 
   private createForgotPasswordForm(): FormGroup {
     return this.fb.group({
-      email: ['', [Validators.required, Validators.email]], // Added email validation here
+      email: ['', [Validators.required, Validators.email]], 
     });
   }
 
@@ -246,27 +246,17 @@ isOpen = false;
     this.authService.verifyOtp(payload).subscribe({
       next: (response) => {
         this.isLoading = false;
-        console.log('Verification response:', response); 
+        console.log('Verification response:', response);
   
-        if (response?.resetToken) {
-          // Store the reset token
-          localStorage.setItem('resetToken', response.resetToken);
-  
-          this.showVerificationForm = false;
-          this.showResetPasswordForm = true;
-  
-          // Ensure the modal displays the reset password form properly
-          this.cdr.detectChanges(); // Trigger change detection if necessary
-  
-          this.successMsg = 'OTP verified successfully. You can now reset your password.';
-        } else {
-          this.errorMsg = 'Verification failed. Please try again.';
-        }
+        // Move to reset password form regardless of reset token
+        this.showVerificationForm = false;
+        this.showResetPasswordForm = true;
+        this.successMsg = 'OTP verified successfully. You can now reset your password.';
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.isLoading = false;
         this.errorMsg = this.handleVerificationError(err);
-        this.cdr.detectChanges();
       }
     });
   }
@@ -280,9 +270,10 @@ isOpen = false;
   }
   handleResetPassword(): void {
     if (this.resetPasswordForm.invalid || this.resetPasswordForm.errors?.['passwordMismatch']) return;
+    
     const resetData = {
-      email: this.forgotPasswordForm.value.email,
-      token: localStorage.getItem('resetToken') || '',
+      email: this.forgotPasswordEmail,
+      token: this.verificationForm.value.verificationCode,
       newPassword: this.resetPasswordForm.value.newPassword
     };
   
@@ -294,7 +285,6 @@ isOpen = false;
         this.isLoading = false;
         this.showResetPasswordForm = false;
         this.showPasswordChangedSuccess = true;
-        localStorage.removeItem('resetToken'); 
       },
       error: (err) => {
         this.isLoading = false;
@@ -341,9 +331,7 @@ isOpen = false;
     this.showRegisterForm = true;
   }
 
-  backToLogin(): void {
-    this.resetAllForms();
-  }
+  // Method to open the register modal
 
   backToVerification(): void {
     this.showResetPasswordForm = false;
@@ -357,15 +345,24 @@ isOpen = false;
   closeOnOutsideClick(event: Event): void {
     this.closeModal();
   }
-  openRegister() {
-    console.log('[LoginComponent] Calling openRegister()');
-    this.modalService.openRegister();
-  }
+
   ngOnInit() {
     // Subscribe to login modal state
     this.modalService.getLoginModalState().subscribe(state => {
       this.showLoginModal = state;
     });
   }
-
+  openRegister() {
+    this.modalService.closeAllModals(); // Close the login modal first
+    this.modalService.openRegister(); // Open the register modal
+  }
+  
+  backToLogin() {
+    this.showLoginForm = true;
+    this.showRegisterForm = false;
+    this.showForgotPasswordForm = false;
+    this.showVerificationForm = false;
+    this.showResetPasswordForm = false;
+    this.showPasswordChangedSuccess = false;
+  }
 }

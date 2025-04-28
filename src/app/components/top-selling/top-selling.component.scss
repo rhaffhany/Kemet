@@ -1,13 +1,16 @@
+// top-selling.component.scss
 $font-poppins: 'Poppins', sans-serif;
 $color-text: #5E6282;
 $color-bg: #ffffff;
 $shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+$shadow-active: 0 10px 20px rgba(0, 0, 0, 0.15);
 $transition-speed: 0.3s;
-
 
 .packages-container {
   text-align: center;
-  line-height: 60.5px;
+  max-width: 1280px;
+  position: relative;
+  margin: 0 auto;
 
   h2 {
     font-family: $font-poppins;
@@ -15,91 +18,296 @@ $transition-speed: 0.3s;
     font-size: 18px;
     line-height: 27px;
     color: #5E6282;
+    margin-bottom: 0;
   }
 
   h1 {
-    font-family: 'inter';
+    font-family: 'Inter', sans-serif;
     font-size: 50px;
     font-weight: 700;
     margin-top: 8px;
-    margin-bottom: 64px;
+    margin-bottom: 20px;
     color: #14183E;
   }
-}
 
-.package-card {
-  display: inline-block;
-  width: 315px;
-  height: 457px;
-  margin: 30.5px;
-  border-radius: 24px;
-  cursor: pointer;
-  overflow: hidden;
-  box-shadow: $shadow;
-  position: relative;
-  transition: transform $transition-speed;
-  &:hover
-{
-    transform: translateY(-10px);
+  .carousel-wrapper {
+    position: relative;
+    padding: 0px 43px;
+    overflow: hidden;
   }
 
-  img {
-    width: 100%;
-    height: 65%;
-    object-fit: cover;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-  }
-
-  .package-details {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 20px;
-    background-color: $color-bg;
-    z-index: 2;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-
-    h3 {
+  ::ng-deep {
+    .owl-stage {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-family: $font-poppins;
-      font-size: 18px;
-      font-weight: 500;
-      line-height: 22.41px;
-      margin-top: 7px;
-      margin-bottom: 19px;
-      color: $color-text;
-      text-decoration: none;
+      padding: 30px 0;
+    }
 
-      .price {
-        font-family: $font-poppins;
-        font-weight: 400;
-        font-size: 18px;
-        line-height: 22.41px;
-        color: $color-text;
-        margin-right: 5px;
-        text-align: right;
+    .owl-item {
+      transition: all 0.5s ease;
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      
+      &.active {
+        opacity: 1;
+        z-index: 1;
+        
+        &.center {
+          transform: translateY(0);
+          z-index: 2;
+        }
+        
+        &.center + .active {  // The card right after center
+          transform: translateY(-40px);
+          z-index: 3;
+          
+          .package-card {
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+          }
+        }
+        
+        &:not(.center):not(.center + .active) {
+          transform: translateY(0);
+          z-index: 1;
+        }
+      }
+    }
+  }
+
+  .package-card {
+    display: block;
+    width: 90%;
+    height: 430px;
+    border-radius: 24px;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: $shadow;
+    position: relative;
+    padding-top: 0px;
+    transition: all $transition-speed;
+    background-color: $color-bg;
+
+    &:hover {
+      transform: translateY(-20px);
+      box-shadow: $shadow-active;
+      -webkit-transform: translateY(-20px);
+      -moz-transform: translateY(-20px);
+      -ms-transform: translateY(-20px);
+      -o-transform: translateY(-20px);
+    }
+    
+    &, & *, .package-details, .package-details *, img, h3, .duration {
+        cursor: pointer;
+    }
+
+    img {
+      width: 100%;
+      height: 80%;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      transition: all $transition-speed;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+
+      &[src=""], &:not([src]) {
+        opacity: 0;
       }
     }
 
-    .duration {
-      font-family: $font-poppins;
-      font-weight: 400;
-      line-height: 19.92px;
-      font-size: 16px;
-      color: $color-text;
 
-      .icon {
-        margin-right: 15px;
-        fill: black;
+    .package-details {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 24px 20px;
+      background-color: $color-bg;
+      z-index: 2;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      margin-top: -20px;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.06);
+      transition: all $transition-speed;
+  
+      // Trip details row - title and price
+      h3 {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        font-family: $font-poppins;
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 24px;
+        margin-top: 0;
+        margin-bottom: 14px;
+        color: #14183E;
+        text-decoration: none;
+  
+        .price {
+          font-family: $font-poppins;
+          font-weight: 500;
+          font-size: 16px;
+          line-height: 22px;
+          color: #59B1E6;
+          padding: 4px 8px;
+          background-color: rgba(53, 67, 255, 0.1);
+          border-radius: 8px;
+          text-align: right;
+        }
       }
+  
+      // Duration row with stars on the right
+      .duration-stars-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 6px;
+      }
+      
+      .duration {
+        font-family: $font-poppins;
+        font-weight: 400;
+        line-height: 20px;
+        font-size: 15px;
+
+        color: $color-text;
+        display: flex;
+        align-items: left;
+        flex: 1;
+  
+        .icon {
+          margin-right: 10px;
+          color: #5E6282;
+          width: 18px;
+          height: 18px;
+        }
+  
+        span {
+          opacity: 0.85;
+        }
+      }
+      
+      .stars {
+        display: flex;
+        align-items: right;
+        gap: 5px;
+        position: absolute;
+        right: 15px;
+        svg {
+          width: 25px;
+          height: 25px;
+        }
+      }
+  
+      // Add a separator line
+      &::before {
+        content: '';
+        position: absolute;
+        top: -1px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 4px;
+        background-color: #F1F1F1;
+        border-radius: 2px;
+      }
+    }
+  
+    // Enhance hover effect
+    &:hover .package-details {
+      padding-bottom: 28px;
+    }
+  }
+
+  .wishlist-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 3;
+    cursor: pointer;
+    border-radius: 50%;
+    padding: 8px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+
+    .heart-icon {
+      width: 24px;
+      height: 24px;
+      transition: transform 0.3s ease;
+
+      &.active {
+        transform: scale(1.1);
+        filter: none;
+        
+        // Apply red color when active
+        &[src*="heart-red"] {
+          filter: brightness(1) saturate(1);
+        }
+      }
+    }
+  }
+
+  /* Navigation Arrows */
+  .nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 10;
+    width: 50px;
+    height: 50px;
+    transition: all 0.3s ease;
+
+    &.left {
+      left: 12px;
+    }
+
+    &.right {
+      right: 20px;
+    }
+
+    &:hover {
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    &:active {
+      transform: translateY(-50%) scale(0.95);
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 992px) {
+  .packages-container {
+    h1 {
+      font-size: 40px;
+      margin-bottom: 40px;
+    }
+    
+    .carousel-wrapper {
+      padding: 40px 40px;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .packages-container {
+    h1 {
+      font-size: 32px;
+      margin-bottom: 30px;
+    }
+    
+    .carousel-wrapper {
+      padding: 30px 30px;
     }
   }
 }

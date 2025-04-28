@@ -5,9 +5,14 @@
       <ng-template carouselSlide>
         <div class="card">
           <!-- Heart Icon -->
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="heart-icon">
-            <path d="M16.32,2.487 C17.744,2.403...Z" />
-          </svg>
+          <div class="wishlist-icon" (click)="toggleWishlist(place.placeID, $event)">
+            <img 
+              [src]="isInWishlist(place.placeID) ? 'assets/icons/heart-red.svg' : 'assets/icons/heart-outline.svg'"
+              [alt]="isInWishlist(place.placeID) ? 'Remove from wishlist' : 'Add to wishlist'"
+              class="heart-icon"
+              [class.active]="isInWishlist(place.placeID)"
+            >
+          </div>
 
           <!-- Place Image -->
           <div
@@ -28,16 +33,19 @@
           <!-- Category -->
           <p class="category">{{ place?.categoryName || 'Uncategorized' }}</p>
 
-          <!-- Rating Stars -->
-          <div class="stars">
-            <ng-container *ngFor="let star of [].constructor(5)">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="#FFD700">
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 
-                                 18.18 21.02 12 17.77 5.82 21.02 
-                                 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-              </svg>
-            </ng-container>
-          </div>
+
+<div class="stars">
+  <ng-container *ngFor="let star of [1,2,3,4,5]; let i = index">
+    <svg width="40" height="40" viewBox="0 0 24 24" 
+         [attr.fill]="i < getStarRating(place.averageRating) ? '#FFD700' : '#CCCCCC'">
+      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 
+                       18.18 21.02 12 17.77 5.82 21.02 
+                       7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+    </svg>
+  </ng-container>
+</div>
+
+
         </div>
       </ng-template>
     </ng-container>

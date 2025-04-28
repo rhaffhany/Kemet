@@ -1,6 +1,6 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&display=swap');
 
+// Variables
 $primary-font: 'Inter', sans-serif;
 $secondary-font: 'Roboto', sans-serif;
 $input-border-color: #FAC817;
@@ -10,229 +10,321 @@ $padding-small: 10px;
 $label-bottom-padding: 5px;
 $font-size: 16px;
 $line-height: 18px;
+$modal-content-width: 624px;
+$button-width: 25rem;
+$phone-input-width: 445px;
 
+// Base Styles
 body {
-  font-family: $primary-font; 
-}
-
-input {
-  border: 1px solid $input-border-color;
-  border-radius: 15px;
-  margin-left: -10px;
-  &:focus {
-    outline: none;
-    border: $input-border-color;
-    box-shadow: 0 0 5px $input-border-color;
-  }
-}
-
-.registerform, .login-info-form {
-  padding: $padding-large;
-  .register-logo, .login-logo {
-    width: 120px;
-    height: auto;
-    margin-left: -7rem;
-    left: 47px;
-    border-radius: 20px 0px 0px 0px;
-    margin-bottom: 45px;
-    position: relative;
-    z-index: 1;
-  }
-}
-
-.form-row {
-  display: flex;
-  gap: $gap-spacing;
-  width: 100%;
-}
-
-h2 {
-  margin-bottom: 11px;
-  margin-left: -3px;
-  font-weight: 600;
-}
-
-.form-item {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding-top: $padding-small;
-  margin-bottom: 22px;
-  margin-left: 10px;
-}
-#gender {
   font-family: $primary-font;
-  display: flex;
-  gap: $gap-spacing;
-  align-items: baseline;
-  font-weight: 300;
-  margin-top: 10px;
 }
 
-input[type="radio"] {
-  margin-right: -10px;
-  margin-left: 0;
-  width: auto;
-}
-
-label {
-  font-family: $primary-font;
-  margin-left: -5px;
-  font-weight: 400;
-  font-size: $font-size;
-  line-height: $line-height;
-  padding-bottom: $label-bottom-padding;
-}
-
-.phone-input {
-  width: 445px;
-  display: flex;
-  align-items: center;
-  border: 1px solid $input-border-color;
-  border-radius: 15px;
-  margin-left: -10px;
-  
-  -webkit-border-radius: 15px;
-  -moz-border-radius: 15px;
-  -ms-border-radius: 15px;
-  -o-border-radius: 15px;
-}
-
-.phonePrefix {
-  font-family: $secondary-font;
-  font-size: $font-size;
-  margin-right: 5px;
-  padding-left: 20px;
-  padding-right: 5px;
-  height: 44px;
-  line-height: 44px;
-  border-radius: 15px 0 0 15px;
-  -webkit-border-radius: 15px 0 0 15px;
-  -moz-border-radius: 15px 0 0 15px;
-  -ms-border-radius: 15px 0 0 15px;
-  -o-border-radius: 15px 0 0 15px;
-}
-
-#phoneNumber {
-  height: 44px;
-  padding-left: 10px;
-  border-radius: 15px;
-  border: none;
-  font-size: $font-size;
-  margin-left: 2px;
-  width: 27rem;
-  font-weight: 300;
-}
-
-.line-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.small-hr {
-  width: 7rem;
-  border-top: 2px solid #111;
-}
-
-h6 {
-  font-family: $primary-font;
-  font-size: 14px;
-  font-weight: 500;
-  color: #718096;
-  letter-spacing: 0.2px;
-  text-align: center;
-  margin-top:-10px;
-  margin-bottom: 0px;
-}
-
-.register-btn {
-  width: 25rem;
-  height: 42px;
-  background-color: #FFBD67;
-  color: #000000;
-  font-family: $primary-font;
-  font-size: $font-size;
-  font-weight: 400;
-  line-height: $line-height;
-  text-align: center;
-  border: 2px solid $input-border-color;
-  border-radius: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
-  margin: 15px 0 -20px 2rem;
-  &:disabled {
-    background-color: #FFBD67;
-    cursor: not-allowed;
-  }
-}
-
-.alert {
-  color: red;
-  height: 0px;
-  padding: 0px;
-}
-
+// Modal Styles
 .modal {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1000;
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  display: block;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
+  display: none;
   justify-content: center;
   align-items: center;
-}
 
-.modal-content {
-  background-color: white;
-  padding: 20px;
-  border-radius: 5px;
-  width: 624px;
-  margin: 0 auto;
-}
+  &.register-modal {
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
-.close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 20px;
-  cursor: pointer;
-}
+    &.show {
+      display: block;
+    }
+  }
 
-.password-icon {
-  position: absolute;
-  top: -30px; 
-  left: 10px;  
-  cursor: pointer;
-  z-index: 99;
-}
+  .modal-content {
+    position: relative;
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: $modal-content-width;
+    margin: 0 auto;
+    max-height: 90vh;
+    overflow-y: auto;
 
-.submit {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  .login-info-btn {
-    width: 249px;
-    margin-left: -2rem;
-    margin-bottom: -20px;
-    margin-top: -3px;
+    .arrow-left {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      width: 35px;
+      height: 35px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 35px;
+      cursor: pointer;
+      z-index: 1000;
+      color: #333;
+      background: none;
+      border: none;
+      padding: 0;
+      line-height: 1;
+    }
   }
 }
-/* Ensure modal is hidden by default */
-.modal {
-  display: none;
+
+.registerform {
+  padding: $padding-small $padding-large $padding-large;
+  width: 580px;
+
+  .form-action{
+    margin-left: -0.5rem;
+  }
+
+  h2 {
+    margin-bottom: 11px;
+    margin-left: -3px;
+    font-weight: 500;
+    font-size: 30px;
+  }
+
+  .form-row {
+    display: flex;
+    gap: $gap-spacing;
+    width: 100%;
+  }
+
+  .form-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding-top: $padding-small;
+    margin-bottom: 22px;
+    margin-left: 10px;
+
+
+    
+    label {
+      font-family: $primary-font;
+      margin-left: -5px;
+      font-weight: 400;
+      font-size: $font-size;
+      line-height: $line-height;
+      padding-bottom: $label-bottom-padding;
+    }
+
+    input {
+      border: 1px solid $input-border-color;
+      border-radius: 15px;
+      margin-left: -10px;
+
+      &:focus {
+        outline: none;
+        border: $input-border-color;
+        box-shadow: 0 0 5px $input-border-color;
+      }
+    }
+
+    #gender {
+      font-family: $primary-font;
+      display: flex;
+      gap: $gap-spacing;
+      align-items: baseline;
+      font-weight: 300;
+      margin-top: 10px;
+
+      input[type="radio"] {
+        margin-right: -10px;
+        margin-left: 0;
+        width: auto;
+      }
+    }
+
+    .phone-input {
+      width: $phone-input-width;
+      display: flex;
+      align-items: center;
+      border: 1px solid $input-border-color;
+      border-radius: 15px;
+      margin-left: -10px;
+
+      .phonePrefix {
+        font-family: $secondary-font;
+        font-size: $font-size;
+        margin-right: 5px;
+        padding-left: 20px;
+        padding-right: 5px;
+        height: 44px;
+        line-height: 44px;
+        border-radius: 15px 0 0 15px;
+      }
+
+      #phoneNumber {
+        height: 44px;
+        padding-left: 10px;
+        border: none;
+        font-size: $font-size;
+        margin-left: 2px;
+        width: 27rem;
+        font-weight: 300;
+      }
+    }
+
+    .alert {
+      color: #ff0000;
+      min-height: 20px;
+      height: auto;
+      padding: 3px 0;
+      margin-top: 2px;
+      margin-bottom: -1rem;
+      font-size: 14px;
+      line-height: 1.2;
+      font-weight: 500;
+      transition: all 0.3s ease;
+
+      p {
+        margin: 0;
+      }
+    }
+  }
+
+  .line-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 20px 0;
+
+    .small-hr {
+      width: 7rem;
+      border-top: 2px solid #111;
+    }
+
+ 
+
+    h6 {
+      font-family: $primary-font;
+      font-size: 14px;
+      font-weight: 500;
+      color: #718096;
+      letter-spacing: 0.2px;
+      margin: 0;
+    }
+  }
+
+  .register-btn {
+    width: $button-width;
+    height: 42px;
+    background-color: #FFBD67;
+    color: #000000;
+    font-family: $primary-font;
+    font-size: $font-size;
+    font-weight: 400;
+    line-height: $line-height;
+    text-align: center;
+    border: 2px solid $input-border-color;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 15px 0 -20px 2rem;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: darken(#FFBD67, 5%);
+    }
+  }
 }
-.modal.show {
-  display: block;
+
+.register-logo {
+  width: 120px;
+  height: auto;
+  position: relative;
+  margin-top: 50px;
+  padding-left: $padding-small;
+  margin-bottom: 20px;
+}
+
+.login-info-form {
+  .back-arrow {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+  }
+
+  .form-item {
+    margin-bottom: 1rem;
+    position: relative;
+
+    .password-toggle {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+  }
+
+  h2 {
+    text-align: left;
+    margin-bottom: 2rem;
+    margin-left: 10px;
+  }
+
+  .alert {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+
+  button {
+    margin-top: 1.5rem;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .modal {
+    .modal-content {
+      width: 90%;
+      padding: 15px;
+    }
+  }
+
+  .registerform {
+    padding: $padding-small;
+
+    .form-row {
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .phone-input {
+      width: 100% !important;
+
+      #phoneNumber {
+        width: 100% !important;
+      }
+    }
+
+    .register-btn {
+      width: 100% !important;
+      margin-left: 0 !important;
+    }
+  }
 }

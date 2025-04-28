@@ -1,79 +1,250 @@
-<section class="personalized-plan">
-    <!-- Print Logo -->
-    <div class="logo-print" [style.--logo-path]="'url(' + logoPath + ')'"></div>
-    
-    <!-- Header Section -->
-    <header>
-      <img [src]="egyptBanner" alt="Egypt">
-      <div class="headerContent">
-        <h1>Your Personalized Egyptian Adventure</h1>
-        <button class="print" (click)="printAsPDF()">Print as PDF</button>
-      </div>
-    </header>
-  
-    <!-- Loading State -->
-    <div *ngIf="isLoading" class="loading-state">
-      <div class="spinner"></div>
+<div class="personalized-plan">
+  <!-- Banner and Controls -->
+  <div class="banner-container">
+    <img [src]="egyptBanner" alt="Egypt Banner" class="banner-image">
+    <div class="banner-text">
+      <h1>Your AI Personalized Egypt Experience</h1>
+      <p>Customized adventures tailored just for you</p>
     </div>
-  
-    <!-- Error State -->
-    <div *ngIf="errorMessage" class="error-state">
-      <p>{{ errorMessage }}</p>
-      <button class="btn" (click)="generateNewPlan()">Generate New Plan</button>
+    <div class="controls">
+      <button class="edit-button" (click)="toggleEditMode()">
+        {{ isEditMode ? 'Save Changes' : 'Edit Plan' }}
+      </button>
+      <button class="print-button" (click)="printAsPDF()">Print PDF</button>
     </div>
-  
-    <!-- Plan Content -->
-    <main *ngIf="!isLoading && !errorMessage && travelPlan.length > 0">
-      <section *ngFor="let day of travelPlan; let dayIndex = index" class="day">
-        <div class="day-container">
-          <h2>DAY {{ day.dayNumber }}</h2>
-          
-          <div class="location">
-            <img class="locationIcon" [src]="locationIcon" alt="Location">
-            <p>{{ day.location }}</p>
-          </div>
-          
-          <div class="book-btn">
-            <button class="btn">Book This Day</button>
-          </div>
-          
-          <div class="todo">
-            <!-- Places -->
-            <div *ngFor="let place of day.places; let placeIndex = index" 
-                 class="place" (click)="navigateToPlace(place.placeId)">
-              <img [src]="place.image" [alt]="place.name">
-              <div class="info">
-                <h3>{{ place.name }}</h3>
-                <p class="category {{ getCategoryClass(place.category) }}">
-                  {{ place.category }}
-                </p>
-                <p class="description">{{ place.description }}</p>
-              </div>
-              <div class="regenerate-icon" (click)="regenerateItem(dayIndex, 'place', placeIndex); $event.stopPropagation()">
-                <img [src]="regenerateIcon" class="regenerate" [class.rotate]="isRegenerating(dayIndex, 'place', placeIndex)">
-              </div>
-              <p class="price">{{ place.price }}</p>
-            </div>
-            
-            <!-- Activities -->
-            <div *ngFor="let activity of day.activities; let activityIndex = index" 
-                 class="activity" (click)="navigateToActivity(activity.activityId)">
-              <img [src]="activity.image" [alt]="activity.name">
-              <div class="info">
-                <h3>{{ activity.name }}</h3>
-                <p class="category {{ getCategoryClass(activity.category) }}">
-                  {{ activity.category }}
-                </p>
-                <p class="description">{{ activity.description }}</p>
-              </div>
-              <div class="regenerate-icon" (click)="regenerateItem(dayIndex, 'activity', activityIndex); $event.stopPropagation()">
-                <img [src]="regenerateIcon" class="regenerate" [class.rotate]="isRegenerating(dayIndex, 'activity', activityIndex)">
-              </div>
-              <p class="price">{{ activity.price }}</p>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
+  </div>
 
-  </section>
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading">
+      <div class="spinner"></div>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="error-message">
+      <p>{{ errorMessage }}</p>
+      <button (click)="generateNewPlan()">Generate New Plan</button>
+  </div>
+
+  <!-- Travel Plan Content -->
+  <div class="travel-plan-container" *ngIf="!isLoading && !errorMessage">
+      <div class="day-list" cdkDropList (cdkDropListDropped)="reorderDays($event)">
+          <div class="day" *ngFor="let day of travelPlan; let i = index"
+               [class.edit-mode]="isEditMode"
+               cdkDrag
+               [cdkDragData]="day">
+              
+              <!-- Custom Day Drag Preview -->
+              <ng-template cdkDragPreview>
+                  <div class="day day-preview edit-mode">
+                      <div class="day-header">
+                          <h2>Day {{day.dayNumber}}</h2>
+                          <div class="location">
+                              <img [src]="locationIcon" alt="Location" class="locationIcon">
+                              <p>{{day.location}}</p>
+                          </div>
+                      </div>
+                      <div class="day-content">
+                          <div class="places-section">
+                              <h3>Places to Visit</h3>
+                              <div class="items-container">
+                                  <div class="place-card" *ngFor="let place of day.places">
+                                      <div class="card-header">
+                                          <img [src]="place.image" [alt]="place.name" 
+                                              class="card-image"
+                                              (error)="$any($event.target).src = defaultImage">
+                                          <span class="category-badge">{{place.category}}</span>
+                                      </div>
+                                      <div class="card-content">
+                                          <h4>{{place.name}}</h4>
+                                          <p class="description">{{place.description}}</p>
+                                          <div class="price-tag">
+                                              <i class="fas fa-tag"></i>
+                                              <span>{{place.price}}</span>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="activities-section">
+                              <h3>Activities</h3>
+                              <div class="items-container">
+                                  <div class="activity-card" *ngFor="let activity of day.activities">
+                                      <div class="card-header">
+                                          <img [src]="activity.image" [alt]="activity.name"
+                                              class="card-image"
+                                              (error)="$any($event.target).src = defaultImage">
+                                          <span class="category-badge">{{activity.category}}</span>
+                                      </div>
+                                      <div class="card-content">
+                                          <h4>{{activity.name}}</h4>
+                                          <p class="description">{{activity.description}}</p>
+                                          <div class="price-tag">
+                                              <i class="fas fa-tag"></i>
+                                              <span>{{activity.price}}</span>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </ng-template>
+
+              <!-- Original Day Content -->
+              <div class="day-header">
+                  <h2>Day {{day.dayNumber}}</h2>
+                  <div class="location">
+                      <img [src]="locationIcon" alt="Location" class="locationIcon">
+                      <p>{{day.location}}</p>
+                  </div>
+                  <div *ngIf="isEditMode" class="drag-handle" cdkDragHandle>
+                      <i class="fas fa-grip-vertical"></i>
+                  </div>
+              </div>
+
+              <!-- Day Content Container -->
+              <div class="day-content">
+                  <!-- Places Section -->
+                  <div class="places-section">
+                      <h3>Places to Visit</h3>
+                      <div class="items-container drag-container" 
+                           cdkDropList 
+                           [id]="'places-list-' + day.dayNumber"
+                           [cdkDropListConnectedTo]="getConnectedPlacesLists(day)"
+                           [cdkDropListData]="day.places"
+                           [cdkDropListDisabled]="!isEditMode"
+                           (cdkDropListDropped)="onItemDrop($event, 'places')">
+                          <div class="place-card" *ngFor="let place of day.places; let placeIndex = index"
+                               [class.edit-mode]="isEditMode"
+                               cdkDrag
+                               [cdkDragData]="{ item: place, type: 'place', dayIndex: i, itemIndex: placeIndex }">
+                              
+                              <!-- Custom Place Card Drag Preview -->
+                              <ng-template cdkDragPreview>
+                                <div class="place-card styled-preview">
+                                    <div class="card-header">
+                                        <img [src]="place.image" [alt]="place.name" 
+                                            class="card-image"
+                                            (error)="$any($event.target).src = defaultImage">
+                                        <span class="category-badge">{{place.category}}</span>
+                                    </div>
+                                    <div class="card-content">
+                                        <h4>{{place.name}}</h4>
+                                        <p class="description">{{place.description}}</p>
+                                        <div class="price-tag">
+                                            <i class="fas fa-tag"></i>
+                                            <span>{{place.price}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                              </ng-template>
+                              
+                              <div class="card-header">
+                                  <img [src]="place.image" alt="Place Image" 
+                                      class="card-image" #img
+                                      (error)="img.src = defaultImage">
+                                  <span class="category-badge">{{place.category}}</span>
+                                  <div *ngIf="isEditMode" class="edit-overlay">
+                                      <div class="drag-indicator">
+                                          <i class="fas fa-grip-lines"></i>
+                                      </div>
+                                  </div>
+                              </div>
+                              
+                              <div class="card-content">
+                                  <h4>{{place.name}}</h4>
+                                  <p class="description">{{place.description}}</p>
+                                  <div class="price-tag">
+                                      <i class="fas fa-tag"></i>
+                                      <span>{{place.price}}</span>
+                                  </div>
+                              </div>
+
+                              <div *ngIf="isEditMode" class="card-actions">
+                                  <button class="regenerate-btn" 
+                                          (click)="regenerateItem(i, 'place', placeIndex)"
+                                          [disabled]="isRegenerating(i, 'place', placeIndex)">
+                                      <img [src]="regenerateIcon" alt="Regenerate">
+                                  </button>
+                                  <div class="drag-handle" cdkDragHandle>
+                                      <i class="fas fa-grip-vertical"></i>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  
+                  <!-- Activities Section -->
+                  <div class="activities-section">
+                      <h3>Activities</h3>
+                      <div class="items-container drag-container" 
+                           cdkDropList 
+                           [id]="'activities-list-' + day.dayNumber"
+                           [cdkDropListConnectedTo]="getConnectedActivitiesLists(day)"
+                           [cdkDropListData]="day.activities"
+                           [cdkDropListDisabled]="!isEditMode"
+                           (cdkDropListDropped)="onItemDrop($event, 'activities')">
+                          <div class="activity-card" *ngFor="let activity of day.activities; let activityIndex = index"
+                               [class.edit-mode]="isEditMode"
+                               cdkDrag
+                               [cdkDragData]="{ item: activity, type: 'activity', dayIndex: i, itemIndex: activityIndex }">
+                              
+                              <!-- Custom Activity Card Drag Preview -->
+                              <ng-template cdkDragPreview>
+                                <div class="activity-card styled-preview">
+                                    <div class="card-header">
+                                        <img [src]="activity.image" [alt]="activity.name" 
+                                            class="card-image"
+                                            (error)="$any($event.target).src = defaultImage">
+                                        <span class="category-badge">{{activity.category}}</span>
+                                    </div>
+                                    <div class="card-content">
+                                        <h4>{{activity.name}}</h4>
+                                        <p class="description">{{activity.description}}</p>
+                                        <div class="price-tag">
+                                            <i class="fas fa-tag"></i>
+                                            <span>{{activity.price}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                              </ng-template>
+                              
+                              <div class="card-header">
+                                  <img [src]="activity.image" alt="Activity Image" 
+                                      class="card-image" #img2
+                                      (error)="img2.src = defaultImage">
+                                  <span class="category-badge">{{activity.category}}</span>
+                                  <div *ngIf="isEditMode" class="edit-overlay">
+                                      <div class="drag-indicator">
+                                          <i class="fas fa-grip-lines"></i>
+                                      </div>
+                                  </div>
+                              </div>
+                              
+                              <div class="card-content">
+                                  <h4>{{activity.name}}</h4>
+                                  <p class="description">{{activity.description}}</p>
+                                  <div class="price-tag">
+                                      <i class="fas fa-tag"></i>
+                                      <span>{{activity.price}}</span>
+                                  </div>
+                              </div>
+
+                              <div *ngIf="isEditMode" class="card-actions">
+                                  <button class="regenerate-btn"
+                                          (click)="regenerateItem(i, 'activity', activityIndex)"
+                                          [disabled]="isRegenerating(i, 'activity', activityIndex)">
+                                      <img [src]="regenerateIcon" alt="Regenerate">
+                                  </button>
+                                  <div class="drag-handle" cdkDragHandle>
+                                      <i class="fas fa-grip-vertical"></i>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>

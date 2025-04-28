@@ -7,10 +7,10 @@
 
       <div class="form-item">
         <label for="email">Email Address</label>
-        <input class="form-control" formControlName="email" type="email" id="email" placeholder="Email" />
+        <input class="form-control" formControlName="email" type="email" id="email" />
         <div *ngIf="loginForm.get('email')?.errors && (loginForm.get('email')?.touched || (loginForm.get('email')?.value?.length ?? 0) > 0)">
-          <p *ngIf="loginForm.get('email')?.getError('required')">Email is required</p>
-          <p *ngIf="loginForm.get('email')?.getError('email')">Invalid email format</p>
+          <p class="text-danger" *ngIf="loginForm.get('email')?.getError('required')">Email is required</p>
+          <p class="text-danger" *ngIf="loginForm.get('email')?.getError('email')">Invalid email format</p>
         </div>
       </div>
 
@@ -28,21 +28,18 @@
         <div *ngIf="loginForm.get('password')?.errors && 
             (loginForm.get('password')?.touched || (loginForm.get('password')?.value?.length ?? 0) > 0)">
             
-          <p *ngIf="loginForm.get('password')?.getError('required')">Password is required</p>
-          <p *ngIf="loginForm.get('password')?.getError('minlength')">Password must be at least 6 characters</p>
+          <p class="text-danger" *ngIf="loginForm.get('password')?.getError('required')">Password is required</p>
+          <p class="text-danger" *ngIf="loginForm.get('password')?.getError('minlength')">Password must be at least 6 characters</p>
         </div>
       </div>
       
-      <a (click)="openForgotPasswordForm()">Forgot password?</a>
+      <a class="forgot-password" (click)="openForgotPasswordForm()">Forgot password?</a>
 
       <div class="btn">
         <button [disabled]="loginForm.invalid" class="login-btn" type="submit">
           Sign in <span *ngIf="isLoading"><i class="fas fa-spin fa-spinner"></i></span>
         </button>
       </div>
-
-      <p *ngIf="errorMsg" class="alert alert-danger">{{ errorMsg }}</p>
-      <p *ngIf="successMsg" class="alert alert-success">{{ successMsg }}</p>
 
       <div class="line-container">
         <hr class="small-hr">
@@ -51,18 +48,19 @@
       </div>
 
       <div class="join-us-link">
-        <a (click)="openRegister(); $event.preventDefault()">Join us now</a>
+        <a (click)="openRegister()">Join us now</a>
       </div>
       
     </form>
 
     <div *ngIf="showRegisterForm" class="modal-login">
-      <img [src]="arrowLeftIcon" alt="Arrow Left Icon" class="arrow-left" (click)="backToLogin()" />
+      <img src="../../../assets/icons/chevron-left.svg" alt="Back" class="arrow-left" (click)="backToLogin()" />
       <app-register></app-register>
     </div>
 
     <div *ngIf="showForgotPasswordForm">
-      <form [formGroup]="forgotPasswordForm" (ngSubmit)="handleForgotPassword()" class="forgot-password-form">
+      <img src="../../../assets/icons/chevron-left.svg" alt="Back" class="arrow-left" (click)="backToLogin()" />
+      <form [formGroup]="forgotPasswordForm" (ngSubmit)="handleForgotPassword()" class="forgot-password-form d-flex flex-column align-items-center justify-content-center">
         <div class="color"></div>
         <h2>Forgot Password?</h2>
         <p>Don’t worry! It happens. Please enter the email associated with your account.</p>
@@ -74,30 +72,25 @@
             formControlName="email" 
             type="email" 
             id="email" 
-            placeholder="Enter your email address" 
           />
           <div *ngIf="forgotPasswordForm.get('email')?.errors && 
                       (forgotPasswordForm.get('email')?.touched || forgotPasswordForm.get('email')?.value.length > 0)" 
                class="alert">
-            <p *ngIf="forgotPasswordForm.get('email')?.getError('required')">Email is required</p>
-            <p *ngIf="forgotPasswordForm.get('email')?.getError('email')">Invalid email format</p>
+            <p class="text-danger" *ngIf="forgotPasswordForm.get('email')?.getError('required')">Email is required</p>
+            <p  class="text-danger" *ngIf="forgotPasswordForm.get('email')?.getError('email')">Invalid email format</p>
           </div>
         </div>
         <button [disabled]="forgotPasswordForm.invalid" class="login-btn" type="submit">
           Send Code <span *ngIf="isLoading"><i class="fas fa-spin fa-spinner"></i></span>
         </button>
 
-        <img [src]="arrowLeftIcon" alt="Arrow Left Icon" class="arrow-left arrow-forget" (click)="backToLogin()" />
-
-        <p *ngIf="errorMsg" class="alert alert-danger">{{ errorMsg }}</p>
-        <p *ngIf="successMsg" class="alert alert-success">{{ successMsg }}</p>
       </form>
     </div>
 
     <!-- Verification Form -->
     <div *ngIf="showVerificationForm">
       <form (ngSubmit)="handleVerification()" class="verification-form">
-        <img [src]="arrowLeftIcon" class="arrow-left" (click)="backToLogin()">
+        <img src="../../../assets/icons/chevron-left.svg" class="arrow-left" (click)="backToLogin()">
         <h2>Please check your email</h2>
         <p>We’ve sent a code to <span>{{ forgotPasswordEmail }}</span></p>
         <div class="form-item">
@@ -120,7 +113,7 @@
     <!-- Reset Password Form -->
     <div *ngIf="showResetPasswordForm">
       <div class="reset-password-section">
-        <img [src]="arrowLeftIcon" class="arrow-left" (click)="backToVerification()">
+        <img src="../../../assets/icons/chevron-left.svg" class="arrow-left" (click)="backToVerification()">
         <h2>Reset Password</h2>
         <p>Please type something you’ll remember</p>
         <form [formGroup]="resetPasswordForm" (ngSubmit)="handleResetPassword()">
@@ -131,10 +124,10 @@
           <div *ngIf="resetPasswordForm.get('newPassword')?.errors && 
                       (resetPasswordForm.get('newPassword')?.touched || 
                       (resetPasswordForm.get('newPassword')?.value?.length ?? 0) > 0)">
-            <p *ngIf="resetPasswordForm.get('newPassword')?.hasError('required')">
+            <p class="text-danger" *ngIf="resetPasswordForm.get('newPassword')?.hasError('required')">
               Password is required
             </p>
-            <p *ngIf="resetPasswordForm.get('newPassword')?.hasError('minlength')">
+            <p class="text-danger" *ngIf="resetPasswordForm.get('newPassword')?.hasError('minlength')">
               Password must be at least 6 characters
             </p>
           </div>
@@ -147,13 +140,13 @@
           <div *ngIf="resetPasswordForm.get('confirmPassword')?.errors && 
                       (resetPasswordForm.get('confirmPassword')?.touched || 
                       (resetPasswordForm.get('confirmPassword')?.value?.length ?? 0) > 0)" class="alert">
-            <p *ngIf="resetPasswordForm.get('confirmPassword')?.hasError('required')">
+            <p class="text-danger" *ngIf="resetPasswordForm.get('confirmPassword')?.hasError('required')">
               Confirm Password is required
             </p>
           </div>
 
           <!-- Password Mismatch Error -->
-          <div *ngIf="resetPasswordForm.hasError('passwordMismatch') && resetPasswordForm.touched">
+          <div class="text-danger" *ngIf="resetPasswordForm.hasError('passwordMismatch') && resetPasswordForm.touched">
             <p>Passwords do not match</p>
           </div>
 

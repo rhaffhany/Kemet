@@ -1,20 +1,48 @@
+<!-- top-selling.component.html -->
 <div class="packages-container">
-  <h2>Top Selling</h2>
+  <h2>Travel Agencies</h2>
   <h1>Exclusive Packages</h1>
-  <div class="package-card" *ngFor="let package of packages" [routerLink]="['/Package-details',package.planId]">
-    <img [src]="package.imageURLs" alt="{{ package.planName }}">
-    <div class="package-details">
-      <h3>{{ package.planName }}
-        <span class="price">{{ package.egyptianAdult | currency:  '£' }}</span>
-      </h3>
-
-      <p class="duration">
-        <div>
-          <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" class="icon feather feather-navigation" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21.64 1.075c-.495.197-19.16 9.067-19.28 9.163-.503.398-.449 1.263.1 1.602.101.062 1.331.387 3.931 1.038l3.785.946.946 3.785c.651 2.6.976 3.83 1.038 3.931.339.549 1.204.603 1.602.1.1-.127 8.99-18.839 9.164-19.29.308-.798-.492-1.591-1.286-1.275m-4.965 9.827a2408.124 2408.124 0 0 0-3.28 6.934c-.042.096-.087.165-.1.152-.013-.012-.325-1.231-.695-2.708-.724-2.89-.726-2.897-1.038-3.103-.122-.081-.754-.254-2.842-.777-1.477-.37-2.695-.682-2.707-.694-.012-.012.039-.047.113-.079.074-.032 3.193-1.509 6.932-3.281a1077.59 1077.59 0 0 1 6.809-3.212c.006.006-1.43 3.052-3.192 6.768" fill-rule="evenodd" stroke="none"/>
-          </svg>
-          {{ package.duration + " Days Trip"}}
-      </div>
-    </div>
+  <div class="carousel-wrapper">
+    <owl-carousel-o #owlCarousel [options]="customOptions" *ngIf="carouselReady && packages?.length">
+      <ng-container *ngFor="let package of packages">
+        <ng-template carouselSlide>
+          <div class="package-card" (click)="navigateToPackage(package.planId)" style="cursor: pointer;">
+            <!-- Heart Icon -->
+            <div class="wishlist-icon" (click)="toggleWishlist(package.planId, $event)">
+              <img 
+                [src]="isInWishlist(package.planId) ? 'assets/icons/heart-red.svg' : 'assets/icons/heart-outline.svg'"
+                [alt]="isInWishlist(package.planId) ? 'Remove from wishlist' : 'Add to wishlist'"
+                class="heart-icon"
+                [class.active]="isInWishlist(package.planId)"
+              >
+            </div>
+            <img [src]="package.imageURLs" alt="{{ package.planName }}">
+            <div class="package-details">
+              <h3>{{ package.planName }}
+                <span class="price">{{ package.egyptianAdult | currency: '£' }}</span>
+              </h3>
+              <div class="duration">
+                <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
+                </svg>
+                <span>{{ package.duration + " Days Trip"}}</span>
+                <div class="stars">
+                  <ng-container *ngFor="let star of [1,2,3,4,5]; let i = index">
+                    <svg width="40" height="40" viewBox="0 0 24 24" 
+                         [attr.fill]="i < getStarRating(package.averageRating) ? '#FFD700' : '#CCCCCC'">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 
+                                       18.18 21.02 12 17.77 5.82 21.02 
+                                       7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </ng-container>
+    </owl-carousel-o>
+    <img *ngIf="carouselReady && packages?.length" [src]="leftArrowSrc" class="nav-button left" aria-label="Previous slide" (click)="onPrev()">
+    <img *ngIf="carouselReady && packages?.length" [src]="rightArrowSrc" class="nav-button right" aria-label="Next slide" (click)="onNext()">
   </div>
 </div>

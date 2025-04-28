@@ -1,6 +1,7 @@
 import { Component, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-plan',
@@ -188,6 +189,32 @@ export class PlanComponent implements AfterViewInit, OnDestroy {
   toggleTravelTimeSelection(option: string): void {
     this.selectedTravelTime = option;
     this.updateProgress();
+    
+    // Show weather information based on selected season
+    let weatherInfo = '';
+    switch (option) {
+      case 'Spring':
+        weatherInfo = 'Spring (March to May) in Egypt is mild and pleasant with temperatures between 18-25°C (64-77°F). Occasional sandstorms (khamaseen) may occur. Perfect for sightseeing and outdoor activities.';
+        break;
+      case 'Summer':
+        weatherInfo = 'Summer (June to August) is hot and dry with temperatures ranging from 28-40°C (82-104°F). Early morning or evening visits to attractions are recommended. Stay hydrated and protect yourself from the sun.';
+        break;
+      case 'Autumn':
+        weatherInfo = 'Autumn (September to November) offers comfortable temperatures between 20-30°C (68-86°F). Great time for Nile cruises and exploring ancient sites. Less crowded than peak seasons.';
+        break;
+      case 'Winter':
+        weatherInfo = 'Winter (December to February) is mild with temperatures between 15-22°C (59-72°F). Nights can be cooler. Best time for desert safaris and archaeological visits. Pack layers for temperature variations.';
+        break;
+    }
+
+    if (weatherInfo) {
+      Swal.fire({
+        title: `${option} in Egypt`,
+        text: weatherInfo,
+        icon: 'info',
+        confirmButtonText: 'Got it'
+      });
+    }
   }
 
   toggleBudgetSelection(option: string): void {

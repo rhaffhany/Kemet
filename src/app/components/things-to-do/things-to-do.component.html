@@ -1,4 +1,11 @@
 <section>
+    <div class="yellow-circle"></div>
+    <div class="purple-circle"></div>
+    <div class="blue-circle"></div>
+    <div class="second-purple-circle"></div>
+    <div class="second-blue-circle"></div>
+    <div class="third-purple-circle"></div>
+    <img [src]="decoreImagePath" class="decore" alt="decore">
     <div class="container vh-100 d-flex justify-content-center align-items-center search">
         <div class="row">
             <div class="header text-center">
@@ -8,36 +15,98 @@
             <app-search />
         </div>
     </div>
-<div class="section-wrapper">
-        <div class="row py-5">
-            <div class="col-md-12 mt-0">
-                <h1 class="title">Recommended for you</h1>
-                <p class="subtitle">Discover why Egypt’s ancient wonders rank among 2024’s Best of the Best Destinations.</p>
-                <app-recommended />
+    <div class="things-to-do-container">
+        <div *ngFor="let section of carouselSections; let i = index" class="section-wrapper">
+            <div class="section-header">
+                <h2 class="section-title">{{ section.title }}</h2>
+                <p class="section-description">{{ section.description }}</p>
+            </div>
+          
+            <!-- Loading state -->
+            <div *ngIf="section.isLoading" class="loading-placeholder d-flex justify-content-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+          
+            <!-- Error state -->
+            <div *ngIf="section.hasError" class="error-state text-center">
+                <p class="text-danger">{{ section.errorMessage || 'Unable to load data. Please try again.' }}</p>
+                <button class="btn btn-outline-primary mt-2" (click)="retryLoading(i)">
+                    <i class="fas fa-sync-alt mr-1"></i> Retry
+                </button>
+            </div>
+      
+            <!-- Carousel -->
+            <div *ngIf="section.carouselReady && !section.isLoading && !section.hasError" class="carousel-container">
+                <owl-carousel-o #owlCarousel [options]="customOptions">
+                    <ng-container *ngFor="let item of section.items">
+                        <ng-template carouselSlide>
+                            <div class="card" [attr.data-item-id]="item.id" [attr.data-item-type]="item.type">
+                                <!-- Wishlist Icon -->
+                                <div class="wishlist-icon" (click)="toggleWishlist(item.id, item.type, $event)">
+                                    <img 
+                                        [src]="isInWishlist(item.id, item.type) ? 'assets/icons/heart-red.svg' : 'assets/icons/heart-outline.svg'"
+                                        [alt]="isInWishlist(item.id, item.type) ? 'Remove from wishlist' : 'Add to wishlist'"
+                                        class="heart-icon"
+                                        [class.active]="isInWishlist(item.id, item.type)"
+                                    >
+                                </div>
+      
+                                <!-- Item Image -->
+                                <div role="button" [routerLink]="getRouterLink(item)" class="image-container">
+                                    <img 
+                                        [src]="item.imageURLs?.$values?.[0] || 'assets/img/default-activity.jpg'" 
+                                        [alt]="item.name" 
+                                        class="card-image"
+                                        loading="lazy"
+                                    />
+                                </div>
+      
+                                <!-- Content -->
+                                <div class="card-content">
+                                    <h3 class="card-title">{{ item.name }}</h3>
+                                    <p *ngIf="item.duration" class="card-duration">{{ item.duration }}</p>
+                                    
+         <!-- Stars -->
+         <div class="stars">
+            <ng-container *ngFor="let star of [1,2,3,4,5]; let i = index">
+              <svg width="40" height="40" viewBox="0 0 24 24" 
+                   [attr.fill]="i < starRating ? '#FFD700' : '#CCCCCC'">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 
+                                 18.18 21.02 12 17.77 5.82 21.02 
+                                 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+            </ng-container>
+          </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ng-container>
+                </owl-carousel-o>
+      
+                <!-- Navigation arrows -->
+                <div *ngIf="section.items && section.items.length > 0" class="nav-buttons">
+                    <img 
+                        [src]="leftArrowSrc" 
+                        class="nav-button left" 
+                        aria-label="Previous slide" 
+                        (click)="onPrev(i)"
+                        alt="Previous">
+      
+                    <img 
+                        [src]="rightArrowSrc" 
+                        class="nav-button right" 
+                        aria-label="Next slide" 
+                        (click)="onNext(i)"
+                        alt="Next">
+                </div>
+            </div>
+      
+            <!-- Empty state -->
+            <div *ngIf="section.carouselReady && !section.isLoading && !section.hasError && section.items?.length === 0" class="empty-state text-center">
+                <p>No items found for this section.</p>
             </div>
         </div>
-        <div class="row py-5">
-            <div class="col-md-12 mt-0">
-                <h1 class="title">Top experience in Cairo</h1>
-                <p class="subtitle">Discover thrilling adventures across Egypt—excitement awaits at every turn!</p>
-                <app-recommended />
-            </div>
-        </div>
-        <div class="row py-5">
-            <div class="col-md-12 mt-0">
-                <h1 class="title">Top attractions near me</h1>
-                <app-recommended />
-            </div>
-        </div>
-        <div class="row py-5">
-            <div class="col-md-12 mt-0">
-                <h1 class="title">Top attractions in Cairo</h1>
-                <p class="subtitle">Don’t miss out! These highly recommended experiences in Egypt are a must for any traveler!</p>
-                <app-recommended />
-            </div>
-        </div>
-
-
-</div>
-
+    </div>
 </section>

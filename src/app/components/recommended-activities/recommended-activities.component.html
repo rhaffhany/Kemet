@@ -1,0 +1,67 @@
+<div class="section-wrapper">
+  <!-- Carousel Reference -->
+  <owl-carousel-o #owlCarousel [options]="customOptions" *ngIf="carouselReady && activities?.length">
+    <ng-container *ngFor="let activity of activities">
+      <ng-template carouselSlide>
+        <div class="card">
+          <!-- Heart Icon -->
+          <div class="wishlist-icon" (click)="toggleWishlist(activity.activityId, $event)">
+            <img 
+              [src]="isInWishlist(activity.activityId) ? 'assets/icons/heart-red.svg' : 'assets/icons/heart-outline.svg'"
+              [alt]="isInWishlist(activity.activityId) ? 'Remove from wishlist' : 'Add to wishlist'"
+              class="heart-icon"
+              [class.active]="isInWishlist(activity.activityId)"
+            >
+          </div>
+
+          <!-- Activity Image -->
+          <div
+            *ngIf="activity && activity.imageURLs && activity.imageURLs.$values && activity.imageURLs.$values.length > 0"
+            role="button"
+            [routerLink]="['/app-activities', activity.activityId]"
+          >
+            <img
+              [src]="activity.imageURLs.$values[0]"
+              [alt]="activity.name"
+              class="card-image"
+            />
+          </div>
+
+          <!-- Title -->
+          <h3 class="card-title">{{ activity?.name }}</h3>
+
+          <!-- Duration -->
+          <p class="category">{{ activity?.duration || 'Duration not specified' }}</p>
+
+<!-- Rating Stars -->
+<div class="stars">
+  <ng-container *ngFor="let star of [1,2,3,4,5]; let i = index">
+    <svg width="40" height="40" viewBox="0 0 24 24" 
+         [attr.fill]="i < getStarRating(activity.averageRating) ? '#FFD700' : '#CCCCCC'">
+      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 
+                       18.18 21.02 12 17.77 5.82 21.02 
+                       7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+    </svg>
+  </ng-container>
+</div>
+        </div>
+      </ng-template>
+    </ng-container>
+  </owl-carousel-o>
+
+  <!-- Navigation Arrows -->
+  <img
+    *ngIf="carouselReady && activities?.length"
+    [src]="leftArrowSrc"
+    class="nav-button left"
+    aria-label="Previous slide"
+    (click)="onPrev()"
+  >
+  <img
+    *ngIf="carouselReady && activities?.length"
+    [src]="rightArrowSrc"
+    class="nav-button right"
+    aria-label="Next slide"
+    (click)="onNext()"
+  >
+</div>

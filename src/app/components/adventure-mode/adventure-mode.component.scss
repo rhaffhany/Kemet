@@ -1,92 +1,168 @@
 /* Variables */
-$blur: 70px;
 $font-family: 'Inter', sans-serif;
-$black: #000000;
-$gray: #777;
+$primary-yellow: #FAC817;
+$light-yellow: #fff2e0;
+$yellow-accent: #FFB800;
+$yellow-dark: #E6B000;
+$text-dark: #3A3000;
+$text-light: #7A6A20;
 $white: #FFFFFF;
-$yellow: #FAC817;
-$purple: #6068FF;
-$light-purple: #D5AEE4;
-$blue: #59B1E6;
+$shadow: rgba(250, 200, 23, 0.3);
+$transition: all 0.3s ease;
 
 section {
+  background: linear-gradient(135deg, $light-yellow, #FFFAF0);
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%; 
+  padding:50px;
+  border-radius: 16px;
+  margin: 0 auto;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
 }
 
 .title {
   font-family: $font-family;
-  font-size: 35px;
+  font-size: 32px;
   font-weight: 800;
-  line-height: 42.36px;
-  margin: 38px auto 13px;
-  color: $black;
+  line-height: 1.2;
+  margin: 0 0 1rem;
+  color: $text-dark;
+  text-align: center;
+  background: linear-gradient(90deg, $primary-yellow, $yellow-dark);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .subtitle {
   font-family: $font-family;
   font-size: 16px;
   font-weight: 500;
-  line-height: 19.36px;
-  color: $gray;
-  margin-bottom: 62px;
+  line-height: 1.5;
+  color: $text-light;
+  margin-bottom: 3rem;
+  text-align: center;
+  max-width: 90%;
 }
 
 .spinner-container {
   text-align: center;
-  margin-top: 50px;
+  position: relative;
+  margin-bottom: 0.5rem;
 }
+
 .spinner-image {
-  width: 450px;
-  height: 450px;
+  width: 280px;
+  height: 280px;
   border-radius: 50%;
-  box-shadow: 4px 4px 30px 3px rgba(0, 0, 0, 0.25);
-  transition: transform 0.3s ease;
-}
-
-@keyframes spin-animation {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-
-.spinBtn {
-  width: 446px;
-  height: 59px;
-  border-radius: 20px;
-  border: 1px solid #FFBD67;
-  background-color: $white;
-  color: #333;
-  margin: 38px auto 48px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s;
-
+  object-fit: cover;
+  border: 8px solid $primary-yellow;
+  box-shadow: 0 10px 30px $shadow, 0 0 0 15px rgba(250, 200, 23, 0.15);
+  transition: $transition;
+  
   &:hover {
-    background-color: #FFBD67;
-    color: $white;
+    transform: scale(1.02);
+    box-shadow: 0 15px 40px $shadow, 0 0 0 20px rgba(250, 200, 23, 0.1);
   }
+}
+
+.result-name {
+  margin-top: 2rem;
+  font-family: $font-family;
+  font-size: 24px;
+  font-weight: 700;
+  color: $text-dark;
+  position: relative;
+  padding-bottom: 0.5rem;
+  
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 3px;
+    background: $primary-yellow;
+    border-radius: 3px;
+  }
+}
+
+.spin-btn {
+  width: 220px;
+  height: 56px;
+  border-radius: 28px;
+  border: none;
+  background: linear-gradient(90deg, $primary-yellow, $yellow-accent);
+  color: $text-dark;
+  margin: 2rem 0 1rem;  
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: $transition;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 20px $shadow;
+  
+  &.error-state {
+    margin-top: 0.5rem;  
+  }
+  
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px $shadow;
+    background: linear-gradient(90deg, $yellow-accent, $primary-yellow);
+  }
+  
+  &:active {
+    transform: translateY(1px);
+    background: $yellow-dark;
+  }
+  
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
   &:before {
     content: '';
     position: absolute;
-    top: -28px;
-    width: 20px;
-    height: 30px;
-    background: #fff;
-    clip-path: polygon(50% 0%, 15% 100%, 85% 100%);
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: $transition;
   }
-  &:focus {
-    outline: none;
+  
+  &:hover:before {
+    left: 100%;
+    transition: 0.7s;
   }
 }
 
-h2 {
-  margin-top: 38px;
+.loading-text {
+  margin-top: 1rem;
   font-family: $font-family;
+  font-size: 16px;
+  color: $text-light;
+  opacity: 0;
+  transition: opacity 0.3s;
+  
+  &.visible {
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.pulse-animation {
+  animation: pulse 1.5s infinite ease-in-out;
 }

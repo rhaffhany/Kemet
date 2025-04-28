@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RecommendedComponent } from './recommended.component';
+import { RecommendedComponent } from './recommended-places.component';
 
 describe('RecommendedComponent', () => {
   let component: RecommendedComponent;

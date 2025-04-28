@@ -1,40 +1,283 @@
 section {
     background-color: var(--main-color);
     margin-top: -50px;
-}
-
-  
-.container-fluid {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 200px;
     
+
+.yellow-circle {
+    width: 478.94px;
+    height: 496.86px;
+    background: radial-gradient(circle, #FAC817, transparent);
+    position: absolute;
+    z-index: 0;
+    filter: blur(70px);
+    opacity: 0.5;
+    top: 600px;
+    left: -84px;
+    border-radius: 50%;
+    pointer-events: none;
+    -webkit-filter: blur(70px);
+  }
+  
+  .purple-circle {
+    width: 478.94px;
+    height: 496.86px;
+    background: radial-gradient(circle, #6068FF, transparent);
+    position: absolute;
+    z-index: 0;
+    filter: blur(70px);
+    opacity: 0.5;
+    top: 1280px;
+    right: -284px;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  
+  .blue-circle {
+    width: 354px;
+    height: 367px;
+    background: radial-gradient(circle, #59B1E6 , transparent);
+    position: absolute;
+    z-index: 0;
+    filter: blur(70px);
+    opacity: 0.8;
+    top: 2250px;
+    left: -50px;
+    border-radius: 50%;
+    pointer-events: none;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+  }
+  
+  .second-purple-circle {
+    width: 478.94px;
+    height: 496.86px;
+    background: radial-gradient(circle, #D5AEE4, transparent);
+    position: absolute;
+    z-index: 0;
+    filter: blur(150px);
+    opacity: 1;
+    top: 2850px;
+    right: -105px;
+    border-radius: 50%;
+    pointer-events: none;
+    -webkit-filter: blur(150px);
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+  }
+  
+  .second-blue-circle {
+    width: 354px;
+    height: 367px;
+    background: radial-gradient(circle, #59B1E6 , transparent);
+    position: absolute;
+    z-index: 0;
+    filter: blur(60px);
+    opacity: 0.8;
+    top: 350px;
+    right: -280px;
+    border-radius: 50%;
+    pointer-events: none;
+    -webkit-filter: blur(60px);
+}
+  
+  .third-purple-circle {
+    width: 478.94px;
+    height: 496.86px;
+    background: radial-gradient(circle, #D5AEE4 , transparent);
+    position: absolute;
+    z-index: 0;
+    filter: blur(70px);
+    opacity: 0.6;
+    top: 3700px;
+    right: -284px;
+    border-radius: 50%;
+    pointer-events: none;
+    -webkit-filter: blur(60px);
+}
 }
 
-.section-wrapper{
+.decore {
+    position: absolute;
+    width: 766px;
+    height: 759px;
+    top: -80px;
+    right: -100px;
+    z-index: 0;
+    opacity: 0.7;
+}
+
+.container, .section-wrapper {
+    position: relative;
+    z-index: 1;
+}
+
+.things-to-do-container {
+    width: 100%;
     max-width: 1300px;
-    margin: 0 100px;
+    margin: 0 auto;
+    padding: 10px;
+}
+  
+.section-wrapper {
+    max-width: 1280px;
+    margin: 0 auto;
+    justify-content: center;
+    padding-top: 15px;
     position: relative;
   
-}
-.title {
-    margin-left: 120px;
-    font-size: 2rem;
-    font-weight: 800;
-    color: #222;
-}
+    .section-header {
+        margin-bottom: 10px;
+        padding: 0 10px;
+      
+        .section-title {
+            position: relative;
+            z-index: 2;
+            font-size: 2rem;
+            font-weight: 800;
+            color: #222;
+        }
+      
+        .section-description {
+            position: relative;
+            z-index: 2;
+            font-size: 25px;
+            color: #1E1E1E;
+            margin: 17px 0 0px;
+        }
+    }
+  
+    .carousel-container {
+        position: relative;
+        width: 100%;
+        padding: 25px 0 50px;
 
-.subtitle {
-    margin-left: 120px;
-    font-size: 1rem;
-    color: #555;
-}
+        ::ng-deep .owl-stage {
+            display: flex;
+            gap: 0px;
+        }
 
-.header h2 {
-    font-weight: 800;
-    font-size: 35px;
-}
+        ::ng-deep .owl-item {
+            display: flex;
+            justify-content: center;
+        }
+    }
+  
+    .card {
+        width: 250px;
+        height: auto;
+        min-height: 365.5px;
+        border-radius: 15px;
+        background: transparent;
+        position: relative;
+        border: none;
+        padding: 10px;
+        box-sizing: border-box;
+        margin-top: 5px;
+        transition: transform 0.3s ease;
+        transform-origin: center center;
+        overflow: visible;
+        &:hover {
+            transform: scale(1.05);
+            z-index: 2;
+        }
+  
+        .card-image {
+            width: 100%;
+            height: 220px;
+            border-radius: 15px;
+            object-fit: cover;
+        }
+  
+        .wishlist-icon {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            cursor: pointer;
+            z-index: 2;
+            padding: 3px;
+            transition: all 0.3s ease;
+    
+            &:hover {
+                transform: scale(1.1);
+            }
+    
+            .heart-icon {
+                width: 24px;
+                height: 24px;
+                transition: all 0.3s ease;
+                object-fit: contain;
+            }
+        }
+  
+        .card-title {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 18px;
+            line-height: 1.2;
+            text-align: left;
+            padding: 0 4px;
+            margin: 4px 0 2px;
+            min-height: 40px;
+            overflow: hidden;
+            color: #333;
+        }
+  
+        .card-duration {
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            font-size: 18px;
+            line-height: 1;
+            letter-spacing: 0;
+            padding: 0 4px;
+            text-align: left;
+            color: #666;
+            margin-bottom: 1px;
+        }
+  
+        .stars {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            
+            svg {
+              width: 37px;
+              height: 37px;
+            }
+          
+          }
+    }
 
-.header p {
-    font-size: 1.2rem;
+    .nav-button {
+        position: absolute;
+        top: 30%;
+        cursor: pointer;
+        z-index: 10;
+        width: 40px;
+        height: 40px;
+        transition: all 0.3s ease;
+  
+        &:hover {
+            transform: scale(1.1);
+        }
+  
+        &.left {
+            left: -12px;
+        }
+  
+        &.right {
+            right: -12px;
+        }
+    }
+}
+  
+// Add minimal spacing between sections
+.section-wrapper:not(:last-child) {
+    margin-bottom: 10px;
 }

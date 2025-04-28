@@ -13,7 +13,6 @@ export class PromoteEventsComponent implements AfterViewInit, OnDestroy {
   realImages: string[] = [
     '/assets/img/grand museum2.jpg',
     '/assets/img/grand museum3.jpg',
-    '/assets/img/grand museum1.jpg'
   ];
   images: string[] = [];
 
@@ -80,7 +79,12 @@ export class PromoteEventsComponent implements AfterViewInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private router: Router
   ) {}
-
+  submitSearch(): void {
+    if (this.query.trim()) {
+      this.router.navigate(['/search-results'], { queryParams: { q: this.query } });
+    }
+  }
+  
   goToDetails(result: any) {
     if (result.type === 'place') {
       this.router.navigate(['/app-places', result.id]);

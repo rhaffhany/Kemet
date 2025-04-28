@@ -14,6 +14,7 @@ $footer-border-color: #D9DBE9;
 footer {
   color: $text-color;
   background-color: $background-color;
+  border-top: 1px solid $footer-border-color;
 
   .content {
     &::after {
@@ -26,9 +27,28 @@ footer {
     }
   }
 
+  .social-media-icons {
+    width: 160px !important;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    margin-left: -0.5rem;
+    img {
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      object-fit: contain;
+      margin: 0 5px;
+
+      &:hover {
+        transform: scale(1.15);
+      }
+    }
+  }
+
   .logo,
-  .categories,
-  .social-media-icons img {
+  .categories {
     cursor: pointer;
   }
 
@@ -38,9 +58,53 @@ footer {
 
   h5 {
     line-height: 20px;
+    font-size: 16px;
   }
 
   .submit-btn{
-    padding: 4px 60px;
+    padding: 4px 65px;
+  }
+}
+
+.currency-selector {
+  .form-control {
+    width: 60%;
+    &.no-spinner {
+      /* Chrome, Safari, Edge, Opera */
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      /* Firefox */
+      &[type=number] {
+        appearance: textfield;
+        -moz-appearance: textfield;
+      }
+    }
+  }
+  
+  .form-select {
+    background-color: transparent;
+    color: #000;
+    background-color: #fbfbfb;
+    padding: 12px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    width: 30%;  // Decreased width for form-select
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.4);
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+    }
+
+    option {
+      background-color: #333;
+      color: #fff;
+      padding: 8px;
+    }
   }
 }

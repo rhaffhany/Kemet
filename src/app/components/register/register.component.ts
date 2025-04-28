@@ -30,9 +30,8 @@ export class RegisterComponent implements OnInit {
     private _Router: Router,
     private modalService: ModalService
   ) {}
-
   ngOnInit() {
-    this.initForms(); // Initialize forms here
+    this.initForms(); // Call the initForms method
     this.modalService.getRegisterModalState().subscribe(state => {
       this.showRegisterModal = state;
     });
@@ -45,7 +44,7 @@ export class RegisterComponent implements OnInit {
       phoneNumber: ['', [Validators.required, Validators.pattern(/^0\d{10}$/)]],
       dateOfBirth: ['', Validators.required],
       nationality: ['', Validators.required],
-      ssn: ['', [Validators.required, Validators.pattern(/^[0-9]{9}$/)]],
+      ssn: ['', [Validators.required, Validators.pattern(/^[0-9]{9,15}$/)]],
     });
 
     this.loginInfoForm = this.fb.group({
@@ -55,8 +54,16 @@ export class RegisterComponent implements OnInit {
       confirmPassword: ['', [Validators.required, this.matchValues('password')]],
     });
   }
-
-
+  backToLogin() {
+    console.log('Going back to login');
+    this.modalService.closeAllModals(); // Close all modals first
+    setTimeout(() => {
+      this.modalService.openLogin(); // Then open login modal
+    }, 100);
+  }
+  closeModal(): void {
+    this.modalService.closeAllModals();
+  }
   matchValues(matchTo: string): ValidatorFn {
     return (control: AbstractControl) => {
       return control.parent && control.value === control.parent.get(matchTo)?.value
@@ -104,9 +111,11 @@ export class RegisterComponent implements OnInit {
       try {
         const response = await this._AuthService.registerForm(formData).toPromise();
         if (response?.token) {
-          this.successMsg = 'Registration successful! Redirecting...';
+          this.successMsg = 'Registration successful!';
           this.modalService.closeAllModals();
-          setTimeout(() => this._Router.navigate(['/login']), 1500);
+          this._Router.navigate(['/home']).then(() => {
+            window.location.reload();
+          });
         }
       } catch (error) {
         this.errorMsg = 'Registration failed. Please try again later.';

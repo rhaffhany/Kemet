@@ -1,7 +1,9 @@
 <nav class="navbar navbar-expand-lg" 
      [class.home-navbar]="isHomePage" 
      [class.things-to-do-navbar]="isThingsToDoPage"
-     [class.regular-navbar]="!isHomePage && !isThingsToDoPage">
+     [class.regular-navbar]="!isHomePage && !isThingsToDoPage"
+     [class.search-result-navbar]="isSearchResultPage"
+     [class.scrolled]="isScrolled">
   <div class="container">
     <div>
       <a class="navbar-brand" routerLink="/home"><img [src]="logo" alt="logo"></a>
@@ -16,6 +18,8 @@
           (input)="onSearchInput()"
           (focus)="activateSearch()"
           (blur)="deactivateSearch()"
+     (keydown.enter)="submitSearch()"
+
           placeholder="Search...">
         <img [src]="searchIcon" alt="searchIcon" class="searchIcon">
       </div>
@@ -68,7 +72,7 @@
         <div class="card-body">
           <div role="button" routerLink="/profile" class="menu-item" (click)="closeCollapse()">Profile</div>
           <div role="button" routerLink="/review" class="menu-item" (click)="closeCollapse()">Write a review</div>
-          <div role="button" routerLink="/booking" class="menu-item" (click)="closeCollapse()">Booking</div>
+          <div role="button" routerLink="/payment-history" class="menu-item" (click)="closeCollapse()">Payment history</div>
           <div role="button" routerLink="/settings" class="menu-item" (click)="closeCollapse()">Settings</div>
           <div role="button" class="menu-item" (click)="logout()">Sign out</div>
         </div>

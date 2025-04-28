@@ -1,0 +1,93 @@
+<div class="search-results-page">
+  <div class="search-container">
+    <div class="search-bar">
+      <input 
+        type="text" 
+        class="search-input" 
+        [(ngModel)]="query" 
+        placeholder="Search..."
+        (keyup.enter)="onSearchSubmit()"
+      />
+      <button class="search-button" (click)="onSearchSubmit()">
+        <img [src]="'/assets/icons/Search.png'" alt="Search" class="search-icon" />
+      </button>
+    </div>
+  </div>
+
+  <div class="results-content">
+    <!-- Filter sidebar -->
+    <div class="filters-container">
+      <div class="filters-card">
+        <h3>Filters</h3>
+        
+        <div class="filter-group">
+          <h4>Type</h4>
+          <div class="filter-options">
+            <div class="filter-option">
+              <input type="checkbox" id="type-place" [(ngModel)]="typeFilters.place" (change)="applyFilters()">
+              <label for="type-place">Places</label>
+            </div>
+            <div class="filter-option">
+              <input type="checkbox" id="type-activity" [(ngModel)]="typeFilters.activity" (change)="applyFilters()">
+              <label for="type-activity">Activities</label>
+            </div>
+          </div>
+        </div>
+        
+        <div class="filter-group">
+          <h4>Category</h4>
+          <div class="filter-options">
+            <div class="filter-option" *ngFor="let category of availableCategories">
+              <input 
+                type="checkbox" 
+                [id]="'category-' + category" 
+                [checked]="isCategorySelected(category)"
+                (change)="toggleCategory(category)"
+              >
+              <label [for]="'category-' + category">{{ category | titlecase }}</label>
+            </div>
+          </div>
+        </div>
+        
+        <div class="filter-actions">
+          <button class="reset" (click)="resetFilters()">Reset All Filters</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search results -->
+    <div class="results-section">
+      <div *ngIf="isLoading" class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Searching...</p>
+      </div>
+
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
+      <div *ngIf="!isLoading && filteredResults.length > 0" class="results-header">
+        <h2>Search Results for "{{ query }}"</h2>
+        <p>{{ filteredResults.length }} results found</p>
+      </div>
+
+      <div *ngIf="!isLoading && filteredResults.length === 0 && !errorMessage" class="error-message">
+        No results match your current filters. Try changing your filters.
+      </div>
+
+      <div class="search-results-container">
+        <div *ngFor="let result of filteredResults" class="result-item" (click)="goToDetails(result)">
+          <img [src]="result.image || notFoundImg" alt="{{ result.name }}" class="result-image" />
+          <div class="result-details">
+            <h4 class="result-name">{{ result.name }}</h4>
+            <p class="result-category">{{ result.category }}</p>
+            <p class="result-description">{{ result.description }}</p>
+            <div class="result-type-badge" [ngClass]="result.type">
+              {{ result.type | titlecase }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -53,38 +53,31 @@
     </div>
   </section>
 
-  <!-- Second Question Section -->
-  <section class="question-section" [ngClass]="{'show-section': showSecondQuestionSection}">
-    <div class="question-container">
-      <h2>2. How long is your trip?</h2>
-      <div class="options-wrapper">
-        <div class="options-row">
-          <button *ngFor="let option of tripDurationOptions.slice(0, 4)" 
-            class="option" 
-            [ngClass]="{'selected': selectedTripDuration === option}"
-            (click)="toggleTripDurationSelection(option)">
-            {{ option }}
-          </button>
-        </div>
-        <div class="options-row">
-          <button *ngFor="let option of tripDurationOptions.slice(4)" 
-            class="option" 
-            [ngClass]="{'selected': selectedTripDuration === option}"
-            (click)="toggleTripDurationSelection(option)">
-            {{ option }}
-          </button>
-        </div>
-      </div>
-      <p><span>DONE:</span> <span class="percentage">{{ progressValue }}%</span></p>
-      <mat-progress-bar mode="determinate"  style="--mdc-linear-progress-active-indicator-color: #FBBC05;" [value]="progressValue"></mat-progress-bar>
-      <div class="btn-container">
-        <img class="backimg" [src]="backimg" (click)="goBackToPreviousQuestion()" />
-        <button class="next-btn" [disabled]="isTripDurationNextDisabled()" (click)="nextQuestion()">
-          <span>Next</span> →
+<!-- Second Question Section -->
+<section class="question-section" [ngClass]="{'show-section': showSecondQuestionSection}">
+  <div class="question-container">
+    <h2>2. How long is your trip?</h2>
+    <div class="options-wrapper">
+      <div class="duration-cards-grid">
+        <button *ngFor="let option of tripDurationOptions" 
+          class="duration-card" 
+          [ngClass]="{'selected': selectedTripDuration === option}"
+          (click)="toggleTripDurationSelection(option)">
+          <span class="duration-number">{{ option.split(' ')[0] }}</span>
+          <span class="duration-text">{{ option.includes('Week') ? 'Week' : 'Days' }}</span>
         </button>
       </div>
     </div>
-  </section>
+    <p><span>DONE:</span> <span class="percentage">{{ progressValue }}%</span></p>
+    <mat-progress-bar mode="determinate" style="--mdc-linear-progress-active-indicator-color: #FBBC05;" [value]="progressValue"></mat-progress-bar>
+    <div class="btn-container">
+      <img class="backimg" [src]="backimg" (click)="goBackToPreviousQuestion()" />
+      <button class="next-btn" [disabled]="isTripDurationNextDisabled()" (click)="nextQuestion()">
+        <span>Next</span> →
+      </button>
+    </div>
+  </div>
+</section>
 
   <!-- Third Question Section -->
   <section class="question-section" [ngClass]="{'show-section': showThirdQuestionSection}">
@@ -180,18 +173,19 @@
   <section class="question-section" [ngClass]="{'show-section': showSixthQuestionSection}">
     <div class="question-container">
       <h2>6. What is your total budget for this trip?</h2>
-      <div class="options-wrapper">
-        <div class="options-row">
+      <div class="options-wrapper budget-options">
+        <div class="options-grid">
           <button *ngFor="let option of budgetOptions" 
-            class="option" 
+            class="budget-option" 
             [ngClass]="{'selected': selectedBudget === option}"
             (click)="toggleBudgetSelection(option)">
-            {{ option }}
+            <span class="budget-amount">{{ option }}</span>
+            <span class="budget-currency">EGP</span>
           </button>
         </div>
       </div>
       <p><span>DONE:</span> <span class="percentage">{{ progressValue }}%</span></p>
-      <mat-progress-bar mode="determinate"  style="--mdc-linear-progress-active-indicator-color: #FBBC05;" [value]="progressValue"></mat-progress-bar>
+      <mat-progress-bar mode="determinate" style="--mdc-linear-progress-active-indicator-color: #FBBC05;" [value]="progressValue"></mat-progress-bar>
       <div class="btn-container">
         <img class="backimg" [src]="backimg" (click)="goBackToPreviousQuestion()" />
         <button class="next-btn" [disabled]="isBudgetNextDisabled()" (click)="nextQuestion()">
@@ -200,7 +194,6 @@
       </div>
     </div>
   </section>
-
   <!-- Results Loading Section -->
   <section class="question-section" [ngClass]="{'show-section': showResultsSection}">
     <div class="question-container">
@@ -223,3 +216,4 @@
     </div>
   </section>
 </section>
+

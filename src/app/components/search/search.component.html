@@ -1,27 +1,34 @@
 <div class="floating-search">
-
   <div class="search-bar">
     <input 
       type="text" 
       class="search-input" 
       [(ngModel)]="query" 
       (input)="onSearchInput()" 
+      (keyup.enter)="onSearchSubmit()"
       placeholder="Search..."
     />
-    
+    <button class="search-button" (click)="onSearchSubmit()">
+      <img [src]="searchIcon" alt="Search" class="search-icon" />
+    </button>
   </div>
 
-  <div *ngIf="errorMessage" class="error-message text-center">
-    {{ errorMessage }}
-  </div>
+  <div *ngIf="showDropdown" class="search-dropdown">
+    <div *ngIf="errorMessage" class="error-message text-center">
+      {{ errorMessage }}
+    </div>
 
-  <div *ngIf="searchResults.length > 0" class="search-results-container">
-    <div *ngFor="let result of searchResults" class="result-item" (click)="goToDetails(result)">
-      <img [src]="result.image || notFoundImg" alt="{{ result.name }}" class="result-image" />
-      <div class="result-details">
-        <h4 class="result-name">{{ result.name }}</h4>
-        <p class="result-description">{{ result.description }}</p>
-        <p class="result-category">{{ result.category }}</p>  
+    <div *ngIf="searchResults.length > 0" class="search-results-container">
+      <div *ngFor="let result of searchResults" class="result-item" (click)="goToDetails(result)">
+        <img [src]="result.image || notFoundImg" alt="{{ result.name }}" class="result-image" />
+        <div class="result-details">
+          <h4 class="result-name">{{ result.name }}</h4>
+          <p class="result-description">{{ result.description }}</p>
+          <p class="result-category">{{ result.category }}</p>  
+        </div>
+      </div>
+      <div class="view-all-results" (click)="onSearchSubmit()">
+        View all results for "{{ query }}"
       </div>
     </div>
   </div>
