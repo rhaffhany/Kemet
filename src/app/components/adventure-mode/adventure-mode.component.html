@@ -1,23 +1,23 @@
-<section>
-  <h1 class="title">Feeling Adventurous?</h1>
-  <p class="subtitle">Spin the wheel and discover exciting places nearby! Don't like what you see? Just spin again!</p>
+<section class="p-4">
+  <h1 class="title mt-1">Feeling Adventurous?</h1>
+  <p class="subtitle mb-5">Spin the wheel and discover exciting places nearby! Don't like what you see? Just spin again!</p>
 
   <div class="spinner-container">
     <img
       [src]="logoImage"
       [style.transform]="'rotate(' + spinAngle + 'deg)'" 
-      [style.transition]="isSpinning ? 'transform ' + animationDuration + 's cubic-bezier(0.36, 0, 0.66, 1)' : 'none'"
+      [style.transition]="isSpinning ? 'transform ' + animationDuration + 's cubic-bezier(0.25, 1, 0.5, 1)' : 'none'"
       alt="Adventure Destination"
       class="spinner-image"
       [ngClass]="{'pulse-animation': !isSpinning && name}"
     />
     
-    <h2 *ngIf="name" class="result-name">{{ name }}</h2>
+    <h2 *ngIf="name" class="result-name mx-1">{{ name }}</h2>
     <p class="loading-text" [ngClass]="{'visible': isSpinning}">Finding your next adventure...</p>
   </div>
   
   <button 
-    class="spin-btn" 
+    class="spin-btn mt-0" 
     [class.error-state]="errorMessage"
     (click)="onButtonClick()" 
     [disabled]="isSpinning">
