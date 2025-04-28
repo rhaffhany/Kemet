@@ -43,11 +43,11 @@
         <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
           <div class="card d-block " style="width: 162px;">
             <div class="card-body">
-              <div role="button" routerLink="profile" class="mb-1" (click)="closeCollapse()">Profile</div>
-              <div role="button" routerLink="" class="mb-1" (click)="closeCollapse()">Write a review</div>
-              <div role="button" routerLink="" class="mb-1" (click)="closeCollapse()">Booking</div>
-              <div role="button" routerLink="" class="mb-1" (click)="closeCollapse()">Settings</div>
-              <div role="button" routerLink="" class="mb-1" (click)="closeCollapse()">Sign out</div>
+              <div role="button" routerLink="/profile" class="menu-item" (click)="closeCollapse()">Profile</div>
+              <div role="button" routerLink="" class="menu-item" (click)="closeCollapse()">Reviews</div>
+              <div role="button" routerLink="/payment-history" class="menu-item" (click)="closeCollapse()">Payment history</div>
+              <div role="button" routerLink="/settings" class="menu-item" (click)="closeCollapse()">Settings</div>
+              <div role="button" class="menu-item" (click)="logout()">Sign out</div>
             </div>
           </div>
         </div>   

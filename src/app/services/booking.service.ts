@@ -12,9 +12,11 @@ export class BookingService {
 
   private DeployURL = 'https://kemet-server.runasp.net';
 
-  bookedPrice:BehaviorSubject<number> = new BehaviorSubject(0);
-  selectedBookedDate:BehaviorSubject<string> = new BehaviorSubject(''); 
-  selectedBoard:BehaviorSubject<string> = new BehaviorSubject(''); 
+  // bookingID:BehaviorSubject<number> = new BehaviorSubject(0);
+  // bookedPrice:BehaviorSubject<number> = new BehaviorSubject(0);
+  // selectedBookedDate:BehaviorSubject<string> = new BehaviorSubject(''); 
+  // selectedBoard:BehaviorSubject<string> = new BehaviorSubject('');
+  // visitorType:BehaviorSubject<string> = new BehaviorSubject('');
 
   bookTrip(bookData:any):Observable<any>{
     const token = this._AuthService.getToken();

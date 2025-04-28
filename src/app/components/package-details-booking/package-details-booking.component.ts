@@ -5,6 +5,7 @@ import { PackageDetails } from 'src/app/interfaces/package-details';
 import { AgencyService } from 'src/app/services/agency.service';
 import { BookingService } from 'src/app/services/booking.service';
 import { DetailsService } from 'src/app/services/details.service';
+import { PaymentService } from 'src/app/services/payment.service';
 import { ReviewService } from 'src/app/services/review.service';
 import Swal from 'sweetalert2';
 
@@ -21,6 +22,7 @@ export class PackageDetailsBookingComponent implements OnInit{
               private _BookingService:BookingService,
               private _AgencyService:AgencyService,
               private _ToastrService: ToastrService,
+              private _PaymentService:PaymentService,
               private _Router:Router){}
 
 
@@ -123,25 +125,43 @@ export class PackageDetailsBookingComponent implements OnInit{
     this.bookData.reserveType = this.selectedBoard;
     this.bookData.bookedPrice = this.bookedPrice;
 
-    this._BookingService.bookedPrice.next(this.bookedPrice);
-    this._BookingService.selectedBoard.next(this.selectedBoard);
-    this._BookingService.selectedBookedDate.next(this.reserveDate);
-
     this._BookingService.bookTrip(this.bookData).subscribe({
       next: (res) => {
-      this.bookingID = res.bookingId;
-      this._ToastrService.success('Thanks for choosing us. Get ready for your adventure!',res.message);
-      this._Router.navigate(['/payment',this.planID,this.bookingID]);
+      this.bookingID = res.bookingId;      
+      
+      // this._BookingService.bookedPrice.next(this.bookedPrice);
+      // this._BookingService.selectedBoard.next(res.reserveType);
+      // this._BookingService.selectedBookedDate.next(res.reserveDate);
 
-      this.resetData();
+      localStorage.setItem('bookedPrice', this.bookedPrice.toString());
+      localStorage.setItem('selectedBoard', res.reserveType);
+      localStorage.setItem('ReserveDate', res.reserveDate);
+      localStorage.setItem('visitorType', res.visitorType);
+
+
+      // Call createPayment after getting bookingID
+      this._PaymentService.createPayment(this.bookingID).subscribe({
+          next: (paymentRes) => {
+            console.log('Client Secret:', paymentRes.clientSecret);
+
+            this._ToastrService.success('Thanks for choosing us. Get ready for your adventure!', res.message);
+            
+            this._Router.navigate(['/payment', this.bookingID, this.planID]);
+            this.resetData();
+          },
+          error: (paymentErr) => {
+            this._ToastrService.error('Failed to create payment. Please try again later.', 'Payment Error');
+          }
+        });
       },
       error: (err) => {
         this._ToastrService.error('Failed to book your trip. Please try again later.','Oops! Something went wrong');
-        // console.error('Booking failed:', err);
+        console.error('Booking failed:', err);
       }
     });
 
   }
+
 
   resetData(){
     this.bookData = {};
@@ -247,12 +267,16 @@ export class PackageDetailsBookingComponent implements OnInit{
               icon: 'success',
               title: 'Review Submitted!',
               text: 'Thanks for your feedback!',
+            }).then(() => {
+              setTimeout(() => {
+                location.reload(); 
+              }, 3000); 
             });
+
             this.clearData();
             this.loading = false;
             this.isAdded = false;
 
-            console.log("review data:",data);              
           },
           error:(err) =>{
             Swal.fire({

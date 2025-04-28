@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 import { ProfileService } from 'src/app/services/profile.service';
 
 @Component({
@@ -13,7 +15,10 @@ export class NavMainComponent {
     this.isCollapsed = true;
   }
 
-  constructor(private _ProfileService:ProfileService){}
+  constructor(private _ProfileService:ProfileService,
+              private _AuthService:AuthService,
+              private _Router:Router
+            ){}
 
   logo:string = "/assets/logo/logo.png";
   searchIcon:string = "/assets/icons/Search.png"
@@ -63,22 +68,10 @@ export class NavMainComponent {
     });
   }
 
-  // updateCurrentData(): void {
-    
-  //   if (!this.userData.profileImageURL) {
-  //     this.profilePic;
-  //   }else{
-  //     this.updatedData.filePath = this.userData.profileImageURL;
-  //   }
 
-  //   this._ProfileService.updateCurrentData(this.updatedData).subscribe({
-  //     next:(response)=>{
-  //       this.userData = {...this.updatedData};
-  //     },
-  //     error:(err)=>{
-  //     },
-  //   });
-  // }
-
+  logout(): void {
+    this._AuthService.logout();
+    this._Router.navigate(['/login']);
+  }
 
 }
