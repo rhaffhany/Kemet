@@ -1,31 +1,30 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root',
+})
 export class ModalService {
-  private isLoginModalOpen = new BehaviorSubject<boolean>(false);
-  private isRegisterModalOpen = new BehaviorSubject<boolean>(false);
+  private loginModalState = new BehaviorSubject<boolean>(false);
+  private registerModalState = new BehaviorSubject<boolean>(false);
 
-  getLoginModalState(): Observable<boolean> {
-    return this.isLoginModalOpen.asObservable();
+  getLoginModalState() {
+    return this.loginModalState.asObservable();
   }
-
-  getRegisterModalState(): Observable<boolean> {
-    return this.isRegisterModalOpen.asObservable();
+  openRegister(): void {
+    this.registerModalState.next(true);
+  }
+  getRegisterModalState() {
+    return this.registerModalState.asObservable();
   }
 
   openLogin() {
-    this.isLoginModalOpen.next(true);
-    this.isRegisterModalOpen.next(false);
+    this.loginModalState.next(true);
   }
 
-openRegister() {
-  console.log('[ModalService] Opening register modal');
-  this.isRegisterModalOpen.next(true);
-  this.isLoginModalOpen.next(false);
-}
+
   closeAllModals() {
-    this.isLoginModalOpen.next(false);
-    this.isRegisterModalOpen.next(false);
+    this.loginModalState.next(false);
+    this.registerModalState.next(false);
   }
 }

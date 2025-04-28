@@ -15,7 +15,6 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { AdventureModeComponent } from './components/adventure-mode/adventure-mode.component';
 import { PlanComponent } from './components/plan/plan.component';
 import { WishlistComponent } from './components/wishlist/wishlist.component';
-import { CommunityComponent } from './components/community/community.component';
 import { NotfoundComponent } from './components/notfound/notfound.component';
 import { ReviewComponent } from './components/review/review.component';
 import { ReviewContentComponent } from './components/review-content/review-content.component';
@@ -26,6 +25,9 @@ import { TravelAgencyProfileComponent } from './components/travel-agency-profile
 import { PackageDetailsBookingComponent } from './components/package-details-booking/package-details-booking.component';
 
 import { PersonalizedPlanComponent } from './components/personalized-plan/personalized-plan.component';
+import { PaymentHistoryComponent } from './components/payment-history/payment-history.component';
+import { SearchResultsComponent } from './components/search-results/search-results.component';
+
 import { PaymentComponent } from './components/payment/payment.component';
 
 const routes: Routes = [
@@ -43,6 +45,7 @@ const routes: Routes = [
       { path: 'register', component: RegisterComponent, title: 'Register' },
       { path: 'places/:placeID', component: PlaceDetailsComponent, title: 'Places', canActivate: [AuthGuard] },
       { path: 'activities/:activityID', component: ActivityDetailsComponent, title: 'Activities', canActivate: [AuthGuard] },
+
     ]
   },
 
@@ -55,13 +58,15 @@ const routes: Routes = [
       { path: 'plan', component: PlanComponent, title: 'Plan' },
       { path: 'personalized-plan', component: PersonalizedPlanComponent, title: 'personalizedPlan' },
       { path: 'wishlist', component: WishlistComponent, title: 'WishList' },
-      { path: 'community', component: CommunityComponent, title: 'Community' },
+      { path: 'payment-history', component: PaymentHistoryComponent, title: 'Payment History' },
       { path: 'app-places/:placeID', component: PlaceDetailsComponent, title: 'Places'},
       { path: 'app-activities/:activityID', component: ActivityDetailsComponent, title: 'Activities'},
       { path: 'review', component: ReviewComponent, title: 'Review' },
       { path: 'write-review', component: ReviewContentComponent, title: 'Review Your Booking' },
       { path: 'write-review/place/:placeID', component: ReviewContentComponent, title: 'Review-Place' },
       { path: 'write-review/activity/:activityID', component: ReviewContentComponent, title: 'Review-Activity' },
+      { path: 'search-results', component: SearchResultsComponent, title: 'results' },
+
     ]
   },
   {

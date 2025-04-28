@@ -135,7 +135,7 @@
                         <input type="number" id="peopleCount" class="peopleCount form-control" [(ngModel)]="bookData.numOfPeople" name="numOfPeople" min="1" (input)="updateBookedPrice()">
                     </div>
 
-                    <p class="text-center mt-3 mb-0 fw-bold">Total Price: {{ bookedPrice | currency:'£' }}</p>
+                    <p class="text-center mt-3 mb-0 fw-bold">Total Price: {{ bookedPrice | currency:'EGP' }}</p>
 
                     <div class="d-flex justify-content-end mt-3">
                         <button class="btn book-btn fw-bolder" (click)="bookTrip()">Book</button>
@@ -146,16 +146,16 @@
                     <i class="fa-solid fa-earth-americas p-3"></i>
                     <div class="d-block">
                         <p class="mt-3" style="font-size: 20px; font-weight: 500;">Tourist</p>  
-                        <p class="text-muted">Adult : {{packageDetails.touristAdult | currency: '£'}}</p> 
-                        <p class="text-muted">Student : {{packageDetails.touristStudent | currency: '£'}}</p> 
+                        <p class="text-muted">Adult : {{packageDetails.touristAdult | currency:'EGP' }}</p> 
+                        <p class="text-muted">Student : {{packageDetails.touristStudent | currency:'EGP' }}</p> 
                     </div>
                 </div>
                 <div class="egyptian-prices bg-white mt-3 d-flex">
                     <img [src]="egyptFlag" alt="Egypt Flag" class="p-3" style="width: 125px;">
                     <div class="d-block">
                         <p class="mt-3" style="font-size: 20px; font-weight: 500;">Egyptian</p>  
-                        <p class="text-muted">Adult : {{packageDetails.egyptianAdult | currency: '£'}}</p> 
-                        <p class="text-muted">Student : {{packageDetails.egyptianStudent | currency: '£'}}</p> 
+                        <p class="text-muted">Adult : {{packageDetails.egyptianAdult | currency:'EGP' }}</p> 
+                        <p class="text-muted">Student : {{packageDetails.egyptianStudent | currency:'EGP' }}</p> 
                     </div>
                 </div>
 

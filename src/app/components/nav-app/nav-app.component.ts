@@ -41,12 +41,14 @@ export class NavAppComponent implements OnInit {
     this.setupRouteListener();
     this.loadUserData();
   }
+  isSearchResultPage = false;
 
   private checkCurrentRoute(): void {
     const currentUrl = this.router.url.split('?')[0];
     this.isHomePage = currentUrl === '/home' || currentUrl === '/';
-    this.isThingsToDoPage = currentUrl.includes('thingstodo');  // Adjust based on your actual URL structure for Things to Do
-    this.showSearchBar = !(this.isHomePage || this.isThingsToDoPage);  // Hide search bar on Home and Things to Do
+    this.isThingsToDoPage = currentUrl.includes('thingstodo');
+    this.isSearchResultPage = currentUrl.includes('search-result'); // Add this
+    this.showSearchBar = !(this.isHomePage || this.isThingsToDoPage || this.isSearchResultPage);
   }
 
   private setupRouteListener(): void {
@@ -55,8 +57,9 @@ export class NavAppComponent implements OnInit {
     ).subscribe((event: NavigationEnd) => {
       const url = event.urlAfterRedirects.split('?')[0];
       this.isHomePage = url === '/home' || url === '/';
-      this.isThingsToDoPage = url.includes('thingstodo');  // Adjust based on your actual URL structure for Things to Do
-      this.showSearchBar = !(this.isHomePage || this.isThingsToDoPage);  // Hide search bar on Home and Things to Do
+      this.isThingsToDoPage = url.includes('thingstodo');
+      this.isSearchResultPage = url.includes('search-result'); // Add this
+      this.showSearchBar = !(this.isHomePage || this.isThingsToDoPage || this.isSearchResultPage);
       this.isScrolled = false;
       this.searchResults = [];
     });
@@ -71,8 +74,13 @@ export class NavAppComponent implements OnInit {
       error: (err) => console.error('Error fetching user data:', err)
     });
   }
-
-  @HostListener('window:scroll')
+  submitSearch(): void {
+    if (this.query.trim()) {
+      this.router.navigate(['/search-results'], { queryParams: { q: this.query } });
+    }
+  }
+  
+  @HostListener('window:scroll', [])
   onWindowScroll(): void {
     this.isScrolled = window.scrollY > 50;
   }

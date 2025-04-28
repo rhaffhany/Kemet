@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, map } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap, mergeMap } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Injectable({
@@ -32,21 +32,118 @@ export class WishlistService {
   }
 
   addPlaceToWishlist(placeID: number): Observable<any> {
-    const headers = this.getHeaders();
-    return this.http.post(`${this.DeployUrl}/AddPlaceToWishlist?PlaceID=${placeID}`, {}, { headers }).pipe(
-      tap(response => console.log('Add to wishlist response:', response)),
-      catchError(this.handleError)
+    return this.getWishlist().pipe(
+      map(response => {
+        // Check if place already exists in wishlist
+        const places = response?.places?.$values || [];
+        const isDuplicate = places.some((place: any) => place.placeID === placeID);
+        
+        if (isDuplicate) {
+          throw new Error('This place is already in your wishlist');
+        }
+        
+        // If not a duplicate, add to wishlist
+        const headers = this.getHeaders();
+        return this.http.post(`${this.DeployUrl}/AddPlaceToWishlist?PlaceID=${placeID}`, {}, { headers }).pipe(
+          tap(response => console.log('Add to wishlist response:', response)),
+          catchError(this.handleError)
+        );
+      }),
+      catchError(error => {
+        if (error.message === 'This place is already in your wishlist') {
+          return throwError(() => error);
+        }
+        return this.handleError(error);
+      })
+    ).pipe(
+      // Flatten the nested Observable
+      mergeMap(observable => observable)
     );
   }
 
-  removeFromWishlist(index: number): Observable<any> {
+  addActivityToWishlist(activityId: number): Observable<any> {
+    return this.getWishlist().pipe(
+      map(response => {
+        // Check if activity already exists in wishlist
+        const activities = response?.activities?.$values || [];
+        const isDuplicate = activities.some((activity: any) => activity.activityId === activityId);
+        
+        if (isDuplicate) {
+          throw new Error('This activity is already in your wishlist');
+        }
+        
+        // If not a duplicate, add to wishlist
+        const headers = this.getHeaders();
+        return this.http.post(`${this.DeployUrl}/AddActivityToWishlist?ActivityID=${activityId}`, {}, { headers }).pipe(
+          tap(response => console.log('Add activity to wishlist response:', response)),
+          catchError(this.handleError)
+        );
+      }),
+      catchError(error => {
+        if (error.message === 'This activity is already in your wishlist') {
+          return throwError(() => error);
+        }
+        return this.handleError(error);
+      })
+    ).pipe(
+      // Flatten the nested Observable
+      mergeMap(observable => observable)
+    );
+  }
+
+  addPlanToWishlist(planId: number): Observable<any> {
+    return this.getWishlist().pipe(
+      map(response => {
+        // Check if plan already exists in wishlist
+        const plans = response?.plans?.$values || [];
+        const isDuplicate = plans.some((plan: any) => 
+          (plan.planId === planId || plan.planID === planId)
+        );
+        
+        if (isDuplicate) {
+          throw new Error('This plan is already in your wishlist');
+        }
+        
+        // If not a duplicate, add to wishlist
+        const headers = this.getHeaders();
+        return this.http.post(`${this.DeployUrl}/AddPlaneToWishlist?PlanID=${planId}`, {}, { headers }).pipe(
+          tap(response => console.log('Add plan to wishlist response:', response)),
+          catchError(error => {
+            console.error('Error adding plan to wishlist:', error);
+            if (error.status === 401) {
+              throw new Error('Please log in to add items to your wishlist');
+            }
+            return this.handleError(error);
+          })
+        );
+      }),
+      catchError(error => {
+        if (error.message === 'This plan is already in your wishlist' || 
+            error.message === 'Please log in to add items to your wishlist') {
+          return throwError(() => error);
+        }
+        return this.handleError(error);
+      })
+    ).pipe(
+      mergeMap(observable => observable)
+    );
+  }
+
+  removeFromWishlist(itemId: number, itemType: string = 'place'): Observable<any> {
     const token = this.authService.getToken();
     if (!token) {
       console.error('No authentication token available');
-      return throwError(() => new Error('User is not authenticated'));
+      return throwError(() => new Error('Please log in to remove items from your wishlist'));
     }
 
-    const url = `${this.DeployUrl}/RemoveFromWishlist?itemId=${index}&itemType=place`;
+    let url = `${this.DeployUrl}/RemoveFromWishlist`;
+    let params = `?itemId=${itemId}&itemType=${itemType.toLowerCase()}`;
+    
+    // Use different endpoint for plans
+    if (itemType.toLowerCase() === 'plan') {
+      url = `${this.DeployUrl}/RemovePlaneFromWishlist`;
+      params = `?PlanID=${itemId}`;
+    }
     
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
@@ -54,35 +151,25 @@ export class WishlistService {
     });
 
     console.log('Removing from wishlist:', { 
-      url,
-      index,
-      token: token.substring(0, 10) + '...',
-      headers: headers.keys()
+      url: url + params,
+      itemId,
+      itemType,
+      token: token.substring(0, 10) + '...'
     });
     
-    return this.http.delete(url, { 
-      headers,
-      observe: 'response'
-    }).pipe(
+    return this.http.delete(url + params, { headers }).pipe(
       tap(response => {
-        console.log('Remove from wishlist response:', {
-          status: response.status,
-          statusText: response.statusText,
-          headers: response.headers,
-          body: response.body
-        });
+        console.log('Remove from wishlist response:', response);
       }),
-      map(response => response.body),
       catchError(error => {
-        console.error('Error in removeFromWishlist:', {
-          error,
-          url,
-          index,
-          status: error.status,
-          message: error.message,
-          headers: headers.keys()
-        });
-        return throwError(() => error);
+        console.error('Error in removeFromWishlist:', error);
+        if (error.status === 401) {
+          return throwError(() => new Error('Please log in to remove items from your wishlist'));
+        }
+        if (error.status === 404) {
+          return throwError(() => new Error('Item not found in wishlist'));
+        }
+        return this.handleError(error);
       })
     );
   }

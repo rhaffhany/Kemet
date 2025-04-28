@@ -1,20 +1,26 @@
 <section>
+  <h1 class="title">Feeling Adventurous?</h1>
+  <p class="subtitle">Spin the wheel and discover exciting places nearby! Don't like what you see? Just spin again!</p>
+
   <div class="spinner-container">
-    <h1 class="title">Feeling meh? Tap, Spin, and Let the Adventure Begin!</h1>
-    <p class="subtitle">Adventure Mode curates thrills near you—don’t like it? Spin for more!</p>
-
-    <div class="spinner">
-      <img
-        [src]="logoImage"
-        [style.transform]="'rotate(' + spinAngle + 'deg)'" 
-        [style.transition]="isSpinning ? 'transform ' + animationDuration + 's cubic-bezier(0.25, 1, 0.5, 1)' : 'none'"
-        alt="Wheel Spinner"
-        class="spinner-image"
-      />
-    </div>
-
-    <!-- Display the fetched name -->
-    <h2 *ngIf="name">{{ name }}</h2>
+    <img
+      [src]="logoImage"
+      [style.transform]="'rotate(' + spinAngle + 'deg)'" 
+      [style.transition]="isSpinning ? 'transform ' + animationDuration + 's cubic-bezier(0.36, 0, 0.66, 1)' : 'none'"
+      alt="Adventure Destination"
+      class="spinner-image"
+      [ngClass]="{'pulse-animation': !isSpinning && name}"
+    />
+    
+    <h2 *ngIf="name" class="result-name">{{ name }}</h2>
+    <p class="loading-text" [ngClass]="{'visible': isSpinning}">Finding your next adventure...</p>
   </div>
-  <button class="spinBtn" (click)="onButtonClick()" [disabled]="disableButton">Spin</button>
+  
+  <button 
+    class="spin-btn" 
+    [class.error-state]="errorMessage"
+    (click)="onButtonClick()" 
+    [disabled]="isSpinning">
+    {{ isSpinning ? 'Spinning...' : 'Spin the Wheel' }}
+  </button>
 </section>

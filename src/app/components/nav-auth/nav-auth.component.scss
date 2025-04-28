@@ -8,6 +8,9 @@ $color-default: #000;
 $color-hover: #FFBD67;
 $main-color:#FFBD67;
 
+// Variables
+$primary-color: #FAC817;
+
 body, html {
   background-color: var(--main-color) !important;
   margin: 0;
@@ -57,22 +60,39 @@ body, html {
   }
 
   .navbar-nav .nav-item .nav-link {
-    font-family: 'inter';
-    font-size: $font-size;
-    font-weight: 200!important;
-    color: $color-default;
-    line-height: $line-height;
-    margin-right: 40px;
+  font-family: 'inter';
+  font-size: $font-size;
+  font-weight: 500;
+  color: $color-default;
+  line-height: $line-height;
+  margin-right: 40px;
+  position: relative;
+  transition: all 0.3s ease;
 
-    &:hover {
-      opacity: 1;
-      color: #f4a261;
-    }
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    height: 2px;
+    width: 0%;
+    background-color: $primary-color;
+    transition: width 0.3s ease-in-out;
+  }
 
-    &.active-link {
-      color: #e76f51;
+  &:hover::after {
+    width: 100%;
+  }
+
+  &.active-link {
+    font-weight: 600;
+
+    &::after {
+      width: 100%;
+      background-color: $primary-color;
     }
   }
+}
 
 
 

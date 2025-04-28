@@ -1,17 +1,16 @@
 <footer>
-    <div class="container ">
-        <div class="row content pt-5 pb-4 position-relative ">
-
+    <div class="container">
+        <div class="row content pt-5 pb-4 position-relative">
             <div class="col-md-4">
                 <img [src]="logo" alt="logo" class="logo mb-2" routerLink="home">
-                <h5>Your smart guide to Egypt‘s hidden gems <br>
+                <h5>Your smart guide to Egypt's hidden gems <br>
                      and timeless wonders </h5>
 
                 <div class="social-media-icons w-25 d-flex justify-content-around mt-4">
-                    <img [src]="facebookLogo" alt="facebookLogo" width="11" height="19">
-                    <img [src]="instagramLogo" alt="instagramLogo" width="19" height="19">
-                    <img [src]="twitterLogo" alt="twitterLogo" class="mt-1" width="19" height="15">
-                    <img [src]="tiktokLogo" alt="youtubeLogo" class="mt-1" width="21" height="15">
+                    <img [src]="facebookLogo" alt="facebookLogo">
+                    <img [src]="instagramLogo" alt="instagramLogo">
+                    <img [src]="twitterLogo" alt="twitterLogo">
+                    <img [src]="tiktokLogo" alt="youtubeLogo">
                 </div>
             </div>
             
@@ -25,6 +24,7 @@
                     <h5 routerLink="">Wishlist</h5>
                 </div>
             </div>
+
             <div class="col-md-2">
                 <h4 class="mb-3 fw-bold">Emergency Contact</h4>
                 <div class="categories">
@@ -35,41 +35,7 @@
                 </div>
             </div>
 
-            <!-- 
             <div class="col-md-2">
-                <h4 class="mb-3">Product</h4>
-                <div class="categories">
-                    <h5 routerLink="">Features</h5>
-                    <h5 routerLink="">Pricing</h5>
-                    <h5 routerLink="">Case studies</h5>
-                    <h5 routerLink="">Reviews</h5>
-                    <h5 routerLink="">Updates</h5>
-                </div>
-            </div> -->
-
-            <!-- <div class="col-md-2 ">
-                <h4 class="mb-3">Company</h4>
-                <div class="categories">
-                    <h5 routerLink="">About</h5>
-                    <h5 routerLink="">Contact us</h5>
-                    <h5 routerLink="">Careers</h5>
-                    <h5 routerLink="">Culture</h5>
-                    <h5 routerLink="">Blog</h5>
-                </div>
-            </div> -->
-
-            <!-- <div class="col-md-2">
-                <h4 class="mb-3">Support</h4>
-                <div class="categories">
-                    <h5 routerLink="">Getting started</h5>
-                    <h5 routerLink="">Help center</h5>
-                    <h5 routerLink="">Server status</h5>
-                    <h5 routerLink="">Report a bug</h5>
-                    <h5 routerLink="">Chat support</h5>
-                </div>
-            </div> -->
-
-            <div class="col-md-2 ">
                 <h4 class="mb-3 fw-bold">Contacts us</h4>
                 <div class="categories">
                    <div class="d-flex mb-3">
@@ -80,30 +46,54 @@
                     <img [src]="phoneLogo" alt="phoneLogo" class="me-1">
                     <h5 class="mb-0">(414) 687 - 5892</h5>
                    </div>
-                   <div class="d-flex mb-3  align-items-start">
+                   <div class="d-flex mb-3 align-items-start">
                     <img [src]="locationLogo" alt="locationLogo" class="mt-1 me-1">
-                    <h5 class="mb-0" style="line-height: 15px;">794 Mcallister St
-                        San Francisco, 94102</h5>
+                    <h5 class="mb-0" style="margin-top: 5px;">Cairo,Egypt</h5>
                    </div>
                 </div>
             </div>
 
-            <div class="col-md-2 d-flex flex-column align-items-center justify-content-center">
+            <div class="col-md-2 d-flex flex-column align-items-center">
                 <h4 class="mb-3 fw-bold">Plan your trip with AI</h4>
-                <div class="categories">
+                <div class="categories mb-4">
                     <button class="submit-btn w-100" (click)="navigateToPlan()">plan</button>                   
                 </div>
+
+                <!-- Currency Calculator -->
+                <h4 class="mb-2 fw-bold">Currency Calculator</h4>
+                <div class="calculator">
+                    <div class="input-group mb-3 currency-selector">
+                        <input type="number" 
+                               class="form-control no-spinner" 
+                               placeholder="Amount" 
+                               [(ngModel)]="amount"
+                               (input)="calculateConversion()"
+                               min="0"
+                               onkeypress="return event.charCode >= 48">
+                        <select class="form-select" 
+                                [(ngModel)]="fromCurrency"
+                                (change)="calculateConversion()">
+                            <option *ngFor="let currency of currencies" [value]="currency.code">
+                                {{currency.code}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="input-group mb-3 currency-selector">
+                        <input type="text" 
+                               class="form-control" 
+                               [value]="convertedAmount.toLocaleString('en-US', { maximumFractionDigits: 2, minimumFractionDigits: 2 })"
+                               readonly>
+                        <select class="form-select" 
+                                [(ngModel)]="toCurrency"
+                                (change)="calculateConversion()">
+                            <option *ngFor="let currency of currencies" [value]="currency.code">
+                                {{currency.code}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
             </div>
-            
         </div>
 
-        <div class="row justify-content-around pb-4">
-            <div class="col-md-4">
-                <p>Copyright &copy; 2025 KEMET Templates</p>
-            </div>
-            <div class="col-md-5">
-                <h5 style="font-weight: 400;">All Rights Reserved | <a routerLink="">Terms and Conditions</a> | <a routerLink="">Privacy Policy</a></h5>
-            </div>
-        </div>
     </div>
 </footer>

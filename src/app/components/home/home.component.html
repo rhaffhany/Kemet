@@ -1,4 +1,11 @@
 <section class="home">
+  <div class="yellow-circle"></div>
+  <div class="purple-circle"></div>
+  <div class="blue-circle"></div>
+  <div class="second-purple-circle"></div>
+  <div class="second-blue-circle"></div>
+  <div class="third-purple-circle"></div>
+  
   <!-- form of Q&A -->
   <app-interests-form/>
   <app-promote-events></app-promote-events>
@@ -11,11 +18,6 @@
     </div>
     <app-ancient-spotlight></app-ancient-spotlight>
   </div>
-
-  <div class="top-selling">
-    <app-top-selling></app-top-selling>
-  </div>
-
   <div class="new-adventure">
     <div class="rectangle"></div>
     <div class="title-container">
@@ -25,14 +27,36 @@
     <app-new-adventure></app-new-adventure>
   </div>
 
+
+  <div class="top-selling">
+    <app-top-selling></app-top-selling>
+  </div>
+
+
+
   <div class="highly-recommended">
     <div class="rectangle"></div>
     <div class="title-container">
-      <h1 class="title" style="font-size: 2rem; font-weight: 800; color: #222;">Highly Recommended</h1>
-      <p class="subtitle">Don't miss out! These highly recommended experiences in Egypt are a must for any traveler!</p>
+      <h1 class="title" style="font-size: 2rem; font-weight: 800; color: #222;">Highly Recommended Destination
+      </h1>
+      <p class="subtitle">Don't miss out! This highly recommended place in Egypt is a must-visit for any traveler!
+      </p>
     </div>
     <app-recommended></app-recommended>
   </div>
+  <div class="highly-recommended">
+    <div class="rectangle"></div>
+    <div class="title-container">
+      <h1 class="title" style="font-size: 2rem; font-weight: 800; color: #222;">Highly Recommended Adventure
+      </h1>
+      <p class="subtitle">Don't miss out! This highly recommended activity in Egypt is a must-try for any traveler!
+
+
+      </p>
+    </div>
+    <app-recommended-activities></app-recommended-activities>
+  </div>
+
 
   <router-outlet></router-outlet>
 </section>

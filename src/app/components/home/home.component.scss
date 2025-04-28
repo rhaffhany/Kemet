@@ -14,6 +14,7 @@ section {
   background-color: #FFE4C2;
   z-index: 0; 
   padding-top:4rem;
+  padding-bottom: 250px;
   overflow: hidden;
 }
 .home {
@@ -120,8 +121,8 @@ section {
   z-index: 0;
   filter: blur(70px);
   opacity: 0.8;
-  top: 3060px;
-  right: -212px;
+  top: 350px;
+  right: -280px;
   border-radius: 50%;
   pointer-events: none;
 }
@@ -134,7 +135,7 @@ section {
   z-index: 0;
   filter: blur(70px);
   opacity: 0.6;
-  top: 3050px;
+  top: 3500px;
   right: -284px;
   border-radius: 50%;
   pointer-events: none;
@@ -166,14 +167,11 @@ section {
   text-align: left;
   margin-top: 155px;
 
-  .title-container {
-    margin-left: 100px;
-  }
+
   .rectangle {
     width: 110px;
     height: 76px;
     position: absolute;
-    margin-left: 100PX;
 
     margin-top: -2rem ;
     border-radius: 30px 0px 10px 0px;
@@ -193,9 +191,9 @@ section {
 }
 
 .new-adventure {
-    position: relative;
-    text-align: left;
-    margin-top: 155px;
+  position: relative;
+  text-align: left;
+  margin-top: 155px;
     .rectangle {
       width: 65px;
       height: 82px;
@@ -215,7 +213,6 @@ section {
   position: relative;
   text-align: left;
   margin-top: 155px;
-  margin-bottom: 238px;
   .rectangle {
     width: 90px;
     height: 82px;

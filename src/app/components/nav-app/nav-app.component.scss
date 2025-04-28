@@ -45,9 +45,9 @@ body, html {
     }
   }
 }
-// Shared Styles for Home and Things-To-Do Navbars
 .home-navbar,
-.things-to-do-navbar {
+.things-to-do-navbar,
+.search-result-navbar {
   height: 100px;
   padding: 1.5rem 0;
   transition: all 0.3s ease;
@@ -308,7 +308,6 @@ body, html {
   border-radius: 8px;
   display: block;
 }
-primary-color
 .result-details {
   white-space: nowrap;
   overflow: hidden;

@@ -26,6 +26,7 @@ export class NewAdventureComponent implements OnInit {
   leftArrowSrc: string = '../../../assets/icons/arrow-left-circle.svg';
   rightArrowSrc: string = '../../../assets/icons/arrow-right-circle.svg';
   carouselReady: boolean = false;
+  starRating: number = 0;
   DeployUrl = 'https://kemet-server.runasp.net';
   wishlistItems: Set<number> = new Set();
 
@@ -43,6 +44,7 @@ export class NewAdventureComponent implements OnInit {
     }
   }
 
+
   loadActivities() {
     this._HomeService.fetchActivities().subscribe(
       data => {
@@ -59,6 +61,7 @@ export class NewAdventureComponent implements OnInit {
     );
   }
 
+
   loadWishlistItems() {
     if (!this.authService.isLoggedIn()) {
       console.log('User not logged in, skipping wishlist load');
@@ -71,22 +74,18 @@ export class NewAdventureComponent implements OnInit {
         this.wishlistItems.clear();
 
         // Handle different response formats
-        let wishlistItems = [];
+        let activities = [];
         if (response && response.activities && response.activities.$values) {
-          wishlistItems = response.activities.$values;
-        } else if (Array.isArray(response)) {
-          wishlistItems = response;
-        } else if (response && response.$values) {
-          wishlistItems = response.$values;
+          activities = response.activities.$values;
         }
         
-        console.log('Processed wishlist items:', wishlistItems);
+        console.log('Processed activities:', activities);
         
-        wishlistItems.forEach((item: any) => {
-          console.log('Processing wishlist item:', item);
-          if (item && item.activityId) {
-            this.wishlistItems.add(item.activityId);
-            console.log('Added activityId to wishlist:', item.activityId);
+        activities.forEach((activity: any) => {
+          console.log('Processing activity:', activity);
+          if (activity && activity.activityId) {
+            this.wishlistItems.add(activity.activityId);
+            console.log('Added activityId to wishlist:', activity.activityId);
           }
         });
 
@@ -98,8 +97,7 @@ export class NewAdventureComponent implements OnInit {
     );
   }
 
-  toggleWishlist(activityId: number | undefined, event: Event) {
-    if (!activityId) return;
+  toggleWishlist(activityId: number, event: Event) {
     event.stopPropagation();
     if (!this.authService.isLoggedIn()) {
       return;
@@ -108,56 +106,35 @@ export class NewAdventureComponent implements OnInit {
     const isInWishlist = this.wishlistItems.has(activityId);
     
     if (isInWishlist) {
-      // Remove from wishlist
-      this.wishlistService.removeFromWishlist(activityId).subscribe({
+      this.wishlistService.removeFromWishlist(activityId, 'activity').subscribe({
         next: () => {
           this.wishlistItems.delete(activityId);
-          console.log('Removed from wishlist:', activityId);
+          console.log('Removed activity from wishlist:', activityId);
         },
         error: (error) => {
-          console.error('Error removing from wishlist:', error);
+          console.error('Error removing activity from wishlist:', error);
         }
       });
     } else {
-      // Add to wishlist
-      const headers = this.getHeaders();
-      this.http.post(`${this.DeployUrl}/api/Wishlist/AddActivityToWishlist?ActivityID=${activityId}`, {}, { headers })
-        .subscribe({
-          next: (response) => {
-            console.log('Add to wishlist response:', response);
-            this.wishlistItems.add(activityId);
-            console.log('Added to wishlist:', activityId);
-          },
-          error: (error) => {
-            console.error('Error adding to wishlist:', error);
-            if (error.status === 400) {
-              console.error('Bad request - check if activityId is correct:', activityId);
-            }
-          }
-        });
+      this.wishlistService.addActivityToWishlist(activityId).subscribe({
+        next: () => {
+          this.wishlistItems.add(activityId);
+          console.log('Added activity to wishlist:', activityId);
+        },
+        error: (error) => {
+          console.error('Error adding activity to wishlist:', error);
+        }
+      });
     }
   }
 
-  isInWishlist(activityId: number | undefined): boolean {
-    if (!activityId) return false;
-    return this.wishlistItems.has(activityId);
-  }
-
-  private getHeaders(): HttpHeaders {
-    const token = this.authService.getToken();
-    if (!token) {
-      console.error('Authentication token is missing.');
-      throw new Error('User is not authenticated.');
-    }
-    return new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
+  isInWishlist(placeId: number): boolean {
+    return this.wishlistItems.has(placeId);
   }
 
   customOptions: OwlOptions = {
     loop: true,
-    margin: 10,
+    margin: -15, 
     nav: false,
     dots: false,
     autoplay: true,
@@ -167,15 +144,24 @@ export class NewAdventureComponent implements OnInit {
       0: {
         items: 1.2
       },
-      768: {
-        items: 3
+      600: {
+        items: 2.2
       },
-      1024: {
-        items: 4
+      768: {
+        items: 3.2
+      },
+      992: {
+        items: 4.2
+      },
+      1200: {
+        items: 5.2
       }
     }
   };
-
+  getStarRating(averageRating: number): number {
+    // Round to nearest half (0.5) then floor to get whole number of filled stars
+    return Math.floor(Math.round(averageRating * 2) / 2);
+  }
   onPrev() {
     if (this.owlCarousel) {
       this.owlCarousel.prev();

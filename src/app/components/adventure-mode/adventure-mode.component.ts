@@ -1,14 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ProfileService } from 'src/app/services/profile.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-adventure-mode',
   templateUrl: './adventure-mode.component.html',
   styleUrls: ['./adventure-mode.component.scss'],
 })
-export class AdventureModeComponent {
+export class AdventureModeComponent implements OnInit {
   logoImage: string = 'assets/logo/K.PNG';
-  imageURLs: string = ''; 
   name: string = ''; 
   errorMessage: string = '';
   isSpinning: boolean = false;
@@ -16,39 +16,48 @@ export class AdventureModeComponent {
   errorImage: string = 'assets/img/retry.jpg'; 
   fallbackImage: string = 'assets/logo/logo.png';
   spinAngle: number = 0; 
-  animationDuration: number = 3; 
-
+  animationDuration: number = 3;
+  
   constructor(private profileService: ProfileService) {}
+  
+  ngOnInit(): void {
+  }
 
   fetchAdventureData(): void {
     this.isSpinning = true;
     this.disableButton = true;
-
-    this.spinAngle = 360 * 5; // Spin 5 full rotations
+    this.errorMessage = ''; 
+    
+    const rotations = 5 + Math.random() * 2;
+    this.spinAngle = 360 * rotations;
 
     setTimeout(() => {
-      this.profileService.getAdventureData().subscribe(
-        (data) => {
-
-          this.logoImage = data?.placeDto?.imageURLs?.$values[0] || this.fallbackImage;
-          this.name = data?.placeDto?.name || '';
-        },
-        (error) => {
-          // Set the error image in case of failure
-          this.logoImage = this.errorImage;
-          this.errorMessage = error;
-        },
-        () => {
-
-          setTimeout(() => {
-            this.isSpinning = false;
-            this.disableButton = false;
-            // Reset the spin angle to ensure it stays at 0 degree
-            this.spinAngle = 0;
-          }, 500); // Add a slight delay to reset and stop the spin
-        }
-      );
-    }, this.animationDuration * 1000);
+      this.profileService.getAdventureData()
+        .pipe(
+          finalize(() => {
+            setTimeout(() => {
+              this.isSpinning = false;
+              this.disableButton = false;
+              this.spinAngle = 0;
+            }, 500);
+          })
+        )
+        .subscribe({
+          next: (data) => {
+            if (data?.place?.imageURLs?.$values?.length > 0) {
+              this.logoImage = data.place.imageURLs.$values[0];
+            } else {
+              this.logoImage = this.fallbackImage;
+            }
+            this.name = data?.place?.name || 'Adventure Awaits';
+          },
+          error: (error) => {
+            this.logoImage = this.errorImage;
+            this.errorMessage = 'Unable to fetch adventure. Try again!';
+            this.name = 'Oops! Try Again';
+          }
+        });
+    }, 500); 
   }
 
   onButtonClick(): void {

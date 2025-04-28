@@ -1,93 +1,137 @@
+.floating-search {
+  position: relative;
   
-    .search-bar {
-      display: flex;
-      align-items: center;
-      height: 60px; 
-      width: 800px; 
-      border-radius: 32px; 
-      background: #fff;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      padding-left: 15px; 
-      padding-right: 8px; 
-      margin-left: 250px;
-      gap: 16px; 
-  
-      .searchIcon {
-        width: 44px;
-        margin-right: 10px;
-      }
-      
-      .search-input {
-        width: 100%;
-        border: none;
-        outline: none;
-        background: transparent;
-        font-size: 18px;
-        font-weight: 400;
-        padding: 18px;
-        
-      }
+  .search-bar {
+    display: flex;
+    align-items: center;
+    height: 60px; 
+    width: 800px; 
+    border-radius: 32px; 
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 0 15px; 
+    margin-left: 250px;
+    
+
+    .search-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 18px;
+      font-weight: 400;
+      padding: 18px;
     }
-  
-    .error-message {
-      color: red;
-      margin-top: 10px;
-      text-align: center;
-    }
-  
-    .search-results-container {
-      background: #fff;
-      position: absolute;
-      border: 1px solid #ddd;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-      border-radius: 5px;
-      max-height: 260px;
-      overflow-y: auto;
-      width: 800px;
-      margin-left: 250px;
-      margin-top: 10px;
-      padding: 10px;
-  
-.result-item {
-  display: flex;
-  gap: 10px;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
+    
+.search-button {
+  background: #fac817;
+  border: none;
   cursor: pointer;
-  transition: background 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  transition: background-color 0.2s ease;
+
+  .search-icon {
+    filter: brightness(0) invert(1); /* Makes the icon white */
+    width: 35px;
+    height: 35px;
+  }
 
   &:hover {
-    background-color: #f4f4f4;
+    background-color: #e6b800;
   }
+}
 
-  .result-image {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 8px;
-    padding: 0;
-    margin-top: 0;
+    
   }
-
-  .result-details {
-    flex: 1;
-    text-align: left;
-
-    .result-name {
-      font-size: 1rem;
-      font-weight: bold;
+  
+  .search-dropdown {
+    position: absolute;
+    left: 250px;
+    top: 70px;
+    width: 800px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    max-height: 500px;
+    overflow: hidden;
+    
+    .error-message {
+      color: #e74c3c;
+      padding: 20px;
+      text-align: center;
     }
-
-    .result-description {
-      font-size: 0.8rem;
-      color: #555;
-    }
-
-    .result-category {
-      font-size: 12px;
-      font-weight: 600;
-      color: #555;
+    
+    .search-results-container {
+      max-height: 300px;
+      overflow-y: auto;
+      
+      .result-item {
+        display: flex;
+        gap: 10px;
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+        cursor: pointer;
+        transition: background 0.2s ease-in-out;
+        
+        &:hover {
+          background-color: #f4f4f4;
+        }
+        
+        .result-image {
+          width: 80px;
+          height: 80px;
+          object-fit: cover;
+          border-radius: 8px;
+        }
+        
+        .result-details {
+          flex: 1;
+          
+          .result-name {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 0 0 5px;
+          }
+          
+          .result-description {
+            font-size: 14px;
+            color: #555;
+            margin: 0 0 5px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+          }
+          
+          .result-category {
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            margin: 0;
+          }
+        }
+      }
+      
+      .view-all-results {
+        padding: 15px;
+        text-align: center;
+        font-weight: 600;
+        color: #FFE4C2;
+        cursor: pointer;
+        background-color: #f5f8ff;
+        transition: background-color 0.2s;
+        
+        &:hover {
+          background-color: #e3f2fd;
+        }
+      }
     }
   }
 }
-    }

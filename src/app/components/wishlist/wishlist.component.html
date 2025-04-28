@@ -1,34 +1,68 @@
-<section>
-  <img src="assets/icons/Heart2.png" alt="Heart Icon" class="wishlist-icon" />
-  
-  <h1 class="title">My Wishlist</h1>
-
-  <button routerLink="/plan">Plan a trip with AI</button>
-
-  <div *ngIf="loading">Loading...</div>
-  <div *ngIf="errorMessage">{{ errorMessage }}</div>
-
-  <div *ngIf="wishlist.length === 0 && !loading">No items in wishlist.</div>
-
-  <div class="card" *ngFor="let item of wishlist; let i = index">
-    <div class="card-body">
-      <div class="menu-container">
-        <button class="menu-btn" (click)="toggleMenu(i)">⋮</button>
-        
-        <div *ngIf="menuOpenIndex === i" class="menu-dropdown">
-          <button (click)="removeItemFromWishlist(item, i)" class="remove-btn">
-            Remove
-          </button>
+<section class="wishlist-container">
+    <div class="wishlist-header">
+      <div class="header-content">
+        <div class="icon-container">
+          <img src="assets/icons/Heart2.png" alt="Heart Icon" class="wishlist-icon" />
         </div>
-      </div>
-
-      <img [src]="item.imageURLs[0] || '/assets/img/default.png'" alt="{{ item.name }}" class="card-photo" />
-      <div class="card-text">
-        <h2 class="card-title">{{ item.name }}</h2>
-
-        <p *ngIf="item.type === 'place'" class="card-subtitle"> {{ item.categoryName }}</p>
-        <p *ngIf="item.type === 'activity'" class="card-subtitle">Activity</p>
+        <h1 class="title">My Wishlist</h1>
       </div>
     </div>
-  </div> 
+
+
+  <!-- Filter tabs -->
+  <div class="filter-tabs">
+    <button class="tab-btn" [class.active]="activeFilter === 'all'" (click)="filterWishlist('all')">All</button>
+    <button class="tab-btn" [class.active]="activeFilter === 'place'" (click)="filterWishlist('place')">Places</button>
+    <button class="tab-btn" [class.active]="activeFilter === 'activity'" (click)="filterWishlist('activity')">Activities</button>
+    <button class="tab-btn" [class.active]="activeFilter === 'plan'" (click)="filterWishlist('plan')">Plans</button>
+  </div>
+
+  <div *ngIf="loading" class="loading-state">Loading...</div>
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+  <div *ngIf="wishlist.length === 0 && !loading" class="empty-state">No items in wishlist.</div>
+  <!-- Cards grid layout -->
+  <div class="cards-grid">
+    <div class="wishlist-card" *ngFor="let item of filteredWishlist; let i = index">
+      <div class="card-menu">
+        <button class="heart-toggle" (click)="removeItemFromWishlist(item, i)">
+          <img src="assets/icons/heart-red.svg" alt="Remove from wishlist" class="heart-icon active" />
+        </button>
+      </div>
+
+      <div class="card-image-container">
+        <img 
+          [src]="item.type === 'plan' ? item.pictureUrl : (item.imageURLs && item.imageURLs.length > 0 ? item.imageURLs[0] : 'assets/img/placeholder.jpg')" 
+          [alt]="item.name"
+          class="card-image"
+        />
+        <span class="card-type-badge" [ngClass]="item.type">{{ item.type | titlecase }}</span>
+      </div>
+      
+      <div class="card-content">
+          <h3 class="card-title">{{ item.type === 'plan' ? item.planName : item.name }}</h3>
+          
+          <div class="card-details">
+            <span *ngIf="item.type === 'place'" class="card-category">
+              {{ item.categoryName || 'Place' }}
+            </span>
+            
+            <span *ngIf="item.type === 'activity'" class="card-category">
+              Activity
+            </span>
+            
+            <span *ngIf="item.type === 'plan'" class="card-category">
+              {{ item.planAvailability }}
+            </span>
+          </div>
+          
+          <button *ngIf="item.type === 'plan'" class="view-details-btn" [routerLink]="['/Package-details', item.id]">View Plan</button>
+          <button *ngIf="item.type === 'place'" class="view-details-btn" [routerLink]="['/app-places', item.placeID]">View Details</button>
+          <button *ngIf="item.type === 'activity'" class="view-details-btn" [routerLink]="['/app-activities', item.id]">View Details</button>
+        </div>
+    </div>
+  </div>
+
+  <!-- Moved the plan trip button to appear after the cards -->
+  <button class="plan-trip-btn" routerLink="/plan">Plan a trip with AI</button>
 </section>

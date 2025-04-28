@@ -16,6 +16,7 @@
         class="search-input" 
         [(ngModel)]="query" 
         (input)="onSearchInput()" 
+        (keydown.enter)="submitSearch()"
         placeholder="Search..."
       />
       

@@ -19,6 +19,7 @@ export class AncientSpotlightComponent implements OnInit {
   carouselReady: boolean = false;
   DeployUrl = 'https://kemet-server.runasp.net';
   wishlistItems: Set<number> = new Set();
+  starRating: number = 0;
 
   constructor(
     private _HomeService: HomeService,
@@ -113,8 +114,8 @@ export class AncientSpotlightComponent implements OnInit {
     const isInWishlist = this.wishlistItems.has(placeId);
     
     if (isInWishlist) {
-      // Remove from wishlist
-      this.wishlistService.removeFromWishlist(placeId).subscribe({
+      // Remove from wishlist using placeId and 'place' type
+      this.wishlistService.removeFromWishlist(placeId, 'place').subscribe({
         next: () => {
           this.wishlistItems.delete(placeId);
           console.log('Removed from wishlist:', placeId);
@@ -143,7 +144,7 @@ export class AncientSpotlightComponent implements OnInit {
 
   customOptions: OwlOptions = {
     loop: true,
-    margin: 10,
+    margin: 65,
     nav: false,
     dots: false,
     autoplay: true,
@@ -153,15 +154,23 @@ export class AncientSpotlightComponent implements OnInit {
       0: {
         items: 1.2
       },
+      600: {
+        items: 2
+      },
       768: {
         items: 3
       },
-      1024: {
-        items: 5 
+      992: {
+        items: 4
+      },
+      1200: {
+        items: 5
       }
     }
   };
-
+  getStarRating(averageRating: number): number {
+    return Math.floor(Math.round(averageRating * 2) / 2);
+  }
   onPrev() {
     if (this.owlCarousel) {
       this.owlCarousel.prev();
