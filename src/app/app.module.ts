@@ -1,5 +1,7 @@
+
 import { CdkDragDrop, CdkDragPreview, DragDropModule } from '@angular/cdk/drag-drop';
 import { SwiperModule } from './../../node_modules/swiper/types/shared.d';
+
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common'; 
@@ -8,6 +10,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { CreditCardDirectivesModule } from 'angular-cc-library';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -57,6 +60,10 @@ import { ReviewFilterPipe } from './pipe/review-filter.pipe';
 import { PaymentHistoryComponent } from './components/payment-history/payment-history.component';
 import { RecommendedActivitiesComponent } from './components/recommended-activities/recommended-activities.component';
 import { SearchResultsComponent } from './components/search-results/search-results.component';
+import { ToastrModule } from 'ngx-toastr';
+import { PaymentComponent } from './components/payment/payment.component';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -100,6 +107,8 @@ import { SearchResultsComponent } from './components/search-results/search-resul
     RecommendedActivitiesComponent,
     SearchResultsComponent,
     
+    PaymentComponent,
+
   ],
   imports: [
   BrowserModule,
@@ -119,6 +128,9 @@ import { SearchResultsComponent } from './components/search-results/search-resul
   ToastModule,
   DragDropModule
 
+=======
+  ToastrModule.forRoot(),
+  CreditCardDirectivesModule
 ],
   providers: [
     MessageService

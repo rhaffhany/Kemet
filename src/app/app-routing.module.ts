@@ -27,6 +27,9 @@ import { PackageDetailsBookingComponent } from './components/package-details-boo
 import { PersonalizedPlanComponent } from './components/personalized-plan/personalized-plan.component';
 import { PaymentHistoryComponent } from './components/payment-history/payment-history.component';
 import { SearchResultsComponent } from './components/search-results/search-results.component';
+
+import { PaymentComponent } from './components/payment/payment.component';
+
 const routes: Routes = [
 
   { 
@@ -70,6 +73,7 @@ const routes: Routes = [
     path: '',component: AgencyLayoutComponent, canActivate: [AuthGuard], children: [
       { path: 'travelAgency-profile', component: TravelAgencyProfileComponent, title: 'TravelAgency-profile' },
       { path: 'Package-details/:planID', component: PackageDetailsBookingComponent, title: 'Package Details' },
+      { path: 'payment/:planID/:bookingID', component: PaymentComponent, title: 'Payment' },
     ]
   },
 
