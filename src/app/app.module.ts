@@ -106,7 +106,6 @@ import { PaymentComponent } from './components/payment/payment.component';
     ReviewFilterPipe,
     RecommendedActivitiesComponent,
     SearchResultsComponent,
-    
     PaymentComponent,
 
   ],
@@ -126,11 +125,9 @@ import { PaymentComponent } from './components/payment/payment.component';
   NgbDatepickerModule,
   MatProgressBarModule,
   ToastModule,
-  DragDropModule
-
-=======
+  DragDropModule,
   ToastrModule.forRoot(),
-  CreditCardDirectivesModule
+  CreditCardDirectivesModule,  
 ],
   providers: [
     MessageService

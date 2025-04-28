@@ -5,39 +5,36 @@ import { CreditCardValidators } from 'angular-cc-library';
 import { PackageDetails } from 'src/app/interfaces/package-details';
 import { BookingService } from 'src/app/services/booking.service';
 import { DetailsService } from 'src/app/services/details.service';
+import { Stripe, PaymentIntent } from '@stripe/stripe-js';
+import { PaymentService } from 'src/app/services/payment.service';
+import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 
-// declare var Stripe;
 
 @Component({
   selector: 'app-payment',
   templateUrl: './payment.component.html',
   styleUrls: ['./payment.component.scss']
 })
-export class PaymentComponent implements OnInit{
+export class PaymentComponent implements OnInit, OnDestroy{
   constructor(private _FormBuilder:FormBuilder,
               private _ActivatedRoute:ActivatedRoute,
               private _DetailsService:DetailsService,
-              private _BookingService:BookingService) {}
+              private _BookingService:BookingService,
+              private _PaymentService:PaymentService,
+              private _ToastrService:ToastrService) {}
 
-  // @Input() checkoutForm: FormGroup;
-  // @ViewChild('ccNumber') ccNumberField: ElementRef;
-  // @ViewChild('cardExpiry', { static: true }) cardExpiryElement: ElementRef;
-  // @ViewChild('cardCvc', { static: true }) cardCvcElement: ElementRef;
+  private stripe: Stripe | null = null;
+  cardElement: any;
+  subscriptions: Subscription = new Subscription();
 
-  stripe: any;
-
+  bookingId: number = 0;
+  
   paymentForm: FormGroup = this._FormBuilder.group({
     cardNumber: ['', [CreditCardValidators.validateCCNumber]],
     expireDate: ['', [CreditCardValidators.validateExpDate]],
     CVV: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(4)]] 
-  });;
-
-  submitted: boolean = false;
-
-  onSubmit() {
-    this.submitted = true;
-    console.log(this.paymentForm);
-  }
+  });
 
   packageDetails:PackageDetails = {} as PackageDetails;
   planID:any;
@@ -45,46 +42,91 @@ export class PaymentComponent implements OnInit{
   bookedPrice:number = 0;
   selectedBookedDate: string = ''; 
   selectedBoard: string = ''; 
+  visitorType: string = '';
+  isLoading: boolean = true;
 
-  ngOnInit(): void {
-    this._ActivatedRoute.paramMap.subscribe({
-      next:(params)=>{
+  bookData:any;
+
+  async ngOnInit(){
+    // payment
+    this.bookingId = +this._ActivatedRoute.snapshot.paramMap.get('bookingID')!;
+    this.stripe = await this._PaymentService.getStripe();
+
+    const elements = this.stripe?.elements();
+    this.cardElement = elements?.create('card');
+    this.cardElement?.mount('#card-element');
+
+
+    this.subscriptions.add(
+      this._ActivatedRoute.paramMap.subscribe({
+        next: (params) => {
         this.planID = params.get('planID'); 
-        this._DetailsService.getDetaliedPlan(this.planID).subscribe({
-          next: (response)=>{            
-            this.packageDetails = response;
-            this.planID = response.planId;
-          }
-        });
-      }
-    });
+          this._DetailsService.getDetaliedPlan(this.planID).subscribe({
+            next: (response)=>{            
+              this.packageDetails = response;
+              this.planID = response.planId;
+              this.isLoading = false; 
+            }
+          });
+        }
+      })
+    );
 
-    this._BookingService.bookedPrice.subscribe({
-      next:(price)=>{
-        this.bookedPrice = price;
-      }
-    });
-    this._BookingService.selectedBoard.subscribe({
-      next:(selectedBoard)=>{
-        this.selectedBoard = selectedBoard;
-      }
-    });
-    this._BookingService.selectedBookedDate.subscribe({
-      next:(date)=>{
-        this.selectedBookedDate = date;
-      }
-    });
+    this.bookedPrice = +localStorage.getItem('bookedPrice')!;
+    this.selectedBoard = localStorage.getItem('selectedBoard')!;
+    this.selectedBookedDate = localStorage.getItem('ReserveDate')!;
+    this.visitorType = localStorage.getItem('visitorType')!;
 
   }
 
+  async pay() {
+    this._PaymentService.createPayment(this.bookingId).subscribe({
+      next: (response) => {
+        const clientSecret = response.clientSecret;
+        
+        this.stripe?.confirmCardPayment(clientSecret, 
+          { payment_method: { card: this.cardElement } }).then((result) => {
+            if (result.error) {
+              this._ToastrService.error('Please try again.','Payment confirmation Error!');
+            } else if (result.paymentIntent?.status === 'succeeded') {
+  
+              this._PaymentService.confirmPayment(result.paymentIntent.id).subscribe({
+                next: (response) => {
+                  console.log("Backend response: ",response);
+                  console.log('Payment Intent:', result.paymentIntent);
+                  console.log('Payment Intent ID:', result.paymentIntent.id);
 
+                  this._ToastrService.success('Payment confirmed successfully!');
+                  
+                  localStorage.removeItem('bookedPrice');
+                  localStorage.removeItem('selectedBoard');
+                  localStorage.removeItem('ReserveDate');
+                  localStorage.removeItem('visitorType');
 
-  ngAfterViewInit(): void {
-    // this.stripe = Stripe('pk_test_51RD90GQR59iEhpdYwrxhvr3VErtv0iYOSYn4NjhZa21C715Ds612AqtLIGPJKpGQpsBTo9s6uNs6duhKpwt6gbKQ00NxhJWq20');
-    // const elements = this.stripe.elements();
+                  if (response === 'Payment not successful') {
+                    this._ToastrService.error('Payment not successful. Please try again.'); 
+                  }
+                  
+                },
+                error: (err) => {
+                  this._ToastrService.error('Please try again.','Payment confirmation failed!');
+                  console.log(err);
+                }
+              });
+            }
+          });
+      },
+      error: (error) => {
+        this._ToastrService.error('Payment failed!');
+        console.log(error);
+      }
+    });
   }
+  
 
-
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
+  }
 
   
 }
