@@ -15,28 +15,6 @@ export class ProfileService {
 
   private DeployUrl = 'https://kemet-server.runasp.net';
 
-  
-  getAdventureData(): Observable<any> {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      return throwError('Authentication token is missing. Please log in again.');
-    }
-
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    });
-
-    return this._HttpClient.get(`${this.DeployUrl}/api/Profile`, { headers })
-      .pipe(
-        catchError((error) => {
-          console.error('Error fetching adventure data:', error);
-          return throwError('An error occurred while fetching adventure data. Please try again later.');
-        })
-      );
-  }
-
   getCurrentUserData():Observable<any>{
     const token = this._AuthService.getToken();
     const headers = new HttpHeaders({

@@ -66,14 +66,14 @@ const routes: Routes = [
       { path: 'write-review/place/:placeID', component: ReviewContentComponent, title: 'Review-Place' },
       { path: 'write-review/activity/:activityID', component: ReviewContentComponent, title: 'Review-Activity' },
       { path: 'search-results', component: SearchResultsComponent, title: 'results' },
-
+      
     ]
   },
   {
     path: '',component: AgencyLayoutComponent, canActivate: [AuthGuard], children: [
       { path: 'travelAgency-profile', component: TravelAgencyProfileComponent, title: 'TravelAgency-profile' },
       { path: 'Package-details/:planID', component: PackageDetailsBookingComponent, title: 'Package Details' },
-      { path: 'payment/:planID/:bookingID', component: PaymentComponent, title: 'Payment' },
+      { path: 'payment/:bookingID/:planID', component: PaymentComponent, title: 'Payment' },
     ]
   },
 

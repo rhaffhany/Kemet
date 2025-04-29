@@ -106,7 +106,6 @@ import { ToastrModule } from 'ngx-toastr';
     ReviewFilterPipe,
     RecommendedActivitiesComponent,
     SearchResultsComponent,
-    
     PaymentComponent,
 
   ],
@@ -127,8 +126,10 @@ import { ToastrModule } from 'ngx-toastr';
   MatProgressBarModule,
   ToastModule,
   DragDropModule,
-  CreditCardDirectivesModule,
-  ToastrModule.forRoot()
+
+  ToastrModule.forRoot(),
+  CreditCardDirectivesModule,  
+
 ],
   providers: [
     MessageService
