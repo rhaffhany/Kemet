@@ -117,8 +117,18 @@ export class RegisterComponent implements OnInit {
             window.location.reload();
           });
         }
-      } catch (error) {
-        this.errorMsg = 'Registration failed. Please try again later.';
+      } catch (error: any) {
+        // Handle specific error cases
+        if (error.error && error.error.message === "Email already exists") {
+          this.errorMsg = 'Email already exists. Please use a different email address.';
+          // Focus on the email field
+          const emailField = document.getElementById('email');
+          if (emailField) {
+            emailField.focus();
+          }
+        } else {
+          this.errorMsg = 'Registration failed. Please try again later.';
+        }
         console.error('Registration error:', error);
       } finally {
         this.isLoading = false;

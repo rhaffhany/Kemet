@@ -28,6 +28,9 @@ export class PlaceDetailsComponent {
   ActivityDetails:ActivityDetails = {} as ActivityDetails;
   activityID:any;
 
+  // Boolean flag to determine if we're showing a place or activity
+  isPlace: boolean = true;
+
   culturalTipsArray:[] = [];
 
   reviewsData:any[] =[];
@@ -49,38 +52,40 @@ export class PlaceDetailsComponent {
       next:(params)=>{
         this.placeID = params.get('placeID');
         this.activityID = params.get('activityID');
+        
+        // Set isPlace flag based on which ID is available
+        this.isPlace = !!this.placeID;
       }
     });
     
-
-    this._DetailsService.getDetailedPlace(this.placeID).subscribe({
-      next: (response) => {
-        this.placeDetails = response;
-        this.reviewsData = response.reviews.$values;
-        this.filteredReviews = [...this.reviewsData];
-
-        this.ratingCounts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-        this.reviewsData.forEach(review => {
-          const rating = review.rating;
-          if (this.ratingCounts[rating] !== undefined) {
-            this.ratingCounts[rating]++;
-          }
-        });
-        
-        // Calculate percentages
-        const totalReviews = this.reviewsData.length;
-        for (let i = 1; i <= 5; i++) {
-          this.ratingPercents[i] = totalReviews > 0
-            ? Math.round((this.ratingCounts[i] / totalReviews) * 100)
-            : 0;
-        }
-
-        this.placeDetails.averageRating = Math.round(this.placeDetails.averageRating * 10) / 10;
-      },
-      error: (err) => {
-        console.error(err);
-      },
-    });
+    // Fetch place details if placeID is available
+    if (this.placeID) {
+      this._DetailsService.getDetailedPlace(this.placeID).subscribe({
+        next: (response) => {
+          this.placeDetails = response;
+          this.reviewsData = response.reviews.$values;
+          this.filteredReviews = [...this.reviewsData];
+          this.calculateRatingStats();
+        },
+        error: (err) => {
+          console.error('Error fetching place details:', err);
+        },
+      });
+    } 
+    // Fetch activity details if activityID is available
+    else if (this.activityID) {
+      this._DetailsService.getDetailedActivity(this.activityID).subscribe({
+        next: (response) => {
+          this.ActivityDetails = response;
+          this.reviewsData = response.reviews?.$values || [];
+          this.filteredReviews = [...this.reviewsData];
+          this.calculateRatingStats();
+        },
+        error: (err) => {
+          console.error('Error fetching activity details:', err);
+        },
+      });
+    }
 
     this._ProfileService.getCurrentUserData().subscribe({
       next:(data)=>{
@@ -96,9 +101,33 @@ export class PlaceDetailsComponent {
       error: (err) => {
         console.error('Error fetching user data:', err);
       },
-
     });
+  }
 
+  // Calculate rating statistics
+  calculateRatingStats(): void {
+    this.ratingCounts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    this.reviewsData.forEach(review => {
+      const rating = review.rating;
+      if (this.ratingCounts[rating] !== undefined) {
+        this.ratingCounts[rating]++;
+      }
+    });
+    
+    // Calculate percentages
+    const totalReviews = this.reviewsData.length;
+    for (let i = 1; i <= 5; i++) {
+      this.ratingPercents[i] = totalReviews > 0
+        ? Math.round((this.ratingCounts[i] / totalReviews) * 100)
+        : 0;
+    }
+
+    // Round average rating to 1 decimal place
+    if (this.isPlace && this.placeDetails.averageRating) {
+      this.placeDetails.averageRating = Math.round(this.placeDetails.averageRating * 10) / 10;
+    } else if (!this.isPlace && this.ActivityDetails.averageRating) {
+      this.ActivityDetails.averageRating = Math.round(this.ActivityDetails.averageRating * 10) / 10;
+    }
   }
 
   handleImageError(event: Event): void {
@@ -117,7 +146,11 @@ export class PlaceDetailsComponent {
   //carsouel
   updateLargeImage(index: number): void {
     const largeImage = document.querySelector('.carousel-inner .carousel-item img') as HTMLImageElement;
-    largeImage.src = this.placeDetails.imageURLs.$values[index];
+    if (this.isPlace) {
+      largeImage.src = this.placeDetails.imageURLs.$values[index];
+    } else {
+      largeImage.src = this.ActivityDetails.imageURLs.$values[index];
+    }
   }
 
   //handle pp
@@ -142,26 +175,9 @@ export class PlaceDetailsComponent {
     });
   }
  
-  carouselOptions = {
-    loop: true,
-    margin: 10,
-    mouseDrag: true,
-    touchDrag: true,
-    pullDrag: true,
-    dots: true,
-    navSpeed: 700,
-    navText: ['<', '>'],
-    responsive: {
-      0: { items: 1 },
-      600: { items: 2 },
-      1000: { items: 3 }
-    },
-    nav: true
-  };
 
   //reviews filters
   toggleFilterOptions:boolean = false;
-
 
   sortByMostRecent() {
     this.reviewsData.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
@@ -172,6 +188,7 @@ export class PlaceDetailsComponent {
       return order === 'high' ? b.rating - a.rating : a.rating - b.rating;
     });
   }
+  
   resetFilters() {
     return this.reviewsData = [...this.filteredReviews];
   }
@@ -198,7 +215,4 @@ export class PlaceDetailsComponent {
   
     this.errorMessage = this.searchResults.length === 0 ? 'No results found.' : '';
   }
-
-
-
 }

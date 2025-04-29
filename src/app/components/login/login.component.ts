@@ -54,6 +54,7 @@ export class LoginComponent implements OnDestroy {
   passwordVisible = false;
   forgotPasswordEmail = '';
   currentUserId: string = '';
+  resetToken: string = '';
 
   // OTP Config
   otpConfig = {
@@ -147,21 +148,28 @@ export class LoginComponent implements OnDestroy {
     this.resetAllForms();
   }
 
-handleLogin() {
-  if (this.loginForm.invalid) return;
+  handleLogin() {
+    if (this.loginForm.invalid) return;
+  
+    this.isLoading = true;
+    this.errorMsg = ''; // Clear any previous error messages
+    
+    this.authService.loginForm(this.loginForm.value).subscribe({
+      next: () => {
+        // Redirect to home page with app navbar
+        this.router.navigate(['/home']);
+      },
+      error: (error) => {
+        if (error.status === 401) {
+          this.errorMsg = 'Invalid credentials. Please check your email and password.';
+        } else {
+          this.errorMsg = error.message || 'Login failed. Please try again.';
+        }
+        this.isLoading = false;
+      }
+    });
+  }
 
-  this.isLoading = true;
-  this.authService.loginForm(this.loginForm.value).subscribe({
-    next: () => {
-      // Redirect to home page with app navbar
-      this.router.navigate(['/home']);
-    },
-    error: (error) => {
-      this.errorMsg = error.message;
-      this.isLoading = false;
-    }
-  });
-}
 isOpen = false;
 
 
@@ -246,9 +254,20 @@ isOpen = false;
     this.authService.verifyOtp(payload).subscribe({
       next: (response) => {
         this.isLoading = false;
-        console.log('Verification response:', response);
+        console.log('Full verification response:', response);
   
-        // Move to reset password form regardless of reset token
+        // Store the resetToken from the response - handle different response structures
+        if (response && response.resetToken) {
+          this.resetToken = response.resetToken;
+          console.log('Reset token stored:', this.resetToken);
+        } else if (response && response.data && response.data.resetToken) {
+          this.resetToken = response.data.resetToken;
+          console.log('Reset token stored from data:', this.resetToken);
+        } else {
+          console.warn('No reset token found in response:', response);
+        }
+  
+        // Move to reset password form
         this.showVerificationForm = false;
         this.showResetPasswordForm = true;
         this.successMsg = 'OTP verified successfully. You can now reset your password.';
@@ -261,6 +280,46 @@ isOpen = false;
     });
   }
   
+handleResetPassword(): void {
+  if (this.resetPasswordForm.invalid || this.resetPasswordForm.errors?.['passwordMismatch']) return;
+  
+  console.log('Using reset token:', this.resetToken);
+  
+  const resetData = {
+    email: this.forgotPasswordEmail,
+    token: this.resetToken,
+    newPassword: this.resetPasswordForm.value.newPassword
+  };
+
+  this.isLoading = true;
+  this.errorMsg = '';
+
+  console.log('Sending reset data:', resetData);
+  
+  this.authService.resetPassword(resetData).subscribe({
+    next: (response) => {
+      console.log('Reset password success:', response);
+      this.isLoading = false;
+      this.showResetPasswordForm = false;
+      this.showPasswordChangedSuccess = true;
+    },
+    error: (err) => {
+      console.log('Reset password error response:', err);
+      this.isLoading = false;
+      
+      // More specific error handling for reset password
+      if (err.status === 400) {
+        if (err.error && err.error.message) {
+          this.errorMsg = err.error.message;
+        } else {
+          this.errorMsg = 'Invalid reset data. Please try again or request a new reset code.';
+        }
+      } else {
+        this.errorMsg = this.handleError(err);
+      }
+    }
+  });
+}
 
   private handleVerificationError(error: HttpErrorResponse): string {
     if (error.status === 401) {
@@ -268,30 +327,7 @@ isOpen = false;
     }
     return 'Verification failed. Please try again.';
   }
-  handleResetPassword(): void {
-    if (this.resetPasswordForm.invalid || this.resetPasswordForm.errors?.['passwordMismatch']) return;
-    
-    const resetData = {
-      email: this.forgotPasswordEmail,
-      token: this.verificationForm.value.verificationCode,
-      newPassword: this.resetPasswordForm.value.newPassword
-    };
-  
-    this.isLoading = true;
-    this.errorMsg = '';
-  
-    this.authService.resetPassword(resetData).subscribe({
-      next: () => {
-        this.isLoading = false;
-        this.showResetPasswordForm = false;
-        this.showPasswordChangedSuccess = true;
-      },
-      error: (err) => {
-        this.isLoading = false;
-        this.errorMsg = this.handleError(err);
-      }
-    });
-  }
+
   
   private resetAllForms(): void {
     this.showLoginForm = true;

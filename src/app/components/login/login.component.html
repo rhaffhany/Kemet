@@ -33,13 +33,19 @@
         </div>
       </div>
       
-      <a class="forgot-password" (click)="openForgotPasswordForm()">Forgot password?</a>
-
-      <div class="btn">
-        <button [disabled]="loginForm.invalid" class="login-btn" type="submit">
-          Sign in <span *ngIf="isLoading"><i class="fas fa-spin fa-spinner"></i></span>
-        </button>
+      <div *ngIf="errorMsg" class="alert text-danger mt-0">
+        {{ errorMsg }}
       </div>
+
+      <a class="forgot-password" (click)="openForgotPasswordForm()">Forgot password?</a>
+      
+
+
+<div class="btn">
+  <button [disabled]="loginForm.invalid" class="login-btn" type="submit">
+    Sign in <span *ngIf="isLoading"><i class="fas fa-spin fa-spinner"></i></span>
+  </button>
+</div>
 
       <div class="line-container">
         <hr class="small-hr">

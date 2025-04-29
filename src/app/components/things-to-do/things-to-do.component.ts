@@ -22,6 +22,12 @@ interface CardItem {
   categoryName?: string;
 }
 
+interface WishlistItem {
+  type: string;
+  placeID?: number;
+  activityID?: number;
+}
+
 interface CarouselSection {
   id: string;
   title: string;
@@ -48,8 +54,12 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
   searchIcon: string = 'assets/icons/Search.png';
   decoreImagePath: string = 'assets/img/Decore.png';
   decoreBlueImagePath: string = 'assets/img/Decore2.png';
-  wishlistItems: Set<number> = new Set();
-    starRating: number = 0;
+  
+  // Store wishlist items as two separate maps for places and activities
+  wishlistPlaces: Set<number> = new Set();
+  wishlistActivities: Set<number> = new Set();
+  
+  starRating: number = 0;
   
   DeployUrl = 'https://kemet-server.runasp.net';
 
@@ -61,7 +71,8 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
     pullDrag: true,
     dots: false,
     navSpeed: 700,
-    navText: ['', ''],
+    autoplay: true,
+    autoplayTimeout: 3000,
     margin: 10,
     autoWidth: false,
     items: 5,
@@ -85,8 +96,18 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
     console.log('ThingsToDoComponent initialized');
     console.log('Using API base URL:', this.DeployUrl);
     this.initializeCarouselSections();
-    this.loadWishlistItems();
-    this.fetchCarouselData();
+    
+    // Load wishlist first, then fetch carousels
+    if (this.authService.isLoggedIn()) {
+      this.loadWishlistItems().then(() => {
+        this.fetchCarouselData();
+      }).catch(error => {
+        console.error('Error loading wishlist:', error);
+        this.fetchCarouselData();
+      });
+    } else {
+      this.fetchCarouselData();
+    }
   }
   
   initializeCarouselSections(): void {
@@ -205,18 +226,25 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
             try {
               if (response && response.$values && Array.isArray(response.$values)) {
                 // Map initial data
-                section.items = response.$values.map((item: any) => ({
-                  id: section.itemType === 'place' ? item.placeID : item.activityId,
-                  name: item.name || 'Unnamed Item',
-                  imageURLs: {
-                    $values: item.imageURLs?.$values || ['assets/img/default-activity.jpg']
-                  },
-                  averageRating: item.averageRating !== undefined ? item.averageRating : null,  
-                  ratingsCount: item.ratingsCount || 0,
-                  duration: item.duration,
-                  type: section.itemType,
-                  categoryName: item.categoryName || ''
-                }));
+                section.items = response.$values.map((item: any) => {
+                  // Normalize the ID field to ensure consistency
+                  const itemId = section.itemType === 'place' 
+                    ? item.placeID 
+                    : (item.activityId || item.activityID); // Handle both casing variants
+                  
+                  return {
+                    id: itemId,
+                    name: item.name || 'Unnamed Item',
+                    imageURLs: {
+                      $values: item.imageURLs?.$values || ['assets/img/default-activity.jpg']
+                    },
+                    averageRating: item.averageRating !== undefined ? item.averageRating : null,  
+                    ratingsCount: item.ratingsCount || 0,
+                    duration: item.duration,
+                    type: section.itemType,
+                    categoryName: item.categoryName || ''
+                  };
+                });
 
                 // If this is a places section, fetch categories for each place
                 if (section.itemType === 'place') {
@@ -295,75 +323,160 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
     }, 200);
   }
 
-  loadWishlistItems(): void {
-    if (!this.authService.isLoggedIn()) {
-      console.log('User not logged in, skipping wishlist load');
-      return;
-    }
-
-    console.log('Loading wishlist items');
-    this.wishlistService.getWishlist().subscribe({
-      next: (wishlist: any[]) => {
-        this.wishlistItems = new Set(
-          wishlist.map(item =>
-            item.type === 'place' ? item.placeID : item.activityID
-          )
-        );
-        console.log(`Loaded ${this.wishlistItems.size} wishlist items`);
-      },
-      error: (error) => {
-        console.error('Error loading wishlist:', error);
+  // Convert to Promise-based function to ensure wishlist loads before carousel data
+  loadWishlistItems(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (!this.authService.isLoggedIn()) {
+        console.log('User not logged in, skipping wishlist load');
+        resolve();
+        return;
       }
+    
+      this.wishlistService.getWishlist().subscribe({
+        next: (response: any) => {
+          console.log('Raw Wishlist Response:', response);
+          this.wishlistPlaces.clear();
+          this.wishlistActivities.clear();
+    
+          // Process different response formats
+          let wishlistItems: WishlistItem[] = [];
+          
+          // Handling various response structures we might receive
+          if (response && response.places && response.places.$values) {
+            // If there's a places object with $values array
+            const placesArray = response.places.$values || [];
+            const activitiesArray = response.activities && response.activities.$values ? response.activities.$values : [];
+            
+            placesArray.forEach((item: any) => {
+              wishlistItems.push({ type: 'place', placeID: item.placeID });
+            });
+            
+            activitiesArray.forEach((item: any) => {
+              // Use a consistent property name for activity IDs
+              wishlistItems.push({ 
+                type: 'activity', 
+                activityID: item.activityID || item.activityId
+              });
+            });
+          } else if (Array.isArray(response)) {
+            // If response is a direct array of wishlist items
+            wishlistItems = response;
+          } else if (response && response.$values) {
+            // If response has a $values array (common ASP.NET format)
+            wishlistItems = response.$values;
+          } else if (response && response.wishlistItems && response.wishlistItems.$values) {
+            // If response has a wishlistItems object with $values array
+            wishlistItems = response.wishlistItems.$values;
+          }
+          
+          console.log('Processed wishlist items:', wishlistItems);
+          
+          // Process each wishlist item and add to the appropriate Set
+          wishlistItems.forEach((item: any) => {
+            console.log('Processing wishlist item:', item);
+            
+            // Handle different property naming formats
+            const type = item.type || (item.placeID ? 'place' : 'activity');
+            const placeId = item.placeID || item.placeId;
+            // Normalize both activityID and activityId casing
+            const activityId = item.activityID || item.activityId;
+            
+            if (type === 'place' && placeId) {
+              this.wishlistPlaces.add(Number(placeId));
+              console.log('Added placeID to wishlist:', placeId);
+            } else if (type === 'activity' && activityId) {
+              this.wishlistActivities.add(Number(activityId));
+              console.log('Added activityID to wishlist:', activityId);
+            }
+          });
+    
+          console.log('Final Wishlist Places:', Array.from(this.wishlistPlaces));
+          console.log('Final Wishlist Activities:', Array.from(this.wishlistActivities));
+          resolve();
+        },
+        error: (error) => {
+          console.error('Error loading wishlist:', error);
+          reject(error);
+        }
+      });
     });
   }
 
   isInWishlist(id: number, type: 'activity' | 'place'): boolean {
-    return this.wishlistItems.has(id);
+    // Ensure id is a number
+    const numericId = Number(id);
+    
+    // Check the appropriate Set based on the item type
+    if (type === 'place') {
+      return this.wishlistPlaces.has(numericId);
+    } else {
+      return this.wishlistActivities.has(numericId);
+    }
   }
-
+  
   toggleWishlist(id: number, type: 'activity' | 'place', event: Event): void {
     event.stopPropagation();
     if (!this.authService.isLoggedIn()) {
       console.log('User not logged in, cannot toggle wishlist');
-      // Optionally show login prompt
+      // You could add a redirect to login page or show a modal here
       return;
     }
-
-    const isInWishlist = this.isInWishlist(id, type);
-    console.log(`Toggling wishlist for ${type} ${id}. Currently in wishlist: ${isInWishlist}`);
-
+  
+    // Ensure id is a number
+    const numericId = Number(id);
+    const isInWishlist = this.isInWishlist(numericId, type);
+    console.log(`Toggling wishlist for ${type} ${numericId}. Currently in wishlist: ${isInWishlist}`);
+  
+    // Optimistically update UI first for better user experience
     if (isInWishlist) {
-      this.wishlistService.removeFromWishlist(id, type).subscribe({
+      if (type === 'place') {
+        this.wishlistPlaces.delete(numericId);
+      } else {
+        this.wishlistActivities.delete(numericId);
+      }
+    } else {
+      if (type === 'place') {
+        this.wishlistPlaces.add(numericId);
+      } else {
+        this.wishlistActivities.add(numericId);
+      }
+    }
+  
+    // Then perform actual API call
+    if (isInWishlist) {
+      this.wishlistService.removeFromWishlist(numericId, type).subscribe({
         next: () => {
-          this.wishlistItems.delete(id);
-          console.log(`Removed ${type} from wishlist:`, id);
+          console.log(`Removed ${type} from wishlist:`, numericId);
         },
         error: (error) => {
           console.error(`Error removing ${type} from wishlist:`, error);
+          // Revert optimistic update on error
+          if (type === 'place') {
+            this.wishlistPlaces.add(numericId);
+          } else {
+            this.wishlistActivities.add(numericId);
+          }
         }
       });
     } else {
-      if (type === 'activity') {
-        this.wishlistService.addActivityToWishlist(id).subscribe({
-          next: () => {
-            this.wishlistItems.add(id);
-            console.log('Added activity to wishlist:', id);
-          },
-          error: (error) => {
-            console.error('Error adding activity to wishlist:', error);
+      const addMethod = type === 'activity' 
+        ? this.wishlistService.addActivityToWishlist.bind(this.wishlistService) 
+        : this.wishlistService.addPlaceToWishlist.bind(this.wishlistService);
+      
+      addMethod(numericId).subscribe({
+        next: () => {
+          console.log(`Added ${type} to wishlist:`, numericId);
+        },
+        error: (error) => {
+          console.error(`Error adding ${type} to wishlist:`, error);
+          // Revert optimistic update on error
+          if (type === 'place') {
+            this.wishlistPlaces.delete(numericId);
+          } else {
+            this.wishlistActivities.delete(numericId);
           }
-        });
-      } else {
-        this.wishlistService.addPlaceToWishlist(id).subscribe({
-          next: () => {
-            this.wishlistItems.add(id);
-            console.log('Added place to wishlist:', id);
-          },
-          error: (error) => {
-            console.error('Error adding place to wishlist:', error);
-          }
-        });
-      }
+        }
+      });
     }
   }
 
@@ -391,7 +504,6 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
     // Round to nearest half (0.5) then floor to get whole number of filled stars
     return Math.floor(Math.round(averageRating * 2) / 2);
   }
-
 
   // Retry loading a specific section with better error handling
   retryLoading(sectionIndex: number): void {
@@ -448,8 +560,10 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
                   type: 'place'
                 };
               } else {
+                // Normalize activity ID
+                const activityId = item.activityId || item.activityID || 0;
                 return {
-                  id: item.activityId || 0,
+                  id: activityId,
                   name: item.name || 'Unnamed Activity',
                   duration: item.duration || 'Duration not specified',
                   imageURLs: this.processImageURLs(item.imageURLs),
