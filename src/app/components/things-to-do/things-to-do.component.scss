@@ -197,24 +197,24 @@ section {
   
         .wishlist-icon {
             position: absolute;
-            top: 15px;
+            top: 20px;
             right: 15px;
             cursor: pointer;
             z-index: 2;
-            padding: 3px;
+            padding: 5px;
             transition: all 0.3s ease;
-    
+      
             &:hover {
-                transform: scale(1.1);
+              transform: scale(1.1);
             }
-    
+      
             .heart-icon {
-                width: 24px;
-                height: 24px;
-                transition: all 0.3s ease;
-                object-fit: contain;
+              width: 24px;
+              height: 24px;
+              transition: all 0.3s ease;
+              object-fit: contain;
             }
-        }
+          }
   
         .card-title {
             font-family: 'Inter', sans-serif;

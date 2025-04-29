@@ -46,11 +46,11 @@
                                 <!-- Wishlist Icon -->
                                 <div class="wishlist-icon" (click)="toggleWishlist(item.id, item.type, $event)">
                                     <img 
-                                        [src]="isInWishlist(item.id, item.type) ? 'assets/icons/heart-red.svg' : 'assets/icons/heart-outline.svg'"
-                                        [alt]="isInWishlist(item.id, item.type) ? 'Remove from wishlist' : 'Add to wishlist'"
-                                        class="heart-icon"
-                                        [class.active]="isInWishlist(item.id, item.type)"
-                                    >
+                                    [src]="isInWishlist(item.id, item.type) ? 'assets/icons/heart-red.svg' : 'assets/icons/heart-outline.svg'"
+                                    [alt]="isInWishlist(item.id, item.type) ? 'Remove from wishlist' : 'Add to wishlist'"
+                                    class="heart-icon"
+                                    [class.active]="isInWishlist(item.id, item.type)"
+                                >
                                 </div>
       
                                 <!-- Item Image -->

@@ -125,15 +125,19 @@ export class AuthService {
     );
   }
 
-  // Reset password
-  resetPassword(data: { email: string; token: string; newPassword: string }): Observable<any> {
-    return this._HttpClient.post(`${this.apiUrl}/api/Accounts/Resetpassword`, data).pipe(
-      catchError(error => {
-        console.error('Reset Password Error:', error);
-        return throwError(() => error);
-      })
-    );
-  }
+// Reset password
+resetPassword(data: { email: string; token: string; newPassword: string }): Observable<any> {
+  console.log('Reset password data:', data); // Add this to debug
+  return this._HttpClient.post(`${this.apiUrl}/api/Accounts/Resetpassword`, data).pipe(
+    tap(response => {
+      console.log('Reset password response:', response);
+    }),
+    catchError(error => {
+      console.error('Reset Password Error:', error);
+      return throwError(() => error);
+    })
+  );
+}
 
   logout() {
     localStorage.removeItem('token');

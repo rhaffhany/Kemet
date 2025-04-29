@@ -38,11 +38,16 @@ body {
 }
 
 // General element styles
-input, label, h2, h6, button, .login-logo, .form-item, .join-us-link, .small-hr, .arrow-left, .alert {
+input, label, h2, h6, p, button, .login-logo, .form-item, .join-us-link, .small-hr, .arrow-left {
   position: relative;
   z-index: 1;
+  color: #000;
 }
-
+.alert{
+  position: relative;
+  z-index: 1;
+  
+}
 input {
   border: 1px solid $input-border-color;
   border-radius: 15px;
@@ -108,7 +113,6 @@ h6 {
   font-size: 12px;
   font-weight: 500;
   line-height: 18px;
-  color: #718096;
   margin: 25px 22px 11px 22px;
 }
 

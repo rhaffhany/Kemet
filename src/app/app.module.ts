@@ -60,8 +60,8 @@ import { ReviewFilterPipe } from './pipe/review-filter.pipe';
 import { PaymentHistoryComponent } from './components/payment-history/payment-history.component';
 import { RecommendedActivitiesComponent } from './components/recommended-activities/recommended-activities.component';
 import { SearchResultsComponent } from './components/search-results/search-results.component';
-import { ToastrModule } from 'ngx-toastr';
 import { PaymentComponent } from './components/payment/payment.component';
+import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
@@ -126,11 +126,9 @@ import { PaymentComponent } from './components/payment/payment.component';
   NgbDatepickerModule,
   MatProgressBarModule,
   ToastModule,
-  DragDropModule
-
-=======
-  ToastrModule.forRoot(),
-  CreditCardDirectivesModule
+  DragDropModule,
+  CreditCardDirectivesModule,
+  ToastrModule.forRoot()
 ],
   providers: [
     MessageService

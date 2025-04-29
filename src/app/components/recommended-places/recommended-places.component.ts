@@ -17,7 +17,7 @@ interface Places {
   ratingsCount?: number;    // You can also add ratingsCount if needed
 }
 @Component({
-  selector: 'app-recommended',
+  selector: 'app-recommended-places',
   templateUrl: './recommended-places.component.html',
   styleUrls: ['./recommended-places.component.scss']
 })
