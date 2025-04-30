@@ -2,6 +2,7 @@ export interface ActivityDetails {
     $id: string
     activityID: number
     name: string
+    categoryName: string
     duration: string
     culturalTips: string
     description: string

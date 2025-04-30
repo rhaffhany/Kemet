@@ -1,199 +1,408 @@
-// Variables
 :root {
-  --main-color: #F5EFE6;
-  --secondary-color: #D0B49F;
-  --accent-color: #FFBD67;
-  --text-primary: #503F25;
-  --text-secondary: #665342;
+  --primary: #1C2541;
+  --secondary: #fac817;
+  --accent: #FFD166;
+  --dark-text: #1C2541;
+  --light-text: #6B7C93;
   --white: #FFFFFF;
-  --black: #333333;
-  --light-gray: #f8f9fa;
-  --rating-color: #FAC817;
+  --shadow: 0 10px 20px rgba(28, 37, 65, 0.08);
+  --transition: all 0.3s ease;
 }
 
-section {
-  background-color: var(--main-color);
-  padding-bottom: 60px;
-}
-
-// Header & Title Styles
-.fw-bolder {
-  color: var(--text-primary);
-}
-
-// Rating Stars
-.rating {
-  display: flex;
-  align-items: center;
-  
-  .rate {
-    margin-right: 2px;
-  }
-}
-
-// Review Link Button
-.review-link {
+// Global Section Title Style
+.section-title {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: var(--primary);
   position: relative;
-  display: inline-block;
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--text-primary);
-  text-decoration: none;
-  padding: 8px 20px;
-  border-radius: 30px;
-  background-color: rgba(80, 63, 37, 0.15);
-  transition: all 0.3s ease-in-out;
-  border: 1px solid transparent;
 
   &::after {
     content: '';
     position: absolute;
-    bottom: 0;
+    bottom: -10px;
     left: 50%;
-    height: 2px;
-    width: 0;
-    background-color: var(--secondary-color);
-    transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
-  }
-
-  &:hover::after {
-    width: 90%;
-    left: 5%;
-  }
-
-  &:hover {
-    background-color: rgba(208, 180, 159, 0.25);
-    color: var(--text-primary);
-    border: 1px solid var(--secondary-color);
-    box-shadow: 0 4px 10px rgba(208, 180, 159, 0.3);
-    transform: translateY(-2px);
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background-color: var(--secondary);
+    border-radius: 3px;
   }
 }
 
-// About Box
-.about {
-  border-radius: 16px;
-  height: fit-content;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease;
-  
-  &:hover {
-    transform: translateY(-5px);
+.place-details-section {
+  padding: 20px;
+  background-color: #ffe4c2;
+  color: var(--dark-text);
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
   }
 
-  h5 {
-    color: var(--text-primary);
-    margin-bottom: 15px;
-    font-weight: 700;
-  }
-  
-  .about-content p {
-    color: var(--text-secondary);
-    margin-bottom: 20px;
-  }
-}
+  .header {
+    padding: 40px 0 20px;
+    position: relative;
 
-.about-items {
-  position: relative;
-  padding-bottom: 15px;
-  margin-bottom: 15px;
-  
-  i {
-    color: var(--secondary-color);
-    font-size: 18px;
-  }
-  
-  p {
-    color: var(--text-secondary);
-  }
-  
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background-color: rgba(0, 0, 0, 0.1);
-  }
-}
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
 
-// Prices Display
-.tourist-prices, .egyptian-prices {
-  margin-bottom: 15px;
-  
-  p {
-    margin-bottom: 5px;
-  }
-}
+    .title-section {
+      flex: 1;
 
-// Image Gallery
-.photos {
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-}
+      .place-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin: 0 0 10px;
+        color: var(--primary);
+      }
 
-.img-lg {
-  height: 450px;
-  object-fit: cover;
-  border-radius: 16px;
-  transition: transform 0.5s ease;
-  
-  &:hover {
-    transform: scale(1.02);
-  }
-}
+      .info {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 20px;
 
-.carousel-thumbnails {
-  padding: 10px 0;
-  
-  .thumbnail-item {
-    cursor: pointer;
-    
-    img {
-      height: 80px;
-      width: 100px;
-      object-fit: cover;
-      border-radius: 8px;
-      transition: all 0.3s ease;
-      border: 2px solid transparent;
-      
-      &:hover {
-        border-color: var(--secondary-color);
-        transform: translateY(-3px);
+        .rating {
+          display: flex;
+          align-items: center;
+
+          .stars {
+            display: flex;
+            color: var(--accent);
+            margin-right: 8px;
+          }
+
+          .rating-number {
+            font-size: 18px;
+            font-weight: 600;
+            margin-right: 5px;
+          }
+
+          .review-count {
+            color: var(--light-text);
+          }
+        }
+
+        .category-badge {
+          background-color: rgba(250, 200, 23, 0.15);
+          color: var(--secondary);
+          padding: 6px 15px;
+          border-radius: 30px;
+          font-weight: 600;
+          font-size: 14px;
+        }
+      }
+    }
+
+    .cta-section {
+      .cta-button {
+        color: var(--white);
+        background-color: #ffbd67;
+        border: 1px solid #ffbd67;
+        padding: 12px 25px;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 16px;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        &:hover {
+          background-color: #ffbd67;
+          transform: translateY(-2px);
+          box-shadow: 0 5px 15px rgba(198, 155, 0, 0.3);
+        }
       }
     }
   }
-}
 
-// Cultural Tips
-.tips-title {
-  color: var(--text-primary);
-  margin-bottom: 20px;
-}
+  .content-grid {
+    display: grid;
+    grid-template-columns: 5fr 3fr;
+    gap: 30px;
+    margin-bottom: 50px;
 
-.tips-container {
-  p {
-    border: 1px solid var(--secondary-color);
-    background-color: var(--white);
-    border-radius: 30px;
-    padding: 8px 20px;
-    margin: 5px;
-    cursor: default;
-    transition: all 0.3s ease;
-    font-weight: 500;
-    
-    &:hover {
-      background-color: var(--secondary-color);
-      color: var(--white);
-      transform: translateY(-3px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    .gallery-section {
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      background: transparent;
+      box-shadow: var(--shadow);
+
+      .img-lg {
+        width: 100%;
+        height: 450px;
+        object-fit: cover;
+      }
+
+      .carousel-thumbnails {
+        display: flex;
+        gap: 10px;
+        padding: 10px 0;
+      }
+      
+      .thumbnail-item {
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+        border-radius: 10px;
+        overflow: hidden;
+        display: flex; /* Added to contain the image properly */
+      }
+      
+      .thumbnail-item img {
+        width: 80px;
+        height: 60px;
+        object-fit: cover;
+        display: block; /* Fixes the empty space issue */
+      }
+      
+      .active-thumbnail {
+        border-color: #FAC817;
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+    }
+
+    .info-section {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+
+      .info-card {
+        background: var(--white);
+        padding: 25px;
+        box-shadow: var(--shadow);
+        border-radius: 25PX;
+
+        .card-header {
+          display: flex;
+          align-items: center;
+          margin-bottom: 15px;
+
+          .icon-circle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background-color: rgba(250, 200, 23, 0.15);
+            border-radius: 50%;
+            margin-right: 12px;
+
+            i {
+              color: var(--secondary);
+              font-size: 16px;
+            }
+          }
+
+          .card-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 0;
+            color: var(--primary);
+          }
+        }
+
+        .about-content {
+          line-height: 1.6;
+          color: var(--light-text);
+          margin-bottom: 20px;
+          
+        }
+
+        .info-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+
+          .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+
+            i {
+              color: var(--secondary);
+              margin-right: 10px;
+              width: 20px;
+            }
+
+            .info-label {
+              font-weight: 600;
+              margin-right: 8px;
+            }
+          }
+        }
+
+        .price-section {
+          margin-top: 15px;
+          border-top: 1px solid #e1e8ed;
+          padding-top: 15px;
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+
+          .price-category {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+
+            .price-icon {
+              font-size: 45px;
+              margin-right: 15px;
+              color: var(--secondary);
+            }
+
+            .price-details {
+              .price-title {
+                font-weight: 500;
+                font-size: 15px;
+                margin: 0 0 5px;
+              }
+
+              .price-item {
+                color: var(--light-text);
+                margin: 0 0 5px;
+              }
+            }
+          }
+        }
+      }
     }
   }
-}
 
-// Reviews Section
+  .tips-section {
+    margin: 50px 0;
+
+    .tips-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+
+      .tip-tag {
+        background-color: var(--white);
+        border-radius: 30px;
+        padding: 10px 20px;
+        font-size: 15px;
+        box-shadow: 0 4px 10px rgba(28, 37, 65, 0.05);
+        transition: var(--transition);
+        border-left: 3px solid var(--secondary);
+
+        &:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 6px 12px rgba(222, 174, 0, 0.15);
+          -webkit-transform: translateY(-3px);
+          -moz-transform: translateY(-3px);
+          -ms-transform: translateY(-3px);
+          -o-transform: translateY(-3px);
+}
+      }
+    }
+  }
+
+  .reviews-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  .featured-reviews {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+  
+    justify-content: center;
+
+  }
+  
+  .review-card {
+    background-color: var(--white);
+    padding: 25px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    border-radius: 25px;
+  
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 24px rgba(28, 37, 65, 0.1);
+    }
+  
+    .reviewer {
+      display: flex;
+      margin-bottom: 15px;
+  
+      .reviewer-image {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 15px;
+        border: 2px solid var(--secondary);
+      }
+  
+      .reviewer-info {
+        display: flex;
+        flex-direction: column;
+  
+        .reviewer-name {
+          font-weight: 600;
+          margin: 0;
+        }
+  
+        .reviewer-location {
+          color: var(--light-text);
+          font-size: 14px;
+          margin: 2px 0 5px;
+        }
+  
+        .reviewer-stars {
+          display: flex;
+          color: var(--accent);
+          font-size: 14px;
+        }
+      }
+    }
+  
+    .review-title {
+      font-weight: 600;
+      margin: 0 0 10px;
+    }
+  
+    .review-text {
+      color: var(--light-text);
+      font-size: 14px;
+      line-height: 1.6;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      -webkit-box-orient: vertical;
+    }
+  
+    .review-info {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+      color: var(--light-text);
+      font-size: 12px;
+  
+      .traveled-with {
+        font-weight: 600;
+        color: var(--dark-text);
+      }
+    }
+  }
+  
+  // Reviews Section
 .reviews, .reviews-avg-box {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
   border-radius: 16px;
@@ -308,18 +517,18 @@ section {
   }
 }
 
-// Rating Bar
+//bar
 .satisfaction-bar {
   width: 100%;
-  background-color: rgba(217, 217, 217, 0.5);
+  background-color: #d9d9d99d;
   border-radius: 30px;
   overflow: hidden;
-  height: 8px;
+  height: 10px;
   margin: 10px auto;
 }
 
 .bar-fill {
-  background-color: var(--accent-color);
+  background-color: #FFBD67;
   height: 100%;
   border-radius: 30px;
   display: flex;
@@ -459,59 +668,4 @@ section {
   }
 }
 
-// Media Queries for Responsiveness
-@media (max-width: 992px) {
-  .about, .photos {
-    margin-bottom: 20px;
-  }
-  
-  .img-lg {
-    height: 350px;
-  }
-  
-  .reviews-box {
-    height: auto;
-    max-height: 450px;
-  }
-}
-
-@media (max-width: 768px) {
-  .img-lg {
-    height: 300px;
-  }
-  
-  .thumbnail-item img {
-    height: 60px;
-    width: 80px;
-  }
-  
-  .reviews-container {
-    max-height: 500px;
-  }
-}
-
-@media (max-width: 576px) {
-  .fw-bolder {
-    font-size: 24px !important;
-  }
-  
-  .review-link {
-    font-size: 16px;
-    padding: 6px 16px;
-  }
-  
-  .img-lg {
-    height: 250px;
-  }
-  
-  .profile-pic {
-    width: 45px;
-    height: 45px;
-  }
-  
-  .filter-reviews button {
-    padding: 4px 12px;
-    font-size: 14px;
-    margin-bottom: 5px;
-  }
 }

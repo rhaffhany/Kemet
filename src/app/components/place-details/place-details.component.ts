@@ -1,16 +1,17 @@
 import { placeDetails } from 'src/app/interfaces/place-details';
 import { ActivityDetails } from 'src/app/interfaces/activity-details';
-import { Component } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DetailsService } from 'src/app/services/details.service';
 import { ProfileService } from 'src/app/services/profile.service';
+declare var bootstrap: any; // Declare bootstrap for carousel
 
 @Component({
   selector: 'app-place-details',
   templateUrl: './place-details.component.html',
   styleUrls: ['./place-details.component.scss']
 })
-export class PlaceDetailsComponent {
+export class PlaceDetailsComponent implements OnInit, AfterViewInit {
 
   profileImg: string = 'assets/img/default-profile.png';
   blackDot:string = "/assets/icons/Ellipse 148.svg";
@@ -28,7 +29,6 @@ export class PlaceDetailsComponent {
   ActivityDetails:ActivityDetails = {} as ActivityDetails;
   activityID:any;
 
-  // Boolean flag to determine if we're showing a place or activity
   isPlace: boolean = true;
 
   culturalTipsArray:[] = [];
@@ -40,52 +40,57 @@ export class PlaceDetailsComponent {
   ratingCounts: { [key: number]: number } = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
   ratingPercents: { [key: number]: number } = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
 
-  // satisfactionRate = 60;
+  carouselInstance: any; // Store carousel instance
 
-  constructor(private _DetailsService:DetailsService, 
-              private _ActivatedRoute:ActivatedRoute, 
-              private _ProfileService:ProfileService ){}
+  constructor(
+    private _DetailsService:DetailsService, 
+    private _ActivatedRoute:ActivatedRoute, 
+    private _ProfileService:ProfileService 
+  ){}
 
   ngOnInit(): void {
-
     this._ActivatedRoute.paramMap.subscribe({
       next:(params)=>{
         this.placeID = params.get('placeID');
         this.activityID = params.get('activityID');
-        
-        // Set isPlace flag based on which ID is available
         this.isPlace = !!this.placeID;
+
+        if (this.placeID) {
+          this._DetailsService.getDetailedPlace(this.placeID).subscribe({
+            next: (response) => {
+              this.placeDetails = response;
+              this.reviewsData = response.reviews?.$values || [];
+              this.filteredReviews = [...this.reviewsData];
+              this.calculateRatingStats();
+
+              setTimeout(() => {
+                this.initCarousel();
+              }, 100);
+            },
+            error: (err) => {
+              console.error('Error fetching place details:', err);
+            },
+          });
+        } 
+        else if (this.activityID) {
+          this._DetailsService.getDetailedActivity(this.activityID).subscribe({
+            next: (response) => {
+              this.ActivityDetails = response;
+              this.reviewsData = response.reviews?.$values || [];
+              this.filteredReviews = [...this.reviewsData];
+              this.calculateRatingStats();
+
+              setTimeout(() => {
+                this.initCarousel();
+              }, 100);
+            },
+            error: (err) => {
+              console.error('Error fetching activity details:', err);
+            },
+          });
+        }
       }
     });
-    
-    // Fetch place details if placeID is available
-    if (this.placeID) {
-      this._DetailsService.getDetailedPlace(this.placeID).subscribe({
-        next: (response) => {
-          this.placeDetails = response;
-          this.reviewsData = response.reviews.$values;
-          this.filteredReviews = [...this.reviewsData];
-          this.calculateRatingStats();
-        },
-        error: (err) => {
-          console.error('Error fetching place details:', err);
-        },
-      });
-    } 
-    // Fetch activity details if activityID is available
-    else if (this.activityID) {
-      this._DetailsService.getDetailedActivity(this.activityID).subscribe({
-        next: (response) => {
-          this.ActivityDetails = response;
-          this.reviewsData = response.reviews?.$values || [];
-          this.filteredReviews = [...this.reviewsData];
-          this.calculateRatingStats();
-        },
-        error: (err) => {
-          console.error('Error fetching activity details:', err);
-        },
-      });
-    }
 
     this._ProfileService.getCurrentUserData().subscribe({
       next:(data)=>{
@@ -104,7 +109,24 @@ export class PlaceDetailsComponent {
     });
   }
 
-  // Calculate rating statistics
+  ngAfterViewInit(): void {
+    // Optional: if you want to init carousel after view init (safer when DOM loads)
+  }
+
+  initCarousel(): void {
+    const carouselElement = document.querySelector('#imageCarousel');
+    if (carouselElement) {
+      this.carouselInstance = bootstrap.Carousel.getInstance(carouselElement) 
+        || new bootstrap.Carousel(carouselElement);
+    }
+  }
+
+  updateLargeImage(index: number): void {
+    if (this.carouselInstance) {
+      this.carouselInstance.to(index);
+    }
+  }
+
   calculateRatingStats(): void {
     this.ratingCounts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
     this.reviewsData.forEach(review => {
@@ -114,7 +136,6 @@ export class PlaceDetailsComponent {
       }
     });
     
-    // Calculate percentages
     const totalReviews = this.reviewsData.length;
     for (let i = 1; i <= 5; i++) {
       this.ratingPercents[i] = totalReviews > 0
@@ -122,7 +143,6 @@ export class PlaceDetailsComponent {
         : 0;
     }
 
-    // Round average rating to 1 decimal place
     if (this.isPlace && this.placeDetails.averageRating) {
       this.placeDetails.averageRating = Math.round(this.placeDetails.averageRating * 10) / 10;
     } else if (!this.isPlace && this.ActivityDetails.averageRating) {
@@ -142,18 +162,7 @@ export class PlaceDetailsComponent {
     }
     return ['/']; 
   }
-  
-  //carsouel
-  updateLargeImage(index: number): void {
-    const largeImage = document.querySelector('.carousel-inner .carousel-item img') as HTMLImageElement;
-    if (this.isPlace) {
-      largeImage.src = this.placeDetails.imageURLs.$values[index];
-    } else {
-      largeImage.src = this.ActivityDetails.imageURLs.$values[index];
-    }
-  }
 
-  //handle pp
   profilePic:string = "/assets/icons/profile-pic.svg"
   uploadProfileImg(event:any){
     const file = event.target.files[0];
@@ -162,7 +171,7 @@ export class PlaceDetailsComponent {
       return;
     }
     const formData:FormData = new FormData();
-    formData.append('ProfileImage',file);
+    formData.append('ProfileImage', file);
 
     this._ProfileService.uploadProfileImg(formData).subscribe({
       next:(response)=>{
@@ -174,9 +183,7 @@ export class PlaceDetailsComponent {
       }
     });
   }
- 
 
-  //reviews filters
   toggleFilterOptions:boolean = false;
 
   sortByMostRecent() {
@@ -193,7 +200,6 @@ export class PlaceDetailsComponent {
     return this.reviewsData = [...this.filteredReviews];
   }
 
-  //search 
   searchText: string = ''; 
   searchResults: any[] = [];
   errorMessage: string = ''; 

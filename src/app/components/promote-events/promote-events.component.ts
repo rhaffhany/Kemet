@@ -11,8 +11,8 @@ export class PromoteEventsComponent implements AfterViewInit, OnDestroy {
   currentIndex: number = 1;
   intervalId: any;
   realImages: string[] = [
-    '/assets/img/grand museum2.jpg',
-    '/assets/img/grand museum3.jpg',
+    'assets/img/grand museum2.jpg',
+    'assets/img/grand museum3.jpg',
   ];
   images: string[] = [];
 
