@@ -31,6 +31,7 @@ export class PackageDetailsBookingComponent implements OnInit{
   profileImg: string = '/assets/img/default-profile.png';
 
 
+  travelAgencyData:any = {};
   travelAgencyID: string = '';
 
   packageDetails:PackageDetails = {} as PackageDetails;
@@ -48,6 +49,14 @@ export class PackageDetailsBookingComponent implements OnInit{
         this._DetailsService.getDetaliedPlan(this.planID).subscribe({
           next: (response)=>{
             this.packageDetails = response;
+
+            this._AgencyService.getTravelAgencyData(response.travelAgencyName).subscribe({
+              next:(res) =>{        
+                this.travelAgencyData = res;
+                this.travelAgencyID = res.travelAgencyId;       
+              }
+            });
+           
             this.packageDetails.averageRating = Math.round(this.packageDetails.averageRating * 10) / 10;
             this.reviewData = this.packageDetails.reviews.$values;
             this.filteredReviews = [...this.reviewData];
@@ -57,11 +66,6 @@ export class PackageDetailsBookingComponent implements OnInit{
       }
     });
 
-    this._AgencyService.getTravelAgencyData('GlobalTravel').subscribe({
-      next:(res) =>{        
-        this.travelAgencyID = res.travelAgencyId;        
-      }
-    })
   }
 
   bookData:any = {};
