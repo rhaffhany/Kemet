@@ -60,7 +60,6 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
   wishlistActivities: Set<number> = new Set();
   
   starRating: number = 0;
-  
   DeployUrl = 'https://kemet-server.runasp.net';
 
   carouselSections: CarouselSection[] = [];
@@ -500,11 +499,25 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getStarRating(averageRating: number): number {
-    // Round to nearest half (0.5) then floor to get whole number of filled stars
-    return Math.floor(Math.round(averageRating * 2) / 2);
+getStarRating(averageRating: number): number[] {
+  if (!averageRating) return [0, 0, 0, 0, 0]; // Default to all empty stars if no rating
+  
+  // Round to nearest half star
+  const roundedRating = Math.round(averageRating * 2) / 2;
+  
+  // Create array representing star values (0 = empty, 1 = half, 2 = full)
+  const stars = [0, 0, 0, 0, 0];
+  
+  for (let i = 0; i < 5; i++) {
+    if (roundedRating >= i + 1) {
+      stars[i] = 2; // Full star
+    } else if (roundedRating >= i + 0.5) {
+      stars[i] = 1; // Half star
+    }
   }
-
+  
+  return stars;
+}
   // Retry loading a specific section with better error handling
   retryLoading(sectionIndex: number): void {
     const section = this.carouselSections[sectionIndex];

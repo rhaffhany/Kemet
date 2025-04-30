@@ -1,15 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ActivityDetails } from 'src/app/interfaces/activity-details';
 import { DetailsService } from 'src/app/services/details.service';
 import { ProfileService } from 'src/app/services/profile.service';
+declare var bootstrap: any; // Add Bootstrap declaration
 
 @Component({
   selector: 'app-activity-details',
   templateUrl: './activity-details.component.html',
   styleUrls: ['./activity-details.component.scss']
 })
-export class ActivityDetailsComponent {
+export class ActivityDetailsComponent implements OnInit, AfterViewInit {
 
   blackDot:string = "/assets/icons/Ellipse 148.svg";
   ticket:string = "/assets/icons/Ticket.svg"
@@ -24,6 +25,7 @@ export class ActivityDetailsComponent {
 
   activityID:any;
   activityDetails: ActivityDetails = {} as ActivityDetails;
+  carouselInstance: any; // Store carousel instance
 
   reviewsData:any[] =[];
   updatedReviewData:any[] = [...this.reviewsData];
@@ -35,7 +37,6 @@ export class ActivityDetailsComponent {
   constructor(private _DetailsService:DetailsService, private _ActivatedRoute:ActivatedRoute, private _ProfileService:ProfileService ){}
 
   ngOnInit(): void {
-
     this._ActivatedRoute.paramMap.subscribe({
       next:(params)=>{
         this.activityID = params.get('activityID');
@@ -66,6 +67,11 @@ export class ActivityDetailsComponent {
           }
 
           this.activityDetails.averageRating = Math.round(this.activityDetails.averageRating * 10) / 10;
+          
+          // Initialize carousel after data is loaded
+          setTimeout(() => {
+            this.initCarousel();
+          }, 100);
         },
         error: (err) => {
           console.error(err);
@@ -87,45 +93,39 @@ export class ActivityDetailsComponent {
       error: (err) => {
         console.error('Error fetching user data:', err);
       },
-
     });
-  
+  }
+
+  ngAfterViewInit(): void {
+    // Initialize carousel after view is initialized
+    setTimeout(() => {
+      this.initCarousel();
+    }, 500);
+  }
+
+  // Initialize Bootstrap carousel
+  initCarousel(): void {
+    const carouselElement = document.getElementById('imageCarousel');
+    if (carouselElement) {
+      this.carouselInstance = new bootstrap.Carousel(carouselElement, {
+        interval: 3000, // Auto rotate every 3 seconds
+        wrap: true,     // Cycle continuously
+        touch: true     // Enable touch swiping on mobile
+      });
+    }
+  }
+
+  // Update large image when clicking on thumbnail
+  updateLargeImage(index: number): void {
+    if (this.carouselInstance) {
+      this.carouselInstance.to(index);
+    }
   }
 
   handleImageError(event: Event): void {
     (event.target as HTMLImageElement).src = this.profileImg;
   }
   
-  // deleteReview(reviewId: number) {
-  //   if (confirm("Are you sure you want to delete this review?")) {
-  //     this._DetailsService.getDetailedActivity(this.activityID).subscribe({
-  //       next: (response) => {
-  //         this.reviewsData = response.reviews.$values[0].activity.reviews.$values;
-  //         this.updatedReviewData = this.reviewsData.filter(
-  //           (review: any) => review.$id !== reviewId
-  //         );
-  //         // const updatedPlace = { ...response, reviews: { $values: this.updatedReviewData } };
-
-  //         console.log("reviews of this place after delete:",this.updatedReviewData);
-  //       },
-  //       error: (err) => {
-  //         console.error(err);
-  //       }
-  //     });
-
-  //     this._DetailsService.getDetailedActivity(this.activityID).subscribe({
-  //       next: () => {
-  //         this.reviewsData = this.updatedReviewData;
-  //         console.log("Review deleted successfully!");
-  //       },
-  //       error: (err) => {
-  //         console.error("Error updating place:", err);
-  //       },
-  //     });
-      
-  //   }
-  // }
-   
   uploadProfileImg(event:any){
     const file = event.target.files[0];
     if (!file) {
@@ -146,12 +146,6 @@ export class ActivityDetailsComponent {
     });
   }
 
-
-  updateLargeImage(index: number): void {
-    const largeImage = document.querySelector('.carousel-inner .carousel-item img') as HTMLImageElement;
-    largeImage.src = this.activityDetails.imageURLs.$values[index];
-  }
-
   carouselOptions = {
     loop: true,
     margin: 10,
@@ -169,24 +163,24 @@ export class ActivityDetailsComponent {
     nav: true
   };
 
-   //reviews filters
-   toggleFilterOptions:boolean = false;
+  //reviews filters
+  toggleFilterOptions:boolean = false;
 
+  sortByMostRecent() {
+    this.reviewsData.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }
 
-   sortByMostRecent() {
-     this.reviewsData.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-   }
- 
-   filterByRating(order: 'high' | 'low') {
-     this.reviewsData.sort((a, b) => {
-       return order === 'high' ? b.rating - a.rating : a.rating - b.rating;
-     });
-   }
-   resetFilters() {
-     return this.reviewsData = [...this.filteredReviews];
-   }
+  filterByRating(order: 'high' | 'low') {
+    this.reviewsData.sort((a, b) => {
+      return order === 'high' ? b.rating - a.rating : a.rating - b.rating;
+    });
+  }
+  
+  resetFilters() {
+    return this.reviewsData = [...this.filteredReviews];
+  }
 
-     //search 
+  //search 
   searchText: string = ''; 
   searchResults: any[] = [];
   errorMessage: string = ''; 
@@ -208,8 +202,4 @@ export class ActivityDetailsComponent {
   
     this.errorMessage = this.searchResults.length === 0 ? 'No results found.' : '';
   }
-
-
- 
-
 }

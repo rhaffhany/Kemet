@@ -6,7 +6,7 @@ import { WishlistService } from 'src/app/services/wishlist.service';
 import { AuthService } from 'src/app/services/auth.service';
 
 interface Activity {
-  activityId: number;  // Ensuring consistent property name
+  activityId: number;  
   name: string;
   imageURLs?: {
     $values: string[];
