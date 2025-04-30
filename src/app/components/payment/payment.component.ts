@@ -1,9 +1,8 @@
-import { AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild  } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild  } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CreditCardValidators } from 'angular-cc-library';
 import { PackageDetails } from 'src/app/interfaces/package-details';
-import { BookingService } from 'src/app/services/booking.service';
 import { DetailsService } from 'src/app/services/details.service';
 import { Stripe, PaymentIntent } from '@stripe/stripe-js';
 import { PaymentService } from 'src/app/services/payment.service';
@@ -20,9 +19,9 @@ export class PaymentComponent implements OnInit, OnDestroy{
   constructor(private _FormBuilder:FormBuilder,
               private _ActivatedRoute:ActivatedRoute,
               private _DetailsService:DetailsService,
-              private _BookingService:BookingService,
               private _PaymentService:PaymentService,
-              private _ToastrService:ToastrService) {}
+              private _ToastrService:ToastrService,
+              private _Router:Router) {}
 
   private stripe: Stripe | null = null;
   cardElement: any;
@@ -44,6 +43,9 @@ export class PaymentComponent implements OnInit, OnDestroy{
   selectedBoard: string = ''; 
   visitorType: string = '';
   isLoading: boolean = true;
+  isPaying: boolean = false; 
+
+
 
   bookData:any;
 
@@ -80,6 +82,7 @@ export class PaymentComponent implements OnInit, OnDestroy{
   }
 
   async pay() {
+    this.isPaying = true;
     this._PaymentService.createPayment(this.bookingId).subscribe({
       next: (response) => {
         const clientSecret = response.clientSecret;
@@ -88,6 +91,7 @@ export class PaymentComponent implements OnInit, OnDestroy{
           { payment_method: { card: this.cardElement } }).then((result) => {
             if (result.error) {
               this._ToastrService.error('Please try again.','Payment confirmation Error!');
+              this.isPaying = false;
             } else if (result.paymentIntent?.status === 'succeeded') {
   
               this._PaymentService.confirmPayment(result.paymentIntent.id).subscribe({
@@ -106,11 +110,14 @@ export class PaymentComponent implements OnInit, OnDestroy{
                   if (response === 'Payment not successful') {
                     this._ToastrService.error('Payment not successful. Please try again.'); 
                   }
-                  
+
+                  this.isPaying = false;
+                  //htt8yar ll payments
+                  this._Router.navigate(['/Package-details',this.planID]);
                 },
                 error: (err) => {
                   this._ToastrService.error('Please try again.','Payment confirmation failed!');
-                  console.log(err);
+                  this.isPaying = false;
                 }
               });
             }
@@ -118,7 +125,7 @@ export class PaymentComponent implements OnInit, OnDestroy{
       },
       error: (error) => {
         this._ToastrService.error('Payment failed!');
-        console.log(error);
+        this.isPaying = false;
       }
     });
   }

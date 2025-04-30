@@ -68,7 +68,7 @@
             <div class="col-md-8">
                 <div class="details bg-white mt-5 p-3">
                     <div class="agency-pp d-flex w-50">
-                        <img [src]="" alt="agency-profile-pic" class="rounded" routerLink="/travelAgency-profile"  style="cursor: pointer;" >
+                        <img [src]=" 'https://kemet-server.runasp.net' +travelAgencyData.profileURl" alt="agency-profile-pic" class="rounded-circle" routerLink="/travelAgency-profile"  style="cursor: pointer;" >
                         <div class="d-block ms-3">
                             <p class="fw-bolder pt-2 mb-1" routerLink="/travelAgency-profile"  style="cursor: pointer;" >{{packageDetails.travelAgencyName}}</p>
                             <p><i class="fa-solid fa-location-dot"></i> <span class="text-muted"> {{packageDetails.travelAgencyAddress}}</span></p>
@@ -214,7 +214,7 @@
                                     
                         <div class="profile-info d-flex justify-content-between">
                             <div class="d-flex">
-                                <img [src]="review.userImageURl || profileImg" class="profile-img rounded-circle" 
+                                <img [src]="profileImg || review.userImageURl" class="profile-img rounded-circle" 
                                     alt="profile-pic" >
                                 <div class="ms-2 d-block">
                                     <p class="fw-bold m-0">{{review.username}}</p>

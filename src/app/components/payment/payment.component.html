@@ -12,7 +12,12 @@
                       <div id="card-element" class="form-control" style="height: 40px; padding-top: 8px;"></div>
                     </div>
           
-                    <button type="submit" class="btn btn-success w-100 mt-4">Checkout</button>
+                    <button type="submit" class="btn btn-success w-100 mt-4" [disabled]="isPaying">
+                        <span *ngIf="!isPaying">Checkout</span>
+                        <div *ngIf="isPaying" class="spinner-border spinner-border-sm text-light" role="status">
+                          <span class="visually-hidden">Processing...</span>
+                        </div>
+                    </button>
                     <p class="text-muted mt-3 text-center" style="font-size: 11px; line-height:14px;">
                       Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our privacy policy.
                     </p>
