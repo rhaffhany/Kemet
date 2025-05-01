@@ -4,14 +4,14 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DetailsService } from 'src/app/services/details.service';
 import { ProfileService } from 'src/app/services/profile.service';
-declare var bootstrap: any; // Declare bootstrap for carousel
+declare var bootstrap: any; 
 
 @Component({
   selector: 'app-place-details',
   templateUrl: './place-details.component.html',
   styleUrls: ['./place-details.component.scss']
 })
-export class PlaceDetailsComponent implements OnInit, AfterViewInit {
+export class PlaceDetailsComponent implements OnInit {
 
   profileImg: string = 'assets/img/default-profile.png';
   blackDot:string = "/assets/icons/Ellipse 148.svg";
@@ -40,7 +40,7 @@ export class PlaceDetailsComponent implements OnInit, AfterViewInit {
   ratingCounts: { [key: number]: number } = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
   ratingPercents: { [key: number]: number } = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
 
-  carouselInstance: any; // Store carousel instance
+  carouselInstance: any; 
 
   constructor(
     private _DetailsService:DetailsService, 
@@ -61,6 +61,8 @@ export class PlaceDetailsComponent implements OnInit, AfterViewInit {
               this.placeDetails = response;
               this.reviewsData = response.reviews?.$values || [];
               this.filteredReviews = [...this.reviewsData];
+
+              
               this.calculateRatingStats();
 
               setTimeout(() => {
@@ -107,10 +109,6 @@ export class PlaceDetailsComponent implements OnInit, AfterViewInit {
         console.error('Error fetching user data:', err);
       },
     });
-  }
-
-  ngAfterViewInit(): void {
-    // Optional: if you want to init carousel after view init (safer when DOM loads)
   }
 
   initCarousel(): void {
