@@ -51,39 +51,39 @@
       <!-- Main Content -->
       <div class="content-grid">
         <!-- Left Column - Gallery -->
-<div class="gallery-section">
-    <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
-      <!-- Large Image Display -->
-      <div class="carousel-inner">
-        <div *ngFor="let imgUrl of activityDetails.imageURLs?.$values; let i = index" 
-             class="carousel-item" [class.active]="i === 0">
-          <img [src]="imgUrl || notFoundImg" class="d-block w-100 img-lg" alt="Activity Image {{i+1}}" style="border-radius: 20px;">
+        <div class="gallery-section">
+            <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+              <!-- Large Image Display -->
+              <div class="carousel-inner">
+                <div *ngFor="let imgUrl of activityDetails.imageURLs?.$values; let i = index" 
+                    class="carousel-item" [class.active]="i === 0">
+                  <img [src]="imgUrl || notFoundImg" class="d-block w-100 img-lg" alt="Activity Image {{i+1}}" style="border-radius: 20px;">
+                </div>
+              </div>
+              
+              <!-- Carousel Controls -->
+              <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#imageCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+          
+              <!-- Thumbnail Carousel (Scrollable) -->
+              <div class="carousel-thumbnails d-flex mt-3" style="overflow-x: auto;">
+                <div *ngFor="let imgUrl of activityDetails.imageURLs?.$values; let i = index" 
+                    class="thumbnail-item" 
+                    (click)="updateLargeImage(i)">
+                  <img [src]="imgUrl || notFoundImg" 
+                      class="img-fluid rounded mb-2" 
+                      style="cursor: pointer; max-width: 80px; margin-right: 10px;" 
+                      alt="Thumbnail {{i+1}}">
+                </div>
+              </div>
+            </div>
         </div>
-      </div>
-      
-      <!-- Carousel Controls -->
-      <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#imageCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
-  
-      <!-- Thumbnail Carousel (Scrollable) -->
-      <div class="carousel-thumbnails d-flex mt-3" style="overflow-x: auto;">
-        <div *ngFor="let imgUrl of activityDetails.imageURLs?.$values; let i = index" 
-             class="thumbnail-item" 
-             (click)="updateLargeImage(i)">
-          <img [src]="imgUrl || notFoundImg" 
-               class="img-fluid rounded mb-2" 
-               style="cursor: pointer; max-width: 80px; margin-right: 10px;" 
-               alt="Thumbnail {{i+1}}">
-        </div>
-      </div>
-    </div>
-  </div>
 
         <!-- Right Column - Info Cards -->
         <div class="info-section">
@@ -114,7 +114,7 @@
             <div class="price-section">
               <!-- Tourist Prices -->
               <div class="price-category">
-                <i class="fa-solid fa-earth-americas pe-3 price-icon"></i>
+                <i class="fa-solid fa-earth-americas pe-3 price-icon me-0"></i>
                 <div class="price-details">
                   <p class="price-title">Tourist</p>  
                   <p class="price-item text-muted">Adult: {{activityDetails.touristAdult | currency:'EGP' }}</p> 

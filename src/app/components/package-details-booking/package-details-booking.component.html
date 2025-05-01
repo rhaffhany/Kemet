@@ -214,7 +214,7 @@
                                     
                         <div class="profile-info d-flex justify-content-between">
                             <div class="d-flex">
-                                <img [src]="profileImg || review.userImageURl" class="profile-img rounded-circle" 
+                                <img [src]="review.userImageURl || profileImg" class="profile-img rounded-circle" 
                                     alt="profile-pic" >
                                 <div class="ms-2 d-block">
                                     <p class="fw-bold m-0">{{review.username}}</p>
