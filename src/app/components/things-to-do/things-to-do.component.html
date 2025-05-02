@@ -6,15 +6,50 @@
     <div class="second-blue-circle"></div>
     <div class="third-purple-circle"></div>
     <img [src]="decoreImagePath" class="decore" alt="decore">
+
     <div class="container vh-100 d-flex justify-content-center align-items-center search">
         <div class="row">
             <div class="header text-center">
                 <h2 style="font-weight: 800; font-size: 35px;">Find Fun Wherever You Go!</h2>
                 <p>Find the Most Beautiful & Historic Places Around Egypt</p>
             </div>
-            <app-search />
+            <app-search/>
         </div>
     </div>
+
+    <div class="container my-5">
+        <div class="rounded-4 p-4">
+            <div class="text-center">
+            <!-- <h3 class="mb-4 text-primary">🌍 Update Your Location</h3> -->
+        
+            <!-- Search Input -->
+            <div class="input-group">
+                <input
+                id="search-box"
+                type="text"
+                class="form-control w-50 mt-5 rounded-pill px-4"
+                placeholder="Search for a location"
+                />
+            </div>
+            <!-- Map Container -->
+            <div
+            #mapContainer
+            class="mx-auto rounded-4 shadow"
+            style="width: 100%; max-width: 700px; height: 450px;"
+            ></div>
+            
+            <!-- Update Button -->
+            <button
+            class="btn btn-primary mt-4 px-5 py-2 rounded-pill fw-semibold"
+            (click)="confirmLocationUpdate()"
+            >
+            ✅ Update Location
+            </button>
+
+            </div>
+        </div>
+    </div>
+
     <div class="things-to-do-container">
         <div *ngFor="let section of carouselSections; let i = index" class="section-wrapper">
             <div class="section-header">
