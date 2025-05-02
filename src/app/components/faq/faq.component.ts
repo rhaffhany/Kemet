@@ -116,4 +116,5 @@ export class FaqComponent {
     this.showChat = false; 
     this.showBlur = this.showAssistant; 
   }
+  
 }

@@ -25,7 +25,7 @@ export class WishlistService {
 
     return this.http.get(`${this.DeployUrl}`, { headers }).pipe(
       tap(response => {
-        console.log('Wishlist response:', response);
+        // console.log('Wishlist response:', response);
       }),
       catchError(this.handleError)
     );
