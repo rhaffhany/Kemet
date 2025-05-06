@@ -99,7 +99,7 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-
+    //For Updating Location
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         const lat = position.coords.latitude;
@@ -137,6 +137,7 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
     });
   }
 
+  // Update Location
   loadMap(lat: number, lng: number): void {
     const loader = new Loader({
       apiKey: 'AIzaSyClrom8fWRRL317MDuWMRdg-cJKg2dr78E',
@@ -227,6 +228,7 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
       error: () => alert('Failed to update location.')
     });
   }
+  //
 
 
   initializeCarouselSections(): void {

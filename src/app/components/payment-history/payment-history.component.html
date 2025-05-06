@@ -1,13 +1,48 @@
-<div class="payment-history-container">
-  <div class="payment-history-header">
-    <div class="header-content">
-      <div class="icon-container">
-        <img [src]="paymentIcon" alt="Payment History" class="payment-history-icon">
+<section>
+
+  <div class="payment-history-container">
+    <div class="payment-history-header">
+      <div class="header-content">
+        <div class="icon-container">
+          <img [src]="paymentIcon" alt="Payment History" class="payment-history-icon">
+        </div>
+        <h1 class="title" style="cursor: pointer;">Payment History</h1>
       </div>
-      <h1 class="title">Payment History</h1>
     </div>
   </div>
-  
 
+  <div class="container pb-5">
+    <div class="row payment-details bg-light shadow rounded-4 p-4 mb-3 justify-content-between" *ngFor="let data of paymentDetails">
+      <div class="col-md-4 d-flex">
+        <!-- <img class="rounded-circle bg-danger me-3" [src]="" alt="" width="90px" height="90px"> -->
+        <div class="hstack">
+          <div>
+            <p class="fw-bold mb-1" style="font-size: 20px;">{{data.planName}}</p>
+            <!-- <p class="mb-1" style="font-size: 14px;">Plan Desc...Lorem ipsum dolor sit amet.</p> -->
+            <p class="text-muted" style="font-size: 13px;">{{data.amount | currency:'£' }}</p>
+          </div>
+        </div>
+      </div>
 
-</div>
+      <div class="col-md-2 d-flex flex-column align-items-end justify-content-between">
+        <div class="status-container">
+          <div class="status-badge d-flex justify-content-end " [ngClass]="'status-' + data.status.toLowerCase()">
+            <span class="status-dot"></span>
+            <span class="status-label">{{ data.status | titlecase }}</span>
+          </div>
+          <button 
+          *ngIf="data.status=== 'Pending'" 
+          class="btn btn-sm btn-outline-warning rounded shadow mt-1 d-flex justify-content-end align-items-center"
+          [routerLink]="(['/payment',data.bookingID,data.trabelAgencyPlanID])">
+          Go to Payment
+          <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+        <small class="text-muted mt-2">{{ data.paymentDate | date:'MMM d, y' }}</small>
+      </div> 
+      
+
+    </div>
+  </div>
+
+</section>

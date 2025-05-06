@@ -25,7 +25,6 @@ export class PackageDetailsBookingComponent implements OnInit{
               private _PaymentService:PaymentService,
               private _Router:Router){}
 
-
   egyptFlag:string= '/assets/img/egyptFlag.png';
   searchIcon:string = "/assets/icons/Search.png";
   profileImg: string = '/assets/img/default-profile.png';
@@ -142,21 +141,10 @@ export class PackageDetailsBookingComponent implements OnInit{
       localStorage.setItem('ReserveDate', res.reserveDate);
       localStorage.setItem('visitorType', res.visitorType);
 
-
-      // Call createPayment after getting bookingID
-      this._PaymentService.createPayment(this.bookingID).subscribe({
-          next: (paymentRes) => {
-            console.log('Client Secret:', paymentRes.clientSecret);
-
-            this._ToastrService.success('Thanks for choosing us. Get ready for your adventure!', res.message);
-            
-            this._Router.navigate(['/payment', this.bookingID, this.planID]);
-            this.resetData();
-          },
-          error: (paymentErr) => {
-            this._ToastrService.error('Failed to create payment. Please try again later.', 'Payment Error');
-          }
-        });
+      this._ToastrService.success('Thanks for choosing us. Get ready for your adventure!', res.message);
+      this._Router.navigate(['/payment', this.bookingID, this.planID]);
+      this.resetData();
+      
       },
       error: (err) => {
         this._ToastrService.error('Failed to book your trip. Please try again later.','Oops! Something went wrong');

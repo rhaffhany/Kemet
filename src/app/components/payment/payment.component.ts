@@ -45,8 +45,6 @@ export class PaymentComponent implements OnInit, OnDestroy{
   isLoading: boolean = true;
   isPaying: boolean = false; 
 
-
-
   bookData:any;
 
   async ngOnInit(){
@@ -94,46 +92,31 @@ export class PaymentComponent implements OnInit, OnDestroy{
               this.isPaying = false;
             } else if (result.paymentIntent?.status === 'succeeded') {
   
-              this._PaymentService.confirmPayment(result.paymentIntent.id).subscribe({
-                next: (response) => {
-                  console.log("Backend response: ",response);
-                  console.log('Payment Intent:', result.paymentIntent);
-                  console.log('Payment Intent ID:', result.paymentIntent.id);
+              console.log("Backend response: ",response);
+              
+              this._ToastrService.success('Payment confirmed successfully!');
+              localStorage.removeItem('bookedPrice');
+              localStorage.removeItem('selectedBoard');
+              localStorage.removeItem('ReserveDate');
+              localStorage.removeItem('visitorType');
 
-                  this._ToastrService.success('Payment confirmed successfully!');
-                  
-                  localStorage.removeItem('bookedPrice');
-                  localStorage.removeItem('selectedBoard');
-                  localStorage.removeItem('ReserveDate');
-                  localStorage.removeItem('visitorType');
+              if (response === 'Payment not successful') {
+                this._ToastrService.error('Payment not successful. Please try again.'); 
+              }
 
-                  if (response === 'Payment not successful') {
-                    this._ToastrService.error('Payment not successful. Please try again.'); 
-                  }
-
-                  this.isPaying = false;
-                  //htt8yar ll payments
-                  this._Router.navigate(['/Package-details',this.planID]);
-                },
-                error: (err) => {
-                  this._ToastrService.error('Please try again.','Payment confirmation failed!');
-                  this.isPaying = false;
-                }
-              });
-            }
+              this.isPaying = false;
+              this._Router.navigate(['/payment-history']);
+            }    
           });
-      },
-      error: (error) => {
-        this._ToastrService.error('Payment failed!');
-        this.isPaying = false;
-      }
+        },error: () =>{
+          this._ToastrService.error('Please try again.','Payment failed!');
+          this.isPaying = false;
+        }
     });
   }
-  
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
   }
 
-  
 }

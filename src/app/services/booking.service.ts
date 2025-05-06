@@ -29,7 +29,13 @@ export class BookingService {
   }
 
   getBookedTrips():Observable<any>{
-    return this._HttpClient.get(`${this.DeployURL}/api/Booking/GetUserBookedTrips`);
+    const token = this._AuthService.getToken();
+    const headers = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+    return this._HttpClient.get(`${this.DeployURL}/api/Booking/GetUserBookedTrips`, headers);
   }
 
 }
