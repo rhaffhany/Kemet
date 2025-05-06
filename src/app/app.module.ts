@@ -62,6 +62,7 @@ import { RecommendedActivitiesComponent } from './components/recommended-activit
 import { SearchResultsComponent } from './components/search-results/search-results.component';
 import { PaymentComponent } from './components/payment/payment.component';
 import { ToastrModule } from 'ngx-toastr';
+import { BookingsComponent } from './components/bookings/bookings.component';
 
 
 @NgModule({
@@ -107,6 +108,7 @@ import { ToastrModule } from 'ngx-toastr';
     RecommendedActivitiesComponent,
     SearchResultsComponent,
     PaymentComponent,
+    BookingsComponent,
 
   ],
   imports: [

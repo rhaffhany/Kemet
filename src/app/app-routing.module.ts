@@ -29,6 +29,7 @@ import { PaymentHistoryComponent } from './components/payment-history/payment-hi
 import { SearchResultsComponent } from './components/search-results/search-results.component';
 
 import { PaymentComponent } from './components/payment/payment.component';
+import { BookingsComponent } from './components/bookings/bookings.component';
 
 const routes: Routes = [
 
@@ -66,7 +67,7 @@ const routes: Routes = [
       { path: 'write-review/place/:placeID', component: ReviewContentComponent, title: 'Review-Place' },
       { path: 'write-review/activity/:activityID', component: ReviewContentComponent, title: 'Review-Activity' },
       { path: 'search-results', component: SearchResultsComponent, title: 'results' },
-      
+      { path: 'booking', component: BookingsComponent, title: 'Bookings' },
     ]
   },
   {

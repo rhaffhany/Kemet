@@ -1,0 +1,48 @@
+<section class="pb-4">
+    <div class="booking-history-container">
+        <div class="booking-history-header">
+        <div class="header-content">
+            <div class="icon-container">
+            <i class="fa-solid fa-cart-plus" style="font-size: 40px;"></i>
+            </div>
+            <h1 class="title" style="cursor: pointer;">Bookings</h1>
+        </div>
+        </div>
+    </div>
+
+    <div class="container pb-5">
+        <div class="row booking-details bg-light shadow rounded-4 p-4 mb-2 justify-content-between" *ngFor="let data of bookingData" [routerLink]="(['/Package-details', data.trabelAgencyPlanID])">
+          <div class="col-md-5 d-flex">
+            <img class="rounded-circle me-3" [src]=" 'https://kemet-server.runasp.net/' + data.travelAgencyPlan.pictureUrl " alt="" width="90px" height="90px">
+            <div class="hstack">
+              <div>
+                <p class="fw-bold mb-1" style="font-size: 20px;">{{data.travelAgencyPlan.planName}} With <span class="text-muted"> {{data.travelAgencyName}}</span></p>
+                <small class="mt-0">{{ data.bookedCategory }} <span class="text-muted">x{{data.numOfPeople}}</span></small>
+                <p class="text-muted mb-0" style="font-size:12px;">{{ data.reserveType }}</p>
+                <!-- <p class="mb-1" style="font-size: 14px;">Plan Desc...Lorem ipsum dolor sit amet.</p> -->
+                <p class="text-muted" style="font-size: 12px;">{{data.bookedPrice | currency:'£' }}</p>
+              </div>
+            </div>
+          </div>
+
+            <div class="col-md-2 d-flex flex-column align-items-end justify-content-between">
+                <div class="status-container">
+                <div class="status-badge d-flex justify-content-end " [ngClass]="'status-' + data.paymentStatus.toLowerCase()">
+                    <span class="status-dot"></span>
+                    <span class="status-label">{{ data.paymentStatus | titlecase }}</span>
+                </div>
+                <button 
+                *ngIf="data.paymentStatus === 'Pending'" 
+                class="btn btn-sm btn-outline-warning rounded shadow mt-1 d-flex justify-content-end align-items-center"
+                [routerLink]="(['/payment',data.id,data.trabelAgencyPlanID])">
+                Go to Payment
+                <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                </div>
+                <small class="text-muted mt-2">{{ data.reserveDate | date:'MMM d, y' }}</small>
+            </div> 
+
+        </div>
+    </div>
+
+</section>

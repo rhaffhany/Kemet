@@ -14,7 +14,7 @@ export class PaymentService {
 
   private DeployUrl = 'https://kemet-server.runasp.net';
 
-  private stripePromise = loadStripe('pk_test_51RD90GQR59iEhpdYwrxhvr3VErtv0iYOSYn4NjhZa21C715Ds612AqtLIGPJKpGQpsBTo9s6uNs6duhKpwt6gbKQ00NxhJWq20');
+  private stripePromise = loadStripe('pk_test_51RKfXWDFSpWxjGAccqQBHkqYho5eeSUWPAAUP1oagJYSnAk6T0fxhUV2u4KvAk1OLxs6WeWv2hIGQZnxypZm7MKh00pbdEmoFk');
 
   createPayment(bookingID: number):Observable<any>{
     const token = this._AuthService.getToken();
@@ -52,7 +52,7 @@ export class PaymentService {
     const headers = new HttpHeaders({
           Authorization: `Bearer ${token}`,
     });
-    return this._HttpClient.get(`${this.DeployUrl}/api/Payment/user-history}`,{headers});
+    return this._HttpClient.get(`${this.DeployUrl}/api/Payment/user-history`,{headers});
   }
 
 }

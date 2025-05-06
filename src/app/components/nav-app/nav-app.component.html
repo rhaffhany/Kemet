@@ -71,9 +71,9 @@
       <div class="menu-card" *ngIf="!isCollapsed">
         <div class="card-body">
           <div role="button" routerLink="/profile" class="menu-item" (click)="closeCollapse()">Profile</div>
-          <div role="button" routerLink="" class="menu-item" (click)="closeCollapse()">Reviews</div>
+          <div role="button" routerLink="/booking" class="menu-item" (click)="closeCollapse()">Bookings</div>
           <div role="button" routerLink="/payment-history" class="menu-item" (click)="closeCollapse()">Payment history</div>
-          <div role="button" routerLink="/settings" class="menu-item" (click)="closeCollapse()">Settings</div>
+          <!-- <div role="button" routerLink="/settings" class="menu-item" (click)="closeCollapse()">Settings</div> -->
           <div role="button" class="menu-item" (click)="logout()">Sign out</div>
         </div>
       </div>
