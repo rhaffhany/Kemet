@@ -60,7 +60,7 @@
 
     <div class="profile-container">
       <div class="profile-trigger" (click)="toggleProfileMenu()">
-        <img [src]="profilePic || userData.profileImageURL" class="profile-pic rounded-circle" alt="profile-pic">
+        <img [src]="profilePic || userData.profileImageURL" class="profile-pic" alt="profile-pic">
       </div>
 
       <div class="overlay" *ngIf="!isCollapsed" (click)="toggleProfileMenu()"></div>
@@ -71,10 +71,8 @@
           <div role="button" routerLink="/payment-history" class="menu-item" (click)="closeCollapse()">Payment history</div>
           <!-- <div role="button" routerLink="/settings" class="menu-item" (click)="closeCollapse()">Settings</div> -->
           <div role="button" class="menu-item" (click)="logout()">Sign out</div>
-
         </div>
       </div>
-
     </div>
   </div>
 </nav>
