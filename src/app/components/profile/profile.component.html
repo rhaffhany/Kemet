@@ -3,10 +3,10 @@
 
     <div class="container">
         <div class="row justify-content-center align-items-center">
-          <div class="col-md-11 p-0 profile-box">
-            <div class="row align-items-center my-md-5 ps-md-2">
+          <div class="col-12 col-md-11 p-0 profile-box">
+            <div class="row align-items-center my-3 my-md-5 ps-md-2">
               <!-- Profile Picture -->
-              <div class="col-md-3 text-center">
+              <div class="col-12 col-md-3 text-center mb-3 mb-md-0">
                 <div class="profile-pic rounded-circle">
                   <img 
                     [src]="profileImg || userData.profileImageURL" 
@@ -17,11 +17,11 @@
               </div>        
       
               <!-- Profile Info -->
-              <div class="col-md-6">
+              <div class="col-12 col-md-6 text-center text-md-start">
                 <div class="profile-info">
                   <h5 class="name fw-bold mb-1">{{ updatedData.firstName }} {{ updatedData.lastName }}</h5>
                   <p class="lead username">{{ user }}{{updatedData.userName}}</p>
-                  <div class="d-flex mt-md-5 info">
+                  <div class="d-flex justify-content-center justify-content-md-start mt-3 mt-md-5 info">
                     <h5 class="fw-bold me-3" >0 Followers</h5>
                     <h5 class="fw-bold">0 Following</h5>
                   </div>
@@ -29,7 +29,7 @@
               </div>
       
               <!-- Edit Profile Button -->
-              <div class="col-md-3 text-md-end text-center px-md-4 mt-md-0 edit-button">
+              <div class="col-12 col-md-3 text-center text-md-end px-md-4 mt-3 mt-md-0 edit-button">
                 <button class="btn btn-outline-dark fw-bold " (click)="toggleEditBox()">
                     Edit profile
                 </button>
@@ -39,10 +39,10 @@
         </div>
       </div>
       
-    <div class="container ">
-        <div class="row justify-content-center ">
+    <div class="container">
+        <div class="row justify-content-center">
              <!-- Information Column -->
-            <div class="col-md-3 me-4 information h-25">
+            <div class="col-12 col-md-3 me-md-4 information h-25 mb-4 mb-md-0">
 
                 <!-- 1 -->
                 <div class="information-items py-5 px-4">
@@ -65,22 +65,32 @@
                 </div>
 
                 <!-- 2 -->
-                <div class="information-items mt-4 py-5 px-5">
-                    <div class="signs d-flex align-items-center justify-content-center ">
-                        <button class="me-2 w-100 btn-main" style="cursor: default;">Traveler</button>
-                        <button class="w-100 btn-main" style="cursor: default;">Adventurer</button>
-                    </div>
-                    <div class="signs mt-2 d-flex align-items-center justify-content-center ">
-                        <button class="me-2 w-100 btn-main" style="cursor: default;">Guided</button>
-                        <button class="w-100 btn-main" style="cursor: default;">Historical</button>
-                    </div>
-                    <div class="signs mt-2  d-flex align-items-center justify-content-center ">
-                        <button class="me-2 w-100 btn-main" style="cursor: default;">Solo</button>
-                        <button class="w-100 btn-main" style="cursor: default;">Flexible</button>
-                    </div>
-                    <div class="signs mt-2  d-flex align-items-center justify-content-center ">
-                        <button class="me-2 w-100 btn-main" style="cursor: default;">Culture</button>
-                        <button class="w-100 btn-main" style="cursor: default;">Fun</button>
+                <div class="information-items mt-4 py-5 px-3 px-md-5">
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <button class="w-100 btn-main" style="cursor: default;">Traveler</button>
+                        </div>
+                        <div class="col-6">
+                            <button class="w-100 btn-main" style="cursor: default;">Adventurer</button>
+                        </div>
+                        <div class="col-6">
+                            <button class="w-100 btn-main" style="cursor: default;">Guided</button>
+                        </div>
+                        <div class="col-6">
+                            <button class="w-100 btn-main" style="cursor: default;">Historical</button>
+                        </div>
+                        <div class="col-6">
+                            <button class="w-100 btn-main" style="cursor: default;">Solo</button>
+                        </div>
+                        <div class="col-6">
+                            <button class="w-100 btn-main" style="cursor: default;">Flexible</button>
+                        </div>
+                        <div class="col-6">
+                            <button class="w-100 btn-main" style="cursor: default;">Culture</button>
+                        </div>
+                        <div class="col-6">
+                            <button class="w-100 btn-main" style="cursor: default;">Fun</button>
+                        </div>
                     </div>
                 </div>   
                 
@@ -128,73 +138,84 @@
             </div>
     
             <!-- Posts Column -->
-            <div class="col-md-8">
+            <div class="col-12 col-md-8">
 
                 <!-- First Post -->
-                <div class="posts d-flex pt-4 px-3 mb-1">
-                    <div class="col-md-1 posts-content">
-                        <div class="content rounded-circle">
-                            <img [src]=" profileImg || userData.profileImageURL " alt="profileImg" (change)="updateCurrentData()" accept="image/*" class="file-input pic" >
+                <div class="posts d-flex pt-4 px-3 mb-4">
+                    <div class="col-2 col-md-1  posts-content">
+                        <div class="content rounded-circle" style="width: 65px; height: 65px; overflow: hidden;">
+                            <img [src]="profileImg || userData.profileImageURL" alt="profileImg" class="w-100 h-100 object-fit-cover" (change)="updateCurrentData()" accept="image/*">
                         </div>
                     </div>
-                    <div class="col-md-10 ms-3 pt-2">
-                        <div class="d-flex">
+                    <div class="col-9 col-md-10 ms-2 ms-md-3 pt-2">
+                        <div class="d-flex flex-wrap align-items-center">
                             <p class="userName pe-1 m-0" style="font-size: 18px; font-weight: 600;">{{userData.firstName}} {{userData.lastName}}</p>
                             <p class="account lead m-0" style="font-size: 16px;">{{user}}{{userData.firstName}}</p>
                             <p class="date lead ps-1 m-0" style="font-size: 16px;">Nov 4</p>
                         </div>
-                        <div class="comments">
-                            <p style="font-weight: 500;">Khan El Khalili is a highly recommended place y’all need to visit.</p>
+                        <div class="comments mt-1">
+                            <p style="font-weight: 500;">Khan El Khalili is a highly recommended place y'all need to visit.</p>
                         </div>
-                        <div class="icons d-flex">
-                            <a href=""><img [src]="chatIcon" alt="chatIcon"></a>
-                            <p class="me-4">130</p>
-                            <a href=""><img [src]="heartIcon" alt="heartIcon"></a>
-                            <p class="me-4">1k</p>
-                            <a href=""><img [src]="sendIcon" alt="sendIcon"></a>
+                        <div class="icons d-flex align-items-center my-2">
+                            <a href="" class="d-flex align-items-center text-decoration-none text-dark">
+                                <img [src]="chatIcon" alt="chatIcon" style="width: 20px; height: 20px;">
+                                <span class="ms-2">130</span>
+                            </a>
+                            <a href="" class="d-flex align-items-center text-decoration-none text-dark ms-4">
+                                <img [src]="heartIcon" alt="heartIcon" style="width: 20px; height: 20px;">
+                                <span class="ms-2">1k</span>
+                            </a>
+                            <a href="" class="d-flex align-items-center text-decoration-none text-dark ms-4">
+                                <img [src]="sendIcon" alt="sendIcon" style="width: 20px; height: 20px;">
+                            </a>
                         </div>
                     </div>
-                    <div class="col-md-1 ps-3">
-                        <a [href]="" class="text-decoration-none text-black" role="button">
-                        <i class="bi bi-three-dots"></i>
+                    <div class="col-1 text-end">
+                        <a [href]="" class="text-decoration-none text-black me-sm-2" role="button">
+                            <i class="bi bi-three-dots"></i>
                         </a>
                     </div>
                 </div>
     
                 <!-- Second Post -->
                 <div class="posts d-flex pt-4 px-3">
-                    <div class="col-md-1 posts-content">
-                        <div class="content rounded-circle">
-                            <img [src]=" profileImg || userData.profileImageURL " alt="profileImg" class="pic" (change)="uploadProfileImg($event)">
+                    <div class="col-2 col-md-1 posts-content">
+                        <div class="content rounded-circle" style="width: 65px; height: 65px; overflow: hidden;">
+                            <img [src]="profileImg || userData.profileImageURL" alt="profileImg" class="w-100 h-100 object-fit-cover" (change)="uploadProfileImg($event)">
                         </div>
                     </div>
-                    <div class="col-12 col-md-10 ms-md-3 pt-2">
-                        <div class="d-flex">
+                    <div class="col-9 col-md-10 ms-2 ms-md-3 pt-2">
+                        <div class="d-flex flex-wrap align-items-center">
                             <p class="userName pe-1 m-0" style="font-size: 18px; font-weight:600;">{{userData.firstName}} {{userData.lastName}}</p>
                             <p class="account lead m-0" style="font-size: 16px;">{{user}}{{userData.firstName}}</p>
                             <p class="date lead ps-1 m-0" style="font-size: 16px;">Nov 5</p>
                         </div>
-                        <div class="comments">
-                            <p style="font-weight: 500;">Art D’egypt was so fun today cant wait for next year.</p>
+                        <div class="comments mt-1">
+                            <p style="font-weight: 500;">Art D'egypt was so fun today cant wait for next year.</p>
                         </div>
-                        <div class="post-pic mb-3">
-                            <img [src]="postImg" alt="postImg">
+                        <div class="post-pic mb-3 mt-2">
+                            <img [src]="postImg" alt="postImg" class="w-100 rounded">
                         </div>
-                        <div class="icons d-flex">
-                            <a href=""><img [src]="chatIcon" alt="chatIcon"></a>
-                            <p class="me-4">200</p>
-                            <a href=""><img [src]="heartIcon" alt="heartIcon"></a>
-                            <p class="me-4">3k</p>
-                            <a href=""><img [src]="sendIcon" alt="sendIcon"></a>
+                        <div class="icons d-flex align-items-center my-2">
+                            <a href="" class="d-flex align-items-center text-decoration-none text-dark">
+                                <img [src]="chatIcon" alt="chatIcon" style="width: 20px; height: 20px;">
+                                <span class="ms-2">200</span>
+                            </a>
+                            <a href="" class="d-flex align-items-center text-decoration-none text-dark ms-4">
+                                <img [src]="heartIcon" alt="heartIcon" style="width: 20px; height: 20px;">
+                                <span class="ms-2">3k</span>
+                            </a>
+                            <a href="" class="d-flex align-items-center text-decoration-none text-dark ms-4">
+                                <img [src]="sendIcon" alt="sendIcon" style="width: 20px; height: 20px;">
+                            </a>
                         </div>
                     </div>
-                    <div class="col-12 col-md-1 ps-3">
-                        <a [href]="" class="text-decoration-none text-black" role="button">
+                    <div class="col-1 text-end">
+                        <a [href]="" class="text-decoration-none text-black me-sm-2" role="button">
                             <i class="bi bi-three-dots"></i>
                         </a>                 
                     </div>
                 </div>
-
 
             </div>
             
@@ -203,7 +224,7 @@
 
     <!-- edit-box -->
     <div class="container-fluid editBoxContainer py-2 pt-1" [class.hidden]="showEditSection">
-        <div class="update-box p-1 mt-4" >
+        <div class="update-box p-1 mt-4">
             
             <div class="row w-100 pt-1">
                 <div class="d-flex justify-content-between p-0 ps-3">
@@ -225,7 +246,7 @@
         
             <div class="row backgroundImgEdit p-2">
                 <div class="blur-wrapper position-relative p-0">
-                    <img [src]="backgroundEdit || userData.backgroundImageURL" alt="background" class="background-image w-100 "  >
+                    <img [src]="backgroundEdit || userData.backgroundImageURL" alt="background" class="background-image w-100" >
                     <div class="blur-overlay position-absolute w-100 h-100"></div>
                     <div class="update-icons d-flex justify-content-evenly align-items-center">
                         <input type="file" #backgroundFileInput (change)="uploadBackgroundImg($event)" hidden>
@@ -235,7 +256,7 @@
                 </div>
             </div>
 
-            <div class="row update-profile-img p-2 ms-5 ">
+            <div class="row update-profile-img p-2 ms-md-5">
                 <div class="blur-wrapper position-relative p-0 w-auto">
                     <img [src]="profileImg || userData.profileImageURL" alt="Profile Image" class="profileImg rounded-circle" >
                     
@@ -250,8 +271,8 @@
             </div>
 
             <div class="container update-data">
-                <div class="row ">
-                    <div class="col col-sm-12">
+                <div class="row">
+                    <div class="col-12">
                         <div class="form-group">
 
                             <div class="form-floating mb-3 d-flex align-items-center position-relative">

@@ -14,6 +14,7 @@ export class AdventureModeComponent {
   // fallbackImage: string = 'assets/logo/logo.png';
 
   name: string = ''; 
+  description: string = '';
   errorMessage: string = '';
   isSpinning: boolean = false;
   disableButton: boolean = false;
@@ -42,6 +43,7 @@ export class AdventureModeComponent {
         console.log(res);
         const imageUrls = res.placeDto.imageURLs?.$values;
         this.name = res.placeDto.name;
+        this.description = res.placeDto.description;
         if (imageUrls && imageUrls.length > 1 && imageUrls[1]) {
           this.logoImage = imageUrls[1];
         } else {

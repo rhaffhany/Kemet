@@ -9,6 +9,7 @@ body, html {
   padding-bottom: 100px;
   overflow-x: hidden;
 }
+
 // Navbar Styles
 .navbar {
   background-color: transparent;
@@ -16,13 +17,18 @@ body, html {
   position: fixed;
   overflow: visible;
   width: 100%;
-  height: 100px;
+  height: auto;
+  min-height: 80px;
   top: 0;
   left: 0;
   z-index: 1000;
   padding-top: 22px;
   padding-bottom: 22px;
   transition: all 0.3s ease-in-out;
+
+  @media (max-width: 991px) {
+    padding: 10px 0;
+  }
 
   &.scrolled {
     background-color: $main-color !important;
@@ -33,27 +39,33 @@ body, html {
     position: absolute;
     width: 100%;
   }
-}
-.regular-navbar {
-  .navbar-nav {
-    .nav-item {
-      margin: 0 0.75rem; 
-    }
-    
-    .nav-link {
-      padding: 0.5rem 0; 
-    }
-  }
-}
-.home-navbar,
-.things-to-do-navbar {
-  height: 100px;
-  padding: 1.5rem 0;
-  transition: all 0.3s ease;
 
-  .navbar-brand {
-    height: 50px;
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+
+    @media (max-width: 991px) {
+      gap: 10px;
+    }
   }
+}
+.navbar-brand {
+  img {
+    width: 130px;
+    height: 60px;
+  }
+}
+
+  .profile-pic {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
 
   .navbar-nav {
     margin: 110px;
@@ -136,6 +148,16 @@ body, html {
   position: relative;
   display: flex;
   align-items: center;
+  flex: 1;
+  max-width: 450px;
+  margin: 0 15px;
+
+  @media (max-width: 991px) {
+    order: 3;
+    max-width: 100%;
+    margin: 10px 0;
+    width: 100%;
+  }
 }
 
 .search-container {
@@ -145,10 +167,14 @@ body, html {
   padding-left: 8px;
   padding-right: 8px;
   height: 50px;
-  width: 450px;
+  width: 100%;
   border-radius: 32px;
   background-color: #f9f9f9;
   transition: box-shadow 0.3s ease-in-out;
+
+  @media (max-width: 991px) {
+    height: 45px;
+  }
 
   &:focus-within {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
@@ -156,8 +182,12 @@ body, html {
 }
 
 .searchIcon {
-  width: 44px;
+  width: 40px;
   margin-right: 10px;
+  
+  @media (max-width: 991px) {
+    width: 20px;
+  }
 }
 
 .search-input {
@@ -165,17 +195,106 @@ body, html {
   border: none;
   outline: none;
   background: transparent;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 400;
-  padding: 18px;
+  padding: 12px;
+
+  @media (max-width: 991px) {
+    font-size: 14px;
+    padding: 10px;
+  }
 }
 
-// Profile Menu
+// Navigation Menu
+.navbar-collapse {
+  @media (max-width: 991px) {
+    position: fixed;
+    top: 80px;
+    left: 0;
+    right: 0;
+    background: $main-color;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease-in-out;
+
+    &.show {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+
+  @media (max-width: 991px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .nav-item {
+    margin: 0 0.75rem;
+
+    @media (max-width: 991px) {
+      margin: 0;
+      width: 100%;
+    }
+  }
+
+  .nav-link {
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    color: black;
+    position: relative;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+
+    @media (max-width: 991px) {
+      display: block;
+      padding: 10px 0;
+      font-size: 18px;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      height: 2px;
+      width: 0%;
+      background-color: $primary-color;
+      transition: width 0.3s ease-in-out;
+    }
+
+    &:hover::after {
+      width: 100%;
+
+      @media (max-width: 991px) {
+        width: 20%;
+      }
+    }
+  }
+}
+
+// Profile Section
 .profile-container {
   position: relative;
   display: inline-block;
   margin-left: 20px;
   z-index: 1001;
+
+  @media (max-width: 991px) {
+    margin-left: 10px;
+  }
 
   .profile-trigger {
     cursor: pointer;
@@ -190,6 +309,11 @@ body, html {
     cursor: pointer;
     border: 1px solid #ccc;
     transition: transform 0.2s ease-in-out;
+
+    @media (max-width: 991px) {
+      width: 30px;
+      height: 30px;
+    }
 
     &:hover {
       transform: scale(1.1);
@@ -212,7 +336,6 @@ body, html {
   top: 50px;
   right: 0;
   width: 180px;
-  height: auto;
   background: white;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   border-radius: 20px;
@@ -221,19 +344,41 @@ body, html {
   z-index: 1002;
   padding: 10px;
   animation: fadeIn 0.2s ease-in-out;
+
+  @media (max-width: 991px) {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    border-radius: 20px 20px 0 0;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+  }
 }
 
 .card-body {
   display: flex;
   flex-direction: column;
 
+  @media (max-width: 991px) {
+    padding: 15px;
+  }
+
   .menu-item {
-    padding: 10px;
+    padding: 12px;
     cursor: pointer;
     transition: background 0.2s;
     color: #333;
     font-size: 14px;
     font-weight: 500;
+
+    @media (max-width: 991px) {
+      padding: 15px;
+      font-size: 16px;
+      text-align: center;
+    }
 
     &:hover {
       border-radius: 20px;
@@ -255,115 +400,92 @@ body, html {
   }
 }
 
-// Search Results Dropdown
+// Search Results
 .search-results-container {
   position: absolute;
   top: 100%;
   left: 0;
-  width: 100%;
-  max-height: 250px;
+  right: 0;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+  max-height: 400px;
   overflow-y: auto;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  padding: 10px;
-  z-index: 1050;
-  display: none;
+  z-index: 1000;
   opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease-in-out;
 
   &.visible {
-    display: block;
     opacity: 1;
+    visibility: visible;
     transform: translateY(0);
+  }
+
+  @media (max-width: 991px) {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-height: 60vh;
+    border-radius: 20px 20px 0 0;
+    margin-top: 0;
   }
 }
 
 .result-item {
   display: flex;
-  align-items: flex-start;
-  padding: 10px;
+  align-items: center;
+  padding: 12px;
+  gap: 12px;
   cursor: pointer;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  transition: background 0.2s ease-in-out;
+  transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-  }
-}
-
-.result-image {
-  width: 50px;
-  height: 50px;
-  margin-right: 15px;
-  min-width: 50px;
-  min-height: 50px;
-  object-fit: cover;
-  object-position: top;
-  border-radius: 8px;
-  display: block;
-}
-primary-color
-.result-details {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.result-name {
-  font-size: 14px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.result-description {
-  font-size: 12px;
-  color: #555;
-  margin: 2px;
-}
-
-.result-category {
-  font-size: 12px;
-  font-weight: 600;
-  margin: 0px;
-  color: #555;
-}
-
-// Responsive Media Queries
-@media (max-width: 992px) {
-  .navbar-collapse {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 20px;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
+    background-color: #f5f5f5;
   }
 
-  .home-navbar,
-  .things-to-do-navbar {
-    height: 70px;
-    padding: 1rem 0;
-  }
-}
-
-@media (max-width: 768px) {
-  .search-wrapper {
-    width: 100%;
-  }
-
-  .search-container {
-    width: 100%;
-  }
-
-  .home-navbar,
-  .things-to-do-navbar {
+  .result-image {
+    width: 60px;
     height: 60px;
-    padding: 0.5rem 0;
+    object-fit: cover;
+    border-radius: 8px;
+  }
 
-    .navbar-brand {
-      height: 40px;
+  .result-details {
+    flex: 1;
+
+    .result-name {
+      margin: 0 0 4px;
+      font-size: 16px;
+      font-weight: 600;
     }
+
+    .result-description {
+      margin: 0 0 4px;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .result-category {
+      margin: 0;
+      font-size: 12px;
+      color: #888;
+    }
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

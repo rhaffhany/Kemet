@@ -275,3 +275,21 @@ section{
     }
   }
   
+@media (max-width: 768px) {
+  .modal-container {
+    width: 90%;
+    max-width: 95vw;
+    padding: 16px 8px;
+    border-radius: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-container {
+    width: 98vw;
+    max-width: 98vw;
+    padding: 8px 2px;
+    border-radius: 10px;
+  }
+}
+  
