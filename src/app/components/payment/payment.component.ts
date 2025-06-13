@@ -72,7 +72,7 @@ export class PaymentComponent implements OnInit, OnDestroy{
       })
     );
 
-    this.bookedPrice = +localStorage.getItem('bookedPrice')!;
+    this.bookedPrice = parseFloat(localStorage.getItem('bookedPrice')!);
     this.selectedBoard = localStorage.getItem('selectedBoard')!;
     this.selectedBookedDate = localStorage.getItem('ReserveDate')!;
     this.visitorType = localStorage.getItem('visitorType')!;
