@@ -15,8 +15,8 @@ export class PaymentHistoryComponent implements OnInit{
   ngOnInit(): void {
     this._PaymentService.getUserPaymentHistory().subscribe({
       next:(res) =>{
-        this.paymentDetails = res.$values;          
-        console.log('payment history:',this.paymentDetails);
+        this.paymentDetails = res.$values;         
+        // console.log('payment history:',this.paymentDetails);
       }
     });
   }

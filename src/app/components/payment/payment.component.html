@@ -1,9 +1,7 @@
-<section class="py-5 vh-100">
-
-    <div class="container p-5 mt-5 ">
-        <div class="payemnt-box mt-5 row shadow rounded">
-
-            <div class="col-md-6 bg-white rounded border border-bottom-0 border-top-0 p-5">
+<section class="py-5 py-md-5 min-vh-100">
+    <div class="container px-3 px-md-5 py-5 py-md-5">
+        <div class="payment-box row g-0 pt-5  rounded">
+            <div class="col-12 col-md-6 bg-white shadow rounded-start p-3 p-md-5">
                 <h2 class="h6 pb-2 border-bottom">Payment</h2>
 
                 <form (ngSubmit)="pay()" novalidate>
@@ -25,16 +23,16 @@
 
             </div>
 
-            <div class="col-md-6 bg-light rounded p-5 text-black" *ngIf="!isLoading">
+            <div class="col-12 col-md-6 bg-light shadow rounded-end p-3 p-md-5 text-black" *ngIf="!isLoading">
                 <h2 class="h6 pb-2 border-bottom">Booking Summary</h2>
-                <div class="booking-info d-flex mt-2 justify-content-between">
-                    <div class="d-flex">
-                        <img [src]="packageDetails.imageURLs" alt="trip-photo" width="70" height="70">
+                <div class="booking-info d-flex flex-column flex-md-row mt-2 justify-content-between">
+                    <div class="d-flex mb-2 mb-md-0">
+                        <img [src]="packageDetails.imageURLs" alt="trip-photo" class="img-fluid" style="width: 70px; height: 70px; object-fit: cover;">
                         <p class="ms-2 col-md-9">{{packageDetails.planName}}: {{packageDetails.description}}</p>
                     </div>
                     <p class="col-md-2">{{bookedPrice | currency:'£'}}</p>
                 </div>
-                <div class="booking-details text-muted mx-auto col-md-8" style="font-size: 13px;">
+                <div class="booking-details text-muted mx-auto col-12 col-md-8" style="font-size: 13px;">
                     <div class="d-flex justify-content-between">
                         <p class="mb-0">{{visitorType}}</p>
                         <p class="mb-0">{{selectedBookedDate | date:'MMM d, y' }}</p>
@@ -50,7 +48,7 @@
                     <p class="col-md-2 fw-bold">{{bookedPrice | currency:'£'}}</p>
                 </div>
             </div>
-            <div *ngIf="isLoading" class="col-md-6 bg-light rounded p-5 text-black text-center hstack justify-content-center">
+            <div *ngIf="isLoading" class="col-12 col-md-6 bg-light rounded-end p-3 p-md-5 text-black text-center hstack justify-content-center">
                 <div class="spinner-border text-success" role="status" style="width: 3rem; height: 3rem;">
                     <span class="visually-hidden">Loading...</span>
                 </div>
@@ -58,5 +56,4 @@
       
         </div>
     </div>
-
 </section>

@@ -19,8 +19,7 @@ export class BookingsComponent implements OnInit{
         this.bookingData = res.$values;
         // this.planDetails = this.bookingData.map(data => data.travelAgencyPlan);
         // console.log(this.planDetails);
-        
-        console.log("Bookings: ",this.bookingData);
+        // console.log("Bookings: ",this.bookingData);
       }
     });
     
