@@ -87,8 +87,7 @@
                 </div>
 
                 <div class="input-group">
-                    <input [(ngModel)]="userInput" class="form-control" placeholder="Type or speak..." 
-                           (keyup.enter)="sendMessage()"/>
+                    <input [(ngModel)]="userInput" class="form-control" placeholder="Type or speak..." />
             
                      <button class="btn" [ngClass]="{'btn-danger recording': isRecording, 'btn-secondary': !isRecording}" 
                            (click)="toggleVoiceInput($event)">

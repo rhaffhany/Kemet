@@ -29,18 +29,14 @@ export class FaqComponent {
   // Click outside detection
   @HostListener('document:click', ['$event'])
   clickOutside(event: Event) {
-    // Check if the clicked element is outside the chat or assistant components
     const clickedInside = this.elementRef.nativeElement.contains(event.target);
     
-    // If click is inside the toggle buttons, we don't want to close
     const isToggleButton = (event.target as HTMLElement).classList.contains('comment') || 
                            (event.target as HTMLElement).classList.contains('mic-icon');
     
-    // Check if click is inside assistant dialog (chat-bot)
     const isInsideAssistantDialog = (event.target as HTMLElement).closest('.chat-bot');
     
     if (!clickedInside && !isToggleButton && !isInsideAssistantDialog && (this.showChat || this.showAssistant)) {
-      // Close everything if clicking outside
       this.closeAll();
     }
   }
@@ -75,9 +71,9 @@ export class FaqComponent {
     this.userInput = '';
   }
 
+
   startVoiceInput() {
-    const recognition = new (window as any).SpeechRecognition || 
-                        (window as any).webkitSpeechRecognition();
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
     recognition.lang = this.sourceLang;
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
@@ -86,23 +82,17 @@ export class FaqComponent {
       const transcript = event.results[0][0].transcript;
       this.userInput = transcript;
       this.sendMessage();
-      this.isRecording = false;
     };
 
     recognition.onerror = (event: any) => {
       console.error('Speech recognition error:', event.error);
-      this.isRecording = false;
-    };
-
-    recognition.onend = () => {
-      this.isRecording = false;
     };
 
     recognition.start();
   }
 
   toggleVoiceInput(event: Event) {
-    event.stopPropagation(); // Prevent the click from bubbling up
+    event.stopPropagation(); 
     
     this.isRecording = !this.isRecording;
   
@@ -112,18 +102,19 @@ export class FaqComponent {
   }
 
   toggleChatBot(event?: Event) {
-    if (event) event.stopPropagation(); // Prevent the click from bubbling up
+    if (event) event.stopPropagation(); 
     
     this.showChat = !this.showChat;
-    this.showAssistant = false; // Close assistant if open
-    this.showBlur = this.showChat; // Show blur if chat is open
+    this.showAssistant = false; 
+    this.showBlur = this.showChat; 
   }
   
   toggleAssistant(event?: Event) {
-    if (event) event.stopPropagation(); // Prevent the click from bubbling up
+    if (event) event.stopPropagation();
     
     this.showAssistant = !this.showAssistant;
-    this.showChat = false; // Close chat if open
-    this.showBlur = this.showAssistant; // Show blur if assistant is open
+    this.showChat = false; 
+    this.showBlur = this.showAssistant; 
   }
+  
 }

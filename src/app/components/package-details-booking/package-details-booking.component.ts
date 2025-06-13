@@ -25,12 +25,12 @@ export class PackageDetailsBookingComponent implements OnInit{
               private _PaymentService:PaymentService,
               private _Router:Router){}
 
-
   egyptFlag:string= '/assets/img/egyptFlag.png';
   searchIcon:string = "/assets/icons/Search.png";
   profileImg: string = '/assets/img/default-profile.png';
 
 
+  travelAgencyData:any = {};
   travelAgencyID: string = '';
 
   packageDetails:PackageDetails = {} as PackageDetails;
@@ -48,6 +48,14 @@ export class PackageDetailsBookingComponent implements OnInit{
         this._DetailsService.getDetaliedPlan(this.planID).subscribe({
           next: (response)=>{
             this.packageDetails = response;
+
+            this._AgencyService.getTravelAgencyData(response.travelAgencyName).subscribe({
+              next:(res) =>{        
+                this.travelAgencyData = res;
+                this.travelAgencyID = res.travelAgencyId;       
+              }
+            });
+           
             this.packageDetails.averageRating = Math.round(this.packageDetails.averageRating * 10) / 10;
             this.reviewData = this.packageDetails.reviews.$values;
             this.filteredReviews = [...this.reviewData];
@@ -57,11 +65,6 @@ export class PackageDetailsBookingComponent implements OnInit{
       }
     });
 
-    this._AgencyService.getTravelAgencyData('GlobalTravel').subscribe({
-      next:(res) =>{        
-        this.travelAgencyID = res.travelAgencyId;        
-      }
-    })
   }
 
   bookData:any = {};
@@ -138,21 +141,10 @@ export class PackageDetailsBookingComponent implements OnInit{
       localStorage.setItem('ReserveDate', res.reserveDate);
       localStorage.setItem('visitorType', res.visitorType);
 
-
-      // Call createPayment after getting bookingID
-      this._PaymentService.createPayment(this.bookingID).subscribe({
-          next: (paymentRes) => {
-            console.log('Client Secret:', paymentRes.clientSecret);
-
-            this._ToastrService.success('Thanks for choosing us. Get ready for your adventure!', res.message);
-            
-            this._Router.navigate(['/payment', this.bookingID, this.planID]);
-            this.resetData();
-          },
-          error: (paymentErr) => {
-            this._ToastrService.error('Failed to create payment. Please try again later.', 'Payment Error');
-          }
-        });
+      this._ToastrService.success('Thanks for choosing us. Get ready for your adventure!', res.message);
+      this._Router.navigate(['/payment', this.bookingID, this.planID]);
+      this.resetData();
+      
       },
       error: (err) => {
         this._ToastrService.error('Failed to book your trip. Please try again later.','Oops! Something went wrong');

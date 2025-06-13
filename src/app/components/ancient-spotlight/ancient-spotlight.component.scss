@@ -1,10 +1,14 @@
 .section-wrapper {
   max-width: 1300px;
+  width: 100%;
   margin: 0 auto;
   position: relative;
+  padding: 0 20px;
+  box-sizing: border-box;
 
   .card {
-    width: 250px;
+    width: 100%;
+    max-width: 250px;
     height: auto;
     min-height: 365.5px;
     border-radius: 15px;
@@ -94,14 +98,12 @@
     .stars {
       display: flex;
       align-items: center;
-
       gap: 5px;
       
       svg {
         width: 37px;
         height: 37px;
       }
-    
     }
   }
 
@@ -110,26 +112,48 @@
     top: 30%;
     cursor: pointer;
     z-index: 10;
-    width: 50px; 
-    height: 50px; 
+    width: 40px;
+    height: 40px;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.1);
+    }
 
     &.left {
-      left: -20px; 
+      left: 0;
     }
 
     &.right {
-      right: -30px; 
+      right: 0;
     }
   }
-  .owl-nav button.owl-prev,
-.owl-nav button.owl-next {
-  cursor: pointer;
-  transition: transform 0.3s ease;
 }
 
-.owl-nav button.owl-prev:active,
-.owl-nav button.owl-next:active {
-  transform: scale(1.2); 
+// Media Queries
+@media screen and (max-width: 768px) {
+  .section-wrapper {
+    padding: 0 35px;
+
+    .nav-button {
+      width: 35px;
+      height: 35px;
+      padding: 6px;
+    }
+  }
 }
 
+// Ensure carousel items are properly spaced
+::ng-deep {
+  .owl-carousel {
+    .owl-stage {
+      display: flex;
+      align-items: center;
+    }
+    
+    .owl-item {
+      display: flex;
+      justify-content: center;
+    }
+  }
 }

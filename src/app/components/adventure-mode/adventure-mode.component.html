@@ -13,7 +13,8 @@
     />
     
     <h2 *ngIf="name" class="result-name mx-1">{{ name }}</h2>
-    <p class="loading-text" [ngClass]="{'visible': isSpinning}">Finding your next adventure...</p>
+    <p *ngIf="name" class="result-description mx-1">{{ description }}</p>
+    <p class="loading-text m-0" [ngClass]="{'visible': isSpinning}">Finding your next adventure...</p>
   </div>
   
   <button 

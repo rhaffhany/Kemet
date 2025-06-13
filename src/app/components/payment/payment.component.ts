@@ -1,9 +1,8 @@
-import { AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild  } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild  } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CreditCardValidators } from 'angular-cc-library';
 import { PackageDetails } from 'src/app/interfaces/package-details';
-import { BookingService } from 'src/app/services/booking.service';
 import { DetailsService } from 'src/app/services/details.service';
 import { Stripe, PaymentIntent } from '@stripe/stripe-js';
 import { PaymentService } from 'src/app/services/payment.service';
@@ -20,9 +19,9 @@ export class PaymentComponent implements OnInit, OnDestroy{
   constructor(private _FormBuilder:FormBuilder,
               private _ActivatedRoute:ActivatedRoute,
               private _DetailsService:DetailsService,
-              private _BookingService:BookingService,
               private _PaymentService:PaymentService,
-              private _ToastrService:ToastrService) {}
+              private _ToastrService:ToastrService,
+              private _Router:Router) {}
 
   private stripe: Stripe | null = null;
   cardElement: any;
@@ -44,6 +43,7 @@ export class PaymentComponent implements OnInit, OnDestroy{
   selectedBoard: string = ''; 
   visitorType: string = '';
   isLoading: boolean = true;
+  isPaying: boolean = false; 
 
   bookData:any;
 
@@ -72,7 +72,7 @@ export class PaymentComponent implements OnInit, OnDestroy{
       })
     );
 
-    this.bookedPrice = +localStorage.getItem('bookedPrice')!;
+    this.bookedPrice = parseFloat(localStorage.getItem('bookedPrice')!);
     this.selectedBoard = localStorage.getItem('selectedBoard')!;
     this.selectedBookedDate = localStorage.getItem('ReserveDate')!;
     this.visitorType = localStorage.getItem('visitorType')!;
@@ -80,6 +80,7 @@ export class PaymentComponent implements OnInit, OnDestroy{
   }
 
   async pay() {
+    this.isPaying = true;
     this._PaymentService.createPayment(this.bookingId).subscribe({
       next: (response) => {
         const clientSecret = response.clientSecret;
@@ -88,45 +89,34 @@ export class PaymentComponent implements OnInit, OnDestroy{
           { payment_method: { card: this.cardElement } }).then((result) => {
             if (result.error) {
               this._ToastrService.error('Please try again.','Payment confirmation Error!');
+              this.isPaying = false;
             } else if (result.paymentIntent?.status === 'succeeded') {
   
-              this._PaymentService.confirmPayment(result.paymentIntent.id).subscribe({
-                next: (response) => {
-                  console.log("Backend response: ",response);
-                  console.log('Payment Intent:', result.paymentIntent);
-                  console.log('Payment Intent ID:', result.paymentIntent.id);
+              console.log("Backend response: ",response);
+              
+              this._ToastrService.success('Payment confirmed successfully!');
+              localStorage.removeItem('bookedPrice');
+              localStorage.removeItem('selectedBoard');
+              localStorage.removeItem('ReserveDate');
+              localStorage.removeItem('visitorType');
 
-                  this._ToastrService.success('Payment confirmed successfully!');
-                  
-                  localStorage.removeItem('bookedPrice');
-                  localStorage.removeItem('selectedBoard');
-                  localStorage.removeItem('ReserveDate');
-                  localStorage.removeItem('visitorType');
+              if (response === 'Payment not successful') {
+                this._ToastrService.error('Payment not successful. Please try again.'); 
+              }
 
-                  if (response === 'Payment not successful') {
-                    this._ToastrService.error('Payment not successful. Please try again.'); 
-                  }
-                  
-                },
-                error: (err) => {
-                  this._ToastrService.error('Please try again.','Payment confirmation failed!');
-                  console.log(err);
-                }
-              });
-            }
+              this.isPaying = false;
+              this._Router.navigate(['/payment-history']);
+            }    
           });
-      },
-      error: (error) => {
-        this._ToastrService.error('Payment failed!');
-        console.log(error);
-      }
+        },error: () =>{
+          this._ToastrService.error('Please try again.','Payment failed!');
+          this.isPaying = false;
+        }
     });
   }
-  
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
   }
 
-  
 }

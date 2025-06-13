@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { CarouselComponent } from 'ngx-owl-carousel-o';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { AuthService } from '../../services/auth.service';
@@ -7,6 +7,8 @@ import { WishlistService } from '../../services/wishlist.service';
 import { catchError, finalize, retry, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Loader } from '@googlemaps/js-api-loader';
+import { UpdateLocationService } from 'src/app/services/update-location.service';
 
 interface CardItem {
   id: number;
@@ -55,7 +57,6 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
   decoreImagePath: string = 'assets/img/Decore.png';
   decoreBlueImagePath: string = 'assets/img/Decore2.png';
   
-  // Store wishlist items as two separate maps for places and activities
   wishlistPlaces: Set<number> = new Set();
   wishlistActivities: Set<number> = new Set();
   
@@ -85,43 +86,153 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
     nav: false
   };
 
+  @ViewChild('mapContainer', { static: false }) mapContainer!: ElementRef;
+  map: any;
+  marker: any;
+  locationData: any;
+  
   constructor(
     private homeService: HomeService,
     private authService: AuthService,
-    private wishlistService: WishlistService
+    private wishlistService: WishlistService,
+    private _UpdateLocationService:UpdateLocationService
   ) {}
 
   ngOnInit(): void {
-    console.log('ThingsToDoComponent initialized');
-    console.log('Using API base URL:', this.DeployUrl);
-    this.initializeCarouselSections();
+    //For Updating Location
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        this.locationData = {
+          latitude: lat,
+          longitude: lng,
+          address: `https://maps.google.com/?q=${lat},${lng}`,
+          locationLink: `https://maps.google.com/?q=${lat},${lng}`
+        };
+
+        this._UpdateLocationService.updateLocation(this.locationData).subscribe();
+
+        this.loadMap(lat, lng);
+      });
+    }
     
+    this.initializeCarouselSections();
     // Load wishlist first, then fetch carousels
     if (this.authService.isLoggedIn()) {
       this.loadWishlistItems().then(() => {
         this.fetchCarouselData();
       }).catch(error => {
-        console.error('Error loading wishlist:', error);
+        // console.error('Error loading wishlist:', error);
         this.fetchCarouselData();
       });
     } else {
       this.fetchCarouselData();
     }
   }
-  
+
+  ngAfterViewInit(): void {
+    this.owlCarousels.changes.subscribe(() => {
+      this.refreshAllCarousels();
+    });
+  }
+
+  // Update Location
+  loadMap(lat: number, lng: number): void {
+    const loader = new Loader({
+      apiKey: 'AIzaSyClrom8fWRRL317MDuWMRdg-cJKg2dr78E',
+      libraries: ['places']
+    });
+
+    loader.load().then(() => {
+      const mapOptions = {
+        center: { lat, lng },
+        zoom: 15
+      };
+
+      this.map = new google.maps.Map(this.mapContainer.nativeElement, mapOptions);
+
+      this.marker = new google.maps.Marker({
+        position: { lat, lng },
+        map: this.map,
+        draggable: true
+      });
+
+      this.marker.addListener('dragend', () => {
+        const newPos = this.marker.getPosition();
+        const newLat = newPos.lat();
+        const newLng = newPos.lng();
+
+        this.locationData = {
+          latitude: newLat,
+          longitude: newLng,
+          address: `https://maps.google.com/?q=${newLat},${newLng}`,
+          locationLink: `https://maps.google.com/?q=${newLat},${newLng}`
+        };
+
+        this._UpdateLocationService.updateLocation(this.locationData).subscribe();
+      });
+
+      this.addSearchBox();
+    });
+  }
+
+  addSearchBox(): void {
+    const input = document.getElementById('search-box') as HTMLInputElement;
+    input.type = 'text';
+    input.placeholder = 'Search for a location';
+    input.style.cssText = 'width: 300px; margin-top: 10px; padding: 6px;';
+
+    this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
+
+    const searchBox = new google.maps.places.SearchBox(input);
+    this.map.addListener('bounds_changed', () => {
+      searchBox.setBounds(this.map.getBounds()!);
+    });
+
+    searchBox.addListener('places_changed', () => {
+      const places = searchBox.getPlaces();
+      if (places && places.length > 0) {
+        const place = places[0];
+        const location = place.geometry!.location!;
+        this.map.setCenter(location);
+        this.marker.setPosition(location);
+
+        this.locationData = {
+          latitude: location.lat(),
+          longitude: location.lng(),
+          address: `https://maps.google.com/?q=${location.lat()},${location.lng()}`,
+          locationLink: `https://maps.google.com/?q=${location.lat()},${location.lng()}`
+        };
+
+        this._UpdateLocationService.updateLocation(this.locationData).subscribe();
+      }
+    });
+  }
+
+  updateLocationData(lat: number, lng: number): void {
+    this.locationData = {
+      latitude: lat,
+      longitude: lng,
+      locationLink: `https://maps.google.com/?q=${lat},${lng}`,
+      address: `https://maps.google.com/?q=${lat},${lng}`
+    };
+  }
+
+  confirmLocationUpdate(): void {
+    this._UpdateLocationService.updateLocation(this.locationData).subscribe({
+      next: (res) =>{
+        console.log("location now:" , this.locationData.address);
+        alert('Location updated successfully!')
+      },
+      error: () => alert('Failed to update location.')
+    });
+  }
+  //
+
+
   initializeCarouselSections(): void {
     this.carouselSections = [
-      {
-        id: 'topAttractions',
-        title: 'Top Attractions Near You',
-        description: 'Discover the most popular attractions in your vicinity',
-        items: [],
-        carouselReady: false,
-        isLoading: true,
-        hasError: false,
-        apiEndpoint: `${this.DeployUrl}/api/Places/TopAttractionsNearMe`,
-        itemType: 'place'
-      },
       {
         id: 'nearbyActivities',
         title: 'Activities Near You',
@@ -132,6 +243,17 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
         hasError: false,
         apiEndpoint: `${this.DeployUrl}/api/Activities/NearbyActivities`,
         itemType: 'activity'
+      },
+      {
+        id: 'topAttractions',
+        title: 'Top Attractions Near You',
+        description: 'Discover the most popular attractions in your vicinity',
+        items: [],
+        carouselReady: false,
+        isLoading: true,
+        hasError: false,
+        apiEndpoint: `${this.DeployUrl}/api/Places/TopAttractionsNearMe`,
+        itemType: 'place'
       },
       {
         id: 'hiddenGemsPlaces',
@@ -180,16 +302,9 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
     ];
     
     // Log all API endpoints for debugging
-    this.carouselSections.forEach(section => {
-      console.log(`Section ${section.id} will use endpoint: ${section.apiEndpoint}`);
-    });
-  }
-  
-  ngAfterViewInit(): void {
-    this.owlCarousels.changes.subscribe(() => {
-      console.log('Carousels updated:', this.owlCarousels.length);
-      this.refreshAllCarousels();
-    });
+    // this.carouselSections.forEach(section => {
+    //   console.log(`Section ${section.id} will use endpoint: ${section.apiEndpoint}`);
+    // });
   }
 
   fetchCarouselData(): void {
@@ -198,13 +313,13 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
       section.hasError = false;
       section.errorMessage = undefined;
       
-      console.log(`Fetching data for section ${section.id} from ${section.apiEndpoint}`);
+      // console.log(`Fetching data for section ${section.id} from ${section.apiEndpoint}`);
       
       this.homeService.getActivities(section.apiEndpoint)
         .pipe(
           retry(2),
           tap(response => {
-            console.log(`Raw API response for ${section.id}:`, response);
+            // console.log(`Raw API response for ${section.id}:`, response);
           }),
           catchError((error: HttpErrorResponse) => {
             console.error(`Error fetching data for section ${section.id}:`, error);
@@ -279,7 +394,6 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // Helper method to safely process imageURLs
   processImageURLs(imageURLs: any): { $values: string[] } {
     const defaultImage = { $values: ['assets/img/default-activity.jpg'] };
     
@@ -322,18 +436,17 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
     }, 200);
   }
 
-  // Convert to Promise-based function to ensure wishlist loads before carousel data
   loadWishlistItems(): Promise<void> {
     return new Promise((resolve, reject) => {
       if (!this.authService.isLoggedIn()) {
-        console.log('User not logged in, skipping wishlist load');
+        // console.log('User not logged in, skipping wishlist load');
         resolve();
         return;
       }
     
       this.wishlistService.getWishlist().subscribe({
         next: (response: any) => {
-          console.log('Raw Wishlist Response:', response);
+          // console.log('Raw Wishlist Response:', response);
           this.wishlistPlaces.clear();
           this.wishlistActivities.clear();
     
@@ -368,11 +481,11 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
             wishlistItems = response.wishlistItems.$values;
           }
           
-          console.log('Processed wishlist items:', wishlistItems);
+          // console.log('Processed wishlist items:', wishlistItems);
           
           // Process each wishlist item and add to the appropriate Set
           wishlistItems.forEach((item: any) => {
-            console.log('Processing wishlist item:', item);
+            // console.log('Processing wishlist item:', item);
             
             // Handle different property naming formats
             const type = item.type || (item.placeID ? 'place' : 'activity');
@@ -382,15 +495,15 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
             
             if (type === 'place' && placeId) {
               this.wishlistPlaces.add(Number(placeId));
-              console.log('Added placeID to wishlist:', placeId);
+              // console.log('Added placeID to wishlist:', placeId);
             } else if (type === 'activity' && activityId) {
               this.wishlistActivities.add(Number(activityId));
-              console.log('Added activityID to wishlist:', activityId);
+              // console.log('Added activityID to wishlist:', activityId);
             }
           });
     
-          console.log('Final Wishlist Places:', Array.from(this.wishlistPlaces));
-          console.log('Final Wishlist Activities:', Array.from(this.wishlistActivities));
+          // console.log('Final Wishlist Places:', Array.from(this.wishlistPlaces));
+          // console.log('Final Wishlist Activities:', Array.from(this.wishlistActivities));
           resolve();
         },
         error: (error) => {
@@ -416,7 +529,7 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
   toggleWishlist(id: number, type: 'activity' | 'place', event: Event): void {
     event.stopPropagation();
     if (!this.authService.isLoggedIn()) {
-      console.log('User not logged in, cannot toggle wishlist');
+      // console.log('User not logged in, cannot toggle wishlist');
       // You could add a redirect to login page or show a modal here
       return;
     }
@@ -424,7 +537,7 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
     // Ensure id is a number
     const numericId = Number(id);
     const isInWishlist = this.isInWishlist(numericId, type);
-    console.log(`Toggling wishlist for ${type} ${numericId}. Currently in wishlist: ${isInWishlist}`);
+    // console.log(`Toggling wishlist for ${type} ${numericId}. Currently in wishlist: ${isInWishlist}`);
   
     // Optimistically update UI first for better user experience
     if (isInWishlist) {
@@ -445,7 +558,7 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
     if (isInWishlist) {
       this.wishlistService.removeFromWishlist(numericId, type).subscribe({
         next: () => {
-          console.log(`Removed ${type} from wishlist:`, numericId);
+          // console.log(`Removed ${type} from wishlist:`, numericId);
         },
         error: (error) => {
           console.error(`Error removing ${type} from wishlist:`, error);
@@ -464,7 +577,7 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
       
       addMethod(numericId).subscribe({
         next: () => {
-          console.log(`Added ${type} to wishlist:`, numericId);
+          // console.log(`Added ${type} to wishlist:`, numericId);
         },
         error: (error) => {
           console.error(`Error adding ${type} to wishlist:`, error);
@@ -499,31 +612,31 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
     }
   }
 
-getStarRating(averageRating: number): number[] {
-  if (!averageRating) return [0, 0, 0, 0, 0]; // Default to all empty stars if no rating
-  
-  // Round to nearest half star
-  const roundedRating = Math.round(averageRating * 2) / 2;
-  
-  // Create array representing star values (0 = empty, 1 = half, 2 = full)
-  const stars = [0, 0, 0, 0, 0];
-  
-  for (let i = 0; i < 5; i++) {
-    if (roundedRating >= i + 1) {
-      stars[i] = 2; // Full star
-    } else if (roundedRating >= i + 0.5) {
-      stars[i] = 1; // Half star
+  getStarRating(averageRating: number): number[] {
+    if (!averageRating) return [0, 0, 0, 0, 0]; // Default to all empty stars if no rating
+    
+    // Round to nearest half star
+    const roundedRating = Math.round(averageRating * 2) / 2;
+    
+    // Create array representing star values (0 = empty, 1 = half, 2 = full)
+    const stars = [0, 0, 0, 0, 0];
+    
+    for (let i = 0; i < 5; i++) {
+      if (roundedRating >= i + 1) {
+        stars[i] = 2; // Full star
+      } else if (roundedRating >= i + 0.5) {
+        stars[i] = 1; // Half star
+      }
     }
+    
+    return stars;
   }
-  
-  return stars;
-}
   // Retry loading a specific section with better error handling
   retryLoading(sectionIndex: number): void {
     const section = this.carouselSections[sectionIndex];
     if (!section) return;
     
-    console.log(`Manually retrying to load section ${section.id}`);
+    // console.log(`Manually retrying to load section ${section.id}`);
     section.isLoading = true;
     section.hasError = false;
     section.errorMessage = undefined;
@@ -531,7 +644,7 @@ getStarRating(averageRating: number): number[] {
     this.homeService.getActivities(section.apiEndpoint)
       .pipe(
         tap(response => {
-          console.log(`Retry: Raw API response for ${section.id}:`, response);
+          // console.log(`Retry: Raw API response for ${section.id}:`, response);
         }),
         catchError(error => {
           console.error(`Retry failed for section ${section.id}:`, error);
@@ -588,7 +701,7 @@ getStarRating(averageRating: number): number[] {
 
             section.carouselReady = true;
             this.refreshCarousel(sectionIndex);
-            console.log(`Retry for section ${section.id} successful with ${section.items.length} items`);
+            // console.log(`Retry for section ${section.id} successful with ${section.items.length} items`);
           } catch (error) {
             console.error(`Error processing retry data for ${section.id}:`, error);
             section.hasError = true;

@@ -1,38 +1,35 @@
 <section class="py-4">
     <div class="container py-5">
-        <div class="row ">
-
-            <div class="col-md-3">
-                <div class="card rounded-2 p-4" style="width: 18rem;">
+        <div class="row g-4">
+            <!-- Card column - will stack on mobile -->
+            <div class="col-12 col-md-4 col-lg-3">
+                <div class="card rounded-2 p-4 w-100">
                     <img *ngIf="isPlaceReview; else activityImage" 
                         [src]="placeDetails.imageURLs.$values[0]" 
-                        class="card-img-top" 
-                        alt="place_pic" 
-                        width="281" 
-                        height="244"
+                        class="card-img-top img-fluid" 
+                        alt="place_pic"
                         [routerLink]="['/places',placeID]"
                         style="cursor: pointer;">
                     <ng-template #activityImage>
                         <img [src]="activityDetails.imageURLs.$values[0]" 
-                             class="card-img-top" 
-                             alt="activity_pic" 
-                             width="281" height="244"
+                             class="card-img-top img-fluid" 
+                             alt="activity_pic"
                              [routerLink]="['/activities',activityID]"
                              style="cursor: pointer;">
                     </ng-template>
 
                     <div class="card-body px-0">
-                      <h5 class="card-text mb-1"*ngIf="isPlaceReview" style="font-size: 20px;">{{placeDetails.name}}</h5>
-                      <h5 class="card-text mb-1"*ngIf="!isPlaceReview" style="font-size: 20px;">{{activityDetails.name}}</h5>
+                      <h5 class="card-text mb-1"*ngIf="isPlaceReview" style="font-size: clamp(16px, 2vw, 20px);">{{placeDetails.name}}</h5>
+                      <h5 class="card-text mb-1"*ngIf="!isPlaceReview" style="font-size: clamp(16px, 2vw, 20px);">{{activityDetails.name}}</h5>
 
-                      <p class="text-muted mb-0" style="font-size: 16px;" *ngIf="isPlaceReview">{{placeDetails.averageRating}} <span class="rate"><i class="fa-solid fa-star"></i></span></p>
-                      <p class="text-muted mb-0" style="font-size: 16px;" *ngIf="!isPlaceReview">{{activityDetails.averageRating}} <span class="rate"><i class="fa-solid fa-star"></i></span></p>
+                      <p class="text-muted mb-0" style="font-size: clamp(14px, 1.5vw, 16px);" *ngIf="isPlaceReview">{{placeDetails.averageRating}} <span class="rate"><i class="fa-solid fa-star"></i></span></p>
+                      <p class="text-muted mb-0" style="font-size: clamp(14px, 1.5vw, 16px);" *ngIf="!isPlaceReview">{{activityDetails.averageRating}} <span class="rate"><i class="fa-solid fa-star"></i></span></p>
                     </div>
                 </div>
-
             </div>
 
-            <div class="col-md-8 offset-1">
+            <!-- Form column -->
+            <div class="col-12 col-md-8 col-lg-9">
                 <!-- Q1 -->
                 <p class="mb-0">How would you rate your experience ?</p>
                 <div class="stars rate">
@@ -58,7 +55,7 @@
                 <p class="mb-1">who did you go ? </p>
                 <!-- <span class="text-muted" style="font-size: 10px;">(optional)</span> -->
                 <div class="chocies">
-                    <button class="selection-btn me-1"
+                    <button class="selection-btn me-1 mb-2"
                     *ngFor="let option of options"
                     [class.selected]="selectedOption === option"
                     (click)="selectOption(option)">
@@ -67,10 +64,10 @@
                 </div>
                 <!-- review -->
                 <p class="mb-1">Write a review</p>
-                <textarea name="review" id="review" class="review w-50 p-2" rows="5" (input)="onReviewChange($event)" [(ngModel)]="reviewText"></textarea>
+                <textarea name="review" id="review" class="review w-100 p-2" rows="5" (input)="onReviewChange($event)" [(ngModel)]="reviewText"></textarea>
                 <!-- title of review -->
                 <p class="mb-1">Title your review</p>
-                <input type="text" class="p-2 w-50" [(ngModel)]="reviewTitle">
+                <input type="text" class="p-2 w-100" [(ngModel)]="reviewTitle">
                 <!-- add photo -->
                 <!-- <p class="mb-1">Add some photos <span class="text-muted" style="font-size: 10px;">(optional)</span></p>
                 <div class="custom-file-upload w-50 p-5">
@@ -84,18 +81,14 @@
                 </div> -->
                 <!-- submit -->
                 <div>
-                    <button class="submit-btn fw-bold w-50 mt-4" type="submit" (click)="submitReview()" [disabled]="!isAdded || loading">
+                    <button class="submit-btn fw-bold w-100 mt-4" type="submit" (click)="submitReview()" [disabled]="!isAdded || loading">
                         <span *ngIf="!loading">Submit</span>
                         <span *ngIf="loading">
                             <i class="spinner-border spinner-border-sm"></i> Loading...
                         </span>
                     </button>
                 </div>
-                
-                
             </div>
-
         </div>
     </div>
-    
 </section>
