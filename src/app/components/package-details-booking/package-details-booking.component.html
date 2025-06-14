@@ -133,7 +133,7 @@
                         <input type="number" id="peopleCount" class="peopleCount form-control" [(ngModel)]="bookData.numOfPeople" name="numOfPeople" min="1" (input)="updateBookedPrice()">
                     </div>
 
-                    <p class="text-center mt-3 mb-0 fw-bold">Total Price: {{ bookedPrice | currency:'EGP' }}</p>
+                    <p class="text-center mt-3 mb-0 fw-bold">Total Price: {{ fullBookedPrice | currency:'EGP' }}</p>
 
                     <div class="d-flex justify-content-end mt-3">
                         <button class="btn book-btn fw-bolder" (click)="bookTrip()">Book</button>

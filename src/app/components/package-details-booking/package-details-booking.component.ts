@@ -74,9 +74,10 @@ export class PackageDetailsBookingComponent implements OnInit{
   selectedUserType: string = 'User'; 
   selectedBoard: string = ''; 
   reserveDate: string = '';
-  numOfPeople: number = 0;
+  numOfPeople:number = 0;
   selectedBookedDate: string = ''; 
   bookedPrice: number = 0;
+  fullBookedPrice:number = 0;
 
   updateNationality(nationality: string): void {
     this.selectedNationality = nationality;
@@ -93,11 +94,13 @@ export class PackageDetailsBookingComponent implements OnInit{
   updateBoard(boardType: string): void {
     this.selectedBoard = boardType;
     this.bookData.selectedBoard = boardType;
+    this.updateBookedPrice();
   }
 
   updateBookedPrice(): void {
     if (!this.packageDetails) return;
   
+    // Calculate base price without board
     if (this.selectedNationality === 'Egyptian') {
       if (this.selectedUserType === 'Adult') {
         this.bookedPrice = this.packageDetails.egyptianAdult;
@@ -112,8 +115,18 @@ export class PackageDetailsBookingComponent implements OnInit{
       }
     }
 
-    this.bookedPrice = this.bookedPrice * this.bookData.numOfPeople;
-    this.bookData.bookedPrice = this.bookedPrice;
+    // Calculate full price including board
+    this.fullBookedPrice = this.bookedPrice * this.bookData.numOfPeople;
+    
+    // Add board price based on selection
+    if (this.selectedBoard === 'Half Board') {
+      this.fullBookedPrice = this.fullBookedPrice + (this.packageDetails.HalfBoardPriceAddition * this.bookData.numOfPeople);
+    } else if (this.selectedBoard === 'Full Board') {
+      this.fullBookedPrice = this.fullBookedPrice + (this.packageDetails.fullBoardPriceAddition * this.bookData.numOfPeople);
+    } else if (this.selectedBoard === 'No Board') {
+      this.fullBookedPrice = this.fullBookedPrice + (0 * this.bookData.numOfPeople);
+    }
+    
   }
   
   bookTrip():void{
@@ -127,20 +140,16 @@ export class PackageDetailsBookingComponent implements OnInit{
     this.bookData.travelAgencyPlanID = this.packageDetails.planId;
     this.bookData.reserveType = this.selectedBoard;
     this.bookData.bookedPrice = this.bookedPrice;
+    this.bookData.selectedNationality = this.selectedNationality;
+    this.bookData.selectedUserType = this.selectedUserType;
 
     this._BookingService.bookTrip(this.bookData).subscribe({
       next: (res) => {
       this.bookingID = res.bookingId;      
       
-      // this._BookingService.bookedPrice.next(this.bookedPrice);
-      // this._BookingService.selectedBoard.next(res.reserveType);
-      // this._BookingService.selectedBookedDate.next(res.reserveDate);
-
-      localStorage.setItem('bookedPrice', this.bookedPrice.toString());
-      localStorage.setItem('selectedBoard', res.reserveType);
-      localStorage.setItem('ReserveDate', res.reserveDate);
-      localStorage.setItem('visitorType', res.visitorType);
-
+      console.log(this.bookData);
+      console.log("booking response",res);
+      
       this._ToastrService.success('Thanks for choosing us. Get ready for your adventure!', res.message);
       this._Router.navigate(['/payment', this.bookingID, this.planID]);
       this.resetData();
@@ -151,7 +160,6 @@ export class PackageDetailsBookingComponent implements OnInit{
         console.error('Booking failed:', err);
       }
     });
-
   }
 
 

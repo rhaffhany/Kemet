@@ -1,4 +1,5 @@
 <section>
+    
     <div class="yellow-circle"></div>
     <div class="purple-circle"></div>
     <div class="blue-circle"></div>
@@ -91,7 +92,7 @@
                                 <!-- Item Image -->
                                 <div role="button" [routerLink]="getRouterLink(item)" class="image-container">
                                     <img 
-                                        [src]="item.imageURLs?.$values?.[0] || 'assets/logo/kemet.png'" 
+                                        [src]="item.imageURLs && item.imageURLs.$values ? item.imageURLs.$values[0] : 'assets/logo/kemet.png'"
                                         [alt]="item.name" 
                                         class="card-image"
                                         loading="lazy"
@@ -102,33 +103,33 @@
                                 <div class="card-content">
                                     <h3 class="card-title">{{ item.name }}</h3>
                                     <p *ngIf="item.duration" class="card-duration">{{ item.duration }}</p>
-                                    
-<!-- Rating Stars -->
-<div class="stars">
-    <ng-container *ngFor="let starValue of getStarRating(item.averageRating)">
-      <!-- Empty star -->
-      <svg *ngIf="starValue === 0" width="16" height="16" viewBox="0 0 24 24" fill="#CCCCCC">
-        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
-      </svg>
-      
-      <!-- Half star - using a clip path approach instead of gradient -->
-      <svg *ngIf="starValue === 1" width="16" height="16" viewBox="0 0 24 24">
-        <!-- Gray background star -->
-        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" 
-              fill="#CCCCCC" />
-        <!-- Gold half star (left half only) -->
-        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" 
-              fill="#FFD700"
-              [attr.clip-path]="'polygon(0 0, 50% 0, 50% 100%, 0 100%)'" />
-      </svg>
-      
-      <!-- Full star -->
-      <svg *ngIf="starValue === 2" width="16" height="16" viewBox="0 0 24 24" fill="#FFD700">
-        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
-      </svg>
-    </ng-container>
-  </div>
+                                    <!-- Rating Stars -->
+                                    <div class="stars">
+                                        <ng-container *ngFor="let starValue of getStarRating(item.averageRating)">
+                                        <!-- Empty star -->
+                                        <svg *ngIf="starValue === 0" width="16" height="16" viewBox="0 0 24 24" fill="#CCCCCC">
+                                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                                        </svg>
+                                        
+                                        <!-- Half star - using a clip path approach instead of gradient -->
+                                        <svg *ngIf="starValue === 1" width="16" height="16" viewBox="0 0 24 24">
+                                            <!-- Gray background star -->
+                                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" 
+                                                fill="#CCCCCC" />
+                                            <!-- Gold half star (left half only) -->
+                                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" 
+                                                fill="#FFD700"
+                                                [attr.clip-path]="'polygon(0 0, 50% 0, 50% 100%, 0 100%)'" />
+                                        </svg>
+                                        
+                                        <!-- Full star -->
+                                        <svg *ngIf="starValue === 2" width="16" height="16" viewBox="0 0 24 24" fill="#FFD700">
+                                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                                        </svg>
+                                        </ng-container>
+                                    </div>
                                 </div>
+
                             </div>
                         </ng-template>
                     </ng-container>
@@ -150,12 +151,15 @@
                         (click)="onNext(i)"
                         alt="Next">
                 </div>
+
             </div>
       
             <!-- Empty state -->
             <div *ngIf="section.carouselReady && !section.isLoading && !section.hasError && section.items?.length === 0" class="empty-state text-center">
                 <p>No items found for this section.</p>
             </div>
+
         </div>
     </div>
+
 </section>

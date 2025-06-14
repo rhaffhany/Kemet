@@ -8,6 +8,7 @@ import { Stripe, PaymentIntent } from '@stripe/stripe-js';
 import { PaymentService } from 'src/app/services/payment.service';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
+import { BookingService } from 'src/app/services/booking.service';
 
 
 @Component({
@@ -21,13 +22,12 @@ export class PaymentComponent implements OnInit, OnDestroy{
               private _DetailsService:DetailsService,
               private _PaymentService:PaymentService,
               private _ToastrService:ToastrService,
+              private _BookingService:BookingService,
               private _Router:Router) {}
 
   private stripe: Stripe | null = null;
   cardElement: any;
   subscriptions: Subscription = new Subscription();
-
-  bookingId: number = 0;
   
   paymentForm: FormGroup = this._FormBuilder.group({
     cardNumber: ['', [CreditCardValidators.validateCCNumber]],
@@ -38,18 +38,21 @@ export class PaymentComponent implements OnInit, OnDestroy{
   packageDetails:PackageDetails = {} as PackageDetails;
   planID:any;
 
+  bookingData:any = {};
+  bookingID:any;
+
   bookedPrice:number = 0;
   selectedBookedDate: string = ''; 
   selectedBoard: string = ''; 
   visitorType: string = '';
+  numOfPeople:number = 0;
   isLoading: boolean = true;
   isPaying: boolean = false; 
 
-  bookData:any;
 
   async ngOnInit(){
     // payment
-    this.bookingId = +this._ActivatedRoute.snapshot.paramMap.get('bookingID')!;
+    this.bookingID = +this._ActivatedRoute.snapshot.paramMap.get('bookingID')!;
     this.stripe = await this._PaymentService.getStripe();
 
     const elements = this.stripe?.elements();
@@ -72,16 +75,32 @@ export class PaymentComponent implements OnInit, OnDestroy{
       })
     );
 
-    this.bookedPrice = parseFloat(localStorage.getItem('bookedPrice')!);
-    this.selectedBoard = localStorage.getItem('selectedBoard')!;
-    this.selectedBookedDate = localStorage.getItem('ReserveDate')!;
-    this.visitorType = localStorage.getItem('visitorType')!;
+    
+    this.subscriptions.add(
+      this._ActivatedRoute.paramMap.subscribe({
+        next: (params) => {
+          this.bookingID = params.get('bookingID')!;
+          this._BookingService.getBookedTripByID(this.bookingID).subscribe({
+            next: (response)=>{  
+              this.bookingData = response;
+              this.bookingID = response.id;
+              this.bookedPrice = response.fullBookedPrice;
+              this.selectedBookedDate = response.reserveDate;
+              this.selectedBoard = response.reserveType;
+              this.visitorType = response.bookedCategory;  
+              this.numOfPeople = response.numOfPeople;
+              this.isLoading = false; 
+            }
+          });
+        }
+      })
+    );
 
   }
 
   async pay() {
     this.isPaying = true;
-    this._PaymentService.createPayment(this.bookingId).subscribe({
+    this._PaymentService.createPayment(this.bookingID).subscribe({
       next: (response) => {
         const clientSecret = response.clientSecret;
         
@@ -92,13 +111,9 @@ export class PaymentComponent implements OnInit, OnDestroy{
               this.isPaying = false;
             } else if (result.paymentIntent?.status === 'succeeded') {
   
-              console.log("Backend response: ",response);
+              // console.log("Backend response: ",response);
               
               this._ToastrService.success('Payment confirmed successfully!');
-              localStorage.removeItem('bookedPrice');
-              localStorage.removeItem('selectedBoard');
-              localStorage.removeItem('ReserveDate');
-              localStorage.removeItem('visitorType');
 
               if (response === 'Payment not successful') {
                 this._ToastrService.error('Payment not successful. Please try again.'); 
