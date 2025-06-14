@@ -38,4 +38,14 @@ export class BookingService {
     return this._HttpClient.get(`${this.DeployURL}/api/Booking/GetUserBookedTrips`, headers);
   }
 
+  getBookedTripByID(bookingID:any):Observable<any>{
+    const token = this._AuthService.getToken();
+    const headers = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+    return this._HttpClient.get(`${this.DeployURL}/api/booking/GetBookedTrip?id=${bookingID}`, headers);
+  }
+
 }
