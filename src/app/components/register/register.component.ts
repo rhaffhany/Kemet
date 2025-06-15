@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { ModalService } from './../../services/modal.service';
 import { Observable } from 'rxjs';
+import { InterestsService } from 'src/app/services/interests.service';
 
 @Component({
   selector: 'app-register',
@@ -28,7 +29,8 @@ export class RegisterComponent implements OnInit {
     private fb: FormBuilder,
     private _AuthService: AuthService,
     private _Router: Router,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private interestsService: InterestsService
   ) {}
   ngOnInit() {
     this.initForms(); // Call the initForms method
@@ -113,9 +115,8 @@ export class RegisterComponent implements OnInit {
         if (response?.token) {
           this.successMsg = 'Registration successful!';
           this.modalService.closeAllModals();
-          this._Router.navigate(['/home']).then(() => {
-            window.location.reload();
-          });
+          this.interestsService.showInterestsForm();
+          this._Router.navigate(['/home']);
         }
       } catch (error: any) {
         // Handle specific error cases

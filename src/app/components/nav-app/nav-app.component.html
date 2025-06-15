@@ -3,10 +3,15 @@
      [class.things-to-do-navbar]="isThingsToDoPage"
      [class.regular-navbar]="!isHomePage && !isThingsToDoPage"
      [class.search-result-navbar]="isSearchResultPage"
+     [class.package-navbar]="isPackagePage"
+     [class.agency-navbar]="isAgencyPage"
+     [class.payment-navbar]="isPaymentPage"
      [class.scrolled]="isScrolled">
   <div class="container">
     <div>
-      <a class="navbar-brand" routerLink="/home"><img [src]="logo" alt="logo"></a>
+      <a class="navbar-brand" routerLink="/home">
+        <img [src]="logo" alt="logo">
+      </a>
     </div>
 
     <div class="search-wrapper" *ngIf="showSearchBar">
@@ -18,9 +23,8 @@
           (input)="onSearchInput()"
           (focus)="activateSearch()"
           (blur)="deactivateSearch()"
-     (keydown.enter)="submitSearch()"
-
-          placeholder="Search...">
+          (keydown.enter)="submitSearch()"
+          placeholder="Search places, activities...">
         <img [src]="searchIcon" alt="searchIcon" class="searchIcon">
       </div>
 
@@ -38,45 +42,104 @@
       </div>
     </div>
     
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" 
+            [attr.aria-expanded]="mobileMenuOpen" 
+            aria-label="Toggle navigation"
+            (click)="toggleMobileMenu()">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarNav">
+    <div class="collapse navbar-collapse" [class.show]="mobileMenuOpen" id="navbarNav">
+      <!-- Mobile Menu Panel -->
       <ul class="navbar-nav">
+        <!-- Mobile Menu Header (only visible on mobile) -->
+        <li class="mobile-menu-header d-lg-none">
+          <img [src]="logo" alt="logo" class="mobile-logo">
+          <button class="mobile-close-btn" (click)="closeMobileMenu()" aria-label="Close menu">
+            ×
+          </button>
+        </li>
+
+        <!-- Main Navigation Section -->
+        <div class="mobile-nav-section d-lg-none"></div>
+        
         <li class="nav-item">
-          <a class="nav-link" routerLink="/home" routerLinkActive="active-link">Home</a>
+          <a class="nav-link" routerLink="/home" routerLinkActive="active-link" (click)="closeMobileMenu()">
+            Home
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/thingstodo" routerLinkActive="active-link">Things to do</a>
+          <a class="nav-link" routerLink="/thingstodo" routerLinkActive="active-link" (click)="closeMobileMenu()">
+            Things to do
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/adventureMode" routerLinkActive="active-link">Adventure mode</a>
+          <a class="nav-link" routerLink="/adventureMode" routerLinkActive="active-link" (click)="closeMobileMenu()">
+            Adventure mode
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/plan" routerLinkActive="active-link">Plan</a>
+          <a class="nav-link" routerLink="/plan" routerLinkActive="active-link" (click)="closeMobileMenu()">
+            Plan
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/wishlist" routerLinkActive="active-link">Wishlist</a>
+          <a class="nav-link" routerLink="/wishlist" routerLinkActive="active-link" (click)="closeMobileMenu()">
+            Wishlist
+          </a>
+        </li>
+        
+        <!-- Desktop Profile Dropdown -->
+        <li class="nav-item dropdown d-none d-lg-block profile-dropdown-item">
+          <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" 
+             data-bs-toggle="dropdown" aria-expanded="false">
+            <img [src]="profilePic || userData.profileImageURL" 
+                 class="profile-pic-inline rounded-circle" 
+                 alt="profile-pic">
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="profileDropdown">
+            <li><a class="dropdown-item" routerLink="/profile">My Profile</a></li>
+            <li><a class="dropdown-item" routerLink="/booking">Bookings</a></li>
+            <li><a class="dropdown-item" routerLink="/payment-history">Payment History</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#" (click)="logout()">Sign Out</a></li>
+          </ul>
+        </li>
+        
+        <!-- Mobile Profile Section -->
+        <li class="nav-item mobile-profile-section d-lg-none">
+          <div class="profile-header" (click)="goToProfile()">
+            <img [src]="profilePic || userData.profileImageURL" 
+                 class="profile-pic-mobile rounded-circle" 
+                 alt="profile-pic">
+            <div class="profile-info">
+              <div class="profile-name">{{ userDisplayName }}</div>
+              <div class="profile-status">Manage your account</div>
+            </div>
+          </div>
+          
+          <a class="mobile-profile-link" routerLink="/booking" routerLinkActive="active-link" (click)="closeMobileMenu()">
+            <i class="fas fa-calendar-check profile-icon"></i>
+            Bookings
+          </a>
+          
+          <a class="mobile-profile-link" routerLink="/payment-history" routerLinkActive="active-link" (click)="closeMobileMenu()">
+            <i class="fas fa-credit-card profile-icon"></i>
+            Payment History
+          </a>
+          
+          <a class="mobile-profile-link logout-link" href="#" (click)="logout(); closeMobileMenu()">
+            <i class="fas fa-sign-out-alt profile-icon"></i>
+            Sign Out
+          </a>
         </li>
       </ul>
     </div>
 
-    <div class="profile-container">
-      <div class="profile-trigger" (click)="toggleProfileMenu()">
-        <img [src]="profilePic || userData.profileImageURL" class="profile-pic rounded-circle" alt="profile-pic">
-      </div>
-      <div class="overlay" *ngIf="!isCollapsed" (click)="toggleProfileMenu()"></div>
-      <div class="menu-card" *ngIf="!isCollapsed">
-        <div class="card-body">
-          <div role="button" routerLink="/profile" class="menu-item" (click)="closeCollapse()">Profile</div>
-          <div role="button" routerLink="/booking" class="menu-item" (click)="closeCollapse()">Bookings</div>
-          <div role="button" routerLink="/payment-history" class="menu-item" (click)="closeCollapse()">Payment history</div>
-          <!-- <div role="button" routerLink="/settings" class="menu-item" (click)="closeCollapse()">Settings</div> -->
-          <div role="button" class="menu-item" (click)="logout()">Sign out</div>
-        </div>
-      </div>
+    <!-- Mobile Menu Backdrop -->
+    <div class="mobile-menu-backdrop d-lg-none" 
+         [class.show]="mobileMenuOpen" 
+         (click)="closeMobileMenu()">
     </div>
   </div>
 </nav>

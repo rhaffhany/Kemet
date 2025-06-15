@@ -125,21 +125,45 @@ export class RecommendedActivitiesComponent implements OnInit {
 
   customOptions: OwlOptions = {
     loop: true,
-    margin: -70,
-    nav: false,
+    mouseDrag: true,
+    touchDrag: true,
+    pullDrag: false,
     dots: false,
+    navSpeed: 700,
+    center: false,
+    items: 5,
+    autoWidth: true, // Allow cards to use their CSS-defined width
+    nav: false,
+    margin: 0,
     autoplay: true,
-    autoplayTimeout: 3000,
-    autoplayHoverPause: false,
+    autoplayTimeout: 5000,
+    autoplayHoverPause: true,
+    slideBy: 5,
     responsive: {
       0: {
-        items: 1.2
+        items: 2,
+        slideBy: 2,
+        margin: 0
+      },
+      480: {
+        items: 2,
+        slideBy: 2,
+        margin: 0
       },
       768: {
-        items: 3
+        items: 3,
+        slideBy: 2,
+        margin: 0
       },
-      1024: {
-        items: 4
+      992: {
+        items: 4,
+        slideBy: 3,
+        margin: 0
+      },
+      1200: {
+        items: 5,
+        slideBy: 5,
+        margin: 0
       }
     }
   };

@@ -56,4 +56,27 @@ export class FooterComponent implements OnInit {
   navigateToPlan(): void {
     this.router.navigate(['/plan']);
   }
+
+  openSocialMedia(platform: string): void {
+    let url = '';
+    
+    switch (platform) {
+      case 'facebook':
+        url = 'https://www.facebook.com/kemeteg';
+        break;
+      case 'instagram':
+        url = 'https://www.instagram.com/_kemeteg/';
+        break;
+      case 'twitter':
+        url = 'https://twitter.com/kemeteg';
+        break;
+      case 'tiktok':
+        url = 'https://www.tiktok.com/@kemeteg'; 
+        break;
+      default:
+        return;
+    }
+    
+    window.open(url, '_blank');
+  }
 }

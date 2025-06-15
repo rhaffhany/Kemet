@@ -134,27 +134,45 @@ export class NewAdventureComponent implements OnInit {
 
   customOptions: OwlOptions = {
     loop: true,
-    margin: -15, 
-    nav: false,
+    mouseDrag: true,
+    touchDrag: true,
+    pullDrag: false,
     dots: false,
+    navSpeed: 700,
+    center: false,
+    items: 5,
+    autoWidth: true,
+    nav: false,
+    margin: 0,
     autoplay: true,
-    autoplayTimeout: 3000,
-    autoplayHoverPause: false,
+    autoplayTimeout: 5000,
+    autoplayHoverPause: true,
+    slideBy: 5,
     responsive: {
       0: {
-        items: 1.2
+        items: 2,
+        slideBy: 2,
+        margin: 0
       },
-      600: {
-        items: 2.2
+      480: {
+        items: 2,
+        slideBy: 2,
+        margin: 0
       },
       768: {
-        items: 3.2
+        items: 3,
+        slideBy: 2,
+        margin: 0
       },
       992: {
-        items: 4.2
+        items: 4,
+        slideBy: 3,
+        margin: 0
       },
       1200: {
-        items: 5.2
+        items: 5,
+        slideBy: 5,
+        margin: 0
       }
     }
   };

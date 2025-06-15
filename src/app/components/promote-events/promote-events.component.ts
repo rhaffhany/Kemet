@@ -1,5 +1,5 @@
 import { SearchService } from 'src/app/services/search.service';
-import { Component, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -8,77 +8,104 @@ import { Router } from '@angular/router';
   styleUrls: ['./promote-events.component.scss']
 })
 export class PromoteEventsComponent implements AfterViewInit, OnDestroy {
-  currentIndex: number = 1;
+  @ViewChild('searchInput') searchInput!: ElementRef;
+  currentImageIndex: number = 0;
   intervalId: any;
-  realImages: string[] = [
+  images: string[] = [
     'assets/img/grand museum2.jpg',
-    'assets/img/grand museum3.jpg',
+    'assets/img/grand museum3.jpg'
   ];
-  images: string[] = [];
+  fallbackImage: string = 'assets/img/grand museum2.jpg';
+  imageLoadStates: boolean[] = [false, false];
+  imageErrorStates: boolean[] = [false, false];
 
   ngAfterViewInit(): void {
-    this.images = [
-      this.realImages[this.realImages.length - 1],
-      ...this.realImages,
-      this.realImages[0]
-    ];
+    // Start immediately - first image should be visible
+    this.currentImageIndex = 0;
+    this.startContinuousCycling();
+  }
 
-    setTimeout(() => {
-      this.updateSlide();
-      this.autoSlide();
+  preloadImages(): Promise<void[]> {
+    const imagePromises = this.images.map((imageSrc, index) => {
+      return new Promise<void>((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+          this.imageLoadStates[index] = true;
+          this.imageErrorStates[index] = false;
+          resolve();
+        };
+        img.onerror = () => {
+          console.warn(`Failed to preload image: ${imageSrc}`);
+          this.imageErrorStates[index] = true;
+          this.imageLoadStates[index] = false;
+          // Keep original image path, fallback will be handled in template
+          resolve();
+        };
+        img.src = imageSrc;
+      });
     });
+
+    return Promise.all(imagePromises);
   }
 
-  autoSlide(): void {
-    this.intervalId = setInterval(() => {
-      this.moveSlide(1);
-    }, 9000);
-  }
-
-  moveSlide(step: number): void {
-    this.currentIndex += step;
-    this.updateSlide();
-
-    const carouselImages = document.querySelector('.carousel-images') as HTMLElement;
-
-    carouselImages.style.transition = 'transform 0.6s ease-in-out';
-    carouselImages.style.transform = `translateX(-${this.currentIndex * 100}%)`;
-
-    carouselImages.addEventListener('transitionend', () => {
-      if (this.currentIndex === this.images.length - 1) {
-        carouselImages.style.transition = 'none';
-        this.currentIndex = 1;
-        carouselImages.style.transform = `translateX(-${this.currentIndex * 100}%)`;
-      } else if (this.currentIndex === 0) {
-        carouselImages.style.transition = 'none';
-        this.currentIndex = this.images.length - 2;
-        carouselImages.style.transform = `translateX(-${this.currentIndex * 100}%)`;
-      }
-    }, { once: true });
-  }
-
-  updateSlide(): void {
-    const carouselImages = document.querySelector('.carousel-images') as HTMLElement;
-    if (carouselImages) {
-      carouselImages.style.transform = `translateX(-${this.currentIndex * 100}%)`;
+  startContinuousCycling(): void {
+    // Clear any existing interval
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
     }
+
+    // Start continuous cycling between images
+    this.intervalId = setInterval(() => {
+      this.currentImageIndex = (this.currentImageIndex + 1) % this.images.length;
+    }, 4000); // Change every 4 seconds
+  }
+
+  getCurrentImage(): string {
+    return this.images[this.currentImageIndex] || this.fallbackImage;
+  }
+
+  getNextImage(): string {
+    const nextIndex = (this.currentImageIndex + 1) % this.images.length;
+    return this.images[nextIndex] || this.fallbackImage;
+  }
+
+  isCurrentImageLoaded(): boolean {
+    return this.imageLoadStates[this.currentImageIndex] || false;
+  }
+
+  hasCurrentImageError(): boolean {
+    return this.imageErrorStates[this.currentImageIndex] || false;
   }
 
   ngOnDestroy(): void {
-    clearInterval(this.intervalId);
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
   }
 
-  searchIcon = "/assets/icons/Search.png";
+  // Enhanced image error handling
+  onImageError(event: any): void {
+    console.warn('Image failed to load:', event.target.src);
+    event.target.src = this.fallbackImage;
+  }
+
+  // Enhanced image load handling
+  onImageLoad(event: any): void {
+    // Image loaded successfully
+  }
+
+  searchIcon = "assets/icons/Search.png";
   query = '';
   searchResults: any[] = [];
   errorMessage = '';
-  notFoundImg: string = "/assets/img/not found.jpg";
+  notFoundImg: string = "assets/img/not found.jpg";
 
   constructor(
     private SearchService: SearchService,
     private cdr: ChangeDetectorRef,
     private router: Router
   ) {}
+  
   submitSearch(): void {
     if (this.query.trim()) {
       this.router.navigate(['/search-results'], { queryParams: { q: this.query } });
@@ -114,4 +141,18 @@ export class PromoteEventsComponent implements AfterViewInit, OnDestroy {
       this.cdr.detectChanges();
     }
   }
+
+  // Enhanced search result image error handling
+  onSearchResultImageError(event: any): void {
+    console.warn('Search result image failed to load:', event.target.src);
+    event.target.src = this.notFoundImg;
+  }
+
+  focusSearchInput(): void {
+    this.searchInput.nativeElement.focus();
+    if (this.query.trim()) {
+      this.submitSearch();
+    }
+  }
 }
+

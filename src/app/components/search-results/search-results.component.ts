@@ -25,6 +25,8 @@ export class SearchResultsComponent implements OnInit {
     activity: false
   };
   
+  isFiltersVisible: boolean = false;
+  
   constructor(
     private searchService: SearchService,
     private route: ActivatedRoute,
@@ -147,5 +149,9 @@ export class SearchResultsComponent implements OnInit {
     });
     
     this.performSearch();
+  }
+
+  toggleFilters() {
+    this.isFiltersVisible = !this.isFiltersVisible;
   }
 }

@@ -1,14 +1,14 @@
 <section class="pb-5">
-    <img [src]="layoutPic" alt="layoutPic" class="w-100 mt-5 pt-4" >
+    <img [src]="layoutPic" alt="layoutPic" class="w-100 d-block">
 
     <!-- profile info -->
-    <div class="container">
-        <div class="row justify-content-center align-items-center">
+    <div class="container g-0">
+        <div class="row justify-content-center align-items-center g-0">
           <div class="col-12 col-md-11 p-0 profile-box">
-            <div class="row align-items-center my-3 my-md-5 ps-md-2">
+            <div class="row align-items-center my-2 my-md-4 px-2 px-md-3">
               <!-- Profile Picture -->
-              <div class="col-12 col-md-3 text-center mb-3 mb-md-0">
-                <div class="profile-pic rounded-circle mx-auto" style="max-width: 200px;">
+              <div class="col-12 col-md-3 text-center mb-2 mb-md-0">
+                <div class="profile-pic rounded-circle mx-auto">
                   <img 
                     [src]="travelpp"
                     alt="Profile Image" 
@@ -21,22 +21,15 @@
                 <div class="profile-info">
                   <h5 class="name fw-bold mb-1">{{travelAgencyData?.userName}}</h5>
                   <p class="lead username" style="font-size: 12px;">{{ user }}{{travelAgencyData?.userName}}</p>
-
-                  <div class="d-flex justify-content-center justify-content-md-start mt-3 mt-md-5 info">
-                    <h5 class="fw-bold me-3">0 Followers</h5>
-                    <h5 class="fw-bold">0 Following</h5>
-                  </div>
-
                 </div>
               </div>
       
               <!-- Review Button -->
-              <div class="col-12 col-md-3 text-center text-md-end px-md-4 mt-3 mt-md-0 edit-button">
+              <div class="col-12 col-md-3 text-center text-md-end px-md-4 edit-button">
                 <button class="btn btn-outline-warning review-btn" (click)="openModal()">
                     Add Review
                 </button>
               </div>
-
             </div>
           </div>
         </div>
@@ -46,9 +39,9 @@
     <div class="container">
         <div class="row justify-content-center">
              <!-- Information Column -->
-            <div class="col-12 col-md-3 me-md-4 information mb-4 mb-md-0">
+            <div class="col-12 col-md-3 me-md-4 information mb-3 mb-md-0">
                 <!-- information items -->
-                <div class="information-items py-4 px-3">
+                <div class="information-items py-3 px-3">
                     <div class="location item d-flex">
                         <i class="fa-regular fa-id-card me-2"></i>
                         <p class="mb-0 text-break">{{travelAgencyData.address}}</p>
@@ -152,25 +145,23 @@
                 </owl-carousel-o>
               </div>
 
-              <!-- All Pacakages -->
+              <!-- All Packages -->
               <div class="packages-booking mt-3">
                 <div class="package bg-white p-3 d-flex flex-column flex-md-row mb-2" *ngFor="let package of packages" >
-
-                  <div class="col-12 col-md-9 d-flex flex-column flex-md-row" [routerLink]="['/Package-details',package.planId]">
-                    <div class="package-container">
-                      <img [src]="package.imageURLs" alt="pic" class="package-pic w-100" style="max-width: 170px; height: auto;">
+                  <div class="col-12 col-md-9 d-flex flex-column flex-md-row align-items-center text-center text-md-start" [routerLink]="['/Package-details',package.planId]">
+                    <div class="package-container mx-auto mx-md-0">
+                      <img [src]="package.imageURLs" alt="pic" class="package-pic" style="max-width: 170px; height: auto;">
                       <i class="fa-regular fa-heart favorite-icon"></i>
                     </div>
-                    <div class="d-block ms-md-3 mt-3 mt-md-0">
+                    <div class="d-block ms-md-3 mt-3 mt-md-0 w-100">
                       <p class="location text-muted mb-1" style="font-size: 18px;">{{package.planName}}, {{package.description}}</p>
                       <p><i class="fa-solid fa-location-arrow"></i> <span class="ms-1 text-muted">{{package.duration}} Days Trip</span></p>
                       <p class="text-muted">{{package.egyptianStudent | currency:'EGP'}} - {{package.touristAdult | currency:'EGP'}}</p>
                     </div>
                   </div>
-                  <div class="col-12 col-md-3 book-btn mt-3 mt-md-0 text-center text-md-end">
-                    <button class="btn fw-bolder w-100 w-md-auto">Book</button>
+                  <div class="col-12 col-md-3 book-btn mt-3 mt-md-0 text-center">
+                    <button class="btn fw-bolder w-100">Book</button>
                   </div>
-                  
                 </div>
               </div>
               

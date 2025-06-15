@@ -2,19 +2,55 @@
   max-width: 1280px;
   margin: 0 auto;
   justify-content: center;
-  padding: 0px 0; 
+  padding: 0 20px;
+  position: relative;
+  
+  @media (max-width: 1200px) {
+    padding: 0 15px;
+  }
+  
+  @media (max-width: 768px) {
+    padding: 0 10px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 0 5px;
+  }
 
   .card {
-    width: 230px;
+    width: 280px !important;
+    max-width: 280px !important;
     height: auto;
+    min-height: 300px;
     border-radius: 15px;
     background: transparent;
     position: relative;
     border: none;
+    padding: 8px;
     box-sizing: border-box;
+    margin-top: 5px;
     transition: transform 0.3s ease;
-    margin: 0;
-  padding-top: 10px;
+    transform-origin: center center;
+    overflow: visible;
+    flex-shrink: 0;
+    
+    @media (max-width: 1200px) {
+      max-width: 220px;
+    }
+    
+    @media (max-width: 768px) {
+      width: 180px !important;
+      max-width: 180px !important;
+      min-height: 250px;
+      padding: 6px;
+    }
+    
+    @media (max-width: 480px) {
+      width: 160px !important;
+      max-width: 160px !important;
+      min-height: 220px;
+      padding: 5px;
+    }
     
     &:hover {
       transform: scale(1.05);
@@ -26,6 +62,15 @@
       border-radius: 20px;
       object-fit: cover;
       
+      @media (max-width: 768px) {
+        height: 160px;
+        border-radius: 15px;
+      }
+      
+      @media (max-width: 480px) {
+        height: 140px;
+        border-radius: 12px;
+      }
     }
 
     .wishlist-icon {
@@ -36,9 +81,31 @@
       z-index: 2;
       padding: 5px;
       transition: all 0.3s ease;
+      
+      @media (max-width: 768px) {
+        cursor: default;
+        top: 18px;
+        right: 8px;
+        padding: 8px;
+        -webkit-tap-highlight-color: transparent;
+      }
+      
+      @media (max-width: 480px) {
+        top: 15px;
+        right: 6px;
+        padding: 10px;
+      }
 
       &:hover {
         transform: scale(1.1);
+        
+        @media (max-width: 768px) {
+          transform: scale(1.05);
+        }
+        
+        @media (max-width: 480px) {
+          transform: none;
+        }
       }
 
       .heart-icon {
@@ -46,13 +113,23 @@
         height: 24px;
         transition: all 0.3s ease;
         object-fit: contain;
+        
+        @media (max-width: 768px) {
+          width: 22px;
+          height: 22px;
+        }
+        
+        @media (max-width: 480px) {
+          width: 20px;
+          height: 20px;
+        }
       }
     }
 
     .card-title {
       font-family: 'Inter', sans-serif;
       font-weight: 600;
-      font-size: 20px;
+      font-size: clamp(16px, 2.2vw, 20px);
       line-height: 1.2;
       text-align: left;
       padding: 0 8px;
@@ -60,57 +137,198 @@
       min-height: 44px;
       overflow: hidden;
       color: #333;
+      
+      @media (max-width: 768px) {
+        font-size: 18px;
+        padding: 0 6px;
+        min-height: 40px;
+        margin: 5px 0 2px;
+      }
+      
+      @media (max-width: 480px) {
+        font-size: 16px;
+        padding: 0 5px;
+        min-height: 36px;
+        margin: 4px 0 1px;
+      }
     }
 
     .card-duration {
       font-family: 'Inter', sans-serif;
       font-weight: 300;
-      font-size: 18px;
+      font-size: clamp(14px, 2vw, 18px);
       line-height: 1;
       letter-spacing: 0;
       padding: 0 8px;
       text-align: left;
       color: #666;
       margin-bottom: 2px;
+      
+      @media (max-width: 768px) {
+        font-size: 16px;
+        padding: 0 6px;
+      }
+      
+      @media (max-width: 480px) {
+        font-size: 14px;
+        padding: 0 5px;
+      }
     }
 
     .stars {
       display: flex;
       align-items: center;
       gap: 5px;
+      padding: 0 8px;
+      
+      @media (max-width: 768px) {
+        gap: 4px;
+        padding: 0 6px;
+      }
+      
+      @media (max-width: 480px) {
+        gap: 3px;
+        padding: 0 5px;
+      }
       
       svg {
-        width: 37px;
-        height: 37px;
+        width: clamp(28px, 4vw, 37px);
+        height: clamp(28px, 4vw, 37px);
+        
+        @media (max-width: 768px) {
+          width: 32px;
+          height: 32px;
+        }
+        
+        @media (max-width: 480px) {
+          width: 26px;
+          height: 26px;
+        }
       }
-    
     }
   }
 
+  /* Navigation Arrows - Enhanced Responsive */
   .nav-button {
     position: absolute;
-    top: 44%;
+    top: 30%;
     cursor: pointer;
     z-index: 10;
     width: 50px;
     height: 50px;
+    transition: all 0.3s ease;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    // Enhanced responsive sizing and positioning
+    @media (max-width: 768px) {
+      cursor: default;
+      width: 42px;
+      height: 42px;
+      top: 30%;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    @media (max-width: 480px) {
+      width: 36px;
+      height: 36px;
+      top: 30%;
+    }
+    
+    @media (max-width: 360px) {
+      width: 32px;
+      height: 32px;
+      top: 30%;
+    }
+
+    &:hover {
+      transform: scale(1.1);
+      background: rgba(255, 255, 255, 0.6);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      
+      // Reduced hover effects on touch devices
+      @media (max-width: 768px) {
+        transform: scale(1.05);
+      }
+      
+      @media (max-width: 480px) {
+        transform: none;
+      }
+    }
 
     &.left {
-      left: -30px;
+      left: -5px;
+      
+      @media (max-width: 768px) {
+        left: -8px;
+      }
+      
+      @media (max-width: 480px) {
+        left: -6px;
+      }
+      
+      @media (max-width: 360px) {
+        left: -4px;
+      }
     }
 
     &.right {
-      right: -30px;
+      right: 5px;
+      
+      @media (max-width: 768px) {
+        right: 15px;
+      }
+      
+      @media (max-width: 480px) {
+        right: 8px;
+      }
+      
+      @media (max-width: 360px) {
+        right: 5px;
+      }
+    }
+    
+    img {
+      width: 24px;
+      height: 24px;
+      filter: brightness(0.7);
+      transition: filter 0.3s ease;
+      
+      @media (max-width: 768px) {
+        width: 20px;
+        height: 20px;
+      }
+      
+      @media (max-width: 480px) {
+        width: 18px;
+        height: 18px;
+      }
+      
+      @media (max-width: 360px) {
+        width: 16px;
+        height: 16px;
+      }
+    }
+    
+    &:hover img {
+      filter: brightness(0.3);
     }
   }
+  
   .owl-nav button.owl-prev,
   .owl-nav button.owl-next {
     cursor: pointer;
     transition: transform 0.3s ease;
-  }
 
-  .owl-nav button.owl-prev:active,
-  .owl-nav button.owl-next:active {
-    transform: scale(1.2);
+    &:hover {
+      transform: scale(1.1);
+    }
+
+    &:active {
+      transform: scale(1.2);
+    }
   }
 }

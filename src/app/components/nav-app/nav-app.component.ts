@@ -17,7 +17,12 @@ export class NavAppComponent implements OnInit {
   showSearchBar = true;
   isSearchActive = false;
   isHomePage = false;
-  isThingsToDoPage = false;  // Move this here only once
+  isThingsToDoPage = false;
+  isSearchResultPage = false;
+  isPackagePage = false;
+  isAgencyPage = false;
+  isPaymentPage = false;
+  mobileMenuOpen = false;
 
   logo = "/assets/logo/kemet.png";
   searchIcon = "/assets/icons/Search.png";
@@ -41,14 +46,16 @@ export class NavAppComponent implements OnInit {
     this.setupRouteListener();
     this.loadUserData();
   }
-  isSearchResultPage = false;
 
   private checkCurrentRoute(): void {
     const currentUrl = this.router.url.split('?')[0];
-    this.isHomePage = currentUrl === '/home' || currentUrl === '/';
+    this.isHomePage = currentUrl === '/home' || currentUrl === '/' || currentUrl.includes('search-result');
     this.isThingsToDoPage = currentUrl.includes('thingstodo');
-    this.isSearchResultPage = currentUrl.includes('search-result'); // Add this
-    this.showSearchBar = !(this.isHomePage || this.isThingsToDoPage || this.isSearchResultPage);
+    this.isSearchResultPage = currentUrl.includes('search-result');
+    this.isPackagePage = currentUrl.includes('Package-details');
+    this.isAgencyPage = currentUrl.includes('travelAgency-profile');
+    this.isPaymentPage = currentUrl.includes('payment');
+    this.showSearchBar = !(this.isHomePage || this.isThingsToDoPage);
   }
 
   private setupRouteListener(): void {
@@ -56,10 +63,13 @@ export class NavAppComponent implements OnInit {
       filter((event: Event): event is NavigationEnd => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
       const url = event.urlAfterRedirects.split('?')[0];
-      this.isHomePage = url === '/home' || url === '/';
+      this.isHomePage = url === '/home' || url === '/' || url.includes('search-result');
       this.isThingsToDoPage = url.includes('thingstodo');
-      this.isSearchResultPage = url.includes('search-result'); // Add this
-      this.showSearchBar = !(this.isHomePage || this.isThingsToDoPage || this.isSearchResultPage);
+      this.isSearchResultPage = url.includes('search-result');
+      this.isPackagePage = url.includes('Package-details');
+      this.isAgencyPage = url.includes('travelAgency-profile');
+      this.isPaymentPage = url.includes('payment');
+      this.showSearchBar = !(this.isHomePage || this.isThingsToDoPage);
       this.isScrolled = false;
       this.searchResults = [];
     });
@@ -68,10 +78,17 @@ export class NavAppComponent implements OnInit {
   private loadUserData(): void {
     this.profileService.getCurrentUserData().subscribe({
       next: (data) => {
-        this.userData = data;
+        console.log('User data loaded:', data); // Debug log
+        this.userData = data || {};
         this.profilePic = this.userData.profileImageURL || this.profilePic;
+        this.cdr.detectChanges(); // Force change detection
       },
-      error: (err) => console.error('Error fetching user data:', err)
+      error: (err) => {
+        console.error('Error fetching user data:', err);
+        // Initialize empty userData on error
+        this.userData = {};
+        this.cdr.detectChanges();
+      }
     });
   }
   submitSearch(): void {
@@ -148,5 +165,41 @@ export class NavAppComponent implements OnInit {
 
   logout(): void {
     this.authService.logout();
+  }
+
+  // Mobile menu methods
+  toggleMobileMenu(): void {
+    this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
+
+  closeMobileMenu(): void {
+    this.mobileMenuOpen = false;
+  }
+
+  openMobileMenu(): void {
+    this.mobileMenuOpen = true;
+  }
+
+  // Navigate to profile page
+  goToProfile(): void {
+    this.router.navigate(['/profile']);
+    this.closeMobileMenu();
+  }
+
+  // Get display name for user
+  get userDisplayName(): string {
+    if (this.userData?.username) {
+      return this.userData.username;
+    }
+    if (this.userData?.name) {
+      return this.userData.name;
+    }
+    if (this.userData?.firstName) {
+      return this.userData.firstName;
+    }
+    if (this.userData?.email) {
+      return this.userData.email.split('@')[0]; // Use email username as fallback
+    }
+    return 'User';
   }
 }

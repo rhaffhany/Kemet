@@ -1,6 +1,7 @@
 import { Component, ElementRef, NgZone } from '@angular/core';
 import { ProfileService } from 'src/app/services/profile.service';
 import Swal from 'sweetalert2';
+import { InterestsService, Interest } from '../../services/interests.service';
 
 @Component({
   selector: 'app-profile',
@@ -11,14 +12,20 @@ import Swal from 'sweetalert2';
 
 export class ProfileComponent {
 
-  constructor(private _ProfileService:ProfileService, private ngZone: NgZone, private eRef:ElementRef){}
+  constructor(private _ProfileService:ProfileService, private ngZone: NgZone, private eRef:ElementRef, private interestsService: InterestsService){}
 
   // assets
-  layoutPic:string = "/assets/img/sunset-5314319_640.png";
+  defaultLayoutPic:string = "/assets/img/sunset-5314319_640.png";
+  defaultBackgroundEdit:string = "/assets/img/sunset-update.png";
   postImg:string = "/assets/img/Credits20Al20-The20Newspaper 1.png"
 
   profileImg: string = 'assets/img/default-profile.png';
-  backgroundEdit:string = "/assets/img/sunset-update.png"
+  layoutPic:string = "/assets/img/sunset-5314319_640.png";
+  backgroundEdit:string = "/assets/img/sunset-update.png";
+  
+  // Temporary storage for uploaded images before saving
+  tempBackgroundUrl: string = '';
+  tempProfileUrl: string = '';
 
   user:string = "@";
 
@@ -52,6 +59,16 @@ export class ProfileComponent {
   isEdited = false;
   isLoading = false;
 
+  // Travel Interests properties
+  isEditingInterests = false;
+  userInterests: Interest[] = [];
+  editableInterests: string[] = [];
+  originalInterests: string[] = [];
+
+  // Interests properties
+  isLoadingInterests = false;
+  interestsError: string | null = null;
+  showInterestsForm = false;
 
   onEdit(): void {
     this.isEdited = true;
@@ -95,21 +112,35 @@ export class ProfileComponent {
         this.onMonthChange();
         this.onYearChange();
     
-        if (!this.userData.profileImageURL) {
-          this.profileImg;
-        }else{
+        // Set profile image - use uploaded image or default
+        if (this.userData.profileImageURL) {
           this.profileImg = this.userData.profileImageURL;
+        } else {
+          this.profileImg = 'assets/img/default-profile.png';
         }
 
-        // if (!this.updatedData.userName) {
-        //   this.updatedData.userName = this.userData.userName;
-        // }
+        // Set background images - use uploaded image or default
+        if (this.userData.backgroundImageURL) {
+          this.layoutPic = this.userData.backgroundImageURL;
+          this.backgroundEdit = this.userData.backgroundImageURL;
+        } else {
+          this.layoutPic = this.defaultLayoutPic;
+          this.backgroundEdit = this.defaultBackgroundEdit;
+        }
 
-        // console.log("userData>>",data);
+        console.log("userData loaded:", data);
+        console.log("Background URL:", this.userData.backgroundImageURL);
+        console.log("Using layoutPic:", this.layoutPic);
+        console.log("Bio data:", this.userData.bio);
+        console.log("Updated bio data:", this.updatedData.bio);
 
       },
       error: (err) => {
         console.error('Error fetching user data:', err);
+        // Set defaults on error
+        this.layoutPic = this.defaultLayoutPic;
+        this.backgroundEdit = this.defaultBackgroundEdit;
+        this.profileImg = 'assets/img/default-profile.png';
       },
     });
 
@@ -117,12 +148,23 @@ export class ProfileComponent {
       this.onCountryChange();
     }
 
+    this.loadUserInterests();
+
+    // Subscribe to interests refresh events
+    this.interestsService.refreshInterests$.subscribe(() => {
+      this.loadUserInterests();
+    });
   }
 
   updateCurrentData(): void {
 
     if (!this.isEdited) return;
     this.isLoading = true;
+
+    // Apply temporary background image if uploaded
+    if (this.tempBackgroundUrl) {
+      this.updatedData.backgroundImageURL = this.tempBackgroundUrl;
+    }
 
     // Ensure dateOfBirth is correctly formatted
     if (this.selectedMonth && this.selectedDay && this.selectedYear) {
@@ -158,6 +200,11 @@ export class ProfileComponent {
 
         console.log("update data:", this.updatedData);
         
+        // Apply temporary background image to main profile
+        if (this.tempBackgroundUrl) {
+          this.layoutPic = this.tempBackgroundUrl;
+          this.tempBackgroundUrl = ''; // Clear temporary storage
+        }
 
         this.userData = {...this.updatedData};
         this.updatedData = response;
@@ -296,16 +343,55 @@ export class ProfileComponent {
       console.error('No file selected!');
       return;
     }
+    
+    // Show immediate preview in edit modal only
+    const localImageUrl = URL.createObjectURL(file);
+    this.backgroundEdit = localImageUrl;
+    
     const _FormData: FormData = new FormData();
     _FormData.append('model', file);
   
     this._ProfileService.uploadBackgroundImg(_FormData).subscribe({
       next: (response) => {
-        this.backgroundEdit = `https://localhost:7051/${response.filePath}`;
-        console.log(response);
+        // Store server URL temporarily, don't update main background yet
+        const serverImageUrl = `http://kemet-server.runasp.net/${response.filePath}`;
+        this.tempBackgroundUrl = serverImageUrl;
+        this.backgroundEdit = serverImageUrl;
+        
+        // Clean up the local URL
+        URL.revokeObjectURL(localImageUrl);
+        
+        // Mark as edited to enable save button
+        this.onEdit();
+        
+        console.log('Background image uploaded successfully:', response);
+        console.log('Temporary background URL:', serverImageUrl);
+        
+        Swal.fire({
+          title: 'Image Uploaded!',
+          text: 'Your cover photo will be updated when you save your profile.',
+          icon: 'info',
+          confirmButtonText: 'OK',
+          confirmButtonColor: 'var(--secondary-color)',
+        });
       },
       error: (err) => {
+        // Revert to current background in edit modal
+        if (this.userData.backgroundImageURL) {
+          this.backgroundEdit = this.userData.backgroundImageURL;
+        } else {
+          this.backgroundEdit = this.defaultBackgroundEdit;
+        }
+        URL.revokeObjectURL(localImageUrl);
+        
         console.error('Upload Error:', err);
+        Swal.fire({
+          title: 'Error!',
+          text: 'Failed to upload cover photo. Please try again.',
+          icon: 'error',
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#d33',
+        });
       }
     });
   }
@@ -323,11 +409,216 @@ export class ProfileComponent {
 
   // editBoxContainer
   showEditSection: boolean = true; 
-  toggleEditBox(): void {
-    this.showEditSection = !this.showEditSection; 
+    toggleEditBox(): void {
+    this.showEditSection = !this.showEditSection;
+    
+    // If closing edit mode, revert any temporary changes
+    if (this.showEditSection) {
+      this.revertTemporaryChanges();
+    }
   }
 
+  revertTemporaryChanges(): void {
+    // Revert background image to current saved version
+    if (this.tempBackgroundUrl) {
+      if (this.userData.backgroundImageURL) {
+        this.backgroundEdit = this.userData.backgroundImageURL;
+      } else {
+        this.backgroundEdit = this.defaultBackgroundEdit;
+      }
+      this.tempBackgroundUrl = ''; // Clear temporary storage
+    }
+  }
 
+  editInterests() {
+    this.interestsService.showInterestsForm();
+  }
 
+  toggleEditInterests(): void {
+    this.isEditingInterests = true;
+    this.originalInterests = [...this.userInterests.map(interest => interest.name)];
+    this.editableInterests = [...this.userInterests.map(interest => interest.name)];
+  }
+
+  saveInterests(): void {
+    // Filter out empty interests
+    this.editableInterests = this.editableInterests.filter(interest => interest.trim() !== '');
+    
+    if (this.editableInterests.length === 0) {
+      Swal.fire({
+        title: 'Error!',
+        text: 'Please add at least one interest.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#d33',
+      });
+      return;
+    }
+
+    // Map interest names to their IDs
+    const allInterests = this.interestsService.getAllInterests();
+    const selectedIds = this.editableInterests
+      .map(name => allInterests.find(interest => interest.name === name)?.id)
+      .filter((id): id is number => id !== undefined);
+
+    // Save to backend
+    this.isLoadingInterests = true;
+    this.interestsService.setSelectedInterests(selectedIds).subscribe({
+      next: () => {
+        // Update local state
+        this.userInterests = this.editableInterests
+          .map(name => allInterests.find(interest => interest.name === name))
+          .filter((interest): interest is Interest => interest !== undefined);
+        
+        this.isEditingInterests = false;
+        this.isLoadingInterests = false;
+        this.onEdit(); // Mark as edited for profile update
+
+        Swal.fire({
+          title: 'Success!',
+          text: 'Your travel interests have been updated.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+          confirmButtonColor: 'var(--secondary-color)',
+        }).then(() => {
+          // Reload interests to ensure we have the latest data
+          this.loadUserInterests();
+        });
+      },
+      error: (error) => {
+        console.error('Error updating interests:', error);
+        this.isLoadingInterests = false;
+        
+        if (error.message === 'Your session has expired. Please log in again.') {
+          Swal.fire({
+            title: 'Session Expired',
+            text: 'Your session has expired. Please log in again.',
+            icon: 'error',
+            confirmButtonText: 'Go to Login',
+            confirmButtonColor: '#d33',
+          }).then(() => {
+            window.location.href = '/login';
+          });
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: 'Failed to update your interests. Please try again.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#d33',
+          });
+        }
+      }
+    });
+  }
+
+  cancelEditInterests(): void {
+    this.isEditingInterests = false;
+    this.editableInterests = [];
+    this.userInterests = [...this.originalInterests.map(name => this.interestsService.getAllInterests().find(interest => interest.name === name) as Interest)];
+  }
+
+  addNewInterest(): void {
+    if (this.editableInterests.length < 10) {
+      this.editableInterests.push('');
+    }
+  }
+
+  removeInterest(index: number): void {
+    if (this.editableInterests.length > 1) {
+      this.editableInterests.splice(index, 1);
+    }
+  }
+
+  onInterestEdit(): void {
+    // Mark as edited when interests are modified
+    this.onEdit();
+  }
+
+  getInterestIcon(interestName: string): string {
+    // Updated icon mapping based on the actual category names
+    const iconMap: { [key: string]: string } = {
+      'Historical': 'fas fa-landmark',
+      'Resorts and Beaches': 'fas fa-umbrella-beach',
+      'Nature Spots': 'fas fa-tree',
+      'Museums': 'fas fa-museum',
+      'Religious': 'fas fa-place-of-worship',
+      'Nile River Destinations': 'fas fa-water',
+      'Desert Landscape': 'fas fa-mountain',
+      'Entertainment': 'fas fa-theater-masks',
+      'Diving Snorkeling': 'fas fa-swimming-pool',
+      'Hiking': 'fas fa-hiking',
+      'Water Sports and Nile Activities': 'fas fa-ship',
+      'Cultural Experience': 'fas fa-users',
+      'Adventure Activity': 'fas fa-compass',
+      'Relaxation and Wellness': 'fas fa-spa',
+      'Safari': 'fas fa-paw',
+      'Fancy Cafe': 'fas fa-coffee',
+      'Fancy Restaurant': 'fas fa-utensils',
+      'Hidden Gems': 'fas fa-gem'
+    };
+    
+    return iconMap[interestName] || 'fas fa-heart';
+  }
+
+  getCompletionPercentage(): number {
+    const maxInterests = 10;
+    const percentage = Math.round((this.userInterests.length / maxInterests) * 100);
+    return Math.min(percentage, 100);
+  }
+
+  loadUserInterests() {
+    this.isLoadingInterests = true;
+    this.interestsError = null;
+
+    this.interestsService.getUserInterests().subscribe({
+      next: (response: { $values: number[] }) => {
+        console.log('Raw API response:', response);
+        
+        // Extract the interest IDs from the response
+        const interestIds = response.$values || [];
+        console.log('Interest IDs from API:', interestIds);
+        
+        // Get all available interests for mapping
+        const allInterests = this.interestsService.getAllInterests();
+        
+        // Map IDs to full interest objects
+        this.userInterests = interestIds
+          .map((id: number) => {
+            const interest = allInterests.find(item => item.id === id);
+            if (!interest) {
+              console.warn(`No matching interest found for ID: ${id}`);
+            }
+            return interest;
+          })
+          .filter((interest: Interest | undefined): interest is Interest => interest !== undefined);
+        
+        console.log('Mapped user interests:', this.userInterests);
+        this.isLoadingInterests = false;
+      },
+      error: (error) => {
+        console.error('Error loading interests:', error);
+        
+        if (error.message === 'Your session has expired. Please log in again.') {
+          // Handle expired session
+          this.interestsError = 'Your session has expired. Please log in again.';
+          // Redirect to login page
+          window.location.href = '/login';
+        } else {
+          this.interestsError = 'Failed to load interests. Please try again.';
+        }
+        
+        this.isLoadingInterests = false;
+      }
+    });
+  }
+
+  getPlaces(): Interest[] {
+    return this.userInterests.filter(interest => interest.type === 'Place');
+  }
+
+  getActivities(): Interest[] {
+    return this.userInterests.filter(interest => interest.type === 'Activity');
+  }
 
 }

@@ -17,7 +17,10 @@
   <div class="results-content">
     <!-- Filter sidebar -->
     <div class="filters-container">
-      <div class="filters-card">
+      <button class="filters-toggle" (click)="toggleFilters()" [class.active]="isFiltersVisible">
+        Filters
+      </button>
+      <div class="filters-card" [class.show]="isFiltersVisible">
         <h3>Filters</h3>
         
         <div class="filter-group">

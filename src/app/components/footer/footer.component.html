@@ -7,10 +7,10 @@
                      and timeless wonders </h5>
 
                 <div class="social-media-icons w-25 d-flex justify-content-around mt-4">
-                    <img [src]="facebookLogo" alt="facebookLogo">
-                    <img [src]="instagramLogo" alt="instagramLogo">
-                    <img [src]="twitterLogo" alt="twitterLogo">
-                    <img [src]="tiktokLogo" alt="youtubeLogo">
+                    <img [src]="facebookLogo" alt="facebookLogo" (click)="openSocialMedia('facebook')" style="cursor: pointer;">
+                    <img [src]="instagramLogo" alt="instagramLogo" (click)="openSocialMedia('instagram')" style="cursor: pointer;">
+                    <img [src]="twitterLogo" alt="twitterLogo" (click)="openSocialMedia('twitter')" style="cursor: pointer;">
+                    <img [src]="tiktokLogo" alt="tiktokLogo" (click)="openSocialMedia('tiktok')" style="cursor: pointer;">
                 </div>
             </div>
             

@@ -95,22 +95,39 @@ export class TopSellingComponent implements OnInit {
     dots: false,
     navSpeed: 700,
     center: false,
-    items: 3,
+    items: 5,
     autoWidth: false,
     nav: false,
-    margin: 30,
+    margin: 20,
     autoplay: true,
     autoplayTimeout: 5000,
     autoplayHoverPause: true,
+    slideBy: 5, // Navigate 5 items at once on desktop
     responsive: {
       0: {
-        items: 1
+        items: 1,
+        slideBy: 1,
+        margin: 15
+      },
+      480: {
+        items: 1,
+        slideBy: 1,
+        margin: 15
       },
       768: {
-        items: 2
+        items: 2,
+        slideBy: 2,
+        margin: 18
       },
       992: {
-        items: 3
+        items: 3,
+        slideBy: 3,
+        margin: 20
+      },
+      1200: {
+        items: 5,
+        slideBy: 5,
+        margin: 20
       }
     }
   };

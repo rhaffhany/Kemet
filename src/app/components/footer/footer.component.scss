@@ -14,9 +14,32 @@ $footer-border-color: #D9DBE9;
 footer {
   color: $text-color;
   background-color: $background-color;
-  border-top: 1px solid $footer-border-color;
+  border-top: 2px solid #FAC817;
+  box-shadow: 0 -2px 8px rgba(250, 200, 23, 0.1);
+  padding: 0 15px;
+  
+  @media (max-width: 768px) {
+    padding: 0 10px;
+    border-top: 1.5px solid #FAC817;
+    box-shadow: 0 -1px 6px rgba(250, 200, 23, 0.08);
+  }
+
+  @media (max-width: 480px) {
+    border-top: 1px solid #FAC817;
+    box-shadow: 0 -1px 4px rgba(250, 200, 23, 0.06);
+  }
+
+  .container {
+    @media (max-width: 768px) {
+      padding: 0;
+    }
+  }
 
   .content {
+    @media (max-width: 768px) {
+      text-align: center;
+    }
+
     &::after {
       content: "";
       display: block;
@@ -24,6 +47,38 @@ footer {
       height: 1px;
       background-color: $footer-border-color;
       margin-top: 20px;
+      
+      @media (max-width: 768px) {
+        margin-top: 15px;
+      }
+    }
+  }
+
+  // Logo and description section
+  .col-md-4 {
+    @media (max-width: 768px) {
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    
+    h5 {
+      @media (max-width: 768px) {
+        font-size: 14px;
+        line-height: 1.5;
+        margin-bottom: 20px;
+      }
+    }
+  }
+
+  // Navigation columns
+  .col-md-2 {
+    @media (max-width: 768px) {
+      margin-bottom: 25px;
+      text-align: center;
+    }
+    
+    @media (max-width: 576px) {
+      margin-bottom: 20px;
     }
   }
 
@@ -33,13 +88,35 @@ footer {
     display: flex;
     justify-content: space-between;
     margin-left: -0.5rem;
+    
+    @media (max-width: 768px) {
+      width: 140px !important;
+      margin: 0 auto 20px auto;
+      justify-content: space-around;
+    }
+    
+    @media (max-width: 480px) {
+      width: 120px !important;
+    }
+    
     img {
       width: 28px;
       height: 28px;
       cursor: pointer;
-      transition: transform 0.2s ease;
+      transition: all 0.2s ease;
       object-fit: contain;
       margin: 0 5px;
+      
+      @media (max-width: 768px) {
+        width: 24px;
+        height: 24px;
+        margin: 0 2px;
+      }
+      
+      @media (max-width: 480px) {
+        width: 22px;
+        height: 22px;
+      }
 
       &:hover {
         transform: scale(1.15);
@@ -47,28 +124,138 @@ footer {
     }
   }
 
-  .logo,
+  .logo {
+    cursor: pointer;
+    max-width: 120px;
+    height: auto;
+    
+    @media (max-width: 768px) {
+      max-width: 100px;
+      margin: 0 auto 15px auto;
+      display: block;
+    }
+    
+    @media (max-width: 480px) {
+      max-width: 80px;
+    }
+  }
+
   .categories {
     cursor: pointer;
+    
+    h5 {
+      transition: color 0.3s ease;
+      
+      &:hover {
+        color: #FAC817;
+      }
+    }
   }
 
   h4 {
     color: $heading-color;
+    font-size: 18px; // Decreased from 20px to 18px
+    font-weight: $heading-font-weight;
+    margin-bottom: 1rem;
+    
+    @media (max-width: 768px) {
+      font-size: 16px; // Decreased from 18px to 16px
+      margin-bottom: 0.8rem;
+    }
+    
+    @media (max-width: 480px) {
+      font-size: 14px; // Decreased from 16px to 14px
+    }
   }
 
   h5 {
     line-height: 20px;
     font-size: 16px;
+    margin-bottom: 8px;
+    
+    @media (max-width: 768px) {
+      font-size: 14px;
+      line-height: 18px;
+      margin-bottom: 6px;
+    }
+    
+    @media (max-width: 480px) {
+      font-size: 13px;
+      line-height: 16px;
+    }
   }
 
-  .submit-btn{
-    padding: 4px 65px;
+  .submit-btn {
+    padding: 8px 32px;
+    font-size: 14px;
+    border-radius: 25px;
+    background-color: #FAC817;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    
+    @media (max-width: 768px) {
+      padding: 10px 20px;
+      font-size: 13px;
+      max-width: 200px;
+      margin: 0 auto;
+      display: block;
+    }
+    
+    @media (max-width: 480px) {
+      padding: 8px 16px;
+      font-size: 12px;
+      max-width: 150px;
+    }
+    
+    &:hover {
+      background-color: darken(#FAC817, 10%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(#FAC817, 0.3);
+    }
+  }
+
+  // Contact section with icons
+  .d-flex {
+    @media (max-width: 768px) {
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+    
+    img {
+      @media (max-width: 768px) {
+        width: 16px;
+        height: 16px;
+      }
+    }
   }
 }
 
+// Currency calculator responsive styles
 .currency-selector {
+  @media (max-width: 768px) {
+    margin-bottom: 0.5rem;
+  }
+  
   .form-control {
     width: 60%;
+    font-size: 14px;
+    padding: 8px 12px;
+    
+    @media (max-width: 768px) {
+      width: 65%;
+      font-size: 13px;
+      padding: 6px 10px;
+    }
+    
+    @media (max-width: 480px) {
+      width: 70%;
+      font-size: 12px;
+      padding: 5px 8px;
+    }
+    
     &.no-spinner {
       /* Chrome, Safari, Edge, Opera */
       &::-webkit-outer-spin-button,
@@ -86,25 +273,49 @@ footer {
   }
   
   .form-select {
-    background-color: transparent;
-    color: #000;
     background-color: #fbfbfb;
-    padding: 12px 12px;
+    color: #000;
+    padding: 8px 12px;
     border-radius: 6px;
     font-size: 14px;
-    width: 30%;  // Decreased width for form-select
+    width: 35%;
     cursor: pointer;
+    border: 1px solid #ddd;
+    
+    @media (max-width: 768px) {
+      width: 30%;
+      font-size: 13px;
+      padding: 6px 10px;
+    }
+    
+    @media (max-width: 480px) {
+      width: 25%;
+      font-size: 12px;
+      padding: 5px 8px;
+    }
 
     &:focus {
       outline: none;
-      border-color: rgba(255, 255, 255, 0.4);
-      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+      border-color: #FAC817;
+      box-shadow: 0 0 0 2px rgba(#FAC817, 0.2);
     }
 
     option {
-      background-color: #333;
-      color: #fff;
+      background-color: #fff;
+      color: #333;
       padding: 8px;
     }
+  }
+}
+
+// Currency calculator container
+.calculator {
+  @media (max-width: 768px) {
+    max-width: 250px;
+    margin: 0 auto;
+  }
+  
+  @media (max-width: 480px) {
+    max-width: 200px;
   }
 }
