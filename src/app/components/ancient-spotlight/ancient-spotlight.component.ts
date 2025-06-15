@@ -144,39 +144,45 @@ export class AncientSpotlightComponent implements OnInit {
 
   customOptions: OwlOptions = {
     loop: true,
-    margin: 20,
-    nav: false,
+    mouseDrag: true,
+    touchDrag: true,
+    pullDrag: false,
     dots: false,
+    navSpeed: 700,
+    center: false,
+    items: 5,
+    autoWidth: true,
+    nav: false,
+    margin: 0,
     autoplay: true,
-    autoplayTimeout: 3000,
+    autoplayTimeout: 5000,
     autoplayHoverPause: true,
-    center: true,
-    stagePadding: 50,
+    slideBy: 5,
     responsive: {
       0: {
-        items: 1,
-        stagePadding: 30,
-        margin: 10
+        items: 2,
+        slideBy: 2,
+        margin: 0
       },
       480: {
-        items: 1.2,
-        stagePadding: 40,
-        margin: 15
+        items: 2,
+        slideBy: 2,
+        margin: 0
       },
       768: {
-        items: 2,
-        stagePadding: 40,
-        margin: 20
+        items: 3,
+        slideBy: 2,
+        margin: 0
       },
       992: {
-        items: 3,
-        stagePadding: 50,
-        margin: 25
+        items: 4,
+        slideBy: 3,
+        margin: 0
       },
       1200: {
-        items: 4,
-        stagePadding: 50,
-        margin: 30
+        items: 5,
+        slideBy: 5,
+        margin: 0
       }
     }
   };

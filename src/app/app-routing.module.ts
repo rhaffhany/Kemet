@@ -68,6 +68,9 @@ const routes: Routes = [
       { path: 'write-review/activity/:activityID', component: ReviewContentComponent, title: 'Review-Activity' },
       { path: 'search-results', component: SearchResultsComponent, title: 'results' },
       { path: 'booking', component: BookingsComponent, title: 'Bookings' },
+      { path: 'travelAgency-profile', component: TravelAgencyProfileComponent, title: 'TravelAgency-profile' },
+      { path: 'Package-details/:planID', component: PackageDetailsBookingComponent, title: 'Package Details' },
+      { path: 'payment/:bookingID/:planID', component: PaymentComponent, title: 'Payment' },
     ]
   },
   {

@@ -1,130 +1,617 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@800&display=swap');
-
-$font-family: 'Inter', sans-serif;
-$font-size: 18px;
-$font-weight: 600;
-$line-height: 21.78px;
-$color-default: #000;
-$color-hover: #FFBD67;
-$main-color:#FFBD67;
-
 // Variables
+$main-color: #FFE4C2;
 $primary-color: #FAC817;
+$white: #ffffff;
+$dark-text: #2c3e50;
+$gray-light: #f8f9fa;
+$gray-medium: #6c757d;
+$shadow-light: rgba(0, 0, 0, 0.08);
+$shadow-medium: rgba(0, 0, 0, 0.15);
 
+// General Styles
 body, html {
-  background-color: var(--main-color) !important;
+  background-color: $main-color;
   margin: 0;
-  padding: 0;
+  overflow-x: hidden;
 }
 
+// Navbar Styles
 .navbar {
-  background-color: var(--main-color) !important;
+  background-color: $main-color;
   position: fixed;
+  overflow: visible;
   width: 100%;
-  height: 90px;
+  height: auto;
+  min-height: 100px;
   top: 0;
   left: 0;
   z-index: 1000;
-  padding-top:30px;
-  padding-bottom: 25px;
-  transition: background-color 0.3s ease-in-out;
-
-  &.scrolled {
-    background-color: var(--main-color) !important;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
-
-}
-
-  .navbar-collapse {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-  }
-
-  .logo {
-   
-    height: auto;
-    margin-left: 105px;
+  padding: 15px 0;
+  transition: all 0.3s ease-in-out;
+  
+  @media (max-width: 1200px) {
+    min-height: 120px;
+    padding: 12px 0;
   }
   
-  .navbar-nav {
+  @media (max-width: 991px) {
+    min-height: 100px;
+    padding: 8px 0;
+  }
+  
+  @media (max-width: 576px) {
+    min-height: 90px;
+    padding: 6px 0;
+  }
+
+  .container {
     display: flex;
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    gap: 30px;
-    justify-content: center;
-    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    padding: 0 15px;
+    
+    @media (max-width: 991px) {
+      flex-wrap: nowrap;
+      position: relative;
+    }
+    
+    @media (max-width: 576px) {
+      padding: 0 12px;
+    }
   }
 
-  .navbar-nav .nav-item .nav-link {
-  font-family: 'inter';
-  font-size: $font-size;
-  font-weight: 500;
-  color: $color-default;
-  line-height: $line-height;
-  margin-right: 40px;
-  position: relative;
-  transition: all 0.3s ease;
+  &.scrolled {
+    background-color: $main-color !important;
+    box-shadow: 0 2px 10px $shadow-light;
+  }
 
-  &::after {
-    content: '';
+  &.transparent {
+    background-color: transparent !important;
     position: absolute;
-    left: 0;
-    bottom: -4px;
-    height: 2px;
-    width: 0%;
-    background-color: $primary-color;
-    transition: width 0.3s ease-in-out;
-  }
-
-  &:hover::after {
     width: 100%;
   }
+}
 
-  &.active-link {
-    font-weight: 600;
-
-    &::after {
-      width: 100%;
-      background-color: $primary-color;
+// Logo Section
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  
+  @media (max-width: 991px) {
+    order: 0;
+  }
+  
+  img {
+    max-height: 70px;
+    margin-right: 70px;
+    width: auto;
+    
+    @media (max-width: 1200px) {
+      max-height: 60px;
+    }
+    
+    @media (max-width: 991px) {
+      max-height: 45px;
+    }
+    
+    @media (max-width: 576px) {
+      max-height: 40px;
     }
   }
 }
 
-
-
-  .sign-in-button-container {
-    list-style-type: none;
-    display: inline-block;
-    position: relative;
-    margin-left: auto;
-    margin-right: 105px;
+// Modern Mobile Toggle Button with Transparent Background
+.navbar-toggler {
+  display: none;
+  border: none;
+  background: transparent;
+  padding: 10px;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  width: 46px;
+  height: 46px;
+  position: relative;
+  
+  @media (max-width: 991px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    order: 3;
+  }
+  
+  @media (max-width: 576px) {
+    width: 42px;
+    height: 42px;
+    padding: 8px;
   }
 
-  .sign-in-button {
-    width: 100px;
-    height: 42px;
-    background-color: #fff;
-    color: $color-default;
-    font-family: $font-family;
-    font-size: $font-size;
-    font-weight: 200;
-    line-height: $line-height;
-    text-align: center;
-    border-radius: 20px;
-    border: 1px solid $color-default;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: background-color 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
-    padding: 0;
-    margin-right: 0;
+  &:hover {
+    background: rgba($white, 0.1);
+    transform: translateY(-1px);
+  }
 
-    &:hover {
-      background-color: $color-hover;
+  &:focus {
+    outline: none;
+  }
+  
+  // Custom hamburger lines
+  .navbar-toggler-icon {
+    background: $dark-text;
+    width: 26px;
+    height: 3px;
+    position: relative;
+    transform: rotate(0deg);
+    transition: 0.3s ease-in-out;
+    border-radius: 2px;
+    
+    @media (max-width: 576px) {
+      width: 22px;
+      height: 2.5px;
+    }
+    
+    &::before,
+    &::after {
+      content: "";
+      background: $dark-text;
+      display: block;
+      position: absolute;
+      height: 3px;
+      width: 100%;
+      border-radius: 2px;
+      opacity: 1;
+      left: 0;
+      transform: rotate(0deg);
+      transition: 0.25s ease-in-out;
+      
+      @media (max-width: 576px) {
+        height: 2.5px;
+      }
+    }
+    
+    &::before {
+      top: -8px;
+      
+      @media (max-width: 576px) {
+        top: -7px;
+      }
+    }
+    
+    &::after {
+      top: 8px;
+      
+      @media (max-width: 576px) {
+        top: 7px;
+      }
     }
   }
+  
+  // Animation when menu is open
+  &[aria-expanded="true"] {
+    .navbar-toggler-icon {
+      background: transparent;
+      
+      &::before {
+        top: 0;
+        transform: rotate(45deg);
+      }
+      
+      &::after {
+        top: 0;
+        transform: rotate(-45deg);
+      }
+    }
+  }
+}
+
+// Professional Mobile Menu
+.navbar-collapse {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  
+  @media (max-width: 991px) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    padding: 0;
+    flex-direction: column;
+    justify-content: flex-start;
+    transform: translateX(100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease-in-out;
+    
+    &:not(.show) {
+      display: flex;
+    }
+    
+    &.show {
+      display: flex;
+      transform: translateX(0);
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+
+// Mobile Menu Panel
+@media (max-width: 991px) {
+  .navbar-nav {
+    background: $white;
+    width: 320px;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    overflow-y: auto;
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    
+    @media (max-width: 576px) {
+      width: 280px;
+    }
+    
+    @media (max-width: 480px) {
+      width: 260px;
+    }
+    
+    .navbar-collapse.show & {
+      transform: translateX(0);
+    }
+  }
+}
+
+// Desktop Navigation
+@media (min-width: 992px) {
+  .navbar-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    .nav-item {
+      margin: 0 1.5rem;
+
+      @media (max-width: 1200px) {
+        margin: 0 1.25rem;
+      }
+    }
+
+    .nav-link {
+      font-size: 18px;
+      font-weight: 600;
+      text-decoration: none;
+      color: $dark-text;
+      position: relative;
+      transition: all 0.3s ease;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      white-space: nowrap;
+
+      @media (max-width: 1200px) {
+        font-size: 17px;
+        padding: 0.5rem 0.9rem;
+      }
+      
+      @media (max-width: 1100px) {
+        font-size: 16px;
+        padding: 0.5rem 0.8rem;
+      }
+      
+      @media (max-width: 1050px) {
+        font-size: 15px;
+        padding: 0.5rem 0.7rem;
+      }
+      
+      @media (max-width: 1000px) {
+        font-size: 14px;
+        padding: 0.5rem 0.6rem;
+      }
+
+      &:hover {
+        color: darken($primary-color, 5%);
+        background-color: rgba($primary-color, 0.1);
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: -4px;
+        height: 2px;
+        width: 0%;
+        background-color: $primary-color;
+        transition: all 0.3s ease-in-out;
+        transform: translateX(-50%);
+      }
+
+      &:hover::after,
+      &.active-link::after {
+        width: 50%;
+      }
+      
+      &.active-link {
+        color: $primary-color;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+// Mobile Menu Header
+.mobile-menu-header {
+  @media (max-width: 991px) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e9ecef;
+    background: $gray-light;
+    
+    @media (max-width: 576px) {
+      padding: 16px 20px;
+    }
+    
+    .mobile-logo {
+      max-height: 35px;
+      width: auto;
+    }
+    
+    .mobile-close-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: $gray-medium;
+      cursor: pointer;
+      padding: 4px;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        color: $dark-text;
+        transform: scale(1.1);
+      }
+    }
+  }
+}
+
+// Mobile Navigation Items
+@media (max-width: 991px) {
+  .mobile-nav-section {
+    padding: 24px 0;
+    
+    @media (max-width: 576px) {
+      padding: 20px 0;
+    }
+  }
+  
+  .nav-item {
+    margin: 0;
+    width: 100%;
+    border-bottom: 1px solid #f1f3f4;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      padding: 16px 24px !important;
+      font-size: 16px !important;
+      font-weight: 500 !important;
+      color: $dark-text !important;
+      text-decoration: none;
+      width: 100%;
+      transition: all 0.3s ease;
+      position: relative;
+      
+      @media (max-width: 576px) {
+        padding: 14px 20px !important;
+        font-size: 15px !important;
+      }
+      
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: $primary-color;
+        transform: scaleY(0);
+        transition: transform 0.3s ease;
+      }
+      
+      &::after {
+        display: none;
+      }
+
+      &:hover {
+        background: rgba($primary-color, 0.08) !important;
+        color: darken($primary-color, 10%) !important;
+        padding-left: 28px !important;
+        
+        @media (max-width: 576px) {
+          padding-left: 24px !important;
+        }
+      }
+      
+      &.active-link {
+        background: rgba($primary-color, 0.12) !important;
+        color: darken($primary-color, 10%) !important;
+        font-weight: 600 !important;
+        
+        &::before {
+          transform: scaleY(1);
+        }
+      }
+    }
+  }
+}
+
+// Mobile Sign In Section
+@media (max-width: 991px) {
+  .mobile-signin-section {
+    margin-top: 0;
+    padding: 24px;
+    background: $gray-light;
+    border-top: 1px solid #e9ecef;
+    
+    @media (max-width: 576px) {
+      padding: 20px;
+    }
+  }
+
+  .mobile-signin-link {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px !important;
+    margin: 0;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #fac817, #ffbd67);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: #2c3e50 !important;
+    font-size: 16px !important;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(250, 200, 23, 0.3);
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    justify-content: center;
+    
+    @media (max-width: 576px) {
+      padding: 14px 16px !important;
+      gap: 12px;
+      font-size: 15px !important;
+    }
+    
+    .signin-icon {
+      font-size: 20px;
+      width: 24px;
+      text-align: center;
+      
+      @media (max-width: 576px) {
+        font-size: 18px;
+        width: 20px;
+      }
+    }
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(250, 200, 23, 0.4);
+      color: #2c3e50 !important;
+    }
+    
+    &:active {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 15px rgba(250, 200, 23, 0.3);
+    }
+  }
+}
+
+// Desktop Sign In Button
+.sign-in-button-container {
+  position: relative;
+  display: inline-block;
+  margin-left: auto;
+  z-index: 1001;
+}
+
+.sign-in-button {
+  width: 140px;
+  height: 50px;
+  background: linear-gradient(135deg, #fac817, #ffbd67);
+  color: #2c3e50;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+  padding: 0;
+  margin: 0;
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(250, 200, 23, 0.3);
+  
+  @media (max-width: 1200px) {
+    width: 130px;
+    height: 45px;
+    font-size: 15px;
+    border-radius: 22.5px;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(250, 200, 23, 0.4);
+  }
+  
+  &:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(250, 200, 23, 0.3);
+  }
+}
+
+// Mobile Menu Backdrop
+.mobile-menu-backdrop {
+  @media (max-width: 991px) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease-in-out;
+    
+    &.show {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+
+// Animations
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

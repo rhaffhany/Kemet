@@ -48,25 +48,113 @@ input, label, h2, h6, p, button, .login-logo, .form-item, .join-us-link, .small-
   z-index: 1;
   
 }
-input {
+.loginform .form-item input {
   border: 1px solid $input-border-color;
-  border-radius: 15px;
-  background-color: #fff;
-  padding: $padding-small;
+  border-radius: 20px;
+  width: 100% !important;
+  box-sizing: border-box;
+  padding: 12px 16px;
+  font-size: 14px;
   font-family: $primary-font;
-  font-size: $font-size;
-  line-height: $line-height;
-  font-weight: 100;  
+  color: #333;
+  background-color: #fff;
+  transition: all 0.3s ease;
+  overflow: hidden;
 
   &:focus {
     outline: none;
     border-color: $input-border-color;
     box-shadow: 0 0 5px $input-border-color;
+    background-color: #fafafa;
+  }
+
+  &::placeholder {
+    color: #999;
+    font-size: 14px;
   }
 }
 
-.form-item {
-  position: relative;
+// Large screens - increase width more
+@media (min-width: 1200px) {
+  .loginform .form-item input {
+    width: 160% !important;
+    max-width: 350px !important;
+  }
+}
+
+// Medium screens - increase default width
+@media (min-width: 768px) and (max-width: 1199px) {
+  .loginform .form-item input {
+    width: 140% !important;
+    max-width: 350px !important;
+  }
+}
+
+// Small screens - slightly wider
+@media (max-width: 767px) {
+  .loginform .form-item input {
+    width: 100% !important;
+    max-width: 320px !important;
+  }
+}
+
+// Extra small screens - maintain reasonable width
+@media (max-width: 480px) {
+  .loginform .form-item input {
+    width: 95% !important;
+    max-width: 280px !important;
+  }
+}
+
+.loginform .form-item .alert {
+  color: #ff0000;
+  min-height: 20px;
+  height: auto;
+  padding: 3px 0;
+  margin-top: 2px;
+  margin-bottom: -1rem;
+  font-size: 14px;
+  line-height: 1.2;
+  font-weight: 500;
+  transition: all 0.3s ease;
+
+  p {
+    margin: 0;
+  }
+}
+
+.loginform a.forgot-password {
+  color: #666;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 13px;
+  display: block;
+  text-align: right;
+  margin-top: 8px;
+  margin-bottom: 0px;
+
+  // Fix for small screens - prevent cutoff
+  @media (max-width: 768px) {
+    text-align: left;
+    margin-right: 10px;
+  }
+  
+  @media (max-width: 480px) {
+    text-align: left;
+    margin-right: 15px;
+    font-size: 12px;
+  }
+
+  &:hover {
+    text-decoration: underline;
+    color: $input-border-color;
+  }
+}
+
+.loginform .form-item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
   width: 100%;
 }
 
@@ -79,82 +167,155 @@ input {
 }
 
 .loginform {
-  width: 624px;
-  height: 580px;
-  border-width: 1px;
-  padding: $padding-large;
+  padding: 40px 30px 30px 30px;
+  width: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
 
-  .btn{
-  margin-left: -4rem;
+  // Responsive padding adjustments
+  @media (max-width: 768px) {
+    padding: 40px 30px 30px 30px;
+    width: 90%;
+    max-width: 400px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 30px 20px 20px 20px;
+    width: 95%;
+  }
+
+  .form-action{
+    margin-left: -0.5rem;
   }
   
   .login-logo {
-    width: 120px;
-    height: auto;
-    margin-left: -3rem;
-    border-radius: 20px 0 0 0;
-    margin-bottom: 45px;
+    display: none;
   }
-  input {
-    width:423px;
+  
+  .input-field {
+    width: 100%;
+    max-width: 320px;
+    box-sizing: border-box;
+    margin-left: 0;
   }
 }
 
-h2 {
-  font-family: 'Poppins', sans-serif;
-  font-weight: 700;
-  font-size: 30px;
-  line-height: 39px;
-  letter-spacing: -0.01em; 
-  margin-bottom: 14px;
+.loginform h2 {
+  margin-bottom: 32px;
+  margin-top: 30px;
+  margin-left: 0;
+  font-weight: 600;
+  font-size: 24px;
+  color: #333;
+  text-align: center;
+  
+  // Responsive adjustments
+  @media (max-width: 768px) {
+    margin-top: 25px;
+    margin-bottom: 24px;
+    font-size: 22px;
+    margin-left: -20px;
+  }
+  
+  @media (max-width: 480px) {
+    margin-top: 20px;
+    font-size: 20px;
+    margin-bottom: 20px;
+    margin-left: -20px;
+  }
 }
 
-h6 {
-  font-size: 12px;
+.loginform .line-container h6 {
+  font-family: $primary-font;
+  font-size: 14px;
   font-weight: 500;
-  line-height: 18px;
-  margin: 25px 22px 11px 22px;
+  color: #888;
+  letter-spacing: 0.2px;
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+  background-color: transparent;
+  position: relative;
+  z-index: 1;
+  
+  // Small screen adjustments
+  @media (max-width: 768px) {
+    margin-left: -20px;
+  }
+  
+  @media (max-width: 480px) {
+    margin-left: -20px;
+  }
 }
 
-label {
-  padding-bottom: $label-bottom-padding;
+.loginform .form-item label {
+  font-family: $primary-font;
   font-weight: 500;
-  font-size: $font-size;
-  line-height: $line-height;
-  margin-top: 10px;
+  font-size: 14px;
+  line-height: 1.4;
+  margin-bottom: 8px;
+  color: #333;
 }
 
-.line-container {
+.loginform .line-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  margin-left: -4rem;
-
+  gap: 16px;
+  margin: 32px 0 16px 0;
+  width: 100%;
+  position: relative;
 }
 
-.small-hr {
-  width: 90px;
-  border-top: 2px solid #111;
-  margin-bottom: 20px;
-
+.loginform .line-container .small-hr {
+  display: none;
 }
 
 .join-us-link {
-  font-size: $font-size;
-  font-weight: 400;
-  line-height: $line-height;
-  text-align: center;
-  display: grid;
-  place-items: center;
-  margin-bottom: 2rem;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0;
   cursor: pointer;
-  color: #000;
-  margin-left: -4rem;
-
+  color: #333;
+  margin-top: 0px;
+  padding: 0px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  a {
+    background: linear-gradient(135deg, #fac817, #ffbd67);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-decoration: none;
+    font-weight: 600;
+    
+    &:hover {
+      background: linear-gradient(135deg, #ffbd67, #fac817);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transform: translateY(-1px);
+    }
+  }
 
   &:hover {
-    text-decoration: underline;
+    background-color: rgba(250, 200, 23, 0.05);
+  }
+  
+  // Small screen adjustments
+  @media (max-width: 768px) {
+    margin-left: -20px;
+  }
+  
+  @media (max-width: 480px) {
+    margin-left: -20px;
+    transform: translateX(-12px);
   }
 }
 
@@ -168,32 +329,55 @@ a {
   }
 }
 
-.btn {
-  display: grid;
-  place-items: center;
-}
+
 
 .login-btn {
-  width: 249px;
-  height: 42px;
+  width: 100%;
+  max-width: 100%;
+  height: 48px;
   background-color: #FFBD67;
   color: #000000;
-  font-size: $font-size;
+  font-family: $primary-font;
+  font-size: 16px;
   font-weight: 500;
-  line-height: $line-height;
+  line-height: 1.4;
   text-align: center;
-  border: 2px solid $input-border-color;
-  border-radius: 20px;
-  cursor: pointer;
+  border: none;
+  border-radius: 24px;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0;
-  margin-top: 24px;
+  margin: 24px auto 0 auto;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   &:disabled {
-    background-color: #FFBD67;
+    opacity: 0.7;
     cursor: not-allowed;
+    background-color: #FFBD67;
+    color: #000000;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: darken(#FFBD67, 8%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  // Small screen adjustments
+  @media (max-width: 768px) {
+    transform: translateX(-12px);
+  }
+  
+  @media (max-width: 480px) {
+    transform: translateX(-12px);
   }
 }
 
@@ -202,26 +386,48 @@ a {
 
 .forgot-password-form {
   position: relative;
-  margin:1rem;
-  margin-left: 5rem;
+  margin: 1rem auto;
   padding: 50px;
   width: 400px;
   height: 450px;
   z-index: 1;
   max-height: 400px;
   max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
   
   .form-item {
     width: 100%;
-    max-width: 400px;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    label {
+      align-self: flex-start;
+      margin-bottom: 0.5rem;
+    }
+    
+    input {
+      width: 100%;
+    }
   }
 
-  h2, p {
+  h2 {
     margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  
+  p {
+    margin-bottom: 1.5rem;
+    text-align: center;
   }
 
   .login-btn {
     margin-top: 1rem;
+    align-self: center;
   }
 }
 
@@ -243,7 +449,7 @@ ng-otp-input {
   display: flex;
   gap: 10px;
   justify-content: center;
-  margin-left: -6rem;
+  margin-left: 0;
 
   .login-btn{
     margin: 20px auto 0; 
@@ -286,13 +492,15 @@ ng-otp-input {
   margin-left: 85px;
   padding: 20px;
 
-
   input{
-    width: 353px;
-
+    width: 100%;
+    max-width: 320px;
+    box-sizing: border-box;
   }
+  
   button {
-    width: 353px;
+    width: 100%;
+    max-width: 320px;
     margin-top: 20px;
   }
 
@@ -317,7 +525,7 @@ ng-otp-input {
   font-size: 14px;
   display: flex;
   align-items: center;
-  margin-left: 6rem;
+  margin-left: 0;
   gap: 8px;
 
   .resend-link {
@@ -342,56 +550,776 @@ ng-otp-input {
   }
 }
 .modal.login-modal {
-  display: none;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  
-  .form-item {
-    display: flex;
-    flex-direction: column; 
-    gap: 0px; 
-  }
+  background-color: rgba(0, 0, 0, 0.75);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 20px;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
   
   &.show {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    animation: fadeIn 0.3s ease-out;
   }
 
   .modal-content {
     position: relative;
-    background-color: white;
-    margin: 20px auto;
-    padding: 30px;
-    width: 90%;
-    max-width: 624px;
-    border-radius: 8px;
-    box-sizing: border-box;
+    background: linear-gradient(135deg, #ffffff 0%, #fefefe 100%);
+    padding: 0;
+    border-radius: 12px;
+    width: 400px;
+    max-width: 90vw;
+    margin: 0 auto;
+    max-height: 90vh;
+    overflow: hidden;
+    color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 
+      0 10px 25px rgba(0, 0, 0, 0.15),
+      0 0 0 1px rgba(250, 200, 23, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(250, 200, 23, 0.2);
+    transition: all 0.3s ease;
+    animation: modalSlideUp 0.3s ease-out;
+    
+    @media (max-width: 768px) {
+      width: 95vw;
+      max-width: 420px;
+      border-radius: 8px;
+      margin: 10px;
+    }
+    
+    @media (max-width: 480px) {
+      width: 98vw;
+      max-width: 360px;
+      border-radius: 6px;
+      margin: 5px;
+    }
   }
 
   .success-form {
     text-align: center;
     padding: 2rem;
+    width: 100%;
 
     h2 {
       margin-bottom: 1rem;
       font-weight: 700;
+      color: #333;
+      font-size: 24px;
+      
+      @media (max-width: 768px) {
+        font-size: 22px;
+      }
+      
+      @media (max-width: 480px) {
+        font-size: 20px;
+      }
     }
 
     p {
       margin-bottom: 1.5rem;
+      color: #666;
+      font-size: 16px;
+      line-height: 1.5;
+      
+      @media (max-width: 768px) {
+        font-size: 15px;
+        margin-bottom: 1.2rem;
+      }
+      
+      @media (max-width: 480px) {
+        font-size: 14px;
+        margin-bottom: 1rem;
+      }
     }
 
     .login-btn {
       width: 100%;
-      max-width: 353px;
+      max-width: 280px;
       margin: 1rem auto 0;
+      height: 48px;
+      
+      @media (max-width: 768px) {
+        max-width: 250px;
+        height: 44px;
+      }
+      
+      @media (max-width: 480px) {
+        max-width: 220px;
+        height: 40px;
+        font-size: 14px;
+      }
     }
+  }
+  
+  // Large screen optimizations
+  @media (min-width: 1200px) {
+    .modal-content {
+      width: 420px;
+      
+      .loginform {
+        padding: 40px 35px 35px 35px;
+        width: 100%;
+        
+        h2 {
+          font-size: 24px;
+          margin-top: 30px;
+        }
+        
+        .form-item input {
+          padding: 12px 15px;
+          font-size: 14px;
+          width: 100% !important;
+          max-width: 100% !important;
+        }
+        
+        .login-btn {
+          height: 46px;
+          font-size: 15px;
+          max-width: 100%;
+          width: 100%;
+        }
+      }
+    }
+  }
+  
+  // iPad Pro 12.9" (1024x1366) - Portrait and Landscape
+  @media only screen 
+    and (min-device-width: 1024px) 
+    and (max-device-width: 1366px) 
+    and (-webkit-min-device-pixel-ratio: 2) {
+    .modal-content {
+      width: 450px;
+      max-width: 60vw;
+      
+      .loginform {
+        padding: 40px 35px 35px 35px;
+        width: 100%;
+        
+        h2 {
+          font-size: 24px;
+          margin-top: 30px;
+          margin-bottom: 28px;
+        }
+        
+        .form-item {
+          margin-bottom: 20px;
+          
+          input {
+            width: 100% !important;
+            max-width: 100% !important;
+            padding: 14px 16px;
+            font-size: 14px;
+            border-radius: 20px;
+          }
+          
+          label {
+            font-size: 13px;
+            margin-bottom: 8px;
+          }
+        }
+        
+        .login-btn {
+          height: 46px;
+          font-size: 15px;
+          max-width: 100%;
+          width: 100%;
+          margin: 25px auto 0;
+        }
+        
+        .line-container {
+          margin: 30px 0 15px 0;
+          
+          h6 {
+            font-size: 13px;
+          }
+        }
+        
+        .join-us-link {
+          font-size: 14px;
+          margin-top: 6px;
+        }
+        
+        a.forgot-password {
+          font-size: 12px;
+          margin-top: 8px;
+        }
+      }
+    }
+  }
+  
+  // iPad Pro 11" (834x1194) - Portrait and Landscape
+  @media only screen 
+    and (min-device-width: 834px) 
+    and (max-device-width: 1194px) 
+    and (-webkit-min-device-pixel-ratio: 2) {
+    .modal-content {
+      width: 430px;
+      max-width: 70vw;
+      
+      .loginform {
+        padding: 40px 35px 35px 35px;
+        width: 100%;
+        
+        h2 {
+          font-size: 24px;
+          margin-top: 30px;
+          margin-bottom: 28px;
+        }
+        
+        .form-item {
+          margin-bottom: 20px;
+          
+          input {
+            width: 100% !important;
+            max-width: 100% !important;
+            padding: 14px 16px;
+            font-size: 14px;
+          }
+          
+          label {
+            font-size: 13px;
+            margin-bottom: 8px;
+          }
+        }
+        
+        .login-btn {
+          height: 46px;
+          font-size: 15px;
+          max-width: 100%;
+          width: 100%;
+          margin: 25px auto 0;
+        }
+        
+        .line-container {
+          margin: 30px 0 15px 0;
+          
+          h6 {
+            font-size: 13px;
+          }
+        }
+        
+        .join-us-link {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+  
+  // Regular iPad (768x1024) - Portrait and Landscape
+  @media only screen 
+    and (min-device-width: 768px) 
+    and (max-device-width: 1024px) 
+    and (-webkit-min-device-pixel-ratio: 1) {
+    .modal-content {
+      width: 420px;
+      max-width: 75vw;
+      
+      .loginform {
+        padding: 40px 30px 30px 30px;
+        width: 100%;
+        
+        h2 {
+          font-size: 22px;
+          margin-top: 25px;
+        }
+        
+        .form-item input {
+          width: 100% !important;
+          max-width: 100% !important;
+          padding: 13px 15px;
+        }
+        
+        .login-btn {
+          height: 44px;
+          max-width: 100%;
+          width: 100%;
+        }
+      }
+    }
+  }
+  
+  // General tablet fallback (769px - 1024px)
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .modal-content {
+      width: 500px;
+      max-width: 85vw;
+      
+      .loginform {
+        padding: 50px 35px 35px 35px;
+        
+        .login-logo {
+          width: 95px;
+        }
+        
+        h2 {
+          font-size: 24px;
+          margin-top: 35px;
+        }
+        
+        .form-item input {
+          width: 120% !important;
+          max-width: 300px !important;
+        }
+      }
+    }
+  }
+  
+  // iPad Pro specific viewport adjustments
+  @media screen and (min-width: 1024px) and (max-width: 1366px) {
+    padding: 25px;
+    
+    .modal-content {
+      width: 440px;
+      max-width: 65vw;
+      border-radius: 12px;
+      
+      .loginform {
+        padding: 40px 30px 30px 30px;
+        width: 100%;
+        
+        h2 {
+          font-size: 23px;
+          margin-top: 28px;
+        }
+        
+        .form-item input {
+          width: 100% !important;
+          max-width: 100% !important;
+          padding: 13px 15px;
+          font-size: 14px;
+        }
+        
+        .login-btn {
+          height: 44px;
+          font-size: 14px;
+          max-width: 100%;
+          width: 100%;
+        }
+      }
+    }
+  }
+  
+  // iPad landscape orientation specific
+  @media screen and (min-width: 1024px) and (max-height: 834px) and (orientation: landscape) {
+    .modal-content {
+      width: 420px;
+      max-width: 75vw;
+      max-height: 85vh;
+      
+      .loginform {
+        padding: 30px 30px 25px 30px;
+        width: 100%;
+        
+        h2 {
+          font-size: 22px;
+          margin-top: 20px;
+          margin-bottom: 20px;
+        }
+        
+        .form-item {
+          margin-bottom: 16px;
+          
+          input {
+            width: 100% !important;
+            max-width: 100% !important;
+            padding: 11px 14px;
+          }
+        }
+        
+        .login-btn {
+          height: 42px;
+          margin: 18px auto 0;
+          width: 100%;
+          max-width: 100%;
+        }
+        
+        .line-container {
+          margin: 20px 0 12px 0;
+        }
+      }
+    }
+  }
+  
+  // Responsive overlay adjustments
+  @media (max-width: 768px) {
+    padding: 15px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 10px;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Responsive styles for mobile and tablet
+@media (max-width: 768px) {
+  .loginform {
+    width: 100%;
+    max-width: 380px;
+    height: auto;
+    padding: 40px 30px 30px 30px;
+    margin: 0 auto;
+    overflow: hidden;
+    
+    .login-logo {
+      display: none !important;
+    }
+    
+    .btn {
+      margin-left: 0;
+      text-align: center;
+    }
+    
+    input {
+      width: 100%;
+      max-width: calc(100% - 20px);
+      box-sizing: border-box;
+      padding: 12px 15px;
+      font-size: 16px;
+      margin-left: 0;
+      overflow: hidden;
+    }
+  }
+  
+  // Modal specific responsive adjustments
+  .modal.login-modal {
+    .loginform {
+      width: 100%;
+      max-width: 100%;
+      padding: 30px 25px 30px 25px;
+      margin: 0;
+      border-radius: 0;
+      overflow: hidden;
+      
+      .login-logo {
+        display: none !important;
+      }
+      
+      h2 {
+        font-size: 22px;
+        margin-top: 25px;
+        margin-bottom: 24px;
+      }
+      
+      .form-item input {
+        max-width: 100%;
+        width: 100% !important;
+        overflow: hidden;
+      }
+      
+      .login-btn {
+        max-width: 100%;
+        transform: none;
+      }
+      
+      .join-us-link {
+        transform: none;
+        margin-left: 0;
+      }
+    }
+  }
+  
+  .form-item {
+    max-width: calc(100% - 20px);
+    margin: 0 auto 1rem auto;
+    
+    label {
+      margin-left: 0;
+      font-size: 15px;
+    }
+  }
+  
+  h2 {
+    font-size: 24px;
+    line-height: 32px;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .line-container {
+    margin-left: 0;
+    margin: 1rem 0;
+  }
+  
+  .join-us-link {
+    margin-left: 0;
+    margin-bottom: 1rem;
+  }
+  
+  .forgot-password-form {
+    width: 90vw;
+    max-width: 350px;
+    margin: 1rem auto;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2rem 1.5rem;
+    height: auto;
+    
+    .form-item {
+      width: 100%;
+      max-width: 280px;
+      
+      input {
+        padding: 12px 15px;
+        font-size: 16px;
+      }
+    }
+  }
+  
+  .verification-form {
+    width: 90vw;
+    max-width: 400px;
+    margin: 1rem auto;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1.5rem;
+    height: auto;
+    
+    ng-otp-input {
+      margin-left: 0;
+      justify-content: center;
+      
+      input {
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+      }
+    }
+    
+    button {
+      width: 100%;
+    }
+  }
+  
+  .reset-password-section {
+    width: 90vw;
+    max-width: 400px;
+    margin: 1rem auto;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1.5rem;
+    height: auto;
+    
+    input {
+      width: 100%;
+      max-width: 280px;
+      padding: 12px 15px;
+      font-size: 16px;
+    }
+    
+    button {
+      width: 100%;
+      max-width: 280px;
+    }
+  }
+  
+  .resend-container {
+    margin-left: 0;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .loginform {
+    width: 100%;
+    padding: 30px 20px 20px 20px;
+    overflow: hidden;
+    
+    .login-logo {
+      display: none !important;
+    }
+    
+    input {
+      max-width: calc(100% - 20px);
+      padding: 10px 12px;
+      font-size: 16px;
+      overflow: hidden;
+    }
+  }
+  
+  // Modal specific mobile adjustments
+  .modal.login-modal {
+    padding: 5px;
+    overflow: hidden;
+    
+    .modal-content {
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    
+    .loginform {
+      width: 100%;
+      max-width: 100%;
+      padding: 20px 15px 20px 15px;
+      margin: 0;
+      overflow: hidden;
+      
+      .login-logo {
+        display: none !important;
+      }
+      
+      h2 {
+        font-size: 20px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        margin-left: 0;
+        transform: none;
+      }
+      
+      .form-item {
+        margin-bottom: 18px;
+        
+        input {
+          width: 100% !important;
+          max-width: 100% !important;
+          padding: 12px 15px;
+          font-size: 16px;
+          overflow: hidden;
+        }
+        
+        label {
+          font-size: 14px;
+          margin-bottom: 6px;
+        }
+      }
+      
+      .login-btn {
+        max-width: 100%;
+        width: 100%;
+        height: 44px;
+        font-size: 15px;
+        margin: 20px auto 0;
+        transform: none;
+      }
+      
+      .line-container h6 {
+        font-size: 13px;
+        margin-left: 0;
+        transform: none;
+      }
+      
+      .join-us-link {
+        font-size: 14px;
+        margin-left: 0;
+        margin-top: 8px;
+        transform: none;
+      }
+      
+      a.forgot-password {
+        font-size: 12px;
+        text-align: left;
+        margin-right: 0;
+      }
+    }
+  }
+  
+  .form-item {
+    max-width: calc(100% - 15px);
+  }
+  
+  h2 {
+    font-size: 20px;
+    line-height: 28px;
+  }
+  
+  h6 {
+    font-size: 11px;
+    margin: 20px 15px 10px 15px;
+  }
+  
+  .login-btn {
+    width: 100%;
+    max-width: 200px;
+    font-size: 14px;
+    height: 40px;
+  }
+  
+  .small-hr {
+    width: 60px;
+  }
+  
+  .verification-form {
+    padding: 1rem;
+    
+    ng-otp-input {
+      input {
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
+      }
+    }
+  }
+  
+  .forgot-password-form {
+    padding: 1.5rem 1rem;
+    
+    .form-item {
+      max-width: 240px;
+      
+      input {
+        padding: 10px 12px;
+      }
+    }
+  }
+  
+  .reset-password-section {
+    padding: 1.5rem 1rem;
+    
+    input {
+      max-width: 240px;
+      padding: 10px 12px;
+    }
+    
+    button {
+      max-width: 240px;
+    }
+  }
+}
+
+// Global responsive container
+@media (max-width: 768px) {
+  .color {
+    width: 300px;
+    height: 300px;
+    top: 20px;
+    left: 20px;
+    filter: blur(50px);
+  }
+  
+  body {
+    padding: 1rem;
+    box-sizing: border-box;
   }
 }
 

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ModalService } from '../../services/modal.service';
 import { Subscription } from 'rxjs';
+import { InterestsService } from '../../services/interests.service';
 
 @Component({
   selector: 'app-login',
@@ -69,7 +70,8 @@ export class LoginComponent implements OnDestroy {
     private authService: AuthService,
     private router: Router,
     private fb: FormBuilder,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private interestsService: InterestsService
   ) {
     
     // Initialize forms
@@ -156,8 +158,10 @@ export class LoginComponent implements OnDestroy {
     
     this.authService.loginForm(this.loginForm.value).subscribe({
       next: () => {
-        // Redirect to home page with app navbar
-        this.router.navigate(['/home']);
+        // Close the login modal
+        this.modalService.closeAllModals();
+        // Show the interests form
+        this.interestsService.showInterestsForm();
       },
       error: (error) => {
         if (error.status === 401) {

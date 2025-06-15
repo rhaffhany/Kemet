@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren, QueryList, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList, AfterViewInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { CarouselComponent } from 'ngx-owl-carousel-o';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { AuthService } from '../../services/auth.service';
@@ -48,7 +48,7 @@ interface CarouselSection {
   templateUrl: './things-to-do.component.html',
   styleUrls: ['./things-to-do.component.scss']
 })
-export class ThingsToDoComponent implements OnInit, AfterViewInit {
+export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren('owlCarousel') owlCarousels!: QueryList<CarouselComponent>;
 
   leftArrowSrc: string = 'assets/icons/arrow-left-circle.svg';
@@ -77,11 +77,21 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
     autoWidth: false,
     items: 5,
     responsive: {
-      0: { items: 1 },
-      400: { items: 2 },
-      740: { items: 3 },
-      940: { items: 4 },
-      1200: { items: 5 }
+      0: { 
+        items: 2, 
+        margin: 4,
+        stagePadding: 0,
+        autoWidth: false
+      },
+      480: { 
+        items: 2, 
+        margin: 4,
+        stagePadding: 0,
+        autoWidth: false
+      },
+      768: { items: 3, margin: 10 },
+      992: { items: 4, margin: 10 },
+      1200: { items: 5, margin: 10 }
     },
     nav: false
   };
@@ -91,6 +101,14 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
   marker: any;
   locationData: any;
   
+  // Modal properties
+  isLocationModalOpen: boolean = false;
+  selectedLocationText: string = '';
+  
+  private resizeListener?: () => void;
+  private visibilityListener?: () => void;
+  private orientationListener?: () => void;
+  
   constructor(
     private homeService: HomeService,
     private authService: AuthService,
@@ -99,6 +117,11 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
+    // Auto-open location modal when component loads
+    setTimeout(() => {
+      this.openLocationModal();
+    }, 500);
+    
     //For Updating Location
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -112,6 +135,9 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
         };
 
         this._UpdateLocationService.updateLocation(this.locationData).subscribe();
+        
+        // Initialize the selected location text
+        this.updateSelectedLocationText();
 
         this.loadMap(lat, lng);
       });
@@ -135,6 +161,55 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
     this.owlCarousels.changes.subscribe(() => {
       this.refreshAllCarousels();
     });
+    
+    // Add event listeners to handle mobile menu interactions
+    this.addMobileMenuEventListeners();
+    
+    // Force refresh after view init to ensure mobile carousels appear
+    setTimeout(() => {
+      this.refreshAllCarousels();
+    }, 1000);
+  }
+  
+  private addMobileMenuEventListeners(): void {
+    // Listen for window resize events (triggered when mobile menu opens/closes)
+    this.resizeListener = () => {
+      setTimeout(() => {
+        this.refreshAllCarousels();
+      }, 300);
+    };
+    window.addEventListener('resize', this.resizeListener);
+    
+    // Listen for visibility change events
+    this.visibilityListener = () => {
+      if (!document.hidden) {
+        setTimeout(() => {
+          this.refreshAllCarousels();
+        }, 200);
+      }
+    };
+    document.addEventListener('visibilitychange', this.visibilityListener);
+    
+    // Listen for orientation change on mobile devices
+    this.orientationListener = () => {
+      setTimeout(() => {
+        this.refreshAllCarousels();
+      }, 500);
+    };
+    window.addEventListener('orientationchange', this.orientationListener);
+  }
+  
+  ngOnDestroy(): void {
+    // Clean up event listeners
+    if (this.resizeListener) {
+      window.removeEventListener('resize', this.resizeListener);
+    }
+    if (this.visibilityListener) {
+      document.removeEventListener('visibilitychange', this.visibilityListener);
+    }
+    if (this.orientationListener) {
+      window.removeEventListener('orientationchange', this.orientationListener);
+    }
   }
 
   // Update Location
@@ -173,42 +248,11 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
         this._UpdateLocationService.updateLocation(this.locationData).subscribe();
       });
 
-      this.addSearchBox();
+
     });
   }
 
-  addSearchBox(): void {
-    const input = document.getElementById('search-box') as HTMLInputElement;
-    input.type = 'text';
-    input.placeholder = 'Search for a location';
-    input.style.cssText = 'width: 300px; margin-top: 10px; padding: 6px;';
 
-    this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
-
-    const searchBox = new google.maps.places.SearchBox(input);
-    this.map.addListener('bounds_changed', () => {
-      searchBox.setBounds(this.map.getBounds()!);
-    });
-
-    searchBox.addListener('places_changed', () => {
-      const places = searchBox.getPlaces();
-      if (places && places.length > 0) {
-        const place = places[0];
-        const location = place.geometry!.location!;
-        this.map.setCenter(location);
-        this.marker.setPosition(location);
-
-        this.locationData = {
-          latitude: location.lat(),
-          longitude: location.lng(),
-          address: `https://maps.google.com/?q=${location.lat()},${location.lng()}`,
-          locationLink: `https://maps.google.com/?q=${location.lat()},${location.lng()}`
-        };
-
-        this._UpdateLocationService.updateLocation(this.locationData).subscribe();
-      }
-    });
-  }
 
   updateLocationData(lat: number, lng: number): void {
     this.locationData = {
@@ -223,10 +267,42 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit {
     this._UpdateLocationService.updateLocation(this.locationData).subscribe({
       next: (res) =>{
         console.log("location now:" , this.locationData.address);
+        // Update the selected location text and close modal
+        this.updateSelectedLocationText();
+        this.closeLocationModal();
         alert('Location updated successfully!')
       },
       error: () => alert('Failed to update location.')
     });
+  }
+
+  // Modal methods
+  openLocationModal(): void {
+    this.isLocationModalOpen = true;
+    // Initialize map when modal opens
+    setTimeout(() => {
+      if (this.locationData) {
+        this.loadMap(this.locationData.latitude, this.locationData.longitude);
+      } else if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          this.loadMap(lat, lng);
+        });
+      }
+    }, 100);
+  }
+
+  closeLocationModal(): void {
+    this.isLocationModalOpen = false;
+  }
+
+  private updateSelectedLocationText(): void {
+    if (this.locationData) {
+      // You can customize this to show a more user-friendly location name
+      // For now, showing coordinates
+      this.selectedLocationText = `${this.locationData.latitude.toFixed(4)}, ${this.locationData.longitude.toFixed(4)}`;
+    }
   }
   //
 

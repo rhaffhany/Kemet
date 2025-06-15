@@ -15,38 +15,42 @@
                 <p>Find the Most Beautiful & Historic Places Around Egypt</p>
             </div>
             <app-search/>
+            
+            <!-- Location Display Button -->
+            <div class="location-display-container">
+                <button class="location-display-btn" (click)="openLocationModal()">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>{{ selectedLocationText || 'Change Location' }}</span>
+                    <i class="fas fa-edit"></i>
+                </button>
+            </div>
         </div>
     </div>
 
-    <div class="container my-5">
-        <div class="rounded-4 p-4">
-            <div class="text-center">
-            <!-- <h3 class="mb-4 text-primary">🌍 Update Your Location</h3> -->
-        
-            <!-- Search Input -->
-            <div class="input-group">
-                <input
-                id="search-box"
-                type="text"
-                class="form-control w-50 mt-5 rounded-pill px-4"
-                placeholder="Search for a location"
-                />
-            </div>
-            <!-- Map Container -->
-            <div
-            #mapContainer
-            class="mx-auto rounded-4 shadow"
-            style="width: 100%; max-width: 700px; height: 450px;"
-            ></div>
+    <!-- Location Modal -->
+    <div class="location-modal" [class.show]="isLocationModalOpen" (click)="closeLocationModal()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+                         <div class="modal-header">
+                 <h3>Update Your Location</h3>
+                 <button class="close-btn" (click)="closeLocationModal()">
+                     <i class="fas fa-times"></i>
+                 </button>
+             </div>
             
-            <!-- Update Button -->
-            <button
-            class="btn btn-primary mt-4 px-5 py-2 rounded-pill fw-semibold"
-            (click)="confirmLocationUpdate()"
-            >
-            ✅ Update Location
-            </button>
-
+            <div class="modal-body">
+                <!-- Map Container -->
+                <div
+                #mapContainer
+                class="map-container"
+                ></div>
+                
+                                 <!-- Update Button -->
+                 <button
+                 class="btn btn-primary mt-4 px-5 py-2 rounded-pill fw-semibold update-btn"
+                 (click)="confirmLocationUpdate()"
+                 >
+                 Update Location
+                 </button>
             </div>
         </div>
     </div>

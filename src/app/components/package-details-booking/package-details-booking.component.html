@@ -1,42 +1,48 @@
 <section class="py-3 py-md-5">
     <!-- package info -->
-    <div class="container px-3 px-md-5 pt-3 pt-md-5 mt-2 mt-md-3">
-        <div class="row">
-            <div class="col-12">
-                <h1 class="fw-bolder fs-4 fs-md-2 mt-5 pt-2">{{packageDetails.planName}}: {{packageDetails.description}}</h1>
-                <div class="rating d-flex">
-                    <p class="fw-bold me-1 mb-0" style="font-size: 18px;">{{packageDetails.averageRating}}</p>
-                    <span *ngFor="let star of [1, 2, 3, 4, 5]; let i = index" class="rate">
-                        <!-- Full Star -->
-                        <svg *ngIf="i + 1 <= packageDetails.averageRating" width="24" height="24" viewBox="0 0 24 24"
-                             xmlns="http://www.w3.org/2000/svg" fill="#FAC817" stroke="currentColor"
-                             stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                        </svg>
-                      
-                        <!-- Half Star -->
-                        <svg *ngIf="i < packageDetails.averageRating && i + 1 > packageDetails.averageRating" width="24" height="24" viewBox="0 0 24 24"
-                             xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1"
-                             stroke-linecap="round" stroke-linejoin="round">
-                          <defs>
-                            <linearGradient id="half-fill" x1="0" x2="1" y1="0" y2="0">
-                              <stop offset="50%" stop-color="#FAC817"/>
-                              <stop offset="50%" stop-color="#FFE5C2"/>
-                            </linearGradient>
-                          </defs>
-                          <polygon fill="url(#half-fill)" points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                        </svg>
-                          <!-- Empty Star -->
-                          <svg *ngIf="i + 1 > packageDetails.averageRating" width="24" height="24" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg" fill="#FFE5C2" stroke="currentColor"
-                            stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                        </svg>
-                    </span>
+    <div class="container px-3 px-md-5 mt-2 mt-md-3">
+        <div class="header">
+            <div class="header-content">
+                <div class="title-section">
+                    <h1 class="place-title">{{packageDetails.planName}}</h1>
+                    <div class="info">
+                        <div class="rating d-flex">
+                            <span *ngFor="let star of [1, 2, 3, 4, 5]" class="rate">
+                                <!-- Full Star -->
+                                <svg *ngIf="star <= packageDetails.averageRating" width="24" height="24" viewBox="0 0 24 24"
+                                     xmlns="http://www.w3.org/2000/svg" fill="#FAC817" stroke="currentColor"
+                                     stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                </svg>
+                              
+                                <!-- Half Star -->
+                                <svg *ngIf="star - 0.5 <= packageDetails.averageRating && star > packageDetails.averageRating" width="24" height="24" viewBox="0 0 24 24"
+                                     xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1"
+                                     stroke-linecap="round" stroke-linejoin="round">
+                                  <defs>
+                                    <linearGradient id="half-fill" x1="0" x2="1" y1="0" y2="0">
+                                      <stop offset="50%" stop-color="#FAC817"/>
+                                      <stop offset="50%" stop-color="#FFE5C2"/>
+                                    </linearGradient>
+                                  </defs>
+                                  <polygon fill="url(#half-fill)" points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                </svg>
+                                <!-- Empty Star -->
+                                <svg *ngIf="star > packageDetails.averageRating" width="24" height="24" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg" fill="#FFE5C2" stroke="currentColor"
+                                    stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                </svg>
+                            </span>
+                            <p style="font-size: 20px;" class="ms-1 mb-0">reviews</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="mt-2">
-                    <button (click)="openModal()" class="text-decoration-none border-0 text-black review-link">
-                        <span class="review-button" style="font-size: 16px; font-weight: 500;">Write a review</span>
+
+                <div class="cta-section">
+                    <button (click)="openModal()" class="cta-button">
+                        <i class="fas fa-pen"></i>
+                        Write a review
                     </button>
                 </div>
             </div>

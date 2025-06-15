@@ -263,11 +263,23 @@ body, html {
     position: relative;
     transition: all 0.3s ease;
     padding: 0.5rem 1rem;
+    white-space: nowrap;
+
+    @media (max-width: 1200px) {
+      font-size: 15px;
+      padding: 0.5rem 0.8rem;
+    }
+    
+    @media (max-width: 1100px) {
+      font-size: 14px;
+      padding: 0.5rem 0.6rem;
+    }
 
     @media (max-width: 991px) {
       display: block;
       padding: 10px 0;
       font-size: 18px;
+      white-space: normal;
     }
 
     &::after {
@@ -295,11 +307,11 @@ body, html {
 .profile-container {
   position: relative;
   display: inline-block;
-  margin-left: 20px;
+  margin-left: 5px;
   z-index: 1001;
 
   @media (max-width: 991px) {
-    margin-left: 10px;
+    margin-left: 5px;
   }
 
   .profile-trigger {

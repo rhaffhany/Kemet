@@ -77,6 +77,13 @@ export class AuthService {
   // Register a new user
   registerForm(userData: RegisterData): Observable<any> {
     return this._HttpClient.post(`${this.apiUrl}/Api/Accounts/RegisterCustomer`, userData).pipe(
+      tap((response: any) => {
+        if (response && response.token) {
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('userName', response.userName);
+          this.updateLoginState();
+        }
+      }),
       catchError(error => {
         console.error('Registration Error:', error);
         return throwError(() => error);

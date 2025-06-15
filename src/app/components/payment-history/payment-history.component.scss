@@ -10,6 +10,15 @@ section{
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: -20px;
+
+  @media (max-width: 991px) {
+    margin-top: -30px;
+  }
+
+  @media (max-width: 576px) {
+    margin-top: -40px;
+  }
   // min-height: 100vh;
 }
 
