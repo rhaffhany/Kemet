@@ -7,16 +7,26 @@
             </div>
             <h1 class="title" style="cursor: pointer;">Bookings</h1>
         </div>
-        </div>
+      </div>
     </div>
 
     <div class="container pb-5">
-        <div class="row booking-details bg-light shadow rounded-4 p-4 mb-2 justify-content-between" *ngFor="let data of bookingData" [routerLink]="(['/Package-details', data.trabelAgencyPlanID])">
+
+        <div class="search-container mb-3 w-25">
+          <div class="input-group">
+              <input type="text" class="form-control" placeholder="Search bookings..." [(ngModel)]="searchTerm" (input)="onSearch()">
+              <span class="input-group-text">
+                  <i class="fa-solid fa-search"></i>
+              </span>
+          </div>
+        </div>
+
+        <div class="row booking-details bg-light shadow rounded-4 p-4 mb-2 justify-content-between" *ngFor="let data of filteredBookings" [routerLink]="(['/Package-details', data.travelAgencyPlanID])">
           <div class="col-md-5 d-flex">
-            <img class="rounded-circle me-3" [src]=" 'https://kemet-server.runasp.net/' + data.travelAgencyPlan.pictureUrl " alt="" width="90px" height="90px">
+            <img class="rounded-circle me-3" [src]="  data.planImage " alt="" width="90px" height="90px">
             <div class="hstack">
               <div>
-                <p class="fw-bold mb-1" style="font-size: 20px;">{{data.travelAgencyPlan.planName}} With <span class="text-muted"> {{data.travelAgencyName}}</span></p>
+                <p class="fw-bold mb-1" style="font-size: 20px;">{{data.planName}} With <span class="text-muted"> {{data.travelAgencyName}}</span></p>
                 <small class="mt-0">{{ data.bookedCategory }} <span class="text-muted">x{{data.numOfPeople}}</span></small>
                 <p class="text-muted mb-0" style="font-size:12px;">{{ data.reserveType }}</p>
                 <!-- <p class="mb-1" style="font-size: 14px;">Plan Desc...Lorem ipsum dolor sit amet.</p> -->
@@ -34,7 +44,7 @@
                 <button 
                 *ngIf="data.paymentStatus === 'Pending'" 
                 class="btn btn-sm btn-outline-warning rounded shadow mt-1 d-flex justify-content-end align-items-center"
-                [routerLink]="(['/payment',data.id,data.trabelAgencyPlanID])">
+                [routerLink]="(['/payment', data.bookingId ,data.travelAgencyPlanID])">
                 Go to Payment
                 <i class="fa-solid fa-arrow-right"></i>
                 </button>

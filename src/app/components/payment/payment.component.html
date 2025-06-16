@@ -29,6 +29,7 @@
                     <div class="d-flex mb-2 mb-md-0">
                         <img [src]="packageDetails.imageURLs" alt="trip-photo" class="img-fluid" style="width: 70px; height: 70px; object-fit: cover;">
                         <p class="ms-2 col-md-9">{{packageDetails.planName}}: {{packageDetails.description}}</p>
+                        <p class="text-muted" style="font-size: 12px;"> x{{numOfPeople}}</p>
                     </div>
                     <p class="col-md-2">{{bookedPrice | currency:'£'}}</p>
                 </div>
@@ -37,7 +38,10 @@
                         <p class="mb-0">{{visitorType}}</p>
                         <p class="mb-0">{{selectedBookedDate | date:'MMM d, y' }}</p>
                     </div>
-                    <p>{{selectedBoard}}</p>
+                    <div class="d-flex gap-2">
+                        <p>{{selectedBoard}}</p>
+                        <p class="mb-0">{{packageDetails.fullBoardPriceAddition || packageDetails.HalfBoardPriceAddition | currency:'£'}}</p>
+                    </div>
                 </div>
                 <div class="border-bottom"></div>
                 <div class="price hstack justify-content-between">
@@ -45,7 +49,7 @@
                         <h3 class="mt-1 mb-0">Total</h3>
                         <p class="text-muted" style="font-size: 12px;">Including £0.0 in taxes</p>
                     </div>
-                    <p class="col-md-2 fw-bold">{{bookedPrice | currency:'£'}}</p>
+                    <p class="col-md-2 fw-bold">{{fullBookedPrice | currency:'£'}}</p>
                 </div>
             </div>
             <div *ngIf="isLoading" class="col-12 col-md-6 bg-light rounded-end p-3 p-md-5 text-black text-center hstack justify-content-center">

@@ -147,6 +147,7 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
   private resizeListener?: () => void;
   private visibilityListener?: () => void;
   private orientationListener?: () => void;
+  // showLocationPopup: boolean = false;
   
   // Track component visibility
   private isVisible = true;
@@ -442,6 +443,11 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
         if (!carousel) return;
         this.refreshCarousel(index);
       });
+  // Update Location
+  loadMap(lat: number, lng: number): void {
+    const loader = new Loader({
+      apiKey: 'AIzaSyDBe3IxUNFQiad1XECr9U-zK7z1j4hCsmw',
+      libraries: ['places']
     });
   }
 
@@ -597,6 +603,71 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
         this.loadMap(lat, lng);
       });
     }
+      this.addSearchBox();
+      
+    });
+  }
+
+  addSearchBox(): void {
+    // Create the search box input element
+    const searchBoxDiv = document.createElement('div');
+    searchBoxDiv.style.cssText = 'margin-top: 10px;';
+    
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.placeholder = 'Search for a location';
+    input.style.cssText = 'width: 300px; padding: 10px 15px ; border: 1px solid #ccc; border-radius: 30px;';
+    
+    searchBoxDiv.appendChild(input);
+    
+    // Add the search box to the map
+    this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(searchBoxDiv);
+
+    const searchBox = new google.maps.places.SearchBox(input);
+    
+    // Bias the SearchBox results towards current map's viewport
+    this.map.addListener('bounds_changed', () => {
+      searchBox.setBounds(this.map.getBounds()!);
+    });
+
+    searchBox.addListener('places_changed', () => {
+      const places = searchBox.getPlaces();
+      if (places && places.length > 0) {
+        const place = places[0];
+        if (!place.geometry || !place.geometry.location) {
+          return;
+        }
+        
+        const location = place.geometry.location;
+        this.map.setCenter(location);
+        this.marker.setPosition(location);
+
+        this.locationData = {
+          latitude: location.lat(),
+          longitude: location.lng(),
+          address: `https://maps.google.com/?q=${location.lat()},${location.lng()}`,
+          locationLink: `https://maps.google.com/?q=${location.lat()},${location.lng()}`
+        };
+
+        this._UpdateLocationService.updateLocation(this.locationData).subscribe();
+      }
+    });
+  }
+
+  openLocationModal(): void {
+    this.isLocationModalOpen = true;
+    // Initialize map when modal opens
+    setTimeout(() => {
+      if (this.locationData) {
+        this.loadMap(this.locationData.latitude, this.locationData.longitude);
+      } else if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          this.loadMap(lat, lng);
+        });
+      }
+    }, 100);
   }
 
   updateLocationData(lat: number, lng: number): void {
@@ -633,6 +704,15 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
       this.selectedLocationText = `${this.locationData.latitude.toFixed(4)}, ${this.locationData.longitude.toFixed(4)}`;
     }
   }
+
+  // toggleLocationPopup(event?: Event) {
+  //   if (event) event.stopPropagation();
+  //   this.showLocationPopup = !this.showLocationPopup;
+  // }
+
+  // closeLocationPopup() {
+  //   this.showLocationPopup = false;
+  // }
 
   initializeCarouselSections(): void {
     this.carouselSections = [
@@ -1163,4 +1243,3 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
   }
-}

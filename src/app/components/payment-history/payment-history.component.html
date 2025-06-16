@@ -12,7 +12,15 @@
   </div>
 
   <div class="container pb-5">
-    <div class="row payment-details bg-light shadow rounded-4 p-4 mb-3 justify-content-between" *ngFor="let data of paymentDetails">
+    <div class="search-container mb-3 w-25">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search payments..." [(ngModel)]="searchTerm" (input)="onSearch()">
+        <span class="input-group-text">
+          <i class="fa-solid fa-search"></i>
+        </span>
+      </div>
+    </div>
+    <div class="row payment-details bg-light shadow rounded-4 p-4 mb-3 justify-content-between" *ngFor="let data of filteredPayments">
       <div class="col-md-4 d-flex">
         <!-- <img class="rounded-circle bg-danger me-3" [src]="" alt="" width="90px" height="90px"> -->
         <div class="hstack">

@@ -1,4 +1,6 @@
 <section>
+
+
     <div class="yellow-circle"></div>
     <div class="purple-circle"></div>
     <div class="blue-circle"></div>
@@ -43,16 +45,27 @@
                 class="map-container"
                 ></div>
                 
-                                 <!-- Update Button -->
+                <!-- Search Box -->
+                <!-- <div class="search-box-container">
+                    <input
+                        id="search-box"
+                        type="text"
+                        class="form-control"
+                        placeholder="Search for a location"
+                    />
+                </div> -->
+                
+                <!-- Update Button -->
                  <button
                  class="btn btn-primary mt-4 px-5 py-2 rounded-pill fw-semibold update-btn"
                  (click)="confirmLocationUpdate()"
                  >
                  Update Location
                  </button>
-            </div>
-        </div>
-    </div>
+             </div>
+         </div>
+     </div>
+
 
     <div class="things-to-do-container">
         <div *ngFor="let section of carouselSections; let i = index" class="section-wrapper">
@@ -96,6 +109,7 @@
                                 <div role="button" [routerLink]="getRouterLink(item)" class="image-container">
                                     <img 
                                         [src]="item.imageURLs.$values[0] || 'assets/logo/kemet.png'" 
+
                                         [alt]="item.name" 
                                         class="card-image"
                                         loading="lazy"
@@ -128,9 +142,11 @@
                                             <svg *ngIf="starValue === 2" width="16" height="16" viewBox="0 0 24 24" fill="#FFD700">
                                                 <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
                                             </svg>
+
                                         </ng-container>
                                     </div>
                                 </div>
+
                             </div>
                         </ng-template>
                     </ng-container>
@@ -150,12 +166,15 @@
                     aria-label="Next slide"
                     (click)="onNext(i)"
                 >
+
             </div>
       
             <!-- Empty state -->
             <div *ngIf="section.carouselReady && !section.isLoading && !section.hasError && section.items?.length === 0" class="empty-state text-center">
                 <p>No items found for this section.</p>
             </div>
+
         </div>
     </div>
+
 </section>
