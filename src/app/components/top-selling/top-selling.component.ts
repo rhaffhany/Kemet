@@ -44,11 +44,9 @@ export class TopSellingComponent implements OnInit {
   navigateToPackage(planId: number) {
     this.router.navigate(['/Package-details', planId]);
   }
-  
   getStarRating(averageRating: number): number {
     return Math.floor(Math.round(averageRating * 2) / 2);
   }
-  
   toggleWishlist(planId: number, event: Event) {
     event.stopPropagation(); // Prevent navigation when clicking wishlist icon
     if (!this.authService.isLoggedIn()) {
@@ -62,8 +60,10 @@ export class TopSellingComponent implements OnInit {
       this.wishlistService.removeFromWishlist(planId, 'plan').subscribe({
         next: () => {
           this.wishlistItems.delete(planId);
+          console.log('Successfully removed from wishlist');
         },
-        error: () => {
+        error: (error: Error) => {
+          console.error('Error removing from wishlist:', error);
           // Add the item back if removal failed
           this.wishlistItems.add(planId);
         }
@@ -72,8 +72,10 @@ export class TopSellingComponent implements OnInit {
       this.wishlistService.addPlanToWishlist(planId).subscribe({
         next: () => {
           this.wishlistItems.add(planId);
+          console.log('Successfully added to wishlist');
         },
-        error: () => {
+        error: (error: Error) => {
+          console.error('Error adding to wishlist:', error);
           // Remove the item if addition failed
           this.wishlistItems.delete(planId);
         }
@@ -144,6 +146,7 @@ export class TopSellingComponent implements OnInit {
 
   loadWishlistItems() {
     if (!this.authService.isLoggedIn()) {
+      console.log('User not logged in, skipping wishlist load');
       return;
     }
 
@@ -164,11 +167,12 @@ export class TopSellingComponent implements OnInit {
           if (item?.planId || item?.planID) {
             const id = item.planId || item.planID;
             this.wishlistItems.add(id);
+            console.log('Added plan to wishlist:', id);
           }
         });
       },
-      error: () => {
-        // Error handling is done in the service
+      error: (error) => {
+        console.error('Error loading wishlist:', error);
       }
     });
   }

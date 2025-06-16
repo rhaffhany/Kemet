@@ -198,6 +198,7 @@ section {
     
     @media (max-width: 768px) {
         margin: 60px auto 40px;
+        padding: 15px 10px;
     }
     
     @media (max-width: 480px) {
@@ -330,76 +331,17 @@ section {
   
     .carousel-container {
         position: relative;
-        padding: 0 40px;
         margin: 20px 0;
+        width: 100%;
+        padding: 10px 40px 20px;
         overflow: visible;
-
-        .nav-button {
-            position: absolute;
-            top: 35%;
-            transform: translateY(-50%);
-            width: 50px;
-            height: 50px;
-            cursor: pointer;
-            z-index: 10;
-            transition: all 0.3s ease;
-            border-radius: 50%;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            
-            &:hover {
-                transform: translateY(-50%) scale(1.1);
-                background: rgba(255, 255, 255, 1);
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            }
-            
-            &.left {
-                left: -25px;
-                
-                @media (max-width: 768px) {
-                    left: -12px;
-                    cursor: default;
-                }
-                
-                @media (max-width: 480px) {
-                    left: 2px;
-                }
-            }
-            
-            &.right {
-                right: -25px;
-                
-                @media (max-width: 768px) {
-                    right: -12px;
-                    cursor: default;
-                }
-                
-                @media (max-width: 480px) {
-                    right: 2px;
-                }
-            }
-
-            @media (max-width: 768px) {
-                width: 45px;
-                height: 45px;
-                -webkit-tap-highlight-color: transparent;
-                
-                &:hover {
-                    transform: translateY(-50%) scale(1.05);
-                }
-            }
-            
-            @media (max-width: 480px) {
-                width: 40px;
-                height: 40px;
-                
-                &:hover {
-                    transform: translateY(-50%);
-                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-                }
-            }
+        
+        @media (max-width: 768px) {
+            padding: 8px 30px 16px;
+        }
+        
+        @media (max-width: 480px) {
+            padding: 6px 20px 12px;
         }
 
         ::ng-deep .owl-carousel {
@@ -446,6 +388,74 @@ section {
                 width: 100%;
                 height: 0;
                 visibility: hidden;
+            }
+        }
+
+        .nav-button {
+            position: absolute;
+            top: 40%;
+            cursor: pointer;
+            z-index: 10;
+            width: 50px;
+            height: 50px;
+            transition: all 0.3s ease;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+            &.left {
+                left: -25px;
+                
+                @media (max-width: 768px) {
+                    left: -12px;
+                }
+                
+                @media (max-width: 480px) {
+                    left: 2px;
+                }
+            }
+
+            &.right {
+                right: -25px;
+                
+                @media (max-width: 768px) {
+                    right: -12px;
+                }
+                
+                @media (max-width: 480px) {
+                    right: 2px;
+                }
+            }
+
+            &:hover {
+                transform: scale(1.1);
+                background: rgba(255, 255, 255, 0.6);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                
+                @media (max-width: 768px) {
+                    transform: scale(1.05);
+                    cursor: default;
+                    -webkit-tap-highlight-color: transparent;
+                }
+                
+                @media (max-width: 480px) {
+                    transform: none;
+                }
+            }
+            
+            // Standardized responsive sizing
+            @media (max-width: 768px) {
+                cursor: default;
+                width: 45px;
+                height: 45px;
+                -webkit-tap-highlight-color: transparent;
+            }
+            
+            @media (max-width: 480px) {
+                width: 40px;
+                height: 40px;
             }
         }
     }
@@ -997,7 +1007,7 @@ section {
       }
     }
   }
-}
+
 
 // Add minimal spacing between sections
 .section-wrapper:not(:last-child) {
@@ -1005,88 +1015,88 @@ section {
 }
 
 // Location Icon Button
-.location-icon-wrapper {
-    position: fixed;
-    top: 110px;
-    left: 20px;
-    z-index: 9999;
-}
+// .location-icon-wrapper {
+//     position: fixed;
+//     top: 110px;
+//     left: 20px;
+//     z-index: 9999;
+// }
 
-.location-icon {
-    width: 60px;
-    height: 60px;
-    color: var(--secondary-color);
-    background-color: #f0f0f0;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    font-size: 24px;
+// .location-icon {
+//     width: 60px;
+//     height: 60px;
+//     color: var(--secondary-color);
+//     background-color: #f0f0f0;
+//     border-radius: 50%;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     cursor: pointer;
+//     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+//     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+//     font-size: 24px;
 
-    &:hover {
-        color: #fff;
-        background-color: var(--secondary-color);
-        transform: translateY(-5px) scale(1.05);
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-    }
-}
+//     &:hover {
+//         color: #fff;
+//         background-color: var(--secondary-color);
+//         transform: translateY(-5px) scale(1.05);
+//         box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+//     }
+// }
 
 // Blur background
-.blur-wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(8px);
-    z-index: 99990;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
+// .blur-wrapper {
+//     position: fixed;
+//     top: 0;
+//     left: 0;
+//     width: 100vw;
+//     height: 100vh;
+//     background-color: rgba(0, 0, 0, 0.4);
+//     backdrop-filter: blur(8px);
+//     z-index: 99990;
+//     opacity: 0;
+//     pointer-events: none;
+//     transition: opacity 0.3s ease;
     
-    &.active {
-        opacity: 1;
-        pointer-events: auto;
-    }
-}
+//     &.active {
+//         opacity: 1;
+//         pointer-events: auto;
+//     }
+// }
 
 // Location popup container
-.location-popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0.95);
-    width: 90%;
-    max-width: 800px;
-    background-color: #fff;
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-    z-index: 99999;
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+// .location-popup {
+//     position: fixed;
+//     top: 50%;
+//     left: 50%;
+//     transform: translate(-50%, -50%) scale(0.95);
+//     width: 90%;
+//     max-width: 800px;
+//     background-color: #fff;
+//     border-radius: 20px;
+//     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+//     z-index: 99999;
+//     opacity: 0;
+//     pointer-events: none;
+//     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
-    &.active {
-        opacity: 1;
-        pointer-events: auto;
-        transform: translate(-50%, -50%) scale(1);
-    }
+//     &.active {
+//         opacity: 1;
+//         pointer-events: auto;
+//         transform: translate(-50%, -50%) scale(1);
+//     }
 
-    .close-btn {
-        cursor: pointer;
-        padding: 8px;
-        border-radius: 50%;
-        background-color: rgba(0, 0, 0, 0.1);
-        color: #666;
-        transition: all 0.3s ease;
+//     .close-btn {
+//         cursor: pointer;
+//         padding: 8px;
+//         border-radius: 50%;
+//         background-color: rgba(0, 0, 0, 0.1);
+//         color: #666;
+//         transition: all 0.3s ease;
         
-        &:hover {
-            background-color: rgba(0, 0, 0, 0.2);
-            transform: rotate(90deg);
-        }
-    }
-}
+//         &:hover {
+//             background-color: rgba(0, 0, 0, 0.2);
+//             transform: rotate(90deg);
+// >>>>>>> Stashed changes
+//         }
+//     }

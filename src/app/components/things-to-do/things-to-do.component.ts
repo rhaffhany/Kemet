@@ -44,13 +44,6 @@ interface CarouselSection {
   dynamicOptions?: OwlOptions;
 }
 
-interface LocationData {
-  latitude: number;
-  longitude: number;
-  address: string;
-  locationLink: string;
-}
-
 @Component({
   selector: 'app-things-to-do',
   templateUrl: './things-to-do.component.html',
@@ -103,23 +96,58 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
   DeployUrl = 'https://kemet-server.runasp.net';
 
   carouselSections: CarouselSection[] = [];
-  customOptions: OwlOptions = this.baseCarouselOptions;
+  customOptions: OwlOptions = {
+    loop: false,
+    mouseDrag: true,
+    touchDrag: true,
+    pullDrag: true,
+    dots: false,
+    navSpeed: 700,
+    autoplay: false,
+    autoplayTimeout: 3000,
+    margin: 10,
+    autoWidth: false,
+    nav: false,
+    responsive: {
+      0: { 
+        items: 2,
+        margin: 4
+      },
+      480: { 
+        items: 2,
+        margin: 8
+      },
+      768: { 
+        items: 3,
+        margin: 10
+      },
+      992: { 
+        items: 4,
+        margin: 10
+      },
+      1200: { 
+        items: 5,
+        margin: 10
+      }
+    }
+  };
 
-  map: google.maps.Map | null = null;
-  marker: google.maps.Marker | null = null;
-  locationData: LocationData | null = null;
+  map: any;
+  marker: any;
+  locationData: any;
   
   // Modal properties
   isLocationModalOpen: boolean = false;
   selectedLocationText: string = '';
   
   // Add property for resize timeout with proper typing for requestAnimationFrame
-  private _resizeTimeout?: ReturnType<typeof requestAnimationFrame>;
+  private _resizeTimeout: ReturnType<typeof requestAnimationFrame> | undefined;
   
   // Optimize event listeners
   private resizeListener?: () => void;
   private visibilityListener?: () => void;
   private orientationListener?: () => void;
+  // showLocationPopup: boolean = false;
   
   // Track component visibility
   private isVisible = true;
@@ -199,8 +227,28 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     // Initialize location modal after view is ready
     this.cdr.detectChanges();
+    this.openLocationModal();
     
-    // Initialize carousels and load data
+    // Handle geolocation
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.ngZone.run(() => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          this.locationData = {
+            latitude: lat,
+            longitude: lng,
+            address: `https://maps.google.com/?q=${lat},${lng}`,
+            locationLink: `https://maps.google.com/?q=${lat},${lng}`
+          };
+
+          this._UpdateLocationService.updateLocation(this.locationData).subscribe();
+          this.updateSelectedLocationText();
+          this.loadMap(lat, lng);
+        });
+      });
+    }
+    
     this.initializeCarouselSections();
     
     // Load data based on auth state
@@ -264,7 +312,7 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
     const options = { passive: true };
     
     this.ngZone.runOutsideAngular(() => {
-      // Optimized scroll handling with passive listener
+      // Optimized scroll handling
       const scrollHandler = () => {
         if (this.isVisible) {
           requestAnimationFrame(() => {
@@ -274,7 +322,7 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
       };
       window.addEventListener('scroll', scrollHandler, options);
       
-      // Optimized resize handling with passive listener
+      // Optimized resize handling
       const resizeHandler = () => {
         requestAnimationFrame(() => {
           this.resizeSubject.next();
@@ -292,7 +340,7 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
       };
       document.addEventListener('visibilitychange', visibilityHandler, options);
       
-      // Optimized touch handling with passive listeners
+      // Optimized touch handling
       const touchHandler = () => {
         if (this.isVisible) {
           requestAnimationFrame(() => {
@@ -344,7 +392,7 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
         if (element) {
           const options = { passive: true };
           
-          // Add passive event handlers
+          // Add passive scroll and touch handlers
           element.addEventListener('mousewheel', () => {}, options);
           element.addEventListener('touchmove', () => {}, options);
           element.addEventListener('wheel', () => {}, options);
@@ -386,6 +434,7 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  // Optimize carousel refresh
   private refreshAllCarousels(): void {
     if (!this.owlCarousels) return;
     
@@ -394,9 +443,15 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
         if (!carousel) return;
         this.refreshCarousel(index);
       });
+  // Update Location
+  loadMap(lat: number, lng: number): void {
+    const loader = new Loader({
+      apiKey: 'AIzaSyDBe3IxUNFQiad1XECr9U-zK7z1j4hCsmw',
+      libraries: ['places']
     });
   }
 
+  // Optimize single carousel refresh
   private refreshCarousel(index: number): void {
     const section = this.carouselSections[index];
     if (!section?.items?.length || !this.owlCarousels) return;
@@ -411,7 +466,8 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  private loadMap(lat: number, lng: number): void {
+  // Optimized map loading with error handling
+  loadMap(lat: number, lng: number): void {
     this.ngZone.runOutsideAngular(() => {
       const loader = new Loader({
         apiKey: 'AIzaSyClrom8fWRRL317MDuWMRdg-cJKg2dr78E',
@@ -420,6 +476,7 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
       });
 
       loader.load().then(() => {
+        // Check if billing is enabled
         if (typeof google === 'undefined' || typeof google.maps === 'undefined') {
           console.error('Google Maps JavaScript API is not loaded');
           return;
@@ -439,16 +496,19 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
             minZoom: 8
           };
 
+          // Create map instance
           this.map = new google.maps.Map(this.mapContainer.nativeElement, mapOptions);
 
+          // Add marker with optimized options
           this.marker = new google.maps.Marker({
             position: { lat, lng },
             map: this.map,
             draggable: true,
             optimized: true,
-            animation: null
+            animation: null // Disable animation for better performance
           });
 
+          // Use debounced marker events
           let dragTimeout: number | null = null;
           
           this.marker.addListener('dragend', () => {
@@ -457,7 +517,7 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
             }
             
             dragTimeout = window.setTimeout(() => {
-              const newPos = this.marker?.getPosition();
+              const newPos = this.marker.getPosition();
               if (newPos) {
                 const newLat = newPos.lat();
                 const newLng = newPos.lng();
@@ -485,10 +545,12 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
 
         } catch (error) {
           console.error('Error initializing map:', error);
+          // Handle map initialization error
           this.handleMapError(error);
         }
       }).catch(error => {
         console.error('Error loading Google Maps:', error);
+        // Handle loading error
         this.handleMapError(error);
       });
     });
@@ -496,16 +558,22 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private handleMapError(error: any): void {
     this.ngZone.run(() => {
+      // Check for billing error
       if (error.message?.includes('billing')) {
         console.error('Google Maps billing error. Please enable billing in the Google Cloud Console.');
+        // You might want to show a user-friendly message here
       }
+      
+      // Fallback to a static map or disable map functionality
       this.disableMapFunctionality();
     });
   }
 
   private disableMapFunctionality(): void {
+    // Clean up existing map instance
     if (this.map) {
-      (this.map as any).setMap(null);
+      // @ts-ignore: Object is possibly 'null'
+      this.map.setMap(null);
       this.map = null;
     }
     if (this.marker) {
@@ -513,13 +581,12 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
       this.marker = null;
     }
 
-    if (this.mapContainer?.nativeElement) {
-      this.mapContainer.nativeElement.innerHTML = `
-        <div class="map-error">
-          <p>Map is currently unavailable. Please try again later.</p>
-        </div>
-      `;
-    }
+    // You might want to show a fallback UI here
+    this.mapContainer.nativeElement.innerHTML = `
+      <div class="map-error">
+        <p>Map is currently unavailable. Please try again later.</p>
+      </div>
+    `;
   }
 
   // Optimize location modal
@@ -527,7 +594,6 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isLocationModalOpen = true;
     this.cdr.detectChanges();
     
-    // Request location only when user opens the modal
     if (this.locationData) {
       this.loadMap(this.locationData.latitude, this.locationData.longitude);
     } else if (navigator.geolocation) {
@@ -535,38 +601,15 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
         this.loadMap(lat, lng);
-        
-        this.locationData = {
-          latitude: lat,
-          longitude: lng,
-          address: `https://maps.google.com/?q=${lat},${lng}`,
-          locationLink: `https://maps.google.com/?q=${lat},${lng}`
-        };
-
-        this._UpdateLocationService.updateLocation(this.locationData).subscribe();
-        this.updateSelectedLocationText();
-      }, (error) => {
-        // Handle geolocation error
-        console.warn('Geolocation error:', error);
-        // Use default coordinates (e.g., Cairo)
-        const defaultLat = 30.0444;
-        const defaultLng = 31.2357;
-        this.loadMap(defaultLat, defaultLng);
-      }, {
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0
       });
     }
-    
-    setTimeout(() => {
       this.addSearchBox();
-    }, 100);
+      
+    });
   }
 
-  private addSearchBox(): void {
-    if (!this.map) return;
-
+  addSearchBox(): void {
+    // Create the search box input element
     const searchBoxDiv = document.createElement('div');
     searchBoxDiv.style.cssText = 'margin-top: 10px;';
     
@@ -577,13 +620,14 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
     
     searchBoxDiv.appendChild(input);
     
-    (this.map as any).controls[google.maps.ControlPosition.TOP_CENTER].push(searchBoxDiv);
+    // Add the search box to the map
+    this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(searchBoxDiv);
 
     const searchBox = new google.maps.places.SearchBox(input);
     
+    // Bias the SearchBox results towards current map's viewport
     this.map.addListener('bounds_changed', () => {
-      const bounds = this.map?.getBounds();
-      searchBox.setBounds(bounds || null);
+      searchBox.setBounds(this.map.getBounds()!);
     });
 
     searchBox.addListener('places_changed', () => {
@@ -595,12 +639,8 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         
         const location = place.geometry.location;
-        if (this.map) {
-          this.map.setCenter(location);
-        }
-        if (this.marker) {
-          this.marker.setPosition(location);
-        }
+        this.map.setCenter(location);
+        this.marker.setPosition(location);
 
         this.locationData = {
           latitude: location.lat(),
@@ -614,7 +654,23 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  private updateLocationData(lat: number, lng: number): void {
+  openLocationModal(): void {
+    this.isLocationModalOpen = true;
+    // Initialize map when modal opens
+    setTimeout(() => {
+      if (this.locationData) {
+        this.loadMap(this.locationData.latitude, this.locationData.longitude);
+      } else if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          this.loadMap(lat, lng);
+        });
+      }
+    }, 100);
+  }
+
+  updateLocationData(lat: number, lng: number): void {
     this.locationData = {
       latitude: lat,
       longitude: lng,
@@ -624,28 +680,39 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   confirmLocationUpdate(): void {
-    if (!this.locationData) return;
-
     this._UpdateLocationService.updateLocation(this.locationData).subscribe({
-      next: () => {
-        console.log("location now:", this.locationData?.address);
+      next: (res) =>{
+        console.log("location now:" , this.locationData.address);
+        // Update the selected location text and close modal
         this.updateSelectedLocationText();
         this.closeLocationModal();
-        alert('Location updated successfully!');
+        alert('Location updated successfully!')
       },
       error: () => alert('Failed to update location.')
     });
   }
 
+  // Modal methods
   closeLocationModal(): void {
     this.isLocationModalOpen = false;
   }
 
   private updateSelectedLocationText(): void {
     if (this.locationData) {
+      // You can customize this to show a more user-friendly location name
+      // For now, showing coordinates
       this.selectedLocationText = `${this.locationData.latitude.toFixed(4)}, ${this.locationData.longitude.toFixed(4)}`;
     }
   }
+
+  // toggleLocationPopup(event?: Event) {
+  //   if (event) event.stopPropagation();
+  //   this.showLocationPopup = !this.showLocationPopup;
+  // }
+
+  // closeLocationPopup() {
+  //   this.showLocationPopup = false;
+  // }
 
   initializeCarouselSections(): void {
     this.carouselSections = [
@@ -655,9 +722,9 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
         description: 'Explore exciting activities happening around you',
         items: [],
         carouselReady: false,
-        apiEndpoint: `${this.DeployUrl}/api/Activities/NearbyActivities`,
         isLoading: true,
         hasError: false,
+        apiEndpoint: `${this.DeployUrl}/api/Activities/NearbyActivities`,
         itemType: 'activity'
       },
       {
@@ -666,9 +733,9 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
         description: 'Discover the most popular attractions in your vicinity',
         items: [],
         carouselReady: false,
-        apiEndpoint: `${this.DeployUrl}/api/Places/TopAttractionsNearMe`,
         isLoading: true,
         hasError: false,
+        apiEndpoint: `${this.DeployUrl}/api/Places/TopAttractionsNearMe`,
         itemType: 'place'
       },
       {
@@ -677,9 +744,9 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
         description: 'Uncover lesser-known but fascinating places',
         items: [],
         carouselReady: false,
-        apiEndpoint: `${this.DeployUrl}/api/Places/PlacesHiddenGems`,
         isLoading: true,
         hasError: false,
+        apiEndpoint: `${this.DeployUrl}/api/Places/PlacesHiddenGems`,
         itemType: 'place'
       },
       {
@@ -688,9 +755,9 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
         description: 'Discover unique and authentic local experiences',
         items: [],
         carouselReady: false,
-        apiEndpoint: `${this.DeployUrl}/api/Activities/ActivitiesHiddenGems`,
         isLoading: true,
         hasError: false,
+        apiEndpoint: `${this.DeployUrl}/api/Activities/ActivitiesHiddenGems`,
         itemType: 'activity'
       },
       {
@@ -699,9 +766,9 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
         description: 'Explore the wonders of Cairo',
         items: [],
         carouselReady: false,
-        apiEndpoint: `${this.DeployUrl}/api/Places/PlacesInCairo`,
         isLoading: true,
         hasError: false,
+        apiEndpoint: `${this.DeployUrl}/api/Places/PlacesInCairo`,
         itemType: 'place'
       },
       {
@@ -710,16 +777,21 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
         description: 'Experience the best activities Cairo has to offer',
         items: [],
         carouselReady: false,
-        apiEndpoint: `${this.DeployUrl}/api/Activities/ActivitiesInCairo`,
         isLoading: true,
         hasError: false,
+        apiEndpoint: `${this.DeployUrl}/api/Activities/ActivitiesInCairo`,
         itemType: 'activity'
       }
     ];
+    
+    // Log all API endpoints for debugging
+    // this.carouselSections.forEach(section => {
+    //   console.log(`Section ${section.id} will use endpoint: ${section.apiEndpoint}`);
+    // });
   }
 
   // Optimize carousel options generation
-  private getCarouselOptions(itemCount: number): OwlOptions {
+  getCarouselOptions(itemCount: number): OwlOptions {
     const cacheKey = itemCount;
     if (this.carouselOptionsCache.has(cacheKey)) {
       return this.carouselOptionsCache.get(cacheKey)!;
@@ -753,7 +825,7 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
     section.dynamicOptions = this.getCarouselOptions(itemCount);
   }
 
-  private fetchCarouselData(): void {
+  fetchCarouselData(): void {
     this.carouselSections.forEach((section, index) => {
       section.isLoading = true;
       section.hasError = false;
@@ -771,71 +843,79 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
             section.isLoading = false;
           })
         )
-        .subscribe({
-          next: (response: any) => {
-            try {
-              const data = response.$values || response;
-              if (Array.isArray(data)) {
-                section.items = data.map(item => ({
-                  id: section.itemType === 'place' ? item.placeID : (item.activityId || item.activityID),
-                  name: item.name || 'Unnamed Item',
-                  imageURLs: this.processImageURLs(item.imageURLs),
-                  averageRating: item.averageRating || 0,
-                  duration: item.duration,
-                  type: section.itemType,
-                  categoryName: item.categoryName || ''
-                }));
-                
-                this.updateCarouselOptionsForSection(index, section.items.length);
-                section.carouselReady = true;
-                
-                setTimeout(() => {
-                  this.refreshCarousel(index);
-                }, 200);
-              } else {
-                throw new Error('Invalid response format');
-              }
-            } catch (error) {
-              section.hasError = true;
-              section.errorMessage = 'Error processing data';
-              section.carouselReady = false;
+        .subscribe((response: any) => {
+          try {
+            const data = response.$values || response;
+            if (Array.isArray(data)) {
+              section.items = data.map(item => ({
+                id: section.itemType === 'place' ? item.placeID : (item.activityId || item.activityID),
+                name: item.name || 'Unnamed Item',
+                imageURLs: this.processImageURLs(item.imageURLs),
+                averageRating: item.averageRating || 0,
+                duration: item.duration,
+                type: section.itemType,
+                categoryName: item.categoryName || ''
+              }));
+              
+              // Update carousel options based on item count
+              this.updateCarouselOptionsForSection(index, section.items.length);
+              section.carouselReady = true;
+              
+              setTimeout(() => {
+                this.refreshCarousel(index);
+              }, 200);
+            } else {
+              throw new Error('Invalid response format');
             }
+          } catch (error) {
+            section.hasError = true;
+            section.errorMessage = 'Error processing data';
+            section.carouselReady = false;
           }
         });
     });
   }
 
-  private processImageURLs(imageURLs: any): { $values: string[] } {
+  processImageURLs(imageURLs: any): { $values: string[] } {
+    // Ensure we always return a valid object with $values array
     if (!imageURLs) {
       return { $values: [] };
     }
 
+    // If imageURLs is already in the correct format, return it
     if (imageURLs.$values) {
       return imageURLs;
     }
 
+    // If imageURLs is an array, wrap it in the correct format
     if (Array.isArray(imageURLs)) {
       return { $values: imageURLs };
     }
 
+    // Default case: return empty array
     return { $values: [] };
   }
 
-  private loadWishlistItems(): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
+  loadWishlistItems(): Promise<void> {
+    return new Promise((resolve, reject) => {
       if (!this.authService.isLoggedIn()) {
+        // console.log('User not logged in, skipping wishlist load');
         resolve();
         return;
       }
     
       this.wishlistService.getWishlist().subscribe({
         next: (response: any) => {
+          // console.log('Raw Wishlist Response:', response);
           this.wishlistPlaces.clear();
           this.wishlistActivities.clear();
     
+          // Process different response formats
           let wishlistItems: WishlistItem[] = [];
           
+          // Handling various response structures we might receive
           if (response && response.places && response.places.$values) {
+            // If there's a places object with $values array
             const placesArray = response.places.$values || [];
             const activitiesArray = response.activities && response.activities.$values ? response.activities.$values : [];
             
@@ -844,31 +924,46 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
             });
             
             activitiesArray.forEach((item: any) => {
+              // Use a consistent property name for activity IDs
               wishlistItems.push({ 
                 type: 'activity', 
                 activityID: item.activityID || item.activityId
               });
             });
           } else if (Array.isArray(response)) {
+            // If response is a direct array of wishlist items
             wishlistItems = response;
           } else if (response && response.$values) {
+            // If response has a $values array (common ASP.NET format)
             wishlistItems = response.$values;
           } else if (response && response.wishlistItems && response.wishlistItems.$values) {
+            // If response has a wishlistItems object with $values array
             wishlistItems = response.wishlistItems.$values;
           }
           
+          // console.log('Processed wishlist items:', wishlistItems);
+          
+          // Process each wishlist item and add to the appropriate Set
           wishlistItems.forEach((item: any) => {
+            // console.log('Processing wishlist item:', item);
+            
+            // Handle different property naming formats
             const type = item.type || (item.placeID ? 'place' : 'activity');
             const placeId = item.placeID || item.placeId;
+            // Normalize both activityID and activityId casing
             const activityId = item.activityID || item.activityId;
             
             if (type === 'place' && placeId) {
               this.wishlistPlaces.add(Number(placeId));
+              // console.log('Added placeID to wishlist:', placeId);
             } else if (type === 'activity' && activityId) {
               this.wishlistActivities.add(Number(activityId));
+              // console.log('Added activityID to wishlist:', activityId);
             }
           });
     
+          // console.log('Final Wishlist Places:', Array.from(this.wishlistPlaces));
+          // console.log('Final Wishlist Activities:', Array.from(this.wishlistActivities));
           resolve();
         },
         error: (error) => {
@@ -880,21 +975,31 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   isInWishlist(id: number, type: 'activity' | 'place'): boolean {
+    // Ensure id is a number
     const numericId = Number(id);
-    return type === 'place' ? 
-      this.wishlistPlaces.has(numericId) : 
-      this.wishlistActivities.has(numericId);
+    
+    // Check the appropriate Set based on the item type
+    if (type === 'place') {
+      return this.wishlistPlaces.has(numericId);
+    } else {
+      return this.wishlistActivities.has(numericId);
+    }
   }
   
   toggleWishlist(id: number, type: 'activity' | 'place', event: Event): void {
     event.stopPropagation();
     if (!this.authService.isLoggedIn()) {
+      // console.log('User not logged in, cannot toggle wishlist');
+      // You could add a redirect to login page or show a modal here
       return;
     }
   
+    // Ensure id is a number
     const numericId = Number(id);
     const isInWishlist = this.isInWishlist(numericId, type);
+    // console.log(`Toggling wishlist for ${type} ${numericId}. Currently in wishlist: ${isInWishlist}`);
   
+    // Optimistically update UI first for better user experience
     if (isInWishlist) {
       if (type === 'place') {
         this.wishlistPlaces.delete(numericId);
@@ -909,11 +1014,15 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     }
   
+    // Then perform actual API call
     if (isInWishlist) {
       this.wishlistService.removeFromWishlist(numericId, type).subscribe({
-        next: () => {},
+        next: () => {
+          // console.log(`Removed ${type} from wishlist:`, numericId);
+        },
         error: (error) => {
           console.error(`Error removing ${type} from wishlist:`, error);
+          // Revert optimistic update on error
           if (type === 'place') {
             this.wishlistPlaces.add(numericId);
           } else {
@@ -927,9 +1036,12 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
         : this.wishlistService.addPlaceToWishlist.bind(this.wishlistService);
       
       addMethod(numericId).subscribe({
-        next: () => {},
+        next: () => {
+          // console.log(`Added ${type} to wishlist:`, numericId);
+        },
         error: (error) => {
           console.error(`Error adding ${type} to wishlist:`, error);
+          // Revert optimistic update on error
           if (type === 'place') {
             this.wishlistPlaces.delete(numericId);
           } else {
@@ -956,33 +1068,39 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getStarRating(averageRating: number): number[] {
-    if (!averageRating) return [0, 0, 0, 0, 0];
+    if (!averageRating) return [0, 0, 0, 0, 0]; // Default to all empty stars if no rating
     
+    // Round to nearest half star
     const roundedRating = Math.round(averageRating * 2) / 2;
+    
+    // Create array representing star values (0 = empty, 1 = half, 2 = full)
     const stars = [0, 0, 0, 0, 0];
     
     for (let i = 0; i < 5; i++) {
       if (roundedRating >= i + 1) {
-        stars[i] = 2;
+        stars[i] = 2; // Full star
       } else if (roundedRating >= i + 0.5) {
-        stars[i] = 1;
+        stars[i] = 1; // Half star
       }
     }
     
     return stars;
   }
-
+  // Retry loading a specific section with better error handling
   retryLoading(sectionIndex: number): void {
     const section = this.carouselSections[sectionIndex];
     if (!section) return;
     
+    // console.log(`Manually retrying to load section ${section.id}`);
     section.isLoading = true;
     section.hasError = false;
     section.errorMessage = undefined;
     
     this.homeService.getActivities(section.apiEndpoint)
       .pipe(
-        tap(response => {}),
+        tap(response => {
+          // console.log(`Retry: Raw API response for ${section.id}:`, response);
+        }),
         catchError(error => {
           console.error(`Retry failed for section ${section.id}:`, error);
           section.hasError = true;
@@ -995,11 +1113,13 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
       )
       .subscribe({
         next: (response: any) => {
-          if (!response) return;
+          if (!response) return; // Skip processing if null (error case)
 
           try {
+            // Extract and normalize the data array from the response
             let itemsArray: any[] = [];
             
+            // Handle different response structures
             if (response && typeof response === 'object') {
               if (response.$values && Array.isArray(response.$values)) {
                 itemsArray = response.$values;
@@ -1010,6 +1130,7 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
               }
             }
             
+            // Process items based on section type
             section.items = itemsArray.map((item: any) => {
               if (section.itemType === 'place') {
                 return {
@@ -1020,6 +1141,7 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
                   type: 'place'
                 };
               } else {
+                // Normalize activity ID
                 const activityId = item.activityId || item.activityID || 0;
                 return {
                   id: activityId,
@@ -1034,7 +1156,9 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
 
             section.carouselReady = true;
             this.refreshCarousel(sectionIndex);
+            // console.log(`Retry for section ${section.id} successful with ${section.items.length} items`);
           } catch (error) {
+            console.error(`Error processing retry data for ${section.id}:`, error);
             section.hasError = true;
             section.errorMessage = 'Error processing data';
             section.carouselReady = false;
@@ -1049,10 +1173,30 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
       : ['/places', item.id];
   }
 
+  // Add this method to dynamically update carousel options based on available items
+  private updateCarouselOptions(sectionIndex: number): void {
+    const section = this.carouselSections[sectionIndex];
+    if (!section || !section.items) return;
+
+    const itemCount = section.items.length;
+    if (itemCount === 0) return;
+
+    const newOptions = this.getCarouselOptions(itemCount);
+
+    const carousel = this.owlCarousels?.get(sectionIndex);
+    if (carousel) {
+      Object.assign(carousel, { options: newOptions });
+      setTimeout(() => {
+        this.refreshCarousel(sectionIndex);
+      }, 200);
+    }
+  }
+
   private handleResize(): void {
     if (!this.isInitialized) return;
     
     this.ngZone.runOutsideAngular(() => {
+      // Batch refresh operations
       const refreshPromises = this.carouselSections.map((_, index) => {
         return new Promise<void>(resolve => {
           if (!this.pendingRefreshes.has(index)) {
@@ -1083,6 +1227,7 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
       const carousel = this.owlCarousels?.get(index);
       if (carousel && this.carouselSections[index]?.carouselReady) {
         try {
+          // Use RAF for smoother visual updates
           requestAnimationFrame(() => {
             this.ngZone.run(() => {
               if (carousel.hasOwnProperty('refresh')) {
@@ -1098,4 +1243,3 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
   }
-}
