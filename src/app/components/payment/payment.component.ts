@@ -42,6 +42,7 @@ export class PaymentComponent implements OnInit, OnDestroy{
   bookingID:any;
 
   bookedPrice:number = 0;
+  fullBookedPrice:number = 0;
   selectedBookedDate: string = ''; 
   selectedBoard: string = ''; 
   visitorType: string = '';
@@ -84,7 +85,8 @@ export class PaymentComponent implements OnInit, OnDestroy{
             next: (response)=>{  
               this.bookingData = response;
               this.bookingID = response.id;
-              this.bookedPrice = response.fullBookedPrice;
+              this.bookedPrice = response.bookedPrice;
+              this.fullBookedPrice = response.fullBookedPrice;
               this.selectedBookedDate = response.reserveDate;
               this.selectedBoard = response.reserveType;
               this.visitorType = response.bookedCategory;  
