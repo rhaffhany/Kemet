@@ -60,13 +60,11 @@ export class RecommendedActivitiesComponent implements OnInit {
 
   loadWishlistItems() {
     if (!this.authService.isLoggedIn()) {
-      console.log('User not logged in, skipping wishlist load');
       return;
     }
 
     this.wishlistService.getWishlist().subscribe(
       (response: any) => {
-        console.log('Raw Wishlist Response:', response);
         this.wishlistItems.clear();
 
         let activities = [];
@@ -77,7 +75,6 @@ export class RecommendedActivitiesComponent implements OnInit {
         activities.forEach((activity: any) => {
           if (activity && activity.activityId) {
             this.wishlistItems.add(activity.activityId);
-            console.log('Added activityId to wishlist:', activity.activityId);
           }
         });
       },
@@ -104,7 +101,6 @@ export class RecommendedActivitiesComponent implements OnInit {
       this.wishlistService.removeFromWishlist(activityId, 'activity').subscribe({
         next: () => {
           this.wishlistItems.delete(activityId);
-          console.log('Removed activity from wishlist:', activityId);
         },
         error: (error) => {
           console.error('Error removing activity from wishlist:', error);
@@ -114,7 +110,6 @@ export class RecommendedActivitiesComponent implements OnInit {
       this.wishlistService.addActivityToWishlist(activityId).subscribe({
         next: () => {
           this.wishlistItems.add(activityId);
-          console.log('Added activity to wishlist:', activityId);
         },
         error: (error) => {
           console.error('Error adding activity to wishlist:', error);

@@ -44,14 +44,14 @@ export class InterestsService {
   setSelectedInterests(interests: number[]): Observable<any> {
     const headers = this.getAuthHeaders();
     
-    // For new users after registration, directly use POST
-    return this.http.post(`${this.apiUrl}/Api/CustomerInterests/AddInterests`, {
+    // First try PUT to update existing interests
+    return this.http.put(`${this.apiUrl}/Api/CustomerInterests/UpdateInterests`, {
       categoryIds: interests
     }, { headers }).pipe(
       catchError((error: HttpErrorResponse) => {
-        // If POST fails with 409 (Conflict) because interests already exist, try PUT
-        if (error.status === 409) {
-          return this.http.put(`${this.apiUrl}/Api/CustomerInterests/UpdateInterests`, {
+        // If PUT fails with 404 (Not Found), try POST to create new interests
+        if (error.status === 404) {
+          return this.http.post(`${this.apiUrl}/Api/CustomerInterests/AddInterests`, {
             categoryIds: interests
           }, { headers });
         }

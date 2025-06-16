@@ -78,7 +78,7 @@
       
             <!-- Carousel -->
             <div *ngIf="section.carouselReady && !section.isLoading && !section.hasError" class="carousel-container">
-                <owl-carousel-o #owlCarousel [options]="customOptions">
+                <owl-carousel-o #owlCarousel [options]="getCarouselOptions(section.items.length)">
                     <ng-container *ngFor="let item of section.items">
                         <ng-template carouselSlide>
                             <div class="card" [attr.data-item-id]="item.id" [attr.data-item-type]="item.type">
@@ -95,7 +95,7 @@
                                 <!-- Item Image -->
                                 <div role="button" [routerLink]="getRouterLink(item)" class="image-container">
                                     <img 
-                                        [src]="item.imageURLs?.$values?.[0] || 'assets/logo/kemet.png'" 
+                                        [src]="item.imageURLs.$values[0] || 'assets/logo/kemet.png'" 
                                         [alt]="item.name" 
                                         class="card-image"
                                         loading="lazy"
@@ -107,53 +107,49 @@
                                     <h3 class="card-title">{{ item.name }}</h3>
                                     <p *ngIf="item.duration" class="card-duration">{{ item.duration }}</p>
                                     
-<!-- Rating Stars -->
-<div class="stars">
-    <ng-container *ngFor="let starValue of getStarRating(item.averageRating)">
-      <!-- Empty star -->
-      <svg *ngIf="starValue === 0" width="16" height="16" viewBox="0 0 24 24" fill="#CCCCCC">
-        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
-      </svg>
-      
-      <!-- Half star - using a clip path approach instead of gradient -->
-      <svg *ngIf="starValue === 1" width="16" height="16" viewBox="0 0 24 24">
-        <!-- Gray background star -->
-        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" 
-              fill="#CCCCCC" />
-        <!-- Gold half star (left half only) -->
-        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" 
-              fill="#FFD700"
-              [attr.clip-path]="'polygon(0 0, 50% 0, 50% 100%, 0 100%)'" />
-      </svg>
-      
-      <!-- Full star -->
-      <svg *ngIf="starValue === 2" width="16" height="16" viewBox="0 0 24 24" fill="#FFD700">
-        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
-      </svg>
-    </ng-container>
-  </div>
+                                    <!-- Rating Stars -->
+                                    <div class="stars">
+                                        <ng-container *ngFor="let starValue of getStarRating(item.averageRating)">
+                                            <!-- Empty star -->
+                                            <svg *ngIf="starValue === 0" width="16" height="16" viewBox="0 0 24 24" fill="#CCCCCC">
+                                                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                                            </svg>
+                                            
+                                            <!-- Half star -->
+                                            <svg *ngIf="starValue === 1" width="16" height="16" viewBox="0 0 24 24">
+                                                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" 
+                                                    fill="#CCCCCC" />
+                                                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" 
+                                                    fill="#FFD700"
+                                                    [attr.clip-path]="'polygon(0 0, 50% 0, 50% 100%, 0 100%)'" />
+                                            </svg>
+                                            
+                                            <!-- Full star -->
+                                            <svg *ngIf="starValue === 2" width="16" height="16" viewBox="0 0 24 24" fill="#FFD700">
+                                                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                                            </svg>
+                                        </ng-container>
+                                    </div>
                                 </div>
                             </div>
                         </ng-template>
                     </ng-container>
                 </owl-carousel-o>
-      
-                <!-- Navigation arrows -->
-                <div *ngIf="section.items && section.items.length > 0" class="nav-buttons">
-                    <img 
-                        [src]="leftArrowSrc" 
-                        class="nav-button left" 
-                        aria-label="Previous slide" 
-                        (click)="onPrev(i)"
-                        alt="Previous">
-      
-                    <img 
-                        [src]="rightArrowSrc" 
-                        class="nav-button right" 
-                        aria-label="Next slide" 
-                        (click)="onNext(i)"
-                        alt="Next">
-                </div>
+                <!-- Custom Navigation Arrows -->
+                <img 
+                    *ngIf="section.carouselReady && section.items?.length"
+                    [src]="leftArrowSrc"
+                    class="nav-button left"
+                    aria-label="Previous slide"
+                    (click)="onPrev(i)"
+                >
+                <img 
+                    *ngIf="section.carouselReady && section.items?.length"
+                    [src]="rightArrowSrc"
+                    class="nav-button right"
+                    aria-label="Next slide"
+                    (click)="onNext(i)"
+                >
             </div>
       
             <!-- Empty state -->

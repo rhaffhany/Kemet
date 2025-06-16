@@ -85,7 +85,6 @@ export class PromoteEventsComponent implements AfterViewInit, OnDestroy {
 
   // Enhanced image error handling
   onImageError(event: any): void {
-    console.warn('Image failed to load:', event.target.src);
     event.target.src = this.fallbackImage;
   }
 
@@ -144,7 +143,6 @@ export class PromoteEventsComponent implements AfterViewInit, OnDestroy {
 
   // Enhanced search result image error handling
   onSearchResultImageError(event: any): void {
-    console.warn('Search result image failed to load:', event.target.src);
     event.target.src = this.notFoundImg;
   }
 
