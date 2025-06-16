@@ -1,21 +1,19 @@
 import { UpdateLocationService } from './services/update-location.service';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit{
+export class AppComponent {
   title = 'kemet';
+  locationData: any;
 
-  constructor(private _UpdateLocationService:UpdateLocationService){}
+  constructor(private _UpdateLocationService: UpdateLocationService) {}
 
-  locationData:any;
-  
-
-  ngOnInit(): void {
-
+  // Move geolocation request to a user action method
+  requestLocation(): void {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -26,13 +24,26 @@ export class AppComponent implements OnInit{
             longitude: position.coords.longitude
           };
 
-          console.log("Getting Current location:", this.locationData.address);
-
-          this._UpdateLocationService.updateLocation(this.locationData).subscribe({});
-
+          this._UpdateLocationService.updateLocation(this.locationData).subscribe();
+        },
+        (error) => {
+          // Handle geolocation error
+          const defaultLat = 30.0444; // Cairo coordinates
+          const defaultLng = 31.2357;
+          this.locationData = {
+            address: `https://maps.google.com/?q=${defaultLat},${defaultLng}`,
+            locationLink: `https://maps.google.com/?q=${defaultLat},${defaultLng}`,
+            latitude: defaultLat,
+            longitude: defaultLng
+          };
+          this._UpdateLocationService.updateLocation(this.locationData).subscribe();
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0
         }
       );
     }
   }
-
 }
