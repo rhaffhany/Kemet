@@ -1,4 +1,3 @@
-
 import { CdkDragDrop, CdkDragPreview, DragDropModule } from '@angular/cdk/drag-drop';
 import { SwiperModule } from './../../node_modules/swiper/types/shared.d';
 
@@ -63,7 +62,7 @@ import { SearchResultsComponent } from './components/search-results/search-resul
 import { PaymentComponent } from './components/payment/payment.component';
 import { ToastrModule } from 'ngx-toastr';
 import { BookingsComponent } from './components/bookings/bookings.component';
-
+import { PlacesForYouComponent } from './components/places-for-you/places-for-you.component';
 
 @NgModule({
   declarations: [
@@ -109,7 +108,7 @@ import { BookingsComponent } from './components/bookings/bookings.component';
     SearchResultsComponent,
     PaymentComponent,
     BookingsComponent,
-
+    PlacesForYouComponent,
   ],
   imports: [
   BrowserModule,
