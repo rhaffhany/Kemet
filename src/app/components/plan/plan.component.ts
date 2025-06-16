@@ -212,7 +212,11 @@ export class PlanComponent implements AfterViewInit, OnDestroy {
         title: `${option} in Egypt`,
         text: weatherInfo,
         icon: 'info',
-        confirmButtonText: 'Got it'
+        confirmButtonText: 'Got it',
+        customClass: {
+          container: 'weather-alert-container',
+          popup: 'weather-alert-popup'
+        }
       });
     }
   }

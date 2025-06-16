@@ -73,13 +73,11 @@ export class RecommendedComponent implements OnInit {
 
   loadWishlistItems() {
     if (!this.authService.isLoggedIn()) {
-      console.log('User not logged in, skipping wishlist load');
       return;
     }
 
     this.wishlistService.getWishlist().subscribe(
       (response: any) => {
-        console.log('Raw Wishlist Response:', response);
         this.wishlistItems.clear();
 
         let wishlistItems = [];
@@ -120,7 +118,6 @@ export class RecommendedComponent implements OnInit {
       this.wishlistService.removeFromWishlist(placeId, 'place').subscribe({
         next: () => {
           this.wishlistItems.delete(placeId);
-          console.log('Removed from wishlist:', placeId);
         },
         error: (error) => {
           console.error('Error removing from wishlist:', error);
@@ -130,7 +127,6 @@ export class RecommendedComponent implements OnInit {
       this.wishlistService.addPlaceToWishlist(placeId).subscribe({
         next: () => {
           this.wishlistItems.add(placeId);
-          console.log('Added to wishlist:', placeId);
         },
         error: (error) => {
           console.error('Error adding to wishlist:', error);

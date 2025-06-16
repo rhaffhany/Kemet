@@ -331,6 +331,7 @@ section {
   
     .carousel-container {
         position: relative;
+        margin: 20px 0;
         width: 100%;
         padding: 10px 40px 20px;
         overflow: visible;
@@ -387,6 +388,74 @@ section {
                 width: 100%;
                 height: 0;
                 visibility: hidden;
+            }
+        }
+
+        .nav-button {
+            position: absolute;
+            top: 40%;
+            cursor: pointer;
+            z-index: 10;
+            width: 50px;
+            height: 50px;
+            transition: all 0.3s ease;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+            &.left {
+                left: -25px;
+                
+                @media (max-width: 768px) {
+                    left: -12px;
+                }
+                
+                @media (max-width: 480px) {
+                    left: 2px;
+                }
+            }
+
+            &.right {
+                right: -25px;
+                
+                @media (max-width: 768px) {
+                    right: -12px;
+                }
+                
+                @media (max-width: 480px) {
+                    right: 2px;
+                }
+            }
+
+            &:hover {
+                transform: scale(1.1);
+                background: rgba(255, 255, 255, 0.6);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                
+                @media (max-width: 768px) {
+                    transform: scale(1.05);
+                    cursor: default;
+                    -webkit-tap-highlight-color: transparent;
+                }
+                
+                @media (max-width: 480px) {
+                    transform: none;
+                }
+            }
+            
+            // Standardized responsive sizing
+            @media (max-width: 768px) {
+                cursor: default;
+                width: 45px;
+                height: 45px;
+                -webkit-tap-highlight-color: transparent;
+            }
+            
+            @media (max-width: 480px) {
+                width: 40px;
+                height: 40px;
             }
         }
     }
@@ -566,115 +635,6 @@ section {
                 }
             }
           }
-    }
-
-    .nav-button {
-        position: absolute;
-        top: 27%;
-        cursor: pointer;
-        z-index: 10;
-        width: 50px;
-        height: 50px;
-        transition: all 0.3s ease;
-        border-radius: 50%;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        
-        // Enhanced responsive sizing and positioning
-        @media (max-width: 768px) {
-            cursor: default;
-            width: 42px;
-            height: 42px;
-            top: 27%;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        @media (max-width: 480px) {
-            width: 36px;
-            height: 36px;
-            top: 27%;
-        }
-        
-        @media (max-width: 360px) {
-            width: 32px;
-            height: 32px;
-            top: 27%;
-        }
-  
-        &:hover {
-            transform: scale(1.1);
-            background: rgba(255, 255, 255, 0.6);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            
-            // Reduced hover effects on touch devices
-            @media (max-width: 768px) {
-                transform: scale(1.05);
-            }
-            
-            @media (max-width: 480px) {
-                transform: none;
-            }
-        }
-  
-        &.left {
-            left: -5px;
-            
-            @media (max-width: 768px) {
-                left: -3px;
-            }
-            
-            @media (max-width: 480px) {
-                left: 0px;
-            }
-            
-            @media (max-width: 360px) {
-                left: 2px;
-            }
-        }
-  
-        &.right {
-            right: -5px;
-            
-            @media (max-width: 768px) {
-                right: -3px;
-            }
-            
-            @media (max-width: 480px) {
-                right: 0px;
-            }
-            
-            @media (max-width: 360px) {
-                right: 2px;
-            }
-        }
-        
-        img {
-          width: 24px;
-          height: 24px;
-          filter: brightness(0.7);
-          transition: filter 0.3s ease;
-          
-          @media (max-width: 768px) {
-                width: 20px;
-                height: 20px;
-          }
-          
-          @media (max-width: 480px) {
-                width: 18px;
-                height: 18px;
-            }
-            
-            @media (max-width: 360px) {
-                width: 16px;
-                height: 16px;
-          }
-        }
-        
-        &:hover img {
-          filter: brightness(0.3);
-        }
     }
 }
   
@@ -1007,6 +967,47 @@ section {
             padding: 20px;
         }
     }
+}
+
+:host ::ng-deep {
+  .owl-nav {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    transform: translateY(-50%);
+    margin-top: 0;
+    pointer-events: none;
+
+    button {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.9) !important;
+      border-radius: 50% !important;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      pointer-events: auto;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: white !important;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      }
+
+      &.owl-prev {
+        left: -20px;
+      }
+
+      &.owl-next {
+        right: -20px;
+      }
+
+      i {
+        font-size: 20px;
+        color: #333;
+      }
+    }
+  }
+
 
 // Add minimal spacing between sections
 .section-wrapper:not(:last-child) {
@@ -1099,4 +1100,3 @@ section {
 // >>>>>>> Stashed changes
 //         }
 //     }
-}

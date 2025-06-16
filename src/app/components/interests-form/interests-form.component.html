@@ -1,64 +1,64 @@
 <div class="interests-modal" *ngIf="showForm$ | async">
     <div class="overlay"></div>
     <section>
-        <div class="container my-3 pt-3 pb-4 px-5" style="background: #ffffff;">
-            <div class="row" style="background: #ffffff;">
-                <div class="col" style="background: #ffffff;">
-                    <h2 style="font-weight: 800; font-size: 36px; background: #ffffff;">Choose your interests</h2>
-                    <h5 style="font-weight: 400; font-size: 18px; background: #ffffff; margin-bottom: 2rem;">Get better travel recommendations</h5>
+    <div class="container my-3 pt-3 pb-4 px-5" style="background: #ffffff;">
+        <div class="row" style="background: #ffffff;">
+            <div class="col" style="background: #ffffff;">
+                <h2 style="font-weight: 800; font-size: 36px; background: #ffffff;">Choose your interests</h2>
+                <h5 style="font-weight: 400; font-size: 18px; background: #ffffff; margin-bottom: 2rem;">Get better travel recommendations</h5>
 
-                    <!-- Places Section -->
-                    <div class="interests-section mt-4" style="background: #ffffff;">
-                        <h3 class="section-title" style="background: #ffffff;">Places</h3>
-                        <div class="interests-options mb-4" style="background: #ffffff;">
-                            <button 
-                                *ngFor="let place of getPlaces()"
-                                class="action-button px-2 me-1 mb-1"
-                                [class.selected]="isSelected(place.id)"
-                                (click)="toggleInterest(place.id)"
-                                style="background: #ffffff;">
-                                {{ place.name }}
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Activities Section -->
-                    <div class="interests-section" style="background: #ffffff;">
-                        <h3 class="section-title" style="background: #ffffff;">Activities</h3>
-                        <div class="interests-options mb-4" style="background: #ffffff;">
-                            <button 
-                                *ngFor="let activity of getActivities()"
-                                class="action-button px-2 me-1 mb-1"
-                                [class.selected]="isSelected(activity.id)"
-                                (click)="toggleInterest(activity.id)"
-                                style="background: #ffffff;">
-                                {{ activity.name }}
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Error Message -->
-                    <div *ngIf="error" class="alert alert-danger mt-2 mb-2 py-2 small">
-                        <i class="fas fa-exclamation-circle me-1"></i>
-                        {{ error }}
-                    </div>
-
-                    <!-- Loading State -->
-                    <div *ngIf="isLoading" class="text-center mt-2 mb-2">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                    </div>
-
-                    <div class="move-buttons d-flex mt-3">
-                        <button class="w-100 me-2" (click)="onSkip()" [disabled]="isLoading">Skip</button>
-                        <button class="w-100" (click)="onNext()" [disabled]="isLoading">
-                            <span *ngIf="!isLoading">Next</span>
-                            <span *ngIf="isLoading">Saving...</span>
+                <!-- Places Section -->
+                <div class="interests-section mt-4" style="background: #ffffff;">
+                    <h3 class="section-title" style="background: #ffffff;">Places</h3>
+                    <div class="interests-options mb-4" style="background: #ffffff;">
+                        <button 
+                            *ngFor="let place of getPlaces()"
+                            class="action-button px-2 me-1 mb-1"
+                            [class.selected]="isSelected(place.id)"
+                            (click)="toggleInterest(place.id)"
+                            style="background: #ffffff;">
+                            {{ place.name }}
                         </button>
                     </div>
                 </div>
+
+                <!-- Activities Section -->
+                <div class="interests-section" style="background: #ffffff;">
+                    <h3 class="section-title" style="background: #ffffff;">Activities</h3>
+                    <div class="interests-options mb-4" style="background: #ffffff;">
+                        <button 
+                            *ngFor="let activity of getActivities()"
+                            class="action-button px-2 me-1 mb-1"
+                            [class.selected]="isSelected(activity.id)"
+                            (click)="toggleInterest(activity.id)"
+                            style="background: #ffffff;">
+                            {{ activity.name }}
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <div *ngIf="error" class="alert alert-danger mt-2 mb-2 py-2 small">
+                    <i class="fas fa-exclamation-circle me-1"></i>
+                    {{ error }}
+                </div>
+
+                <!-- Loading State -->
+                <div *ngIf="isLoading" class="text-center mt-2 mb-2">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+
+                <div class="move-buttons d-flex mt-3">
+                    <button class="w-100 me-2" (click)="onSkip()" [disabled]="isLoading">Skip</button>
+                    <button class="w-100" (click)="onNext()" [disabled]="isLoading">
+                        <span *ngIf="!isLoading">Next</span>
+                        <span *ngIf="isLoading">Saving...</span>
+                    </button>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 </div>

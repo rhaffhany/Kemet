@@ -119,29 +119,16 @@ export class InterestsFormComponent implements OnInit {
       },
       error: (err) => {
         this.isLoading = false;
-        if (err.status === 401) {
+        console.error('Error saving interests:', err);
+        
+        if (err.message === 'Your session has expired. Please log in again.') {
           this.error = 'Your session has expired. Please log in again.';
           // Redirect to login after a short delay
           setTimeout(() => {
             this.router.navigate(['/login']);
           }, 2000);
-        } else if (err.status === 409) {
-          // If interests already exist, try updating instead
-          this.error = 'Updating your existing interests...';
-          this.interestsService.setSelectedInterests(this.selectedInterests).subscribe({
-            next: () => {
-              this.isLoading = false;
-              this.interestsService.hideInterestsForm();
-            },
-            error: (updateErr) => {
-              this.isLoading = false;
-              this.error = 'Failed to update interests. Please try again.';
-              console.error('Error updating interests:', updateErr);
-            }
-          });
         } else {
           this.error = 'Failed to save interests. Please try again.';
-          console.error('Error saving interests:', err);
         }
       }
     });

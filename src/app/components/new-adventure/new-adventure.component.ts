@@ -64,13 +64,11 @@ export class NewAdventureComponent implements OnInit {
 
   loadWishlistItems() {
     if (!this.authService.isLoggedIn()) {
-      console.log('User not logged in, skipping wishlist load');
       return;
     }
 
     this.wishlistService.getWishlist().subscribe(
       (response: any) => {
-        console.log('Raw Wishlist Response:', response);
         this.wishlistItems.clear();
 
         // Handle different response formats
@@ -79,17 +77,11 @@ export class NewAdventureComponent implements OnInit {
           activities = response.activities.$values;
         }
         
-        console.log('Processed activities:', activities);
-        
         activities.forEach((activity: any) => {
-          console.log('Processing activity:', activity);
           if (activity && activity.activityId) {
             this.wishlistItems.add(activity.activityId);
-            console.log('Added activityId to wishlist:', activity.activityId);
           }
         });
-
-        console.log('Final Wishlist Items:', Array.from(this.wishlistItems));
       },
       error => {
         console.error('Error loading wishlist:', error);
@@ -109,7 +101,6 @@ export class NewAdventureComponent implements OnInit {
       this.wishlistService.removeFromWishlist(activityId, 'activity').subscribe({
         next: () => {
           this.wishlistItems.delete(activityId);
-          console.log('Removed activity from wishlist:', activityId);
         },
         error: (error) => {
           console.error('Error removing activity from wishlist:', error);
@@ -119,7 +110,6 @@ export class NewAdventureComponent implements OnInit {
       this.wishlistService.addActivityToWishlist(activityId).subscribe({
         next: () => {
           this.wishlistItems.add(activityId);
-          console.log('Added activity to wishlist:', activityId);
         },
         error: (error) => {
           console.error('Error adding activity to wishlist:', error);

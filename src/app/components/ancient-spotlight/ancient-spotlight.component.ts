@@ -41,7 +41,6 @@ export class AncientSpotlightComponent implements OnInit {
         if (data && Array.isArray(data.$values)) {
           this.places = data.$values;
           this.carouselReady = true;
-          console.log('Loaded places:', this.places);
           
           // Fetch category for each place
           this.places.forEach(place => {
@@ -68,13 +67,11 @@ export class AncientSpotlightComponent implements OnInit {
 
   loadWishlistItems() {
     if (!this.authService.isLoggedIn()) {
-      console.log('User not logged in, skipping wishlist load');
       return;
     }
 
     this.wishlistService.getWishlist().subscribe(
       (response: any) => {
-        console.log('Raw Wishlist Response:', response);
         this.wishlistItems.clear();
 
         // Handle different response formats
@@ -87,17 +84,11 @@ export class AncientSpotlightComponent implements OnInit {
           wishlistItems = response.$values;
         }
         
-        console.log('Processed wishlist items:', wishlistItems);
-        
         wishlistItems.forEach((item: any) => {
-          console.log('Processing wishlist item:', item);
           if (item && item.placeID) {
             this.wishlistItems.add(item.placeID);
-            console.log('Added placeID to wishlist:', item.placeID);
           }
         });
-
-        console.log('Final Wishlist Items:', Array.from(this.wishlistItems));
       },
       error => {
         console.error('Error loading wishlist:', error);
@@ -118,7 +109,6 @@ export class AncientSpotlightComponent implements OnInit {
       this.wishlistService.removeFromWishlist(placeId, 'place').subscribe({
         next: () => {
           this.wishlistItems.delete(placeId);
-          console.log('Removed from wishlist:', placeId);
         },
         error: (error) => {
           console.error('Error removing from wishlist:', error);
@@ -129,7 +119,6 @@ export class AncientSpotlightComponent implements OnInit {
       this.wishlistService.addPlaceToWishlist(placeId).subscribe({
         next: () => {
           this.wishlistItems.add(placeId);
-          console.log('Added to wishlist:', placeId);
         },
         error: (error) => {
           console.error('Error adding to wishlist:', error);
