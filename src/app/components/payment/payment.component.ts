@@ -125,9 +125,10 @@ export class PaymentComponent implements OnInit, OnDestroy{
               this._Router.navigate(['/payment-history']);
             }    
           });
-        },error: () =>{
+        },error: (error) =>{
           this._ToastrService.error('Please try again.','Payment failed!');
           this.isPaying = false;
+          console.log("Error: ",error);
         }
     });
   }
