@@ -100,7 +100,7 @@ export class TopSellingComponent implements OnInit {
     nav: false,
     margin: 20,
     autoplay: true,
-    autoplayTimeout: 5000,
+    autoplayTimeout: 7000,
     autoplayHoverPause: true,
     slideBy: 5, // Navigate 5 items at once on desktop
     responsive: {
