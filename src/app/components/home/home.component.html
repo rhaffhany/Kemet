@@ -10,6 +10,16 @@
   <app-interests-form/>
   <app-promote-events></app-promote-events>
 
+  <!-- Places For You -->
+  <div class="ancient-spotlight" *ngIf="authService.isLoggedIn()">
+    <div class="rectangle"></div>
+    <div class="title-container">
+      <h1 class="title">Places For You</h1>
+      <p class="subtitle">Explore the best places for you to visit in Egypt.</p>
+    </div>
+    <app-places-for-you></app-places-for-you>
+  </div>
+
   <div class="ancient-spotlight">
     <div class="rectangle"></div>
     <div class="title-container">

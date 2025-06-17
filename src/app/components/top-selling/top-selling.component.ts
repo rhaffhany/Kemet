@@ -61,11 +61,15 @@ export class TopSellingComponent implements OnInit {
         next: () => {
           this.wishlistItems.delete(planId);
           console.log('Successfully removed from wishlist');
+          // Reload wishlist to ensure UI is in sync with server
+          this.loadWishlistItems();
         },
         error: (error: Error) => {
           console.error('Error removing from wishlist:', error);
           // Add the item back if removal failed
           this.wishlistItems.add(planId);
+          // Reload wishlist to ensure UI is in sync with server
+          this.loadWishlistItems();
         }
       });
     } else {
@@ -73,11 +77,15 @@ export class TopSellingComponent implements OnInit {
         next: () => {
           this.wishlistItems.add(planId);
           console.log('Successfully added to wishlist');
+          // Reload wishlist to ensure UI is in sync with server
+          this.loadWishlistItems();
         },
         error: (error: Error) => {
           console.error('Error adding to wishlist:', error);
           // Remove the item if addition failed
           this.wishlistItems.delete(planId);
+          // Reload wishlist to ensure UI is in sync with server
+          this.loadWishlistItems();
         }
       });
     }
