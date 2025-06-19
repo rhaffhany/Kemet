@@ -4,7 +4,7 @@ import { AuthService } from '../../services/auth.service';
 import { HomeService } from 'src/app/services/home.service';
 import { WishlistService } from '../../services/wishlist.service';
 import { catchError, finalize, retry, tap } from 'rxjs/operators';
-import { of, Subscription, Subject } from 'rxjs';
+import { of, Subscription, Subject, Observable } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Loader } from '@googlemaps/js-api-loader';
 import { UpdateLocationService } from 'src/app/services/update-location.service';
@@ -36,7 +36,7 @@ interface CarouselSection {
   description: string;
   items: CardItem[];
   carouselReady: boolean;
-  apiEndpoint: string;
+  apiEndpoint: string; // Identifier for the service method to call
   isLoading: boolean;
   hasError: boolean;
   errorMessage?: string;
@@ -93,7 +93,6 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
   wishlistActivities: Set<number> = new Set();
   
   starRating: number = 0;
-  DeployUrl = 'https://kemet-server.runasp.net';
 
   carouselSections: CarouselSection[] = [];
   customOptions: OwlOptions = {
@@ -556,7 +555,6 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
       `;
     });
   }
-
   // Optimize location modal
   openLocationModal(): void {
     this.isLocationModalOpen = true;
@@ -590,6 +588,7 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
         this.updateSelectedLocationText();
         this.closeLocationModal();
         alert('Location updated successfully!')
+        this.fetchCarouselData();
       },
       error: () => alert('Failed to update location.')
     });
@@ -618,7 +617,7 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
         carouselReady: false,
         isLoading: true,
         hasError: false,
-        apiEndpoint: `${this.DeployUrl}/api/Activities/NearbyActivities`,
+        apiEndpoint: 'nearbyActivities',
         itemType: 'activity'
       },
       {
@@ -629,7 +628,7 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
         carouselReady: false,
         isLoading: true,
         hasError: false,
-        apiEndpoint: `${this.DeployUrl}/api/Places/TopAttractionsNearMe`,
+        apiEndpoint: 'topAttractions',
         itemType: 'place'
       },
       {
@@ -640,7 +639,7 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
         carouselReady: false,
         isLoading: true,
         hasError: false,
-        apiEndpoint: `${this.DeployUrl}/api/Places/PlacesHiddenGems`,
+        apiEndpoint: 'hiddenGemsPlaces',
         itemType: 'place'
       },
       {
@@ -651,7 +650,7 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
         carouselReady: false,
         isLoading: true,
         hasError: false,
-        apiEndpoint: `${this.DeployUrl}/api/Activities/ActivitiesHiddenGems`,
+        apiEndpoint: 'hiddenGemsActivities',
         itemType: 'activity'
       },
       {
@@ -662,7 +661,7 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
         carouselReady: false,
         isLoading: true,
         hasError: false,
-        apiEndpoint: `${this.DeployUrl}/api/Places/PlacesInCairo`,
+        apiEndpoint: 'placesInCairo',
         itemType: 'place'
       },
       {
@@ -673,15 +672,10 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
         carouselReady: false,
         isLoading: true,
         hasError: false,
-        apiEndpoint: `${this.DeployUrl}/api/Activities/ActivitiesInCairo`,
+        apiEndpoint: 'activitiesInCairo',
         itemType: 'activity'
       }
     ];
-    
-    // Log all API endpoints for debugging
-    // this.carouselSections.forEach(section => {
-    //   console.log(`Section ${section.id} will use endpoint: ${section.apiEndpoint}`);
-    // });
   }
 
   // Optimize carousel options generation
@@ -725,48 +719,77 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
       section.hasError = false;
       section.errorMessage = '';
 
-      this.homeService.getActivities(section.apiEndpoint)
-        .pipe(
-          retry(3),
-          catchError((error: HttpErrorResponse) => {
-            section.hasError = true;
-            section.errorMessage = error.message || 'An error occurred while fetching data';
-            return of({ $values: [] });
-          }),
-          finalize(() => {
-            section.isLoading = false;
-          })
-        )
-        .subscribe((response: any) => {
-          try {
-            const data = response.$values || response;
-            if (Array.isArray(data)) {
-              section.items = data.map(item => ({
-                id: section.itemType === 'place' ? item.placeID : (item.activityId || item.activityID),
-                name: item.name || 'Unnamed Item',
-                imageURLs: this.processImageURLs(item.imageURLs),
-                averageRating: item.averageRating || 0,
-                duration: item.duration,
-                type: section.itemType,
-                categoryName: item.categoryName || ''
-              }));
-              
-              // Update carousel options based on item count
-              this.updateCarouselOptionsForSection(index, section.items.length);
-              section.carouselReady = true;
-              
-              setTimeout(() => {
-                this.refreshCarousel(index);
-              }, 200);
-            } else {
-              throw new Error('Invalid response format');
-            }
-          } catch (error) {
-            section.hasError = true;
-            section.errorMessage = 'Error processing data';
-            section.carouselReady = false;
+      // Map section identifiers to service methods
+      let apiCall: Observable<any>;
+      
+      switch (section.apiEndpoint) {
+        case 'nearbyActivities':
+          apiCall = this.homeService.getNearbyActivities();
+          break;
+        case 'topAttractions':
+          apiCall = this.homeService.getTopAttractionsNearMe();
+          break;
+        case 'hiddenGemsPlaces':
+          apiCall = this.homeService.getPlacesHiddenGems();
+          break;
+        case 'hiddenGemsActivities':
+          apiCall = this.homeService.getActivitiesHiddenGems();
+          break;
+        case 'placesInCairo':
+          apiCall = this.homeService.getPlacesInCairo();
+          break;
+        case 'activitiesInCairo':
+          apiCall = this.homeService.getActivitiesInCairo();
+          break;
+        default:
+          console.error(`Unknown API endpoint: ${section.apiEndpoint}`);
+          section.hasError = true;
+          section.errorMessage = 'Unknown API endpoint';
+          section.isLoading = false;
+          return;
+      }
+
+      apiCall.pipe(
+        retry(3),
+        catchError((error: HttpErrorResponse) => {
+          section.hasError = true;
+          section.errorMessage = error.message || 'An error occurred while fetching data';
+          return of({ $values: [] });
+        }),
+        finalize(() => {
+          section.isLoading = false;
+        })
+      )
+      .subscribe((response: any) => {
+        try {
+          const data = response.$values || response;
+          if (Array.isArray(data)) {
+            section.items = data.map(item => ({
+              id: section.itemType === 'place' ? item.placeID : (item.activityId || item.activityID),
+              name: item.name || 'Unnamed Item',
+              imageURLs: this.processImageURLs(item.imageURLs),
+              averageRating: item.averageRating || 0,
+              duration: item.duration,
+              type: section.itemType,
+              categoryName: item.categoryName || ''
+            }));
+            
+            // Update carousel options based on item count
+            this.updateCarouselOptionsForSection(index, section.items.length);
+            section.carouselReady = true;
+            
+            setTimeout(() => {
+              this.refreshCarousel(index);
+            }, 200);
+          } else {
+            throw new Error('Invalid response format');
           }
-        });
+        } catch (error) {
+          section.hasError = true;
+          section.errorMessage = 'Error processing data';
+          section.carouselReady = false;
+        }
+      });
     });
   }
 
@@ -990,75 +1013,104 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
     section.hasError = false;
     section.errorMessage = undefined;
     
-    this.homeService.getActivities(section.apiEndpoint)
-      .pipe(
-        tap(response => {
-          // console.log(`Retry: Raw API response for ${section.id}:`, response);
-        }),
-        catchError(error => {
-          console.error(`Retry failed for section ${section.id}:`, error);
-          section.hasError = true;
-          section.errorMessage = 'Retry failed. Please try again later.';
-          return of(null);
-        }),
-        finalize(() => {
-          section.isLoading = false;
-        })
-      )
-      .subscribe({
-        next: (response: any) => {
-          if (!response) return; // Skip processing if null (error case)
+    // Map section identifiers to service methods
+    let apiCall: Observable<any>;
+    
+    switch (section.apiEndpoint) {
+      case 'nearbyActivities':
+        apiCall = this.homeService.getNearbyActivities();
+        break;
+      case 'topAttractions':
+        apiCall = this.homeService.getTopAttractionsNearMe();
+        break;
+      case 'hiddenGemsPlaces':
+        apiCall = this.homeService.getPlacesHiddenGems();
+        break;
+      case 'hiddenGemsActivities':
+        apiCall = this.homeService.getActivitiesHiddenGems();
+        break;
+      case 'placesInCairo':
+        apiCall = this.homeService.getPlacesInCairo();
+        break;
+      case 'activitiesInCairo':
+        apiCall = this.homeService.getActivitiesInCairo();
+        break;
+      default:
+        console.error(`Unknown API endpoint: ${section.apiEndpoint}`);
+        section.hasError = true;
+        section.errorMessage = 'Unknown API endpoint';
+        section.isLoading = false;
+        return;
+    }
 
-          try {
-            // Extract and normalize the data array from the response
-            let itemsArray: any[] = [];
-            
-            // Handle different response structures
-            if (response && typeof response === 'object') {
-              if (response.$values && Array.isArray(response.$values)) {
-                itemsArray = response.$values;
-              } else if (response.$id && response.$values && Array.isArray(response.$values)) {
-                itemsArray = response.$values;
-              } else if (Array.isArray(response)) {
-                itemsArray = response;
-              }
+    apiCall.pipe(
+      tap(response => {
+        // console.log(`Retry: Raw API response for ${section.id}:`, response);
+      }),
+      catchError(error => {
+        console.error(`Retry failed for section ${section.id}:`, error);
+        section.hasError = true;
+        section.errorMessage = 'Retry failed. Please try again later.';
+        return of(null);
+      }),
+      finalize(() => {
+        section.isLoading = false;
+      })
+    )
+    .subscribe({
+      next: (response: any) => {
+        if (!response) return; // Skip processing if null (error case)
+
+        try {
+          // Extract and normalize the data array from the response
+          let itemsArray: any[] = [];
+          
+          // Handle different response structures
+          if (response && typeof response === 'object') {
+            if (response.$values && Array.isArray(response.$values)) {
+              itemsArray = response.$values;
+            } else if (response.$id && response.$values && Array.isArray(response.$values)) {
+              itemsArray = response.$values;
+            } else if (Array.isArray(response)) {
+              itemsArray = response;
             }
-            
-            // Process items based on section type
-            section.items = itemsArray.map((item: any) => {
-              if (section.itemType === 'place') {
-                return {
-                  id: item.placeID || 0,
-                  name: item.name || 'Unnamed Place',
-                  imageURLs: this.processImageURLs(item.imageURLs),
-                  averageRating: item.averageRating || 0,
-                  type: 'place'
-                };
-              } else {
-                // Normalize activity ID
-                const activityId = item.activityId || item.activityID || 0;
-                return {
-                  id: activityId,
-                  name: item.name || 'Unnamed Activity',
-                  duration: item.duration || 'Duration not specified',
-                  imageURLs: this.processImageURLs(item.imageURLs),
-                  averageRating: item.averageRating || 0,
-                  type: 'activity'
-                };
-              }
-            });
-
-            section.carouselReady = true;
-            this.refreshCarousel(sectionIndex);
-            // console.log(`Retry for section ${section.id} successful with ${section.items.length} items`);
-          } catch (error) {
-            console.error(`Error processing retry data for ${section.id}:`, error);
-            section.hasError = true;
-            section.errorMessage = 'Error processing data';
-            section.carouselReady = false;
           }
+          
+          // Process items based on section type
+          section.items = itemsArray.map((item: any) => {
+            if (section.itemType === 'place') {
+              return {
+                id: item.placeID || 0,
+                name: item.name || 'Unnamed Place',
+                imageURLs: this.processImageURLs(item.imageURLs),
+                averageRating: item.averageRating || 0,
+                type: 'place'
+              };
+            } else {
+              // Normalize activity ID
+              const activityId = item.activityId || item.activityID || 0;
+              return {
+                id: activityId,
+                name: item.name || 'Unnamed Activity',
+                duration: item.duration || 'Duration not specified',
+                imageURLs: this.processImageURLs(item.imageURLs),
+                averageRating: item.averageRating || 0,
+                type: 'activity'
+              };
+            }
+          });
+
+          section.carouselReady = true;
+          this.refreshCarousel(sectionIndex);
+          // console.log(`Retry for section ${section.id} successful with ${section.items.length} items`);
+        } catch (error) {
+          console.error(`Error processing retry data for ${section.id}:`, error);
+          section.hasError = true;
+          section.errorMessage = 'Error processing data';
+          section.carouselReady = false;
         }
-      });
+      }
+    });
   }
 
   getRouterLink(item: CardItem): any[] {

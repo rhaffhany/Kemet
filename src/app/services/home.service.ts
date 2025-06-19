@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
-
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +9,14 @@ import { AuthService } from './auth.service';
 export class HomeService {
   private DeployUrl = 'https://kemet-server.runasp.net';
 
-  constructor(private _HttpClient: HttpClient , private _AuthService:AuthService) { }
+  constructor(private _HttpClient: HttpClient, private _AuthService: AuthService) { }
+
+  private getHeaders(): HttpHeaders {
+    const token = this._AuthService.getToken();
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+  }
 
   fetchPlaces(): Observable<any> {
     return this._HttpClient.get(`${this.DeployUrl}/api/places`);
@@ -38,5 +44,34 @@ export class HomeService {
 
   getActivities(endpoint: string): Observable<any> {
     return this._HttpClient.get(endpoint);
+  }
+
+  // Things-to-do specific API methods with token authentication
+  getNearbyActivities(): Observable<any> {
+    const headers = this.getHeaders();
+    return this._HttpClient.get(`${this.DeployUrl}/api/Activities/NearbyActivities`, { headers });
+  }
+
+  getTopAttractionsNearMe(): Observable<any> {
+    const headers = this.getHeaders();
+    return this._HttpClient.get(`${this.DeployUrl}/api/Places/TopAttractionsNearMe`, { headers });
+  }
+
+  getPlacesHiddenGems(): Observable<any> {
+    return this._HttpClient.get(`${this.DeployUrl}/api/Places/PlacesHiddenGems`);
+  }
+
+  getActivitiesHiddenGems(): Observable<any> {
+    return this._HttpClient.get(`${this.DeployUrl}/api/Activities/ActivitiesHiddenGems`);
+  }
+
+  getPlacesInCairo(): Observable<any> {
+    const headers = this.getHeaders();
+    return this._HttpClient.get(`${this.DeployUrl}/api/Places/PlacesInCairo`, { headers });
+  }
+
+  getActivitiesInCairo(): Observable<any> {
+    const headers = this.getHeaders();
+    return this._HttpClient.get(`${this.DeployUrl}/api/Activities/ActivitiesInCairo`, { headers });
   }
 }

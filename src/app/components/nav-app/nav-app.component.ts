@@ -78,7 +78,6 @@ export class NavAppComponent implements OnInit {
   private loadUserData(): void {
     this.profileService.getCurrentUserData().subscribe({
       next: (data) => {
-        console.log('User data loaded:', data); // Debug log
         this.userData = data || {};
         this.profilePic = this.userData.profileImageURL || this.profilePic;
         this.cdr.detectChanges(); // Force change detection
