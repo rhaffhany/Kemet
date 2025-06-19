@@ -198,6 +198,10 @@ export class PlaceDetailsComponent implements OnInit {
     return this.reviewsData = [...this.filteredReviews];
   }
 
+  isPriceZero(price: any): boolean {
+    return parseFloat(price) === 0;
+  }
+
   searchText: string = ''; 
   searchResults: any[] = [];
   errorMessage: string = ''; 

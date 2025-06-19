@@ -48,6 +48,7 @@ import { NgbModule, NgbCollapseModule, NgbDatepickerModule } from '@ng-bootstrap
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { AgencyLayoutComponent } from './layouts/agency-layout/agency-layout.component';
 import { KcurrencyPipe } from './pipe/kcurrency.pipe';
+import { PriceFormatPipe } from './pipe/price-format.pipe';
 
 import { PackageDetailsBookingComponent } from './components/package-details-booking/package-details-booking.component';
 
@@ -98,6 +99,7 @@ import { PlacesForYouComponent } from './components/places-for-you/places-for-yo
     ActivityDetailsComponent,
     AgencyLayoutComponent,
     KcurrencyPipe,
+    PriceFormatPipe,
     PackageDetailsBookingComponent,
     TravelAgencyProfileComponent,
     NavTravelAgencyComponent,

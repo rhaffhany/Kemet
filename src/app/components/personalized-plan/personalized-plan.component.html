@@ -59,7 +59,10 @@
                                           <p class="description">{{place.description}}</p>
                                           <div class="price-tag">
                                               <i class="fas fa-tag"></i>
-                                              <span>{{place.price}}</span>
+                                              <span *ngIf="isPriceZero(place.price); else placePrice">{{place.price | priceFormat}}</span>
+                                              <ng-template #placePrice>
+                                                  <span>{{place.price | priceFormat | currency:'£'}}</span>
+                                              </ng-template>
                                           </div>
                                       </div>
                                   </div>
@@ -80,7 +83,10 @@
                                           <p class="description">{{activity.description}}</p>
                                           <div class="price-tag">
                                               <i class="fas fa-tag"></i>
-                                              <span>{{activity.price}}</span>
+                                              <span *ngIf="isPriceZero(activity.price); else activityPrice">{{activity.price | priceFormat}}</span>
+                                              <ng-template #activityPrice>
+                                                  <span>{{activity.price | priceFormat | currency:'£'}}</span>
+                                              </ng-template>
                                           </div>
                                       </div>
                                   </div>
@@ -133,7 +139,10 @@
                                         <p class="description">{{place.description}}</p>
                                         <div class="price-tag">
                                             <i class="fas fa-tag"></i>
-                                            <span>{{place.price}}</span>
+                                            <span *ngIf="isPriceZero(place.price); else placePricePreview">{{place.price | priceFormat}}</span>
+                                            <ng-template #placePricePreview>
+                                                <span>{{place.price | priceFormat | currency:'£' }}</span>
+                                            </ng-template>
                                         </div>
                                     </div>
                                 </div>
@@ -156,7 +165,10 @@
                                   <p class="description">{{place.description}}</p>
                                   <div class="price-tag">
                                       <i class="fas fa-tag"></i>
-                                      <span>{{place.price}}</span>
+                                      <span *ngIf="isPriceZero(place.price); else placePriceOriginal">{{place.price | priceFormat}}</span>
+                                      <ng-template #placePriceOriginal>
+                                          <span>{{place.price | priceFormat | currency: '£' }}</span>
+                                      </ng-template>
                                   </div>
                               </div>
 
@@ -203,7 +215,10 @@
                                         <p class="description">{{activity.description}}</p>
                                         <div class="price-tag">
                                             <i class="fas fa-tag"></i>
-                                            <span>{{activity.price}}</span>
+                                            <span *ngIf="isPriceZero(activity.price); else activityPricePreview">{{activity.price | priceFormat}}</span>
+                                            <ng-template #activityPricePreview>
+                                                <span>{{activity.price | priceFormat | currency:'£' }}</span>
+                                            </ng-template>
                                         </div>
                                     </div>
                                 </div>
@@ -226,7 +241,10 @@
                                   <p class="description">{{activity.description}}</p>
                                   <div class="price-tag">
                                       <i class="fas fa-tag"></i>
-                                      <span>{{activity.price}}</span>
+                                      <span *ngIf="isPriceZero(activity.price); else activityPriceOriginal">{{activity.price | priceFormat}}</span>
+                                      <ng-template #activityPriceOriginal>
+                                          <span>{{activity.price | priceFormat | currency:'£' }}</span>
+                                      </ng-template>
                                   </div>
                               </div>
 
