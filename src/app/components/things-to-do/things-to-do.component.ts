@@ -462,125 +462,99 @@ export class ThingsToDoComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Optimized map loading with error handling
   loadMap(lat: number, lng: number): void {
-    this.ngZone.runOutsideAngular(() => {
-      const loader = new Loader({
-        apiKey: 'AIzaSyClrom8fWRRL317MDuWMRdg-cJKg2dr78E',
-        libraries: ['places'],
-        version: 'weekly'
+    const loader = new Loader({
+      apiKey: 'AIzaSyDBe3IxUNFQiad1XECr9U-zK7z1j4hCsmw',
+      libraries: ['places'],
+      version: 'weekly'
+    });
+
+    loader.load().then(() => {
+      const mapOptions: google.maps.MapOptions = {
+        center: { lat, lng },
+        zoom: 15,
+        gestureHandling: 'cooperative',
+        fullscreenControl: true,
+        mapTypeControl: false,
+        streetViewControl: true,
+        zoomControl: false,
+        clickableIcons: false
+      };
+
+      this.map = new google.maps.Map(this.mapContainer.nativeElement, mapOptions);
+      this.marker = new google.maps.Marker({
+        position: { lat, lng },
+        map: this.map,
+        draggable: true
       });
 
-      loader.load().then(() => {
-        // Check if billing is enabled
-        if (typeof google === 'undefined' || typeof google.maps === 'undefined') {
-          console.error('Google Maps JavaScript API is not loaded');
-          return;
-        }
+      // Create the search box input element
+      const searchBoxDiv = document.createElement('div');
+      searchBoxDiv.style.cssText = 'margin-top: 10px;';
+      
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.placeholder = 'Search for a location';
+      input.style.cssText = 'width: 300px; padding: 10px 15px; border: 1px solid #ccc; border-radius: 30px;';
+      
+      searchBoxDiv.appendChild(input);
+      
+      // Add the search box to the map
+      this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(searchBoxDiv);
 
-        try {
-          const mapOptions: google.maps.MapOptions = {
-            center: { lat, lng },
-            zoom: 15,
-            gestureHandling: 'cooperative',
-            fullscreenControl: false,
-            mapTypeControl: false,
-            streetViewControl: false,
-            zoomControl: true,
-            clickableIcons: false,
-            maxZoom: 18,
-            minZoom: 8
+      const searchBox = new google.maps.places.SearchBox(input);
+      
+      // Bias the SearchBox results towards current map's viewport
+      this.map.addListener('bounds_changed', () => {
+        searchBox.setBounds(this.map.getBounds()!);
+      });
+
+      searchBox.addListener('places_changed', () => {
+        const places = searchBox.getPlaces();
+        if (places && places.length > 0) {
+          const place = places[0];
+          if (!place.geometry || !place.geometry.location) {
+            return;
+          }
+          
+          const location = place.geometry.location;
+          this.map.setCenter(location);
+          this.marker.setPosition(location);
+
+          this.locationData = {
+            latitude: location.lat(),
+            longitude: location.lng(),
+            address: `https://maps.google.com/?q=${location.lat()},${location.lng()}`,
+            locationLink: `https://maps.google.com/?q=${location.lat()},${location.lng()}`
           };
 
-          // Create map instance
-          this.map = new google.maps.Map(this.mapContainer.nativeElement, mapOptions);
-
-          // Add marker with optimized options
-          this.marker = new google.maps.Marker({
-            position: { lat, lng },
-            map: this.map,
-            draggable: true,
-            optimized: true,
-            animation: null // Disable animation for better performance
-          });
-
-          // Use debounced marker events
-          let dragTimeout: number | null = null;
-          
-          this.marker.addListener('dragend', () => {
-            if (dragTimeout) {
-              window.clearTimeout(dragTimeout);
-            }
-            
-            dragTimeout = window.setTimeout(() => {
-              const newPos = this.marker.getPosition();
-              if (newPos) {
-                const newLat = newPos.lat();
-                const newLng = newPos.lng();
-
-                this.ngZone.run(() => {
-                  this.locationData = {
-                    latitude: newLat,
-                    longitude: newLng,
-                    address: `https://maps.google.com/?q=${newLat},${newLng}`,
-                    locationLink: `https://maps.google.com/?q=${newLat},${newLng}`
-                  };
-
-                  this._UpdateLocationService.updateLocation(this.locationData)
-                    .pipe(
-                      catchError(error => {
-                        console.error('Error updating location:', error);
-                        return of(null);
-                      })
-                    )
-                    .subscribe();
-                });
-              }
-            }, 300);
-          });
-
-        } catch (error) {
-          console.error('Error initializing map:', error);
-          // Handle map initialization error
-          this.handleMapError(error);
+          this._UpdateLocationService.updateLocation(this.locationData).subscribe();
         }
-      }).catch(error => {
-        console.error('Error loading Google Maps:', error);
-        // Handle loading error
-        this.handleMapError(error);
       });
+
+      this.marker.addListener('dragend', () => {
+        const newPos = this.marker.getPosition();
+        if (newPos) {
+          const newLat = newPos.lat();
+          const newLng = newPos.lng();
+          
+          this.locationData = {
+            latitude: newLat,
+            longitude: newLng,
+            address: `https://maps.google.com/?q=${newLat},${newLng}`,
+            locationLink: `https://maps.google.com/?q=${newLat},${newLng}`
+          };
+
+          this._UpdateLocationService.updateLocation(this.locationData).subscribe();
+        }
+      });
+    }).catch(error => {
+      console.error('Error loading Google Maps:', error);
+      this.mapContainer.nativeElement.innerHTML = `
+        <div class="map-error">
+          <p>Map is currently unavailable. Please try again later.</p>
+        </div>
+      `;
     });
-  }
-
-  private handleMapError(error: any): void {
-    this.ngZone.run(() => {
-      // Check for billing error
-      if (error.message?.includes('billing')) {
-        console.error('Google Maps billing error. Please enable billing in the Google Cloud Console.');
-        // You might want to show a user-friendly message here
-      }
-      
-      // Fallback to a static map or disable map functionality
-      this.disableMapFunctionality();
-    });
-  }
-
-  private disableMapFunctionality(): void {
-    // Clean up existing map instance
-    if (this.map) {
-      // @ts-ignore: Object is possibly 'null'
-      this.map.setMap(null);
-      this.map = null;
-    }
-    if (this.marker) {
-      this.marker.setMap(null);
-      this.marker = null;
-    }
-
-    // You might want to show a fallback UI here
-    this.mapContainer.nativeElement.innerHTML = `
-      <div class="map-error">
-        <p>Map is currently unavailable. Please try again later.</p>
-      </div>
-    `;
   }
 
   // Optimize location modal
