@@ -19,7 +19,7 @@ export interface PackageDetails {
     egyptianStudent: number
     touristAdult: number
     touristStudent: number
-    HalfBoardPriceAddition: number
+    HalfBoardPriceAddittion: number
     fullBoardPriceAddition: number
 }
   

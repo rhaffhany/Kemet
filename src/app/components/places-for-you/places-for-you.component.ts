@@ -3,6 +3,7 @@ import { CarouselComponent, OwlOptions } from 'ngx-owl-carousel-o';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 import { WishlistService } from '../../services/wishlist.service';
+import { InterestsService } from '../../services/interests.service';
 
 interface Place {
   placeID: number;
@@ -81,11 +82,11 @@ export class PlacesForYouComponent implements OnInit {
   constructor(
     private http: HttpClient,
     public authService: AuthService,
-    private wishlistService: WishlistService
+    private wishlistService: WishlistService,
+    private interestsService: InterestsService
   ) {}
 
   ngOnInit(): void {
-    console.log('PlacesForYou component initialized');
     this.loadPlacesForYou();
     this.loadWishlist();
   }
@@ -178,5 +179,9 @@ export class PlacesForYouComponent implements OnInit {
 
   onNext(): void {
     this.owlCarousel?.next();
+  }
+
+  openInterestsForm(): void {
+    this.interestsService.showInterestsForm();
   }
 } 

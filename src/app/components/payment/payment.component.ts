@@ -122,7 +122,11 @@ export class PaymentComponent implements OnInit, OnDestroy{
               }
 
               this.isPaying = false;
-              this._Router.navigate(['/payment-history']);
+              this._Router.navigate(['/payment-history']).then(() => {
+                setTimeout(() => {
+                  window.location.reload();
+                }, 1000);
+              });
             }    
           });
         },error: (error) =>{

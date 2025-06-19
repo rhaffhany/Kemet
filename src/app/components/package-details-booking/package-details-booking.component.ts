@@ -118,7 +118,7 @@ export class PackageDetailsBookingComponent implements OnInit{
     // Calculate board price addition
     let boardPriceAddition = 0;
     if (this.selectedBoard === 'Half Board') {
-      boardPriceAddition = this.packageDetails.HalfBoardPriceAddition;
+      boardPriceAddition = this.packageDetails.HalfBoardPriceAddittion;
     } else if (this.selectedBoard === 'Full Board') {
       boardPriceAddition = this.packageDetails.fullBoardPriceAddition;
     }
