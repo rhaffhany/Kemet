@@ -180,6 +180,10 @@ export class ActivityDetailsComponent implements OnInit, AfterViewInit {
     return this.reviewsData = [...this.filteredReviews];
   }
 
+  isPriceZero(price: any): boolean {
+    return parseFloat(price) === 0;
+  }
+
   //search 
   searchText: string = ''; 
   searchResults: any[] = [];

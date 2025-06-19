@@ -119,8 +119,14 @@
                 <i class="fa-solid fa-earth-americas pe-3 price-icon me-0"></i>
                 <div class="price-details">
                   <p class="price-title">Tourist</p>  
-                  <p class="price-item text-muted">Adult: {{placeDetails.touristAdult | currency:'EGP' }}</p> 
-                  <p class="price-item text-muted">Student: {{placeDetails.touristStudent | currency:'EGP' }}</p> 
+                  <p class="price-item text-muted">Adult: <span *ngIf="isPriceZero(placeDetails.touristAdult); else touristAdultPrice">{{placeDetails.touristAdult | priceFormat}}</span>
+                    <ng-template #touristAdultPrice>
+                      <span>{{placeDetails.touristAdult | priceFormat | currency: '£' }}</span>
+                    </ng-template></p> 
+                  <p class="price-item text-muted">Student: <span *ngIf="isPriceZero(placeDetails.touristStudent); else touristStudentPrice">{{placeDetails.touristStudent | priceFormat}}</span>
+                    <ng-template #touristStudentPrice>
+                      <span>{{placeDetails.touristStudent | priceFormat | currency: '£' }}</span>
+                    </ng-template></p> 
                 </div>
               </div>
               
@@ -129,8 +135,14 @@
                 <img [src]="egyptFlag" alt="Egypt Flag" class="pe-3" style="width: 65px; height: 50px;">
                 <div class="price-details">
                   <p class="price-title">Egyptian</p>  
-                  <p class="price-item text-muted">Adult: {{placeDetails.egyptianAdult | currency:'EGP' }}</p> 
-                  <p class="price-item text-muted">Student: {{placeDetails.egyptianStudent | currency:'EGP' }}</p> 
+                  <p class="price-item text-muted">Adult: <span *ngIf="isPriceZero(placeDetails.egyptianAdult); else egyptianAdultPrice">{{placeDetails.egyptianAdult | priceFormat}}</span>
+                    <ng-template #egyptianAdultPrice>
+                      <span>{{placeDetails.egyptianAdult | priceFormat | currency: '£' }}</span>
+                    </ng-template></p> 
+                  <p class="price-item text-muted">Student: <span *ngIf="isPriceZero(placeDetails.egyptianStudent); else egyptianStudentPrice">{{placeDetails.egyptianStudent | priceFormat}}</span>
+                    <ng-template #egyptianStudentPrice>
+                      <span>{{placeDetails.egyptianStudent | priceFormat | currency: '£' }}</span>
+                    </ng-template></p> 
                 </div>
               </div>
             </div>

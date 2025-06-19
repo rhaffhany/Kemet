@@ -250,10 +250,6 @@ export class PersonalizedPlanComponent implements OnInit {
       this.alternativeDays = [];
     }
   }
-  
-
-
-
 
 // Update your getDragPreviewClass method
 getDragPreviewClass(item: any): string {
@@ -369,10 +365,10 @@ reorderItems(event: CdkDragDrop<any[]>, items: any[]) {
   
   private processPlace(place: any): any {
     return {
-      name: place.name,
-      category: place.categoryName || 'Historical',
-      description: place.description,
-      price: place.entryCost ? `${place.entryCost} LE` : 'Price varies',
+      name: place.name || 'Unknown Place',
+      category: place.categoryName || 'General',
+      description: place.description || 'No description available',
+      price: place.entryCost,
       image: place.imageURLs || this.defaultImage,
       placeId: place.placeId
     };
@@ -380,10 +376,10 @@ reorderItems(event: CdkDragDrop<any[]>, items: any[]) {
   
   private processActivity(activity: any): any {
     return {
-      name: activity.name,
-      category: activity.categoryName || 'Cultural',
-      description: activity.description,
-      price: activity.entryCost ? `${activity.entryCost} LE` : 'Price varies',
+      name: activity.name || 'Unknown Activity',
+      category: activity.categoryName || 'General',
+      description: activity.description || 'No description available',
+      price: activity.entryCost,
       image: activity.imageURL || this.defaultImage,
       activityId: activity.activityId
     };
@@ -523,6 +519,10 @@ reorderItems(event: CdkDragDrop<any[]>, items: any[]) {
     return this.travelPlan
       .filter(day => day.location === currentDay.location && day.dayNumber !== currentDay.dayNumber)
       .map(day => 'activities-list-' + day.dayNumber);
+  }
+
+  isPriceZero(price: any): boolean {
+    return parseFloat(price) === 0;
   }
 
  
