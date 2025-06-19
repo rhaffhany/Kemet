@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { AuthService } from './auth.service';
+
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +10,7 @@ import { Observable } from 'rxjs';
 export class HomeService {
   private DeployUrl = 'https://kemet-server.runasp.net';
 
-  constructor(private _HttpClient: HttpClient) { }
+  constructor(private _HttpClient: HttpClient , private _AuthService:AuthService) { }
 
   fetchPlaces(): Observable<any> {
     return this._HttpClient.get(`${this.DeployUrl}/api/places`);

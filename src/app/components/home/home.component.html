@@ -10,6 +10,15 @@
   <app-interests-form/>
   <app-promote-events></app-promote-events>
 
+  <div class="ancient-spotlight">
+    <div class="rectangle"></div>
+    <div class="title-container">
+      <h1 class="title">Ancient spotlight</h1>
+      <p class="subtitle">Discover why Egypt's ancient wonders rank among 2024's Best of the Best Destinations.</p>
+    </div>
+    <app-ancient-spotlight></app-ancient-spotlight>
+  </div>
+
   <!-- Places For You -->
   <div class="ancient-spotlight" *ngIf="authService.isLoggedIn()">
     <div class="rectangle"></div>
@@ -20,14 +29,6 @@
     <app-places-for-you></app-places-for-you>
   </div>
 
-  <div class="ancient-spotlight">
-    <div class="rectangle"></div>
-    <div class="title-container">
-      <h1 class="title">Ancient spotlight</h1>
-      <p class="subtitle">Discover why Egypt's ancient wonders rank among 2024's Best of the Best Destinations.</p>
-    </div>
-    <app-ancient-spotlight></app-ancient-spotlight>
-  </div>
   <div class="new-adventure">
     <div class="rectangle"></div>
     <div class="title-container">

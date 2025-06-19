@@ -45,4 +45,12 @@
   <!-- Navigation Arrows -->
   <img *ngIf="carouselReady && places?.length" [src]="leftArrowSrc" class="nav-button left" aria-label="Previous slide" (click)="onPrev()">
   <img *ngIf="carouselReady && places?.length" [src]="rightArrowSrc" class="nav-button right" aria-label="Next slide" (click)="onNext()">
+
+  <!-- Empty State Message -->
+  <div *ngIf="carouselReady && (!places || places.length === 0)" class="empty-message">
+    <p class="text-danger fw-bold text-center mt-5">Enter your interests first to get personalized places recommendations!</p>
+    <button class="btn btn-warning d-block mx-auto " (click)="openInterestsForm()">
+      Open Interests Form
+    </button>
+  </div>
 </div>
